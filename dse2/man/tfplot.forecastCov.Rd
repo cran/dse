@@ -55,7 +55,7 @@ If lty is NULL (default) it is set to
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model <- est.VARX.ls(eg1.DSE.data.diff)
+    model <- estVARXls(eg1.DSE.data.diff)
     z <- forecastCov(model, data=eg1.DSE.data.diff)
     tfplot(z)
 }

@@ -21,9 +21,9 @@
     \method{MonteCarloSimulations}{TSestModel}(model, simulation.args=NULL, 
            replications=100, rng=NULL, quiet=FALSE, ...)
     \method{MonteCarloSimulations}{EstEval}(model, simulation.args=NULL,
-            replications=100, rng=get.RNG(model),  quiet=FALSE, ...)
+            replications=100, rng=getRNG(model),  quiet=FALSE, ...)
     \method{MonteCarloSimulations}{MonteCarloSimulations}(model, 
-       simulation.args=NULL, replications=100, rng=get.RNG(model),  quiet=FALSE, ...)
+       simulation.args=NULL, replications=100, rng=getRNG(model),  quiet=FALSE, ...)
 }
 \arguments{
     \item{model}{an object from which a model can be extracted. The model must
@@ -62,7 +62,7 @@ of the distribution of the simulations at specified periods.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model, simulation.args=list(sampleT=100))
 tfplot(z)
 distribution(z)

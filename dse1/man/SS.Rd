@@ -2,7 +2,7 @@
 \alias{SS}
 \alias{is.SS}
 \alias{is.innov.SS}
-\alias{is.non.innov.SS}
+\alias{is.nonInnov.SS}
 
 \title{State Space Models}
 \description{Construct a }
@@ -11,7 +11,7 @@
              description=NULL, names=NULL, input.names=NULL, output.names=NULL)
     is.SS(obj)
     is.innov.SS(obj)
-    is.non.innov.SS(obj)
+    is.nonInnov.SS(obj)
 }
 \arguments{
     \item{F.}{(nxn) is the state transition matrix F.}

@@ -37,8 +37,8 @@ horizon periods.
 Thus, for example, the result of
 featherForecasts(model, data, from.periods=c(200,250,300))
 would be forecasts for 1 through 36 steps ahead (the default),
-starting at the 200th,250th, and 300th point of output.data(data).
-This function assumes that input.data(data) (the exogenous 
+starting at the 200th,250th, and 300th point of outputData(data).
+This function assumes that inputData(data) (the exogenous 
 variable) is as long as necessary for the most future forecast.
 }
 \seealso{
@@ -47,7 +47,7 @@ variable) is as long as necessary for the most future forecast.
 }
 \examples{
 if(is.R()) data("egJofF.1dec93.data", package="dse1")
-model <- est.VARX.ls(egJofF.1dec93.data)
+model <- estVARXls(egJofF.1dec93.data)
 pr <- featherForecasts(model, egJofF.1dec93.data)
 tfplot(pr)
 }

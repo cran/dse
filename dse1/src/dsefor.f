@@ -323,7 +323,7 @@ C
      + ITH,PARM,AP,IP,JP,ICT,CONST,AN,IN,JN)
 
 C
-C Put parameters into arrays (as in S function set.arrays) and call KF
+C Put parameters into arrays (as in S function setArrays) and call KF
 C
 C  The state and tracking error are not calculated.
 C       Use KF if these are needed.
@@ -957,7 +957,7 @@ C      IF (IT.LE.5) CALL DBPRDB('step4 ',6, Y(IT,3),1)
      + ITH,PARM,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
      + IS,AA,BB,WW)
 C
-C Put parameters into arrays (as in S function set.arrays) and call ARMA
+C Put parameters into arrays (as in S function setArrays) and call ARMA
 C
 C  It is assummed that M,P,IA,IB, and IC - the dimensions of the parameter
 C    arrays - are given. Trying to calculate these causes problems.

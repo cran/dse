@@ -27,12 +27,12 @@ This class of objects is returned by estimation methods or can be built
 according to the description for specific sub-classes (eg "ARMA", "SS").
 
 The \code{TSmodel} class of objects has methods for the generic functions
-\code{print, test.equal, seriesNames, seriesNamesInput,
+\code{print, testEqual, seriesNames, seriesNamesInput,
 seriesNamesOutput, l, roots, stability,  
 forecast, featherForecasts, horizonForecasts,
 simulate, MonteCarloSimulations}
 
-Also, the function \code{is.TSmodel} and the functions \code{to.SS, to.ARMA, to.troll} are supported.
+Also, the function \code{is.TSmodel} and the functions \code{toSS, toARMA, to.troll} are supported.
 Other model classes inherit from the class \code{TSmodel}.
 
 This class of objects contains a time series model. It is the class of

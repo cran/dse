@@ -7,11 +7,11 @@
 \description{Calculate forecasts at specified horizons.}
 \usage{
    horizonForecastsCompiled(obj, data, horizons=1:4,
-	  discard.before=minimum.startup.lag(obj))
+	  discard.before=minimumStartupLag(obj))
    \method{horizonForecastsCompiled}{SS}(obj, data, horizons=1:4,
-	 discard.before=minimum.startup.lag(obj))
+	 discard.before=minimumStartupLag(obj))
    \method{horizonForecastsCompiled}{ARMA}(obj, data, horizons=1:4,
-	  discard.before=minimum.startup.lag(obj))
+	  discard.before=minimumStartupLag(obj))
 }
 \arguments{
     \item{obj}{see horizonForecasts.}
@@ -27,7 +27,7 @@
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 z <-  horizonForecasts(model, eg1.DSE.data.diff)
 }
 %\keyword{DSE}

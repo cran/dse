@@ -1,6 +1,6 @@
  require("dse1")
  Sys.info()
- version.dse()
+ DSEversion()
  data("eg1.DSE.data.diff", package="dse1") 
  
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
@@ -13,13 +13,13 @@ all.ok <- TRUE
 
 test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Muller")
 
-VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
-SSmodel  <- to.SS(VARmodel)
+VARmodel  <-  estVARXar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
+SSmodel  <- toSS(VARmodel)
 
 
 cat("dse1 test 2 ...\n")
    good <- VARmodel$estimates$like[1]
-   tst  <- l(set.arrays(SSmodel), eg1.DSE.data.diff,warn=FALSE)$estimates$like[1]
+   tst  <- l(setArrays(SSmodel), eg1.DSE.data.diff,warn=FALSE)$estimates$like[1]
    error <- max(abs(good-tst))
    cat("max. error ", max(error))
 
@@ -30,7 +30,7 @@ cat("dse1 test 2 ...\n")
 
 cat("dse1 test 3 ...\n")
    good <- VARmodel$estimates$like[1] 
-   tst  <- l(set.arrays(VARmodel), eg1.DSE.data.diff, warn=FALSE)$estimates$like[1]
+   tst  <- l(setArrays(VARmodel), eg1.DSE.data.diff, warn=FALSE)$estimates$like[1]
    error <- max(abs(good-tst))
    cat("max. error ", max(error))
 
@@ -41,7 +41,7 @@ cat("dse1 test 3 ...\n")
 
 
 cat("dse1 test 4 ...\n")
-  ARMAmodel <- to.ARMA(SSmodel)
+  ARMAmodel <- toARMA(SSmodel)
   good <- VARmodel$estimates$like[1]
    tst  <- l(ARMAmodel, eg1.DSE.data.diff, warn=FALSE)$estimates$like[1]
    error <- max(abs(good-tst))

@@ -3,7 +3,7 @@
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
    Sys.info()
-   version.dse()
+   DSEversion()
    random.number.test() 
 
 
@@ -18,13 +18,13 @@ dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
  if (verbose) cat("dse2 test 0 ... ")
   z <- eg1.DSE.data.diff
   z$input <- NULL
-  mod1 <- TSmodel(est.VARX.ar(z, re.add.means=FALSE, warn=FALSE))
+  mod1 <- TSmodel(estVARXar(z, re.add.means=FALSE, warn=FALSE))
   ok <- is.TSmodel(mod1)
   all.ok <- ok 
   if (verbose)  {if (ok) cat("ok\n") else  cat("failed!\n") }
 
   if (verbose) cat("dse2 test 1 ... ")
-  z <- est.black.box1(eg1.DSE.data.diff, verbose=FALSE, max.lag=2)
+  z <- estBlackBox1(eg1.DSE.data.diff, verbose=FALSE, max.lag=2)
   error <- max(abs(z$estimates$like[1]+4025.943051342767))
   ok <- is.TSestModel(z) &  (fuzz.large > error )
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -33,8 +33,8 @@ dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
 
   if (verbose) cat("dse2 test 2 ... ")
-  z <- est.wt.variables(eg1.DSE.data.diff, c(1,10,10),
-                        estimation="est.VARX.ls")
+  z <- estWtVariables(eg1.DSE.data.diff, c(1,10,10),
+                        estimation="estVARXls")
   error <- max(abs(z$estimates$like[1]+4125.05572604540066)) 
   ok <- is.TSestModel(z) &   (fuzz.large > error)
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -43,7 +43,7 @@ dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
 
   if (verbose) cat("dse2 test 3 ... ")
-  z <- est.SS.Mittnik(eg1.DSE.data.diff, max.lag=2, n=3)
+  z <- estSSMittnik(eg1.DSE.data.diff, max.lag=2, n=3)
   error <- max(abs(z$estimates$like[1]+3794.0394069904219))
   ok <- is.SS(z$model) &   (fuzz.large > error )
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -52,7 +52,7 @@ dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
 
   if (verbose) cat("dse2 test 4 ... ")
-  z <- l( reduction.Mittnik(z, criterion="taic", verbose=FALSE), 
+  z <- l( MittnikReduction(z, criterion="taic", verbose=FALSE), 
          eg1.DSE.data.diff)
   error <- max(abs(z$estimates$like[1]+3795.6760513068380)) 
   ok <- is.SS(z$model)  &  (fuzz.large > error )
@@ -79,10 +79,10 @@ dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
 
   if (verbose) cat("dse2 test 6 ... ")
   # previously end=c(1969,6) when .diff data had wrong start date
-  output.data(modSS$data) <- tfwindow(output.data(modSS), end=c(1969,7))
+  outputData(modSS$data) <- tfwindow(outputData(modSS), end=c(1969,7))
   # it should be possible to do the following instead, but tsp seems to
   # sometimes get mixed up in forecast and cause System terminating: bad address
-  # output.data(modSS$data) <- output.data(modSS$data)[1:100,]
+  # outputData(modSS$data) <- outputData(modSS$data)[1:100,]
   z <- forecast(modSS, percent=c(90,100,110))
 
 # previously 136 below
@@ -136,8 +136,8 @@ dse2.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
       }
 
   data <- eg1.DSE.data.diff
-  mod1 <- TSmodel(est.VARX.ls(data,max.lag=3))
-  modSS <- l(to.SS(mod1),data)
+  mod1 <- TSmodel(estVARXls(data,max.lag=3))
+  modSS <- l(toSS(mod1),data)
 
   z <- featherForecasts( modSS,  from.periods=c(230,250))
   tfplot(z, start.=c(1980,1))

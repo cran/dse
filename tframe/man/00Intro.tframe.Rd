@@ -76,7 +76,7 @@ The most important methods which need to be
 supported are tframe.zzz(), start.zzz(), end.zzz(), and periods.zzz().
 While frequency.zzz() should not in theory be necessary, it makes 
 porting code much easier. Other methods which should be supported are
-time.zzz(), check.tframeConsistent.zzz(), tfTruncate.zzz(), 
+time.zzz(), checktframeConsistent.zzz(), tfTruncate.zzz(), 
 tfExpand.zzz(), 
 earliestStartIndex.zzz(),
 earliestEndIndex.zzz(), latestStartIndex.zzz(), and
@@ -106,7 +106,7 @@ Operations which should be possible on tframed data:
      -tbind  (like cbind) with shift to align the the tframe 
                  (and NA pad.start, pad.end, pad=TRUE/FALSE) 
          
-     - [  ]   without losing the tframe. This is done with select.series().
+     - [  ]   without losing the tframe. This is done with selectSeries().
 
 
 The attribute "seriesNames" is also supported as a way to indicate the names

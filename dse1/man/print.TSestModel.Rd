@@ -34,7 +34,7 @@ as 0.9999999999)
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 print(model)
 print(model, digits=3)
 print(model, digits=3, fuzz=0.001)

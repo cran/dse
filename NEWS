@@ -1,3 +1,17 @@
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.6-1
+
+Changes (Possibly) Affecting Users
+
+    o	several more program names have been revised so as to avoid confusion 
+	with methods for generics with similar names. (That is, function 
+	foo.bar has been changed to fooBar, or to barFoo in some cases.)
+    o	DSEversion (previously version.DSE) gives the version of 
+    	each package.
+
+Changes Affecting Development
+
+    o	testing in Makefiles has been been further refined.
+
 		CHANGES IN DSE AND DSEPLUS VERSION 2003.4-1
 
 Changes (Possibly) Affecting Users
@@ -31,7 +45,7 @@ Changes (Possibly) Affecting Users
 
     o	DSE.HOME has been removed and .path.package is used in its place.
 
-    o	version.dse now gives the version of each package.
+    o	version.DSE now gives the version of each package.
 
 Changes Affecting Development
 

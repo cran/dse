@@ -3,7 +3,7 @@
 \alias{scale.TSestModel}
 \alias{scale.ARMA}
 \alias{scale.innov}
-\alias{scale.non.innov}
+\alias{scale.nonInnov}
 \alias{checkScale}
 \alias{checkScale.TSestModel}
 \alias{checkScale.TSmodel}
@@ -15,7 +15,7 @@
     \method{scale}{TSestModel}(x, center=FALSE, scale=NULL)
     \method{scale}{ARMA}(x, center=FALSE, scale=NULL)
     \method{scale}{innov}(x, center=FALSE, scale=NULL)
-    \method{scale}{non.innov}(x, center=FALSE, scale=NULL)
+    \method{scale}{nonInnov}(x, center=FALSE, scale=NULL)
     
     checkScale(x, scale)
     \method{checkScale}{TSestModel}(x, scale)
@@ -57,7 +57,7 @@
     z <- scale(eg1.DSE.data.diff, 
         scale=list(input=rep(2, nseriesInput(eg1.DSE.data.diff)), 
                   output=rep(2,nseriesOutput(eg1.DSE.data.diff))))
-    model <- est.VARX.ls(eg1.DSE.data.diff)
+    model <- estVARXls(eg1.DSE.data.diff)
     model <- scale(model, 
         scale=list(input=rep(2, nseriesInput(eg1.DSE.data.diff)), 
                   output=rep(2,nseriesOutput(eg1.DSE.data.diff))))

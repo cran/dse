@@ -5,26 +5,26 @@
  data("egJofF.1dec93.data", package="dse1") 
  
   eg4.DSE.data<- egJofF.1dec93.data
-  output.data(eg4.DSE.data) <- output.data(eg4.DSE.data, series=c(1,2,6,7))
+  outputData(eg4.DSE.data) <- outputData(eg4.DSE.data, series=c(1,2,6,7))
 
-  eg4.DSE.model <- est.VARX.ls(eg4.DSE.data)
+  eg4.DSE.model <- estVARXls(eg4.DSE.data)
  
   new.data <- TSdata(
-              input= ts(rbind(input.data(eg4.DSE.data), matrix(.1,10,1)), 
+              input= ts(rbind(inputData(eg4.DSE.data), matrix(.1,10,1)), 
                        start=start(eg4.DSE.data),
                        frequency=frequency(eg4.DSE.data)),    
-              output=ts(rbind(output.data(eg4.DSE.data),matrix(.3,5,4)), 
+              output=ts(rbind(outputData(eg4.DSE.data),matrix(.3,5,4)), 
                        start=start(eg4.DSE.data),
                        frequency=frequency(eg4.DSE.data)))
   seriesNames(new.data) <- seriesNames(eg4.DSE.data)
 
-  z  <- l(TSmodel(eg4.DSE.model), trim.na(new.data)) 
+  z  <- l(TSmodel(eg4.DSE.model), trimNA(new.data)) 
 
   cat("Forecasting...\n")
 
   zz <- forecast(TSmodel(eg4.DSE.model), new.data)
-  z <-  forecast(TSmodel(eg4.DSE.model), trim.na(new.data), 
-		conditioning.inputs=input.data(new.data))
+  z <-  forecast(TSmodel(eg4.DSE.model), trimNA(new.data), 
+		conditioning.inputs=inputData(new.data))
   tfplot(zz, start.=c(1990,6))
 
   z <- forecast(eg4.DSE.model, conditioning.inputs.forecasts=matrix(.5,6,1)) 

@@ -12,7 +12,7 @@
     is.horizonForecasts(obj)
     horizonForecasts(obj, ...)
     \method{horizonForecasts}{TSmodel}(obj, data, horizons=1:4,
-	 discard.before=minimum.startup.lag(obj), compiled=.DSECOMPILED, ...)
+	 discard.before=minimumStartupLag(obj), compiled=.DSECOMPILED, ...)
     \method{horizonForecasts}{TSestModel}(obj, data=NULL, ...)
     \method{horizonForecasts}{TSdata}(obj, model, ...)
     \method{horizonForecasts}{forecastCov}(obj,horizons=NULL, 
@@ -35,9 +35,9 @@ TSmodel), data, horizons, discard.before, and horizonForecasts.
 horizonForecasts is an array with three dimension: 
 \code{c(length(horizons), dim(model$data))}.
 Projections are not calculated before discard.before or after
-the end of output.data(data).
+the end of outputData(data).
 Each horizon is aligned so that horizonForecasts[h,t,] contains the forecast
-for the data point output.data(data)[t,] (from horizon[h] periods prior).
+for the data point outputData(data)[t,] (from horizon[h] periods prior).
 }
 \details{
 Calculate multiple 'horizon'-step ahead forecasts 
@@ -51,7 +51,7 @@ ie. calculate forecasts but return only those indicated by horizons.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 z <-  horizonForecasts(model, eg1.DSE.data.diff)
 }
 %\keyword{DSE}

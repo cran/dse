@@ -13,10 +13,10 @@
     This tests if an object isnherits 
     from \code{forecastCovEstimatorsWRTdata.subsets}. This type of object
     code be generated in different ways but the only current example
-    is \code{mine.strip}.
+    is \code{stripMine}.
 }
 \seealso{
-    \code{\link{mine.strip}}
+    \code{\link{stripMine}}
 }
 \
 %\keyword{DSE}

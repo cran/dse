@@ -7,9 +7,7 @@
 \alias{tframe<-.rts}
 \alias{tframe<-.cts}
 \alias{tframe<-.its}
-\alias{tframe<-.tf}
 \alias{tframe<-.ts}
-\alias{tframe<-.POSIXtframe}
 \alias{is.tframe}
 
 \title{Extract or Set a tframe}
@@ -33,13 +31,11 @@
     \method{tframe}{ts}(x)
 
     tframe(x) <- value
-%    \method{tframe<-}{default}(x, value)
-%    \method{tframe<-}{rts}(x, value)
-%    \method{tframe<-}{cts}(x, value)
-%    \method{tframe<-}{its}(x, value)
-%    \method{tframe<-}{tf}(x, value)
-%    \method{tframe<-}{ts}(x, value)
-%    \method{tframe<-}{POSIXtframe}(x, value)
+    \method{tframe}{default}(x) <- value
+    \method{tframe}{rts}(x) <- value
+    \method{tframe}{cts}(x) <- value
+    \method{tframe}{its}(x) <- value
+    \method{tframe}{ts}(x) <- value
 
     is.tframe(tf)
 }

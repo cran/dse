@@ -39,7 +39,7 @@
     The function \code{as.TSdata} uses the elements input and output 
     directly and
     strips away other class information and parts of the object (and does 
-    not make use of input.data(data) or output.data(data) which may 
+    not make use of inputData(data) or outputData(data) which may 
     do something special for certain classes.
 }
 \seealso{
@@ -48,7 +48,7 @@
 \code{\link[dse2]{freeze.TSPADIdata}},
 \code{\link{TSmodel}},
 \code{\link{TSestModel.object}}
-\code{\link[dse2]{set.TSPADIdata}}
+\code{\link[dse2]{setTSPADIdata}}
 }
 %\keyword{DSE}
 \keyword{ts}

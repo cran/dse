@@ -24,7 +24,7 @@ as a diagonal matrix.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- to.SS(est.VARX.ls(eg1.DSE.data.diff))
+model <- toSS(estVARXls(eg1.DSE.data.diff))
 gmap(2, model)
 }
 %\keyword{DSE}

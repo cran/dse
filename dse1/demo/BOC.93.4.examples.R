@@ -6,11 +6,11 @@ require("dse1")
  cat("This demo reproduces some results from Bank of Canada Working Paper 93-4.\n")
 
    sub.sample <- TSdata(
-      input=tfwindow(input.data(eg1.DSE.data.diff),end=c(1981,2)),
-      output=tfwindow(output.data(eg1.DSE.data.diff),end=c(1981,2)) )
+      input=tfwindow(inputData(eg1.DSE.data.diff),end=c(1981,2)),
+      output=tfwindow(outputData(eg1.DSE.data.diff),end=c(1981,2)) )
 
-   VAR.model <- est.VARX.ar(sub.sample, re.add.means=F)
-   SS1.model <- l(balance.Mittnik(to.SS(VAR.model), n=9),sub.sample)
+   VAR.model <- estVARXar(sub.sample, re.add.means=F)
+   SS1.model <- l(balanceMittnik(toSS(VAR.model), n=9),sub.sample)
 
    g1 <- diag(1,9)
    g1[1:3,] <- SS1.model$model$H
@@ -21,7 +21,7 @@ require("dse1")
                   #   happened in the paper
    example.gap.matrix <-g1 %*% g2
    SSgap.model <- l(gmap(example.gap.matrix,SS1.model),sub.sample)
-   ARMA.model<- l(to.ARMA(SS1.model),sub.sample)
+   ARMA.model<- l(toARMA(SS1.model),sub.sample)
 
    print(VAR.model)   
    print(SS1.model)

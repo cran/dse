@@ -26,11 +26,11 @@ model is controllable.
 \code{\link{observability}},
 \code{\link{stability}}
 \code{\link{roots}}
-\code{\link{McMillan.degree}}
+\code{\link{McMillanDegree}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- to.SS(est.VARX.ls(eg1.DSE.data.diff))
+model <- toSS(estVARXls(eg1.DSE.data.diff))
 reachability(model)
 }
 %\keyword{DSE}

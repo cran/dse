@@ -15,7 +15,7 @@
  	B=array(diag(1,3),c(1,3,3)))
   e.ls.mod1 <- EstEval( mod1, replications=100, 
  	simulation.args=list(sampleT=100, sd=1), 
- 	estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
+ 	estimation="estVARXls", estimation.args=list(max.lag=2), 
  	criterion="TSmodel", quiet=T)
 
      tfplot(coef(e.ls.mod1))
@@ -27,7 +27,7 @@
  
   e.ls.mod2 <- EstEval( mod2, replications=100, 
                      simulation.args=list(sampleT=100, sd=1), 
-                     estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
+                     estimation="estVARXls", estimation.args=list(max.lag=2), 
                      criterion="TSmodel", quiet=T)
 
      tfplot(coef(e.ls.mod2)) 
@@ -44,32 +44,32 @@
   
 
   pc <- forecastCovEstimatorsWRTtrue(mod3,
- 	estimation.methods=list(est.VARX.ls=list(max.lag=6)),
+ 	estimation.methods=list(estVARXls=list(max.lag=6)),
  	est.replications=2, pred.replications=10, quiet=T)
 
   tfplot(pc)
  
   pc.rd <- forecastCovReductionsWRTtrue(mod3,
- 	estimation.methods=list(est.VARX.ls=list(max.lag=3)),
+ 	estimation.methods=list(estVARXls=list(max.lag=3)),
  	est.replications=2, pred.replications=10, quiet=T)
 
   tfplot(pc.rd)
 
   data("eg1.DSE.data", package = "dse1") 
 
-  z <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
+  z <-outOfSample.forecastCovEstimatorsWRTdata(trimNA(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
- 		est.VARX.ar=list(warn=F), 
- 		est.VARX.ls=list(warn=F)), 
+ 		estVARXar=list(warn=F), 
+ 		estVARXls=list(warn=F)), 
  	trend=T, zero=T)
   tfplot(z)
 
-  zz <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
+  zz <-outOfSample.forecastCovEstimatorsWRTdata(trimNA(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
- 		est.black.box4=list(max.lag=3, verbose=F, warn=F),
-		est.VARX.ls=list(max.lag=3, warn=F)), 
+ 		estBlackBox4=list(max.lag=3, verbose=F, warn=F),
+		estVARXls=list(max.lag=3, warn=F)), 
 	trend=T, zero=T)
 
   tfplot(zz)

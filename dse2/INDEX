@@ -5,17 +5,17 @@ These are installed in the doc/ directory for each package.
 A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
 See also the bundle dseplus with related packages.
-coef.TSmodel.ee         Specific Methods for coef
+coef.TSmodelEstEval     Specific Methods for coef
 combine.forecastCov     Combine 2 Forecast Cov Objects
 distribution.MonteCarloSimulations
                         Generate distribution plots of Monte Carlo
                         simulations
 distribution            Plot distribution of estimates
 EstEval                 Evaluate an estimation method
-estimate.models         Estimate Models
-estimators.horizonForecasts
+estimateModels          Estimate Models
+estimatorsHorizonForecastsWRTdata
                         Estimate models and forecast at given horizons
-exclude.forecastCov     Filter Object to Remove Forecasts
+excludeForecastCov      Filter Object to Remove Forecasts
 extractforecastCov      Extract Forecast Covariance
 featherForecasts        Multiple Horizon-Step Ahead Forecasts
 forecastCovEstimatorsWRTdata
@@ -29,44 +29,42 @@ forecastCovReductionsWRTtrue
 forecastCovWRTtrue      Compare Forecasts to True Model Output
 forecast                Forecast Multiple Steps Ahead
 forecasts               Extract Forecasts
-generate.model.SS       Randomly generate a state space model
-gen.mine.data           Generate Data
+generateSSmodel         Randomly generate a state space model
+genMineData             Generate Data
 horizonForecastsCompiled
                         Calculate forecasts at specified horizons
 horizonForecasts        Calculate forecasts at specified horizons
 is.forecastCovEstimatorsWRTdata.subsets
                         Check Inheritance
-mine.stepwise           Mine Stepwise
-mine.strip              Select a Data Subset and Model
-min.forecastCov         Minimum Forecast Cov Models
-minimum.startup.lag     Starting Periods Required
+mineStepwise            Mine Stepwise
+minForecastCov          Minimum Forecast Cov Models
+minimumStartupLag       Starting Periods Required
 MonteCarloSimulations   Generate simulations
 nseriesfeatherForecasts
                         Number of Series
-out.of.sample.forecastCovEstimatorsWRTdata
+outOfSample.forecastCovEstimatorsWRTdata
                         Calculate Out-of-Sample Forecasts
 permute                 Permute
-phase.plots             Calculate Phase Plots
-plot.mine.stepwise      Plot Mine Stepwise Object
-print.estimated.models
-                        Print Specific Methods
-roots.estimated.models
-                        Roots Specific Methods
-select.forecastCov      Select Forecast Covariances Meeting Criteria
+phasePlots              Calculate Phase Plots
+plot.mineStepwise       Plot Mine Stepwise Object
+print.estimatedModels   Print Specific Methods
+roots.estimatedModels   Roots Specific Methods
+selectForecastCov       Select Forecast Covariances Meeting Criteria
 seriesNamesInput.forecast
                         TS Input and Output Specific Methods
-shock.decomposition     Shock Decomposition
-summary.estimated.models
+shockDecomposition      Shock Decomposition
+stripMine               Select a Data Subset and Model
+summary.estimatedModels
                         Summary Specific Methods
-test.equal.estimated.models
+testEqual.estimatedModels
                         Specific Methods for Testing Equality
-tfplot.coef.ee          Specific tfplot methods for coef.ee (EstEval)
-                        objects
+tfplot.coefEstEval      Specific tfplot methods for coefEstEval
+                        (EstEval) objects
 tfplot.forecastCov      Plots of Forecast Variance
 tfplot.MonteCarloSimulations
                         Generate plots of Monte Carlo simulations
-tfplot.roots.ee         Specific tfplot methods for roots.ee (EstEval)
-                        objects
+tfplot.rootsEstEval     Specific tfplot methods for rootsEstEval
+                        (EstEval) objects
 tfplot.TSdata.ee        Specific Methods for tfplot
-total.forecastCov       Sum covariance of forecasts across all series
+totalForecastCov        Sum covariance of forecasts across all series
 TSdata.forecastCov      TS Extractor Specific Methods

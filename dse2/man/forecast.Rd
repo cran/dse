@@ -51,22 +51,22 @@ are conditioned, the argument horizon is ignored (except when percent is
 specified) and the actual horizon is determined by the inputs in the 
 following way:
 If inputs are not specified by optional arguments (as below) then the default
-will be to use input.data(data). This will be the same as the function l() unless
-input.data(data) is longer than
-output.data(data) (after NAs are trimmed from each separately).
-Otherwise, if conditioning.inputs is specified it is used for input.data(data).
+will be to use inputData(data). This will be the same as the function l() unless
+inputData(data) is longer than
+outputData(data) (after NAs are trimmed from each separately).
+Otherwise, if conditioning.inputs is specified it is used for inputData(data).
 It must be a time series matrix or a list of time series matrices each
-of which is used in turn as input.data(data). The default above is the same as
-forecast(model, trim.na(data), conditioning.inputs=trim.na(input.data(data)) )
+of which is used in turn as inputData(data). The default above is the same as
+forecast(model, trimNA(data), conditioning.inputs=trimNA(inputData(data)) )
 Otherwise, if conditioning.inputs.forecasts is specified it is appended 
-to input.data(data). It must be a time series  
+to inputData(data). It must be a time series  
 matrix or a list of time series matrices each of which is 
-appended to input.data(data) and the concatenation used as conditioning.inputs.
+appended to inputData(data) and the concatenation used as conditioning.inputs.
 Both conditioning.inputs and conditioning.inputs.forecasts should not be
 specified.
 Otherwise, if percent is specified then conditioning.inputs.forecasts are set
 to percent/100 times the value of input corresponding to the last period
-of output.data(data) and used for horizon periods. percent can be a vector, 
+of outputData(data) and used for horizon periods. percent can be a vector, 
 in which case each value is applied in turn. ie c(90,100,110) would would 
 give results for conditioning.input.forecasts 10 percent above and below 
 the last value of input.
@@ -77,8 +77,8 @@ the last value of input.
 }
 \examples{
     if(is.R()) data("egJofF.1dec93.data", package="dse1")
-    model <- est.VARX.ls(window(egJofF.1dec93.data, end=c(1985,12)))
-    pr <- forecast(model, conditioning.inputs=input.data(egJofF.1dec93.data))
+    model <- estVARXls(window(egJofF.1dec93.data, end=c(1985,12)))
+    pr <- forecast(model, conditioning.inputs=inputData(egJofF.1dec93.data))
     #tfplot(pr) Rbug 0.90.1
     is.forecast(pr)
 } 

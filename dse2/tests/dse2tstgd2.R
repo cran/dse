@@ -12,7 +12,7 @@
 if(!require("dse2"))  stop("this test requires dse2.")
 if(!require("setRNG"))stop("this test requires setRNG.")
  Sys.info()
- version.dse()
+ DSEversion()
 
 print.values <- FALSE
 fuzz.small <- 1e-14
@@ -33,9 +33,15 @@ all.ok <- TRUE
      test.rng3 <- list(kind="default", normal.kind="default", 
                         seed=c( 53,41,26,39,10,1,19,25,56,32,28,3) )
     } else 
-    {test.rng1 <- test.rng2 <- test.rng3 <- test.rng4 <- 
+    {#As of R 1.7.1 a bug was recognized in Kinderman-Ramage and it was changed.
+     #   These tests use the old version named "Buggy Kinderman-Ramage" to
+     #   get old results for comparison.
+     test.rng1 <- test.rng2 <- test.rng3 <- test.rng4 <- 
+      if (version$major >= 1 && version$minor >= 7.1)
+           list(kind="Wichmann-Hill", normal.kind="Buggy Kinderman-Ramage",
+	        seed=c(979, 1479, 1542)) else
            list(kind="Wichmann-Hill", normal.kind="Kinderman-Ramage",
-	        seed=c(979, 1479, 1542))} # defaults changed in R 1.0.0
+	        seed=c(979, 1479, 1542))}
 	   # might consider also 
 	   #list(kind="Wichmann-Hill", normal.kind="user-supplied", seed=c(979, 1479, 1542))}
            # R's Box-Muller was declared not reproducible. 
@@ -60,8 +66,8 @@ data("egJofF.1dec93.data", package="dse1")
 if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   error <- abs(3352.4721630925987483 - 
-            sum(c(output.data(egJofF.1dec93.data),
-                   input.data(egJofF.1dec93.data))))
+            sum(c(outputData(egJofF.1dec93.data),
+                   inputData(egJofF.1dec93.data))))
   ok <-  fuzz.large > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -71,7 +77,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 # Section 4 - Model Estimation
 
   cat("Guide part 2 test 2 ... \n")
-  model.eg1.ls <- est.VARX.ls(trim.na(eg1.DSE.data), warn=FALSE)
+  model.eg1.ls <- estVARXls(trimNA(eg1.DSE.data), warn=FALSE)
 #  opts <-options(warn=-1) 
     subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12),warn=FALSE)
 #  options(opts)
@@ -82,7 +88,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   tfplot(model.eg1.ls, start.=c(1990,1))
 
  
-  z <- check.residuals(model.eg1.ls, plot.=FALSE, pac=TRUE)
+  z <- checkResiduals(model.eg1.ls, plot.=FALSE, pac=TRUE)
   check.value <- (
   if (!is.R())c(4.67445135116577148, 3274.42578125,      -2371.9997808950302)
   else        c(4.674448837156188,   3274.422653488969,  -2371.999780895034) )
@@ -101,9 +107,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   cat("Guide part 2 test 3 ... \n")
   # NB- non-stationary data. ar is not really valid
-  model.eg1.ar <- est.VARX.ar(trim.na(eg1.DSE.data), warn=FALSE) 
-  model.eg1.ss <- est.SS.from.VARX(trim.na(eg1.DSE.data), warn=FALSE) 
-# model.eg1.mle <- est.max.like(trim.na(eg1.DSE.data),model.eg1.ar) # this may be slow
+  model.eg1.ar <- estVARXar(trimNA(eg1.DSE.data), warn=FALSE) 
+  model.eg1.ss <- estSSfromVARX(trimNA(eg1.DSE.data), warn=FALSE) 
+# model.eg1.mle <- est.max.like(trimNA(eg1.DSE.data),model.eg1.ar) # this may be slow
   check.value <- if (!is.R()) c(6738.642280883833, 6921.352391513382) else
                               c(6738.562190977154, 6921.352391513382)#ts ar
   #elseif(is.R()) check.value <- c(6735.139112062216, 6921.352391513382)bats ar
@@ -125,11 +131,11 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   cat("Guide part 2 test 4a... \n")
    eg4.DSE.data<- egJofF.1dec93.data
-   output.data(eg4.DSE.data) <- output.data(eg4.DSE.data, series=c(1,2,6,7))
+   outputData(eg4.DSE.data) <- outputData(eg4.DSE.data, series=c(1,2,6,7))
  # following is optional 
- # tframe(output.data(eg4.DSE.data))<- tframe(output.data(egJofF.1dec93.data))
+ # tframe(outputData(eg4.DSE.data))<- tframe(outputData(egJofF.1dec93.data))
 
-  model.eg4.bb <- est.black.box(trim.na(eg4.DSE.data), max.lag=3, verbose=FALSE) 
+  model.eg4.bb <- estBlackBox(trimNA(eg4.DSE.data), max.lag=3, verbose=FALSE) 
 
   tst <- model.eg4.bb$estimates$like[1]
   printTestValue(c(tst), digits=18)
@@ -141,7 +147,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
 
   cat("Guide part 2 test 4b... \n")
-  z <- information.tests(model.eg1.ar, model.eg1.ss, Print=FALSE, warn=FALSE)
+  z <- informationTests(model.eg1.ar, model.eg1.ss, Print=FALSE, warn=FALSE)
 #  if (is.S())      check.value <- 231152.464267979725
 #  else if (is.R()) check.value <- 231151.0300943982  # ts ar
 # else if (is.R()) check.value <- 230978.2532793634  bats ar
@@ -161,18 +167,18 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 # Section 5 - Forecasting
 
   cat("Guide part 2 test 5 ... \n")
-  eg4.DSE.model <- est.VARX.ls(eg4.DSE.data)
+  eg4.DSE.model <- estVARXls(eg4.DSE.data)
 #  Fame call disabled for testing: new.data <- freeze(eg4.DSE.data.names) 
   new.data <- TSdata(
-              input= ts(rbind(input.data(eg4.DSE.data), matrix(.1,10,1)), 
+              input= ts(rbind(inputData(eg4.DSE.data), matrix(.1,10,1)), 
                        start=start(eg4.DSE.data),
                        frequency=frequency(eg4.DSE.data)),    
-              output=ts(rbind(output.data(eg4.DSE.data),matrix(.3,5,4)), 
+              output=ts(rbind(outputData(eg4.DSE.data),matrix(.3,5,4)), 
                        start=start(eg4.DSE.data),
                        frequency=frequency(eg4.DSE.data)))
   seriesNames(new.data) <- seriesNames(eg4.DSE.data)
-  z  <- l(TSmodel(eg4.DSE.model), trim.na(new.data)) 
-#  z <- l(TSmodel(eg4.DSE.model), trim.na(freeze(eg4.DSE.data.names)))
+  z  <- l(TSmodel(eg4.DSE.model), trimNA(new.data)) 
+#  z <- l(TSmodel(eg4.DSE.model), trimNA(freeze(eg4.DSE.data.names)))
   error <- max(abs(556.55870662521476788 -z$estimates$like[1]))
   ok <-  fuzz.large > error 
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -182,14 +188,14 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   cat("Guide part 2 test 6 ... \n")
   zz <- forecast(TSmodel(eg4.DSE.model), new.data)
-  z <-  forecast(TSmodel(eg4.DSE.model), trim.na(new.data), 
-		conditioning.inputs=input.data(new.data))
+  z <-  forecast(TSmodel(eg4.DSE.model), trimNA(new.data), 
+		conditioning.inputs=inputData(new.data))
   tfplot(zz, start.=c(1990,6))
   error <- abs(4.7990339556773520258 - sum(forecasts(z)[[1]]))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
-  ok <- test.equal(zz,z) & ok
+  ok <- testEqual(zz,z) & ok
   all.ok <- all.ok & ok 
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
@@ -278,13 +284,13 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   e.ls.mod1 <- EstEval( mod1, replications=100, 
  	rng=test.rng1,
  	simulation.args=list(sampleT=100, sd=1), 
- 	estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
+ 	estimation="estVARXls", estimation.args=list(max.lag=2), 
  	criterion="TSmodel", quiet=TRUE)
 
 #    e.ar.mod1 <- EstEval( mod1, replications=100, 
 #   	rng=test.rng1,
 #   	simulation.args=list(sampleT=100, sd=1), 
-#   	estimation="est.VARX.ar", estimation.args=list(max.lag=2, aic=FALSE), 
+#   	estimation="estVARXar", estimation.args=list(max.lag=2, aic=FALSE), 
 #   	criterion="TSmodel", quiet=TRUE)
 #   tfplot(coef(e.ar.mod1))
 
@@ -302,7 +308,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   e.ls.mod2 <- EstEval( mod2, replications=100, 
                      rng=test.rng2,
                      simulation.args=list(sampleT=100, sd=1), 
-                     estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
+                     estimation="estVARXls", estimation.args=list(max.lag=2), 
                      criterion="TSmodel", quiet=TRUE)
      old.par <- par(mfcol=c(2,1)) #set the number of plots on the plotics device
      on.exit(par(old.par))
@@ -347,7 +353,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   cat("Guide part 2 test 14... \n")
   pc <- forecastCovEstimatorsWRTtrue(mod3,
  	rng=test.rng3,
- 	estimation.methods=list(est.VARX.ls=list(max.lag=6)),
+ 	estimation.methods=list(estVARXls=list(max.lag=6)),
  	est.replications=2, pred.replications=10, quiet=TRUE)
   # the fuzz.small has to be relaxed here to accomodate differences in rnorm
   #   between Splus3.1 and Splus3.2  (the numbers are from Splus3.2)
@@ -366,7 +372,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   cat("Guide part 2 test 15... \n")
   pc.rd <- forecastCovReductionsWRTtrue(mod3,
  	rng=test.rng4,
- 	estimation.methods=list(est.VARX.ls=list(max.lag=3)),
+ 	estimation.methods=list(estVARXls=list(max.lag=3)),
  	est.replications=2, pred.replications=10, quiet=TRUE)
 
   check.value <- if (!is.R()) 
@@ -381,19 +387,19 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 16... \n")
-  z <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
+  z <-outOfSample.forecastCovEstimatorsWRTdata(trimNA(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
- 		est.VARX.ar=list(warn=FALSE), 
- 		est.VARX.ls=list(warn=FALSE)), 
+ 		estVARXar=list(warn=FALSE), 
+ 		estVARXls=list(warn=FALSE)), 
  	trend=TRUE, zero=TRUE)
   tfplot(z)
   opts <- options(warn=-1)
-  zz <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
+  zz <-outOfSample.forecastCovEstimatorsWRTdata(trimNA(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
- 		est.black.box4=list(max.lag=3, verbose=FALSE, warn=FALSE),
-		est.VARX.ls=list(max.lag=3, warn=FALSE)), 
+ 		estBlackBox4=list(max.lag=3, verbose=FALSE, warn=FALSE),
+		estVARXls=list(max.lag=3, warn=FALSE)), 
 	trend=TRUE, zero=TRUE)
 
 #    zf<-horizonForecasts(zz$multi.model[[1]],zz$data, horizons=c(1,3,6))

@@ -4,12 +4,12 @@ require("dse2")
  data("eg1.DSE.data.diff", package = "dse1") 
 
   cat("truncate sample to 240 periods.\n")
-  eg1.DSE.data.diff.trunc <- TSdata(input= input.data(eg1.DSE.data.diff)[1:240,, drop=F], 
-            output=output.data(eg1.DSE.data.diff)[1:240,])
+  eg1.DSE.data.diff.trunc <- TSdata(input= inputData(eg1.DSE.data.diff)[1:240,, drop=F], 
+            output=outputData(eg1.DSE.data.diff)[1:240,])
   seriesNames(eg1.DSE.data.diff.trunc)  <- seriesNames(eg1.DSE.data.diff)
 
   cat("estimates a VAR model using the truncated sample.\n")
-  V.1 <- est.VARX.ar(eg1.DSE.data.diff.trunc)
+  V.1 <- estVARXar(eg1.DSE.data.diff.trunc)
   
   cat("calculate the likelihood, one step ahead predictions, etc.\n")
   l.V.1 <-l(V.1, eg1.DSE.data.diff.trunc)
@@ -25,7 +25,7 @@ require("dse2")
   o.V.1 <-l(V.1, eg1.DSE.data.diff) 
 
   cat("convert the VAR model to a state space model balanced by Mittnik's technique.\n")
-  SS.V.1 <- to.SS(V.1) 
+  SS.V.1 <- toSS(V.1) 
 
   cat("likelihood, one step ahead predictions, etc., based on truncated sample.\n")
   l.SS.V.1 <-l(SS.V.1, eg1.DSE.data.diff.trunc) 
@@ -40,18 +40,18 @@ require("dse2")
   cat("\n")
 
   cat("Exhibit 2. Mittnik reduction from VAR model: \n")
-  M5.SS.V.1 <- reduction.Mittnik(SS.V.1, data=eg1.DSE.data.diff, criterion="taic")  
+  M5.SS.V.1 <- MittnikReduction(SS.V.1, data=eg1.DSE.data.diff, criterion="taic")  
   cat(paste(
    "  If criterion is not specified the program prompts for a state dimension\n",
    "  and returns that model. Results is put in the variable M5.SS.V.1."))
 
   cat("Exhibit 3. Mittnik estimation lag=3: \n")
-  M12.shift3 <- est.SS.Mittnik(eg1.DSE.data.diff.trunc, max.lag=3, n=12)
-  M12.shift3 <- reduction.Mittnik(M12.shift3, data=eg1.DSE.data.diff.trunc, criterion="taic")  
+  M12.shift3 <- estSSMittnik(eg1.DSE.data.diff.trunc, max.lag=3, n=12)
+  M12.shift3 <- MittnikReduction(M12.shift3, data=eg1.DSE.data.diff.trunc, criterion="taic")  
 
   cat("Exhibit 4. Mittnik estimation lag=4: \n")
-  M12.shift4 <- est.SS.Mittnik(eg1.DSE.data.diff.trunc,max.lag=4, n=15)
-  M12.shift4 <- reduction.Mittnik(M12.shift4, data=eg1.DSE.data.diff.trunc, criterion="taic")  
+  M12.shift4 <- estSSMittnik(eg1.DSE.data.diff.trunc,max.lag=4, n=15)
+  M12.shift4 <- MittnikReduction(M12.shift4, data=eg1.DSE.data.diff.trunc, criterion="taic")  
 
 
   cat(paste(

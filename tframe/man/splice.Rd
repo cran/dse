@@ -29,7 +29,7 @@ priority. The frequencies should be the same.
 
 \seealso{
     \code{\link{tfwindow}},
-    \code{\link{trim.na}},
+    \code{\link{trimNA}},
     \code{\link{tbind}}
 }
 

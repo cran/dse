@@ -3,7 +3,7 @@
 \alias{tframe<-.TSdata}
 \alias{tfwindow.TSdata}
 \alias{tbind.TSdata}
-\alias{trim.na.TSdata}
+\alias{trimNA.TSdata}
 
 \alias{window.TSdata}
 
@@ -11,15 +11,16 @@
 \description{See the generic function description.}
 \usage{
     \method{tframed}{TSdata}(x, tf=NULL, input.names=NULL, output.names=NULL)
-%    \method{tframe<-}{TSdata}(x, value)
+    \method{tframe}{TSdata}(x) <- value
     \method{tfwindow}{TSdata}(x, start=NULL, end=NULL, tf=NULL, warn=TRUE)
     \method{tbind}{TSdata}(d1, d2)
-    \method{trim.na}{TSdata}(x, start.=TRUE, end.=TRUE)
+    \method{trimNA}{TSdata}(x, start.=TRUE, end.=TRUE)
     \method{window}{TSdata}(x, start=NULL, end=NULL, tf=NULL, warn=TRUE, ...)
 }
 \arguments{
     \item{x}{See the generic function.}
     \item{tf}{a time frame. See the generic function.}
+    \item{value}{a time frame to associate with x.}
     \item{input.names}{See the generic function.}
     \item{output.names}{See the generic function.}
     \item{start}{See the generic function.}
@@ -36,7 +37,7 @@
     \code{\link[tframe]{tframed}},
     \code{\link[tframe]{tfwindow}},
     \code{\link[tframe]{tbind}},
-    \code{\link[tframe]{trim.na}}
+    \code{\link[tframe]{trimNA}}
 }
 
 %\keyword{DSE}

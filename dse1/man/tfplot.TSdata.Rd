@@ -21,8 +21,8 @@
     \item{...}{additional objects to be plotted.}
     \item{start.}{start of plot. (passed to tfwindow)}
     \item{end.}{end of plot. (passed to tfwindow)}
-    \item{select.inputs}{series to be plotted. (passed to select.series)}
-    \item{select.outputs}{series to be plotted. (passed to select.series)}
+    \item{select.inputs}{series to be plotted. (passed to selectSeries)}
+    \item{select.outputs}{series to be plotted. (passed to selectSeries)}
     \item{Title}{string to use for plot title (passed to plot).}
     \item{xlab}{string to use for x label (passed to plot).}
     \item{ylab}{string to use for y label (passed to plot).}

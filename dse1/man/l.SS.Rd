@@ -4,7 +4,7 @@
 \description{Evaluate a state space TSmodel.
 }
 \usage{
-    l.SS(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
+    \method{l}{SS}(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
          return.state=FALSE, return.track=FALSE, result=NULL, 
 	 compiled=.DSECOMPILED,
          warn=TRUE, return.debug.info=FALSE, ...)
@@ -67,7 +67,7 @@ error at each period ahead.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- to.SS(TSmodel(est.VARX.ls(eg1.DSE.data.diff)))
+model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
 lmodel <- l.SS(model,eg1.DSE.data.diff)
 }
 %\keyword{DSE}

@@ -3,10 +3,12 @@
 \title{DSE}
 \center{Dynamic Systems Estimation - Multivariate Time Series Package}
 \synopsis{}
-\usage{
-   library("dse1") # 1 is the main part
-   library("dse2") #   extensions
-  }
+
+\section{Usage}{
+   library("dse1") 
+   library("dse2") 
+}
+
 
 \description{
 This is a library of functions for time series modeling.  The library 

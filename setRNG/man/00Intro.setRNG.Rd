@@ -1,9 +1,11 @@
 \name{00Intro.setRNG}
 \alias{00Intro.setRNG}
 \title{setRNG}
-\usage{
-% library("setRNG")
+
+\section{Usage}{
+   library("setRNG") 
 }
+
 \description{
   Programs to set random number generator (and seed) in R and S.}
 \section{Introduction}{
@@ -13,7 +15,7 @@ the mechanism for converting uniform numbers to normally distributed numbers.
 
 The library also implements an approach to random number generation 
 which allows the same random experiments to be replicated in S and R.
-As of R 1.0.1 this adds nothing to R except for the function set.RNG which sets
+As of R 1.0.1 this adds nothing to R except for the function setRNG which sets
 both RNGkind and the seed. The functions allow the R results using 
 Wichmann-Hill and Box-Muller to be replicated in S.
 These functions are intended primarily as a way to confirm that other code works in 
@@ -29,7 +31,7 @@ The files in the S/ subdirectory of the package are for use with S (not R).
 
 \examples{
 is.R()
-set.RNG(kind="Wichmann-Hill", seed=c(979,1479,1542), normal.kind="Box-Muller")
+setRNG(kind="Wichmann-Hill", seed=c(979,1479,1542), normal.kind="Box-Muller")
 rnorm(10)
 }
 \keyword{programming}

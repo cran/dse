@@ -31,7 +31,7 @@ is returned and a warning is issued if warn=TRUE.
 
 \seealso{
     \code{\link{tfwindow}},
-    \code{\link{trim.na}},
+    \code{\link{trimNA}},
     \code{\link{splice}}
 }
 

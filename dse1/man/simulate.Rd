@@ -14,7 +14,7 @@
     \method{simulate}{SS}(model, input=NULL, 
         start. = NULL, freq = NULL,sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
 	rng=NULL, compiled=.DSECOMPILED, ...)
-    \method{simulate}{TSestModel}(model, input=input.data(model),
+    \method{simulate}{TSestModel}(model, input=inputData(model),
 			sd=NULL, SIGMA=NULL, ...)
 }
 \arguments{
@@ -84,7 +84,7 @@ The rng will be set first if it is specified.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 z <- simulate(model)}
 %\keyword{DSE}
 \keyword{ts}

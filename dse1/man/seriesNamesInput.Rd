@@ -36,6 +36,7 @@
 }
 \arguments{
     \item{x}{Object of class TSdata, TSmodel or TSestModel.}
+    \item{value}{value to be assigned to object.}
 }
 \value{
 The first usages gives a vector of strings with the series names.

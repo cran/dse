@@ -637,7 +637,7 @@ integer *an, *in, *jn;
     static doublereal trkerr[1]	/* was [1][1][1] */;
 
 
-/* Put parameters into arrays (as in S function set.arrays) and call KF */
+/* Put parameters into arrays (as in S function setArrays) and call KF */
 
 /*  The state and tracking error are not calculated. */
 /*       Use KF if these are needed. */
@@ -1845,7 +1845,7 @@ doublereal *aa, *bb, *ww;
     static integer i__, j, l;
 
 
-/* Put parameters into arrays (as in S function set.arrays) and call ARMA */
+/* Put parameters into arrays (as in S function setArrays) and call ARMA */
 
 /*  It is assummed that M,P,IA,IB, and IC - the dimensions of the parameter */
 /*    arrays - are given. Trying to calculate these causes problems. */

@@ -3,10 +3,10 @@
 \title{Plot Model Roots}
 \description{Calculate and plot roots of a model.}
 \usage{
-    plot.roots(x, pch='*', fuzz=0, ...)}
+    \method{plot}{roots}(x, pch='*', fuzz=0, ...)}
 \arguments{
-    \item{x}{An object of class TSmodel or a vector of complex (or real) 
-values as returned by the function roots.}
+    \item{x}{An object of class roots (a vector of complex (or real) 
+values as returned by the function roots).}
     \item{pch}{character to be used for the plot (passed to plot.default).}
     \item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
     \item{...}{(further arguments, currently disregarded).}
@@ -17,15 +17,15 @@ The eigenvalues of the state transition matrix or the inverse of the roots of th
 determinant of the AR polynomial are returned invisibly.
 }
 \seealso{
-    \code{\link{add.plot.roots}}
+    \code{\link{addPlotRoots}}
     \code{\link{roots}}
     \code{\link{stability}}
-    \code{\link{McMillan.degree}}
+    \code{\link{McMillanDegree}}
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model <- est.VARX.ls(eg1.DSE.data.diff)
-    plot.roots(model)
+    model <- estVARXls(eg1.DSE.data.diff)
+    plot(roots(model))
 }
 %\keyword{DSE}
 \keyword{ts}

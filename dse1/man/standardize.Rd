@@ -10,7 +10,7 @@ remove cross correlations between series.}
 \value{A time series matrix.}
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-z <- standardize(output.data(eg1.DSE.data.diff))
+z <- standardize(outputData(eg1.DSE.data.diff))
 }
 %\keyword{DSE}
 \keyword{ts}

@@ -22,7 +22,7 @@
     \item{start.}{start of plot. (passed to tfwindow)}
     \item{end.}{end of plot. (passed to tfwindow)}
     \item{tf}{a tframe or tframed object}
-    \item{series}{series to be plotted. (passed to select.series)}
+    \item{series}{series to be plotted. (passed to selectSeries)}
     \item{Title}{string to use for plot title.}
     \item{xlab}{string to use for x label (passed to plot).}
     \item{ylab}{string to use for y label (passed to plot).}

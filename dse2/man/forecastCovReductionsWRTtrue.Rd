@@ -29,7 +29,7 @@
     \item{quiet}{If TRUE then some messages are not printed.}
     \item{zero}{if TRUE the covariance is calculated for a forecast of zero.}
     \item{trend}{if TRUE the covariance is calculated for a forecast of trend.}
-    \item{estimation.methods}{a list as used by estimate.models.}
+    \item{estimation.methods}{a list as used by estimateModels.}
     \item{criteria}{a ...}
     \item{compiled}{a logical indicating if compiled code should be
       used. (Usually true except for debugging.)}
@@ -43,7 +43,7 @@
    (estimation.methods is as in estimation.models BUT ONLY THE FIRST IS USED.)
   discard.before is an integer indicating 1+the number of points in the
   beginning of forecasts to discard for calculating forecast covariances.
-  criteria can  be a vector of criteria as in information.tests,
+  criteria can  be a vector of criteria as in informationTests,
    (eg c("taic", "tbic") in which case the "best" model for each criteria
    is accounted separately. (ie. it is added to the beginning of the list of
   estimated models)

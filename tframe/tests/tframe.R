@@ -23,7 +23,7 @@ tframe.function.tests <- function( verbose=TRUE, synopsis=TRUE)
 
 
   if (verbose) cat("tframe test 2 ... ")
-  ok <- test.equal(tframe(data), tframe(data))
+  ok <- testEqual(tframe(data), tframe(data))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
@@ -111,8 +111,8 @@ tframe.function.tests <- function( verbose=TRUE, synopsis=TRUE)
   if (verbose) cat("tframe test 14... ")
   data <- tframed(matrix(rnorm(300),100,3), list(start=c(1961,1), frequency=12))
   z <- tfwindow(data, start=c(1963,2), end=c(1969,1))
-  ok <- test.equal(data, splice(z, data))
-  ok <- ok & test.equal(tframe(data), tframe(splice(z, data)))
+  ok <- testEqual(data, splice(z, data))
+  ok <- ok & testEqual(tframe(data), tframe(splice(z, data)))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
