@@ -27,7 +27,7 @@
     coef(model)
     coef(model) <- 0.1 + coef(model)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

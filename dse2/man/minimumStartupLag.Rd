@@ -33,6 +33,6 @@
 
 \note{There is some redundancy between this and startShift which 
       should be cleaned up.}
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

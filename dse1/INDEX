@@ -76,6 +76,7 @@ sourceInfo.TSdata       tfPADI Specific Methods
 SS                      State Space Models
 stability               Calculate Stability of a TSmodel
 standardize             standardize data
+state                   Extract State
 summary.TSdata          Specific Methods for Summary
 sumSqerror              Calculate sum of squared prediction errors
 testEqual.ARMA          Specific Methods for Testing Equality

@@ -30,6 +30,6 @@
     pr <- forecast(model, conditioning.inputs=inputData(egJofF.1dec93.data))
     z <- forecasts(pr)
 } 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

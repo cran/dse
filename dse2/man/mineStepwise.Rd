@@ -36,6 +36,6 @@
     a series is included for each element of rss.
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -36,7 +36,7 @@
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <-estSSfromVARX(eg1.DSE.data.diff)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

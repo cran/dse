@@ -25,6 +25,6 @@
     \code{\link[dse1]{TSmodel}} 
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

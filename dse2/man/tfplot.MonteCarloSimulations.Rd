@@ -36,6 +36,6 @@ model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model)
 tfplot(z)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -605,20 +605,24 @@ nseries.default <- function(x)  {if (is.matrix(x)) ncol(x) else 1}
  seriesNames <- function(x)       UseMethod("seriesNames")
 "seriesNames<-" <- function(x, value)UseMethod("seriesNames<-")
 
- seriesNames.default <- function(x)
-   {if (is.null(x)) return(NULL)
+ seriesNames.default <- function(x) {
+    if (is.null(x)) return(NULL)
     names <- attr(x, "seriesNames")
     if (is.null(names)) names <- dimnames(x)[[2]]
     if (is.null(names)) names <- paste("Series", seq(ncol(x)))
     names
-   }
+    }
 
-"seriesNames<-.default" <- function(x, value)
-  {if( (mode(value) != "character") || (length(value) != nseries(x)))
-      value <- seriesNames(value)
+"seriesNames<-.default" <- function(x, value) {
+   if (!is.null(value)) {
+      if (mode(value) != "character") value <- seriesNames(value)
+      if (length(value) != nseries(x))
+         stop("length of names (",length(value),
+	      ") does not match number of series(",nseries(x),").")
+      }
    attr(x,"seriesNames")<-value
    x
-  }
+   }
 
 
 
@@ -735,26 +739,30 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
     noise <- outputData(simulate(noise.model, sampleT=sampleT+lags))
     noise <- list(w0=noise[1:lags,,drop=FALSE], w=noise[lags+seq(sampleT),,drop=FALSE])
    }
-  if (is.null(noise))
-   {w0 <-matrix(NA,lags,p)
+  if (is.null(noise)) {
+    w0 <-matrix(NA,lags,p)
     w <- matrix(NA,sampleT,p)
-    if (!is.null(SIGMA))
-       {if(length(SIGMA) == 1) SIGMA <- diag(SIGMA, p)
+    if (!is.null(SIGMA)) {
+        if(length(SIGMA) == 1) SIGMA <- diag(SIGMA, p)
 	W <- t(chol(SIGMA))
         w <- t(W %*% t(matrix(rnorm((lags+sampleT)*p),(lags+sampleT),p)))
 	w0 <- w[1:lags,]
 	w  <- w[-c(1:lags),]
-       }
-    else
-      {if (length(sd)==1) sd <-rep(sd,p)
+        }
+    else {
+       if (length(sd)==1) sd <-rep(sd,p)
        for (i in 1:p)
          {w0[,i] <- rnorm(lags,sd=sd[i])
           w[,i]  <- rnorm(sampleT,sd=sd[i])
          }
-      }
+       }
     noise <- list(w=w, w0=w0)
-   }
-
+    }
+  else {
+     if (is.null(noise$w0) || is.null(noise$w) )
+       stop("supplied noise structure is not correct.")
+     }
+       
   if(!is.null(noise.baseline))
      {if (is.vector(noise.baseline))
         {if(length(noise.baseline)==1) noise$w <- noise$w + noise.baseline

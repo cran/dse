@@ -1,5 +1,10 @@
 
-/*  -- translated by f2c (version 20010224).
+/*
+
+NOTE  This C code is out of date. The fortran version of the code has been
+       modified and this file has not been updated!!!!!!!!
+       
+  -- translated by f2c (version 20010224).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */

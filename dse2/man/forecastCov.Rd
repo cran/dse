@@ -63,6 +63,6 @@ trend using data to estimation.sample.
     z <-  forecastCov(model1, model2, data=trimNA(eg1.DSE.data.diff))
     is.forecastCov(z)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

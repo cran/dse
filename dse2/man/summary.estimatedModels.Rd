@@ -70,7 +70,7 @@
     \code{\link{summary}}
     \code{\link{print}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

@@ -49,7 +49,7 @@ The second usages assigns a vector of strings to be the series names of data.
 if(is.R()) data("eg1.DSE.data", package="dse1")
 seriesNamesOutput(eg1.DSE.data) 
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

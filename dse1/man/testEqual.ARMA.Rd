@@ -22,6 +22,6 @@
 
 \seealso{\code{\link[tframe]{testEqual}} }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

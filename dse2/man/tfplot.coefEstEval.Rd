@@ -37,6 +37,6 @@
     \code{\link[tframe]{tfplot}}
     \code{\link{EstEval}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

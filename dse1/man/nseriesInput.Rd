@@ -44,6 +44,6 @@
 if(is.R()) data("eg1.DSE.data", package="dse1")
 nseriesOutput(eg1.DSE.data) 
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

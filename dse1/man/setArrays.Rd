@@ -22,7 +22,7 @@
 }
 \value{A TSmodel object.}
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{internal}
 
 

@@ -62,6 +62,6 @@ If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
     is.EstEval(z)
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

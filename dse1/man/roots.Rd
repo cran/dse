@@ -29,19 +29,34 @@
     \item{...}{arguments passed to other methods.}
 }
 \value{
-
 The eigenvalues of the state transition matrix or the inverse of the roots of the
 determinant of the AR polynomial are returned.
 }
+\details{
+   The equality of roots for equivalent state space and ARMA models is
+   illustrated in Gilbert (1993). The calculation of ARMA model roots is
+   more stable if the model is converted to state space and the roots
+   calculated from the state transition matrix (see Gilbert,2000). The
+   calculation is done this way by default. If \code{by.poly=TRUE} then
+   the determinant of the AR polynomial is expanded to get the roots.
+   }
 \seealso{
-\code{\link{stability}},
-\code{\link{McMillanDegree}}
-}
+  \code{\link{stability}},
+  \code{\link{McMillanDegree}}
+  }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- estVARXls(eg1.DSE.data.diff)
-roots(model)
-}
-%\keyword{DSE}
+  if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+  model <- estVARXls(eg1.DSE.data.diff)
+  roots(model)
+  }
+\references{
+    Gilbert, P. D. (1993) State space and ARMA models: An overview of
+    the equivalence. Working paper 93-4, Bank of Canada. Available at
+    <www.bank-banque-canada.ca/pgilbert>
+
+    Gilbert, P.D.(2000) A note on the computation of time series model roots, 
+    Applied Economics Letters 7, p423-424
+    }
+ \concept{DSE}
 \keyword{ts}
 

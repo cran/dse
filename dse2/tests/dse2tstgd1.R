@@ -1,5 +1,4 @@
-if(!require("mva"))   stop("this test requires mva.")
-if(!require("ts"))    stop("this test requires ts.")
+if(!require("stats"))   stop("this test requires stats.")
 if(!require("dse2"))  stop("this test requires dse2.")
 if(!require("setRNG"))stop("this test requires setRNG.")
  #x11()
