@@ -32,8 +32,8 @@
     The methods ***.ee are intended mainly to be called from EstEval as
     criterion for evaluating an estimation method.
 }
-\seealso{\code{\link{roots}}
-         \code{\link{stability}}
+\seealso{\code{\link[dse1]{roots}}
+         \code{\link[dse1]{stability}}
          \code{\link{EstEval}}
 	}
 

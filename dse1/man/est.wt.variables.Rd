@@ -23,7 +23,9 @@
 }
 \seealso{
     \code{\link{est.VARX.ls}}
-    \code{\link{est.min.sqerror}}
+    \code{\link{est.black.box}}
+    \code{\link{bft}}
+    \code{\link{est.max.like}}
 }
 %\keyword{DSE}
 \keyword{ts}

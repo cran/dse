@@ -26,10 +26,10 @@
 }
 
 \seealso{
-    \code{\link{periods}}, 
-    \code{\link{start}},
-    \code{\link{end}},
-    \code{\link{frequency}}
+    \code{\link[tframe]{periods}}, 
+    \code{\link[tframe]{start}},
+    \code{\link[tframe]{end}},
+    \code{\link[tframe]{frequency}}
 }
 %\keyword{DSE}
 \keyword{ts}

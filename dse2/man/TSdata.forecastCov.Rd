@@ -19,9 +19,9 @@
 }
 
 \seealso{ 
-    \code{\link{TSdata}} 
-    \code{\link{TSestModel}} 
-    \code{\link{TSmodel}} 
+    \code{\link[dse1]{TSdata}} 
+    \code{\link[dse1]{TSestModel}} 
+    \code{\link[dse1]{TSmodel}} 
 }
 
 %\keyword{DSE}

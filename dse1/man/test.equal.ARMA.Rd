@@ -20,7 +20,7 @@
     \item{fuzz}{see generic method.}
 }
 
-\seealso{ \code{\link{test.equal}} }
+\seealso{\code{\link[tframe]{test.equal}} }
 
 %\keyword{DSE}
 \keyword{ts}

@@ -45,7 +45,7 @@ The second usages assigns the input or output series.
 }
 \seealso{
     \code{\link{TSdata}}
-    \code{\link{select.series}}
+    \code{\link[tframe]{select.series}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data", package="dse1")

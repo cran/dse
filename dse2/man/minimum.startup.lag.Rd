@@ -28,7 +28,7 @@
 }
 
 \seealso{
-    \code{\link{TSmodel}}
+    \code{\link[dse1]{TSmodel}}
 }
 
 \note{There is some redundancy between this and startShift which 

@@ -6,24 +6,13 @@ A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
 See also the bundle dseplus with related packages.
 00Intro.dse1            DSE
-ARMA                    ARMA Model Constructor
-DSE.utilities           DSE Utilities
-DSECOMPILED             Use Compiled or S/R Code
-McMillan.degree         Calculate McMillan Degree
-Polynomials             Polynomial Utilities
-Portmanteau             Calculate Portmanteau statistic
-Riccati                 Riccati Equation
-SS                      State Space Models
-TSdata                  Construct TSdata time series object
-TSdata.object           time series data object
-TSestModel              Estimated Time Series Model
-TSmodel                 Time Series Models
 acf.M                   Calculate Auto-Covariance
 add.plot.roots          Add Model Roots to a plot
+ARMA                    ARMA Model Constructor
 balance.Mittnik         Balance a state space model
 best.TSestModel         Select Best Model
-check.balance           Check Balance of a TSmodel
 check.balanceMittnik    Check Balance of a TSmodel
+check.balance           Check Balance of a TSmodel
 check.consistent.dimensions
                         Check Consistent Dimensions
 check.residuals         Autocorrelations Diagnostics
@@ -31,39 +20,43 @@ coef.TSmodel            Extract Model Parameters
 combine                 Combine two objects.
 combine.TSdata          Combine series from two TSdata objects.
 diff.log                Calculate the difference of log data
+DSECOMPILED             Use Compiled or S/R Code
 eg1.DSE.data            Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data      Eleven Time Series used in Gilbert (1995)
-est.SS.Mittnik          Estimate a State Space Model
-est.SS.from.VARX        Estimate a state space TSmodel using VAR
-                        estimation
-est.VARX.ar             Estimate a VAR TSmodel
-est.VARX.ls             Estimate a VAR TSmodel
-est.black.box           Estimate a TSmodel
 est.black.box1          Estimate a TSmodel
 est.black.box2          Estimate a TSmodel
 est.black.box3          Estimate a TSmodel
 est.black.box4          Estimate a TSmodel
+est.black.box           Estimate a TSmodel
 est.max.like            Maximum Likelihood Estimation
+est.SS.from.VARX        Estimate a state space TSmodel using VAR
+                        estimation
+est.SS.Mittnik          Estimate a State Space Model
+est.VARX.ar             Estimate a VAR TSmodel
+est.VARX.ls             Estimate a VAR TSmodel
 est.wt.variables        Weighted Estimation
 findg                   Find Equivalence Transformation
 fix.constants           Fix TSmodel Coefficients (Parameters) to
                         Constants
 fixF                    Set SS Model F Matrix to Constants
 gmap                    Basis Transformation of a Model.
-information.tests       Tabulates selection criteria
 information.tests.calculations
                         Calculate selection criteria
+information.tests       Tabulates selection criteria
 input.data              TSdata Series
 l.ARMA                  Evaluate an ARMA TSmodel
 l                       Evaluate a TSmodel
 l.SS                    Evaluate a state space TSmodel
 markov.parms            Markov Parameters
+McMillan.degree         Calculate McMillan Degree
 nseriesInput            Number of Series in in Input or Output
 observability           Calculate Model Observability Matrix
 percent.change          Calculate percent change
-periods.TSdata          Specific Methods for tframed Data
 periodsInput            TSdata Periods
+periods.TSdata          Specific Methods for tframed Data
 plot.roots              Plot Model Roots
+Polynomials             Polynomial Utilities
+Portmanteau             Calculate Portmanteau statistic
 print.TSdata            Print Specific Methods
 print.TSestModel        Display TSmodel Arrays
 reachability            Calculate Model Reachability Matrix
@@ -71,26 +64,31 @@ reduced.models.Mittnik
                         Reduced Models via Mittnik SVD balancing
 reduction.Mittnik       Balance and Reduce a Model
 residual.stats          Calculate Residuals Statistics and Likelihood
+Riccati                 Riccati Equation
 roots                   Calculate Model Roots
 scale.TSdata            Scale Methods for TS objects
-seriesNames.TSdata      Series Names Specific Methods
 seriesNamesInput        TSdata Series Names
-set.arrays              Set TSmodel Array Information
+seriesNames.TSdata      Series Names Specific Methods
 set.parameters          Set TSmodel Parameter Information
 simulate                Simulate a TSmodel
 smoother                Evaluate a smoother with a TSmodel
 source.info.TSdata      tfPADI Specific Methods
+SS                      State Space Models
 stability               Calculate Stability of a TSmodel
 standardize             standardize data
-sum.sqerror             Calculate sum of squared prediction errors
 summary.TSdata          Specific Methods for Summary
+sum.sqerror             Calculate sum of squared prediction errors
 test.equal.ARMA         Specific Methods for Testing Equality
 tfplot.TSdata           Tfplot Specific Methods
 tframed.TSdata          Specific Methods for tframed Data
 to.ARMA                 Convert to an ARMA Model
-to.SS                   Convert to State Space Model
-to.SS.innov             Convert to State Space Innovations Model
 to.SSChol               Convert to Non-Innovation State Space Model
+to.SS.innov             Convert to State Space Innovations Model
 to.SSOform              Convert to Oform
+to.SS                   Convert to State Space Model
+TSdata.object           time series data object
+TSdata                  Construct TSdata time series object
+TSestModel              Estimated Time Series Model
+TSmodel                 Time Series Models
 version.dse             Print Version Information
 ytoypc                  Convert to year to year percent change

@@ -47,7 +47,7 @@
 }
 
 \seealso{
-    \code{\link{simulate}}
+    \code{\link[dse1]{simulate}}
 }
 
 \examples{

@@ -45,7 +45,7 @@ is not always the case, for example with est.black.box methods).
 If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
 }
 \seealso{
-\code{\link{simulate}}
+\code{\link[dse1]{simulate}}
 \code{\link{MonteCarloSimulations}}
 \code{\link{distribution}}
 \code{\link{forecastCovWRTtrue}}

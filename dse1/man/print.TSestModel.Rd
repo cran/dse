@@ -8,18 +8,20 @@
 Display TSmodel arrays.
 }
 \usage{
-    \method{print}{SS}(x, digits=options()$digits, ...)
-    \method{print}{ARMA}(x, digits=options()$digits, L=TRUE, fuzz=1e-10, ...)
+    \method{print}{SS}(x, digits=options()$digits, latex=FALSE, ...)
+    \method{print}{ARMA}(x, digits=options()$digits, latex=FALSE, L=TRUE, fuzz=1e-10, ...)
     \method{print}{TSestModel}(x, ...)
     }
 
 \arguments{
     \item{x}{An object of class TSmodel or TSestModel.}
     \item{digits}{the number of significant digits}
-    \item{L}{
+    \item{L}{logical
       if TRUE then ARMA model arrays are displayed as a polynomial matrix 
-      with L indicating lags. Otherwise, each lag of the array is 
+      with L indicating lags. Otherwise, each lag in the array is 
       displayed as a matrix.}
+    \item{latex}{logical. If TRUE additional context is added to make the output
+      suitable for inclusion in a latex document.}
     \item{fuzz}{
       ARMA model polynomial elements with absolute value less than fuzz
       are not displayed (i.e.-as if they are zero)}
@@ -34,6 +36,9 @@ as 0.9999999999)
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(eg1.DSE.data.diff)
 print(model)
+print(model, digits=3)
+print(model, digits=3, fuzz=0.001)
+print(model, digits=3, fuzz=0.001, latex=TRUE)
 }
 
 

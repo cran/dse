@@ -34,7 +34,7 @@
   result (and sometimes not even then). 
 }
 \seealso{
-    \code{\link{tfplot}}
+    \code{\link[tframe]{tfplot}}
     \code{\link{EstEval}}
 }
 %\keyword{DSE}

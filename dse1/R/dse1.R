@@ -150,34 +150,61 @@ print.TSestModel <- function(x, ...)
   invisible(x)
 }
 
-print.SS <- function(x, digits=options()$digits, ...) 
+print.SS <- function(x, digits=options()$digits, latex=FALSE, ...) 
     {#  (... further arguments, currently disregarded)
-     cat("F=\n"); print(x$F,digits=digits)
-     if(!is.null(x$G)) {cat("G=\n"); print(x$G,digits=digits) }
-     cat("H=\n"); print(x$H,digits=digits)
+     printM <- function(st, M, digits, latex)
+	{arrayc <- function(n)
+	   {cat("\\left[ \\begin{array}{"); for(j in 1:n) cat("c"); cat("}\n") }
+	 if (latex) cat("\\begin{equation}\n")
+	 cat("\n", st, "=\n")
+	 col <- if (is.matrix(M)) dim(M)[2] else length(M)
+	 if (latex) 
+	   {arrayc(col)
+	    if (!is.matrix(M)) M <- matrix(M, 1, length(M))
+	    M <- signif(M, digits=digits)
+            for (i in 1:dim(M)[1])
+	      {for (j in 1:dim(M)[2]) 
+	         {cat(M[i,j])
+		  if (j != dim(M)[2]) cat(" & ")
+		 }
+	       if (i != dim(M)[1]) cat("\\\\ \n")
+	      }
+	    cat("\n\\end{array} \\right] \n\\end{equation}\n")
+	   }
+	 else print(M, digits=digits)
+	 invisible()
+	}
+	
+     printM("F", x$F, digits, latex)
+     if(!is.null(x$G)) printM("G", x$G, digits, latex)
+     printM("H", x$H, digits, latex)
      if ( is.non.innov.SS(x)) 
-       {cat("Q=\n"); print(x$Q,digits=digits)
-        cat("R=\n"); print(x$R,digits=digits)
-        R <-x$R
+       {printM("Q", x$Q, digits, latex)
+        printM("R", x$R, digits, latex)
        }
-     if (is.innov.SS(x)) cat("K=\n"); print(x$K,digits=digits)
-     if(!is.null(x$z0)) cat("initial state=\n");print(x$z0,digits=digits)
+     else if (is.innov.SS(x))  printM("K", x$K, digits, latex)
+     if(!is.null(x$z0)) printM("initial state", x$z0, digits, latex)
      if(!is.null(x$P0))
-       cat("initial state tracking error=\n");print(x$P0,digits=digits)
+        printM("initial state tracking error", x$P0, digits, latex)
      invisible(x)
     }
 
-print.ARMA <- function(x, digits=options()$digits, L=TRUE, fuzz=1e-10, ...) 
+print.ARMA <- function(x, digits=options()$digits, latex=FALSE, L=TRUE, fuzz=1e-10, ...) 
 #  (... further arguments, currently disregarded)
    # L controls the form of the display for ARMA models. 
    #If true the poly.matrix is displayed with"Ln" printed.
-   {A <- x$A
+   {arrayc <- function(n)
+	{cat("\\left[ \\begin{array}{"); for(j in 1:n) cat("c"); cat("}\n") }
+        
+     A <- x$A
      B <- x$B
      C <- x$C
      if(!is.null(x$TREND))
         cat("TREND= ", format(signif(x$TREND,digits=digits)))
-     if (L)
-       {cat("\nA =\n")
+     if (latex | L)
+       {if (latex) cat("\\begin{equation}")
+        cat("\nA(L) =\n")
+        if (latex) arrayc(dim(A)[3])
         for(i in 1:dim(A)[2]) 
           {for(j in 1:dim(A)[3]) 
              {cat(format(signif(A[1,i,j],digits=digits)))
@@ -185,13 +212,15 @@ print.ARMA <- function(x, digits=options()$digits, L=TRUE, fuzz=1e-10, ...)
                  if (abs(A[l,i,j]) > fuzz)
                   {if(1==sign(A[l,i,j])) cat("+")
                    cat(format(signif(A[l,i,j],digits=digits)))
-                   cat("L",l-1,sep="")
+                   if (latex) cat("L^{",l-1,"}", sep="") else cat("L",l-1,sep="")
                   }
-               cat("    ")
+               if (latex & j != dim(A)[3]) cat(" & ") else cat("    ")
              }
-           cat("\n")
+           if (latex) cat("\\\\ \n") else cat("\n")
          }
-        cat("\nB =\n")
+        if (latex) cat("\\end{array} \\right] \n\\end{equation}\n\\begin{equation}")
+        cat("\nB(L) =\n")
+        if (latex) arrayc(dim(B)[3]) 
         for(i in 1:dim(B)[2]) 
           {for(j in 1:dim(B)[3]) 
              {cat(signif(B[1,i,j],digits=digits))
@@ -199,14 +228,17 @@ print.ARMA <- function(x, digits=options()$digits, L=TRUE, fuzz=1e-10, ...)
                  if (abs(B[l,i,j]) > fuzz)
                   {if(1==sign(B[l,i,j])) cat("+")
                    cat(signif(B[l,i,j],digits=digits))
-                   cat("L",l-1,sep="")
+                   if (latex) cat("L^{",l-1,"}", sep="") else cat("L",l-1,sep="")
                   }
-              cat("    ")
+              if (latex & j != dim(B)[3]) cat(" & ") else cat("    ")
              }
-           cat("\n")
-          }
-        if(!is.null(x$C)) 
-          {cat("\nC =\n")
+           if (latex) cat("\\\\ \n") else cat("\n")
+         }
+         if (latex) cat("\\end{array} \\right] \n\\end{equation}\n")
+         if(!is.null(x$C)) 
+          {if (latex) cat("\\begin{equation}")
+           cat("\nC(L) =\n")
+           if (latex) arrayc(dim(C)[3])
            for(i in 1:dim(C)[2]) 
            {for(j in 1:dim(C)[3]) 
              {cat(signif(C[1,i,j],digits=digits))
@@ -214,12 +246,14 @@ print.ARMA <- function(x, digits=options()$digits, L=TRUE, fuzz=1e-10, ...)
                  if (abs(C[l,i,j]) > fuzz)
                   {if(1==sign(C[l,i,j])) cat("+")
                    cat(signif(C[l,i,j],digits=digits))
-                   cat("L",l-1,sep="")
+                   if (latex) cat("L^{",l-1,"}", sep="") else cat("L",l-1,sep="")
                   }
-              cat("    ")
+              if (latex & j != dim(C)[3]) cat(" & ") else cat("    ")
              }
-             cat("\n")
-           } }
+             if (latex) cat("\\\\ \n") else cat("\n")
+           } 
+           if (latex) cat("\\end{array} \\right] \n\\end{equation}\n")
+	  }
        }
      else
        {for(l in 1:dim(A)[1]) {cat("\nA(L=",l-1,")\n");print(A[l,,],digits=digits)}
@@ -1205,7 +1239,7 @@ acf.M.TSdata <- function(obj, lag=round(6*log(periods(obj))),
   sampleT <-periods(data)
   if (sub.mean) d <- d- t(matrix(apply(d,2,mean),dim(d)[2],sampleT))
 #  if (type == "correlation") d <- d %*% diag(1/diag(t(d)%*%d/sampleT)^.5)
-#  z <-acf(d, type = type, plot=FALSE)$acf
+#  z <-acf(as.ts(d), type = type, plot=FALSE)$acf
   z <- array(NA, c(lag,p,dim(d)[2]))
   for (i in 1:lag) 
     {z[i,,] <- (t(d[i:sampleT,1:p]) %*% d[1:(sampleT+1-i),]) / (sampleT+1-i)
@@ -3844,7 +3878,7 @@ est.black.box4 <- function(data, estimation="est.VARX.ls",
 Portmanteau <- function(res){
   # Portmanteau statistic for residual
   if (is.R()) if (!require("ts", warn.conflicts = FALSE)) stop("package ts is required.")
-  ac <- acf(res,type="covariance", plot=FALSE)$acf
+  ac <- acf(as.ts(res),type="covariance", plot=FALSE)$acf
   p <- dim(ac)[1]
 #  a0 <- solve(ac[1,,])  the following is more robust than solve for
 #              degenerate densities
@@ -3919,21 +3953,25 @@ check.residuals.default <- function(obj, ac=TRUE, pac=TRUE,
           }
      if (ac)
        {#par(mfrow = c(1, 1), mar = c(2.1, 4.1,3.1, 0.1), oma=c(0,0,5,0) )
-        #acr  <-acf(resid, plot=TRUE)$acf
+        #acr  <-acf(as.ts(resid), plot=TRUE)$acf
         #mtext("Autocorrelations", side=3, outer=TRUE, cex=1.5)
-        acr  <-acf(resid, plot=TRUE, mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
+        acr  <-acf(as.ts(resid), plot=TRUE, mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
         mtext("Autocorrelations", side=3, outer=TRUE, cex=1.5, line=3)
        }
      if (pac)
        {#par(mfrow = c(1, 1), mar = c(2.1, 4.1,3.1, 0.1), oma=c(0,0,5,0) )
-        pacr <-acf(resid, plot=TRUE, type= "partial",
-	           mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf 
+        if(is.R()) pacr <- 
+	  pacf(as.ts(resid), plot=TRUE, mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
+	else   pacr <-
+           acf(as.ts(resid), plot=TRUE, type= "partial",
+	           mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
         mtext("Partial Autocorrelations", side=3, outer=TRUE, cex=1.5, line=3)
        }
     }
   else 
-    {if (ac)  acr  <-acf(resid, plot=FALSE)$acf
-     if (pac) pacr <-acf(resid, plot=FALSE, type= "partial")$acf 
+    {if (ac)  acr  <- acf(as.ts(resid), plot=FALSE)$acf
+     if (pac) pacr <- if (is.R()) pacf(as.ts(resid), plot=FALSE)$acf
+                          else    acf(as.ts(resid), plot=FALSE, type= "partial")$acf
     }
   if (ac & verbose)
     {cat("residual auto-correlations:\n")
