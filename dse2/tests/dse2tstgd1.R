@@ -51,9 +51,9 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
 #              output=tframed(eg1.DSE.data[,2:4,drop=FALSE], 
 #                                         list(start=c(1961,3), frequency=12)))
 # above worked, but needs DSE.HOME which is depreciated. use
-       data(eg1.DSE.data.diff, package="dse1")
-       data(eg1.DSE.data, package="dse1")
-       data(egJofF.1dec93.data, package="dse1")
+       data("eg1.DSE.data.diff", package="dse1")
+       data("eg1.DSE.data", package="dse1")
+       data("egJofF.1dec93.data", package="dse1")
         
    
   if (verbose) { cat("ok\n") }
@@ -81,19 +81,19 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
    if (graphics) tfplot(model1)
 
 # In the next test
-# with svd    sum(TSmodel(model2)$F)= -1.1078692933906153506 and 
+# with svd  (in Splus and previously in R)
+#             sum(TSmodel(model2)$F)= -1.1078692933906153506 and 
 # with La.svd sum(TSmodel(model2)$F)=  3.9469252417636165
 # which seems fairly large, but the matrix is 14x14 and 
 # the roots are almost identical
 
-#  error <- max(Mod(c(15.430979953081722655   - sum(TSmodel(model1)$A),
-#                         -1.1078692933906153506  - sum(TSmodel(model2)$F),
-#                         2.4561249653768193468   - sum(roots(model2)) )))
+  good <- if (is.R()) 
+      c(15.430979953081722655, 3.9469252417636165, 2.4561249653768193468) else
+      c(15.430979953081722655, -1.1078692933906153506, 2.4561249653768193468)
 
   test.value <- c(sum(TSmodel(model1)$A), sum(TSmodel(model2)$F),
                          sum(roots(model2)) )
-  error <- max(Mod(c(15.430979953081722655, 3.9469252417636165,
-                         2.4561249653768193468) - test.value))
+  error <- max(Mod(good - test.value))
   ok <- fuzz.large > error
   if (!ok) {print(test.value, digits=16)
             if (is.na(max.error)) max.error <- error

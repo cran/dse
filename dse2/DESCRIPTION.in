@@ -1,4 +1,4 @@
 Package: dse2
 Title: Dynamic Systems Estimation - extensions
 Description:  Multivariate Time Series - extensions
-Depends: R (>= 1.6.2), dse1 (>= 2003.2-1)
+Depends: R (>= 1.6.2), dse1 (>= 2003.3-1)
