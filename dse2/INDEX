@@ -1,0 +1,91 @@
+best.TSestModel          Select the best model
+combination.monitor.function.tests
+                         combination.monitor.function.tests
+combination.monitoring   Combination Monitoring
+combine.forecast.cov     Combine 2 forecast.cov type objects.
+distribution.monte.carlo.simulations
+                         Generate distribution plots of Monte Carlo
+                         simulations
+distribution             Plot distribution of estimates
+dse2.function.tests      dse2.function.tests
+dse3.function.tests      dse3.function.tests
+dse4.function.tests      dse4.function.tests
+est.black.box            Estimate a TSmodel
+est.black.box1           Estimate a TSmodel
+est.black.box2           Estimate a TSmodel
+est.black.box3           Estimate a TSmodel
+est.black.box4           Estimate a TSmodel
+est.max.like             Maximum likelihood estimation
+est.min.sqerror          est.min.sqerror
+est.SS.Mittnik           Estimate a state space model
+est.wt.variables         Weighted Estimation
+estimate.models          Estimate Models
+estimators.horizon.forecasts
+                         Estimate models and forecast at given horizons
+eval.estimation          Evaluate an estimation method
+exclude.forecast.cov     Filter object to remove forecasts
+extract.forecast.cov     extract.forecast.cov
+feather.forecasts        Multiple Horizon-Step Ahead Forecasts
+forecast.cov.estimators.wrt.data
+                         Calculate Forecast Cov of Estimators WRT Data
+forecast.cov.estimators.wrt.true
+                         Generate forecasts cov and compare against the
+                         output of a true model
+forecast.cov             Forecast covariance for different models
+forecast.cov.wrt.true    Generate forecasts and compare them against the
+                         output of a true model
+forecast                 Forecast Multiple Steps Ahead
+forecasts                Extract Forecasts
+fprint                   Formatted Printing of Time Series
+freeze.TSPADIdata        Get fixed data snapshot using TSPADI
+gen.mine.data            Generate Data
+generate.model.SS        Randomly generate a state space model
+getpadi                  Get Data from TSPADI Database Interface
+guide.example.tests      Users Guide Tests
+horizon.forecasts        Calculate forecasts at specified horizons
+input.data.TSPADIdata    TS Input and Output Specific Methods
+is.forecast.cov.estimators.wrt.data.subsets
+                         Check Inheritance
+min.forecast.cov         Minimum forecast cov models
+mine.stepwise            mine.stepwise
+mine.strip               Select a data subset and model
+minimum.startup.lag      Starting Periods Required
+modify.TSPADIdata        modify a TSPADIdata object
+monte.carlo.simulations  Generate simulations
+out.of.sample.forecast.cov.estimators.wrt.data
+                         Calculate out-of-sample forecasts
+parms.TSmodel.ee         Specific Methods for parms
+permute                  Permute
+phase.plots              Calculate phase plots
+plot.mine.stepwise       plot.mine.stepwise
+print.TSPADIdata         Print Specific Methods
+putpadi.TSdata           Specific Methods for putpadi
+reduced.models.Mittnik   Reduced Models via Mittnik SVD balancing
+reduction.Mittnik        Balance and reduce a model
+retrieve.and.verify.data
+                         retrieve and verify data
+roots.estimated.models   Roots Specific Methods
+select.forecast.cov      Select forecast covariances meeting given
+                         criteria
+set.TSPADIdata           Prompt for series names
+shock.decomposition      shock.decomposition
+simple.monitor.function.tests
+                         simple.monitor.function.tests
+simple.monitoring        Simple Monitoring
+source.info.TSPADIdata   TSPADIdata Specific Methods
+summary.TSPADIdata       Summary Specific Methods
+tagged.function.tests    tagged.function.tests
+tags                     Tagged Matrices
+test.equal.estimated.models
+                         Specific Methods for Testing Equality
+tfplot.forecast.cov      Plots of Forecast Variance
+tfplot.monte.carlo.simulations
+                         Generate plots of Monte Carlo simulations
+tfplot.TSdata            Specific Methods for tfplot
+tfwindow.tagged          Specific Methods for Tframed data
+total.forecast.cov       Sum covariance of forecasts across all series
+TSdata.forecast.cov      TS Extractor Specific Methods
+tsp.TSPADIdata           Specific Methods for tsp
+TSPADI.function.tests    TSPADI.function.tests
+TSPADIdata               Constructor for TSPADIdata object
+TSPADIdata2              Constructor for TSPADIdata object

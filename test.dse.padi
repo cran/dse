@@ -1,0 +1,49 @@
+#!/bin/sh
+
+#PADI=${PADI:=./} export PADI
+if [ $PADI ]; then
+  echo "Using PADI=" $PADI
+else
+  echo "Environment variable PADI must be set to run test.dse.padi!"
+  exit 0
+fi
+
+PATH=$PATH:$PADI/bin   export PATH
+echo "Using PATH=" $PATH
+
+rm -f .RData
+d=`date`
+
+R_LIBS=$PADI/rlibs:$R_LIBS  export R_LIBS
+echo "Using R_LIBS=" $R_LIBS
+
+PADI_STARTUP="simple.server"           export PADI_STARTUP
+PADI_CLEANUP="cleanup.simple.server"   export PADI_CLEANUP
+
+R  --vsize=6M --nsize=300K --no-save --quiet <<eofR
+   require("ts",    warn.conflicts=T)
+   require("dse2",  warn.conflicts=T)
+   require("padi",  warn.conflicts=T)
+   source("test.padi1.s")
+
+eofR
+rm -f .RData
+
+PADI_STARTUP="fame.server"             export PADI_STARTUP
+PADI_CLEANUP="cleanup.fame.server"     export PADI_CLEANUP
+
+R  --vsize=6M --nsize=400K  --no-save --quiet <<eofR
+   require("ts",    warn.conflicts=F)
+   require("dse2",  warn.conflicts=F)
+   require("padi",  warn.conflicts=F)
+   source("test.padi2.s")
+
+eofR
+rm -f .RData
+
+echo "========================================="
+echo "R test.padi1.s and test.padi2.s timing:"
+echo "start" $d
+echo "end  " `date`
+echo `uname -a`
+echo "========================================="

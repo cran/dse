@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# assuming the DSE R libraries are in the pwd set
+#R_LIBS=${R_LIBS:=$PWD/rlibs} export R_LIBS
+echo R_LIBS set to $R_LIBS
+
+rm -f .RData
+d=`date`
+
+R --nsize=1M --vsize=6M --no-save --quiet <<eofR
+  require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
+ #x11()
+  postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
+             # width=6, height=8, pointsize=10,
+  source("test.lite.s")
+  
+eofR
+
+echo "========================================="
+echo "R test.lite.s timing:"
+echo "start" $d
+echo "end  " `date`
+echo `uname -a`
+echo "========================================="
+
+rm -f .RData
+

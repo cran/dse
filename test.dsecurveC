@@ -1,0 +1,26 @@
+#!/bin/sh
+
+
+#R_LIBS=${R_LIBS:=$PWD/rlibs} export R_LIBS
+
+rm -f .RData
+d=`date`
+
+#  60M is too small at C1
+# 240M is too small at C2
+# 600M is too small at C3 
+ R --vsize=1000M --nsize=2M --no-save --quiet <<eofR
+# gcinfo(1)
+  require("dse2"); require("dse3") #,  warn.conflicts=F)
+  source("test.dsecurveC.s")
+
+eofR
+
+echo "========================================="
+echo "R test.dsecurveC.s timing:"
+echo "start" $d
+echo "end  " `date`
+echo `uname -a`
+echo "========================================="
+
+rm -f .RData

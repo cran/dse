@@ -1,0 +1,25 @@
+#!/bin/sh
+
+echo R_LIBS set to $R_LIBS
+
+rm -f .RData
+d=`date`
+
+R --nsize=1M --vsize=6M --no-save --quiet <<eofR
+  require("mva"); require("ts"); require("dse2"); require("dse3") # adds dse, tframe, and syskern
+ x11()
+ # postscript(file="juice.out.ps",  paper="letter", horizontal=F, onefile=T)
+ #           # width=6, height=8, pointsize=10,
+   juice.function.tests( verbose=F, graphics=T)
+  
+eofR
+
+echo "========================================="
+echo "R test.dse.juice timing:"
+echo "start" $d
+echo "end  " `date`
+echo `uname -a`
+echo "========================================="
+
+rm -f .RData
+

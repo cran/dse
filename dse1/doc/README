@@ -1,0 +1,19 @@
+      A Dynamic Systems Estimation library. 
+         Paul Gilbert, Bank of Canada
+
+This library implements an object oriented approach to time series modeling, 
+testing of forecasting models, and testing of estimation algorithms.
+
+The latest version of the library is available at
+   <http://www.bank-banque-canada.ca/pgilbert>.
+Please check the web site for more recent versions of the library.
+   
+Also at that web location is a "Brief User's Guide" in both postscript 
+(guide.ps) and PDF (guide.pdf) formats. In R the help documentation is added to
+R's help system when the package is installed. In Splus the help documention is
+available in an HTML based help facility which should be installed in the 
+directory html at the location in your file system where the library is 
+installed. Point your browser at dsehome.htm to begin.  
+
+
+
