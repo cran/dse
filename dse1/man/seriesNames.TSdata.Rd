@@ -25,6 +25,6 @@
 
 \seealso{ \code{\link[tframe]{seriesNames}} }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

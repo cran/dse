@@ -7,10 +7,10 @@ be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as c
 See also the bundle dseplus with related packages.
 coef.TSmodelEstEval     Specific Methods for coef
 combine.forecastCov     Combine 2 Forecast Cov Objects
+distribution            Plot distribution of estimates
 distribution.MonteCarloSimulations
                         Generate distribution plots of Monte Carlo
                         simulations
-distribution            Plot distribution of estimates
 EstEval                 Evaluate an estimation method
 estimateModels          Estimate Models
 estimatorsHorizonForecastsWRTdata
@@ -18,32 +18,34 @@ estimatorsHorizonForecastsWRTdata
 excludeForecastCov      Filter Object to Remove Forecasts
 extractforecastCov      Extract Forecast Covariance
 featherForecasts        Multiple Horizon-Step Ahead Forecasts
+forecast                Forecast Multiple Steps Ahead
+forecastCov             Forecast covariance for different models
 forecastCovEstimatorsWRTdata
                         Calculate Forecast Cov of Estimators WRT Data
 forecastCovEstimatorsWRTtrue
                         Compare Forecasts Cov Relative to True Model
                         Output
-forecastCov             Forecast covariance for different models
 forecastCovReductionsWRTtrue
                         Forecast covariance for different models
 forecastCovWRTtrue      Compare Forecasts to True Model Output
-forecast                Forecast Multiple Steps Ahead
 forecasts               Extract Forecasts
 generateSSmodel         Randomly generate a state space model
 genMineData             Generate Data
+horizonForecasts        Calculate forecasts at specified horizons
 horizonForecastsCompiled
                         Calculate forecasts at specified horizons
-horizonForecasts        Calculate forecasts at specified horizons
 is.forecastCovEstimatorsWRTdata.subsets
                         Check Inheritance
 mineStepwise            Mine Stepwise
 minForecastCov          Minimum Forecast Cov Models
 minimumStartupLag       Starting Periods Required
 MonteCarloSimulations   Generate simulations
-nseriesfeatherForecasts
+nseries.featherForecasts
                         Number of Series
 outOfSample.forecastCovEstimatorsWRTdata
                         Calculate Out-of-Sample Forecasts
+periods.MonteCarloSimulations
+                        Tframe or Number of Periods
 permute                 Permute
 phasePlots              Calculate Phase Plots
 plot.mineStepwise       Plot Mine Stepwise Object
@@ -65,6 +67,6 @@ tfplot.MonteCarloSimulations
                         Generate plots of Monte Carlo simulations
 tfplot.rootsEstEval     Specific tfplot methods for rootsEstEval
                         (EstEval) objects
-tfplot.TSdata.ee        Specific Methods for tfplot
+tfplot.TSmodelEstEval   Specific Methods for tfplot
 totalForecastCov        Sum covariance of forecasts across all series
 TSdata.forecastCov      TS Extractor Specific Methods

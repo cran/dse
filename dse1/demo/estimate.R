@@ -7,13 +7,14 @@
   cat("Estimation...\n")
 
   model.eg1.ls <- estVARXls(trimNA(eg1.DSE.data), warn=F)
-  subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12))
+  subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12),
+                             warn=FALSE)
 
   summary(model.eg1.ls)
   model.eg1.ls # or print(model.eg1.ls)
   
   tfplot(model.eg1.ls)
-  tfplot(model.eg1.ls, start.=c(1990,1))
+  tfplot(model.eg1.ls, start=c(1990,1))
 
   checkResiduals(model.eg1.ls, plot.=F, pac=T)
 

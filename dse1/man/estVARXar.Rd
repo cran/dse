@@ -77,6 +77,6 @@ the model for the exog. variable (as estimated by ar() is  discarded.
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXar(eg1.DSE.data.diff)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

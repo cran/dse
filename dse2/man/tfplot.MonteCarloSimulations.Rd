@@ -3,19 +3,17 @@
 \title{Generate plots of Monte Carlo simulations}
 \description{Generate plots of Monte Carlo simulations.}
 \usage{
-    \method{tfplot}{MonteCarloSimulations}(x, start.=NULL, end.=NULL,
+    \method{tfplot}{MonteCarloSimulations}(x, 
+    tf=tframe(x$simulations), start=tfstart(tf), end=tfend(tf),
     series=seq((dim(x$simulations)[2])), 
     select.simulations=seq(dim(x$simulations)[3]),
     graphs.per.page=5, mar=par()$mar)
 }
 \arguments{
     \item{x}{The result of MonteCarloSimulations.}
-    \item{start.}{
-    The starting period for plots. (The default NULL gives the start of 
-    the simulations.)}
-    \item{end.}{
-    The ending period for plots.(The default NULL gives the end of 
-    the simulations.)}
+    \item{tf}{The time frame for plots. see \code{tfplot}.}
+    \item{start}{The starting period for plots, taken from tf by default.}
+    \item{end}{The ending period for plots, taken from tf by default.}
     \item{series}{
        The series which should be plotted. The default NULL gives all series.}
     \item{select.simulations}{
@@ -38,6 +36,6 @@ model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model)
 tfplot(z)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

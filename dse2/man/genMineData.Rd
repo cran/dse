@@ -59,6 +59,6 @@
     ymodel <- TSmodel(estVARXls(z, max.lag=3))   
     sim.data <- genMineData(umodel, ymodel)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

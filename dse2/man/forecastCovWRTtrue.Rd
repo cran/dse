@@ -64,6 +64,6 @@ data <- simulate(true.model)
 models <- list(TSmodel(estVARXar(data)),TSmodel(estVARXls(data)))
 z <-  forecastCovWRTtrue( models, true.model)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -12,7 +12,6 @@ earliestEnd             Start and End for Objects with Multiple Time
                         Series
 freeze                  Get fixed data snapshot
 nseries                 Number of Series
-periods                 Extract Time Frame Information
 selectSeries            Extract a Subset of Series
 seriesNames             Names of Series in a time series object
 splice                  Splice Time Series
@@ -22,7 +21,8 @@ testEqualtframes        Compare Two Time Frames
 tfExpand                Expand a Tframe or Tframed Object.
 tfplot                  Plot Tframed Objects
 tfprint                 Print Tframed Objects
-tframed                 Construct a Tframed Object
 tframe                  Extract or Set a tframe
+tfspan                  Time Span
+tfstart                 Extract Time Frame Information
 tfwindow                Truncate a Time Series
 trimNA                  Trim NAs from Time Series

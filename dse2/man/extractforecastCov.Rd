@@ -23,6 +23,6 @@
     \code{\link{forecastCov}}
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

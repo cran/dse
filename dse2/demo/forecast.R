@@ -25,13 +25,13 @@
   zz <- forecast(TSmodel(eg4.DSE.model), new.data)
   z <-  forecast(TSmodel(eg4.DSE.model), trimNA(new.data), 
 		conditioning.inputs=inputData(new.data))
-  tfplot(zz, start.=c(1990,6))
+  tfplot(zz, start=c(1990,6))
 
   z <- forecast(eg4.DSE.model, conditioning.inputs.forecasts=matrix(.5,6,1)) 
   summary(z)
   tfplot(z)
 
-  tfplot(z, start.=c(1990,1)) 
+  tfplot(z, start=c(1990,1)) 
 
   z <- l(TSmodel(eg4.DSE.model), new.data)
   tfplot(z)

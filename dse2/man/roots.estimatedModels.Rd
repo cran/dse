@@ -9,13 +9,13 @@
 \title{Roots Specific Methods}
 \description{See the generic function description.}
 \usage{
-    \method{roots}{estimatedModels}(obj, digits=options()$digits, mod =FALSE)
+    \method{roots}{estimatedModels}(obj, digits=options()$digits, mod =FALSE, ...)
     \method{roots}{forecastCovEstimatorsWRTtrue}(obj, digits=options()$digits,
-       mod=FALSE)
-    \method{roots}{coefEstEval}(obj, criterion.args=NULL)
+       mod=FALSE, ...)
+    \method{roots}{coefEstEval}(obj, criterion.args=NULL, ...)
     \method{roots}{rootsEstEval}(obj, ...)
-    \method{roots}{TSestModelEstEval}(obj, criterion.args=NULL)
-    \method{roots}{TSmodelEstEval}(obj, criterion.args=list(randomize = TRUE))
+    \method{roots}{TSestModelEstEval}(obj, criterion.args=NULL, ...)
+    \method{roots}{TSmodelEstEval}(obj, criterion.args=list(randomize = TRUE), ...)
 }
 \arguments{
     \item{obj}{an object from which roots are to be extracted or calculated and
@@ -37,6 +37,6 @@
          \code{\link{EstEval}}
 	}
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

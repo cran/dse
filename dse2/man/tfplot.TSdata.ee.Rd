@@ -14,34 +14,39 @@
                        criterion ="coef", criterion.args=NULL)
     \method{tfplot}{TSestModelEstEval}(x, graph.args=NULL,
                        criterion ="coef", criterion.args=NULL)
-    \method{tfplot}{featherForecasts}(x, start.=NULL, end.=NULL, 
+    \method{tfplot}{featherForecasts}(x, tf=NULL, start=tfstart(tf), end=tfend(tf), 
         series=seq(nseries(x)), 
         Title="Predictions (dotted) and actual data (solid)", 
         ylab=seriesNamesOutput(x),
         graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    \method{tfplot}{forecast}(x, start.=NULL, end.=NULL,
+    \method{tfplot}{forecast}(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
         series = seq(length=nseriesOutput(x$data)),
 	Title="Predictions (dotted) and actual data (solid)",
         ylab = seriesNamesOutput(x$data), 
 	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    \method{tfplot}{EstEval}(x, start.=NULL, end.=NULL,
-        series = seq(length=nseriesOutput(x$truth)),
-	Title="Predictions (dotted) and actual data (solid)",
-        ylab = seriesNamesOutput(x$truth), 
+    \method{tfplot}{EstEval}(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
+        truth= if(is.TSdata(x$truth)) outputData(x$truth) else x$truth,
+        series = seq(length=nseries(truth)),
+	Title="Estimated (and true) results",
+        ylab = seriesNames(truth), remove.mean = FALSE,
 	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    \method{tfplot}{horizonForecasts}(x, start.=NULL, end.=NULL,
+    \method{tfplot}{horizonForecasts}(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
          series=seq(length=nseriesOutput(x$data)),
 	 Title="Predictions (dotted) and actual data (solid)", 
 	 ylab=seriesNamesOutput(x$data), 
 	 graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    \method{tfplot}{multiModelHorizonForecasts}(x, start.=NULL, end.=NULL,
-         series=NULL)
+    \method{tfplot}{multiModelHorizonForecasts}(x, 
+         tf=NULL, start=tfstart(tf), end=tfend(tf), series=NULL)
 }
 \arguments{
     \item{x}{an object for which a tfplot is to be produced.}
-    \item{start.}{see \code{tfplot}.}
-    \item{end.}{see \code{tfplot}.}
+    \item{tf}{see \code{tfplot}.}
+    \item{start}{see \code{tfplot}.}
+    \item{end}{see \code{tfplot}.}
+    \item{truth}{true value which will be plotted along with estimates.}
     \item{Title}{string of characters to use for title.}
+    \item{remove.mean}{logical indicating if means should be removed
+          before plotting results.}
     \item{ylab}{vector of strings for y axis labelling.}
     \item{graphs.per.page}{integer indicating number of graphs to place on a
        page.}
@@ -61,6 +66,6 @@
     \code{\link[tframe]{tfplot}}
     \code{\link{EstEval}} }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -51,6 +51,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- forecastCovEstimatorsWRTdata(eg1.DSE.data.diff, 
     estimation.methods=list(estVARXls=list(max.lag=4)))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

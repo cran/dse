@@ -37,7 +37,7 @@ all.ok <- TRUE
      #   These tests use the old version named "Buggy Kinderman-Ramage" to
      #   get old results for comparison.
      test.rng1 <- test.rng2 <- test.rng3 <- test.rng4 <- 
-      if (version$major >= 1 && version$minor >= 7.1)
+      if (as.numeric(version$major)+0.1*as.numeric(version$minor) >= 1.71 )
            list(kind="Wichmann-Hill", normal.kind="Buggy Kinderman-Ramage",
 	        seed=c(979, 1479, 1542)) else
            list(kind="Wichmann-Hill", normal.kind="Kinderman-Ramage",
@@ -85,7 +85,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   # print(model.eg1.ls)
   
   tfplot(model.eg1.ls)
-  tfplot(model.eg1.ls, start.=c(1990,1))
+  tfplot(model.eg1.ls, start=c(1990,1))
 
  
   z <- checkResiduals(model.eg1.ls, plot.=FALSE, pac=TRUE)
@@ -192,7 +192,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   zz <- forecast(TSmodel(eg4.DSE.model), new.data)
   z <-  forecast(TSmodel(eg4.DSE.model), trimNA(new.data), 
 		conditioning.inputs=inputData(new.data))
-  tfplot(zz, start.=c(1990,6))
+  tfplot(zz, start=c(1990,6))
   error <- abs(4.7990339556773520258 - sum(forecasts(z)[[1]]))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -209,7 +209,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   # summary(z)
   # print(z)
   tfplot(z)
-  tfplot(z, start.=c(1990,1))
+  tfplot(z, start=c(1990,1))
   
   #  forecasts(z)[[1]]
   #  tfwindow(forecasts(z)[[1]], start=c(1994,5)) 

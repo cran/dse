@@ -24,7 +24,7 @@
     .DSECOMPILED <- TRUE
     .DSEDUP <- TRUE
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{programming}
 
 

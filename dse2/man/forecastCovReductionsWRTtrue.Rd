@@ -46,6 +46,6 @@
    is accounted separately. (ie. it is added to the beginning of the list of
   estimated models)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

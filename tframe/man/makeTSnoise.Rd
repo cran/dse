@@ -35,5 +35,4 @@
     \item{frequency}{a time frequency to use for the generated matrix.}
 }
 \value{A time series matrix.}
-%\keyword{DSE}
 \keyword{internal}

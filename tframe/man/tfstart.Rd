@@ -1,46 +1,70 @@
-\name{periods}
+\name{tfstart}
 
-\alias{start}
+\alias{tfstart}
+\alias{tfstart.default}
+\alias{tfstart.tstframe}
+\alias{start.tframed}
 \alias{start.tframe}
-\alias{start.tstframe}
 
-\alias{end}
+\alias{tfend}
+\alias{tfend.default}
+\alias{tfend.tstframe}
+\alias{end.tframed}
 \alias{end.tframe}
-\alias{end.tstframe}
 
-\alias{frequency}
+\alias{tffrequency}
+\alias{tffrequency.default}
+\alias{frequency.tframed}
 \alias{frequency.tframe}
 
+\alias{tfperiods}
+\alias{tfperiods.default}
+\alias{tfperiods.stamped}
 \alias{periods}
 \alias{periods.default}
+\alias{periods.tframed}
 \alias{periods.tframe}
-\alias{periods.stamped}
 
-\alias{time}
+
+\alias{tftime}
+\alias{tftime.default}
+\alias{time.tframed}
 \alias{time.tframe}
 
 \title{Extract Time Frame Information}
 \description{Functions for extracting time frame information.}
 
 \usage{
-    start(x, ...)
+    \method{start}{tframed}(x, ...)
     \method{start}{tframe}(x, ...)
-    \method{start}{tstframe}(x, ...)
+    tfstart(x)
+    \method{tfstart}{default}(x)
+    \method{tfstart}{tstframe}(x)
 
-    end(x, ...)
+    \method{end}{tframed}(x, ...)
     \method{end}{tframe}(x, ...)
-    \method{end}{tstframe}(x, ...)
+    tfend(x)
+    \method{tfend}{default}(x)
+    \method{tfend}{tstframe}(x)
 
-    frequency(x, ...)
+    \method{frequency}{tframed}(x, ...)
     \method{frequency}{tframe}(x, ...)
+    tffrequency(x)
+    \method{tffrequency}{default}(x)
 
     periods(x)
     \method{periods}{default}(x)
+    \method{periods}{tframed}(x)
     \method{periods}{tframe}(x)
-    \method{periods}{stamped}(x)
+    tfperiods(x)
+    \method{tfperiods}{default}(x)
+    \method{tfperiods}{stamped}(x)
 
-    time(x, ...)
+    \method{time}{tframed}(x, ...)
     \method{time}{tframe}(x, ...)
+    tftime(x)
+    \method{tftime}{default}(x)
+    \method{time}{tframed}(x, ...)
 }
 
 \arguments{
@@ -73,10 +97,10 @@
 }
 \examples{
     z <- ts(rnorm(100), start=c(1982,1), frequency=12)
-    start(z)
+    tfstart(z)
     z <- tframed(matrix(rnorm(200), 100,2), 
             tf=list(start=c(1982,1), frequency=12))
-    end(z)
+    tfend(z)
     periods(z)
     time(z)
 }

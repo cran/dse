@@ -1,17 +1,18 @@
 \name{tfplot.TSdata}
 \alias{tfplot.TSdata}
-\alias{tfplot.TSmodel}
 \alias{tfplot.TSestModel}
 
 \title{Tfplot Specific Methods}
 \description{See the generic function description.}
 \usage{
-    \method{tfplot}{TSdata}(x, ..., start.=NULL,end.=NULL,
+    \method{tfplot}{TSdata}(x, ..., 
+        tf=NULL, start=tfstart(tf), end=tfend(tf), 
         select.inputs  = seq(length=nseriesInput(x)),
         select.outputs = seq(length=nseriesOutput(x)),
         Title=NULL, xlab=NULL, ylab=NULL, 
 	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    \method{tfplot}{TSestModel}(x, ..., start.=NULL,end.=NULL, 
+    \method{tfplot}{TSestModel}(x, ..., 
+        tf=NULL, start=tfstart(tf), end=tfend(tf), 
         select.inputs=NULL, select.outputs=NULL,
         Title=NULL, xlab=NULL, ylab=NULL, 
         graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
@@ -19,8 +20,9 @@
 \arguments{
     \item{x}{object to be plotted.}
     \item{...}{additional objects to be plotted.}
-    \item{start.}{start of plot. (passed to tfwindow)}
-    \item{end.}{end of plot. (passed to tfwindow)}
+    \item{start}{start of plot.}
+    \item{end}{end of plot.}
+    \item{tf}{an alternate way to specify start and end of plot.}
     \item{select.inputs}{series to be plotted. (passed to selectSeries)}
     \item{select.outputs}{series to be plotted. (passed to selectSeries)}
     \item{Title}{string to use for plot title (passed to plot).}
@@ -35,6 +37,6 @@
 
 \seealso{ \code{\link[tframe]{tfplot}} }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

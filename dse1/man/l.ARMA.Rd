@@ -25,14 +25,19 @@
     \item{...}{(further arguments, currently disregarded).}
 }
 
-\value{an object of class TSestModel (see TSestModel).}
+\value{
+  An object of class TSestModel (see TSestModel) containing the
+  calculated likelihood, prediction, etc. for ARMA model.
+  }
 
 \details{
 This function is called by the function l() when the argument to l is an ARMA
-model. Using l() is usually preferable to calling l.ARMA directly.
+model (see \link{ARMA}). Using l() is usually preferable to calling l.ARMA directly.
 l.ARMA calls a compiled program unless compiled=FALSE. The compiled version is much 
 faster. 
 
+sampleT is the length of data which should be used to 
+calculate the one-step ahead predictions, and likelihood value for the model:
 Output data must be at least as long as sampleT. If sampleT is not supplied it
 is taken to be periods(data).
 
@@ -47,6 +52,7 @@ error at each period ahead.
 
 }
 \seealso{
+\code{\link{ARMA}}
 \code{\link{l}},
 \code{\link{l.SS}}
 \code{\link{TSmodel}}
@@ -57,6 +63,7 @@ error at each period ahead.
     model <- TSmodel(estVARXls(eg1.DSE.data.diff))
     evalutated.model <- l.ARMA(model,eg1.DSE.data.diff)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
+
 

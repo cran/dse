@@ -20,6 +20,6 @@
 \seealso{
     \code{\link{EstEval}} 
     \code{\link{coef}} }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

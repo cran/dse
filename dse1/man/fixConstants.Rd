@@ -42,7 +42,7 @@
 \seealso{
     \code{\link{fixF}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

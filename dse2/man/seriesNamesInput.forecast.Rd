@@ -10,20 +10,20 @@
 \title{TS Input and Output Specific Methods}
 \description{See the generic function description.}
 \usage{
-    \method{seriesNamesInput}{forecast}(obj)
-    \method{seriesNamesInput}{featherForecasts}(obj)
-    \method{seriesNamesInput}{MonteCarloSimulations}(obj)
+    \method{seriesNamesInput}{forecast}(x)
+    \method{seriesNamesInput}{featherForecasts}(x)
+    \method{seriesNamesInput}{MonteCarloSimulations}(x)
 
-    \method{seriesNamesOutput}{forecast}(obj)
-    \method{seriesNamesOutput}{featherForecasts}(obj)
-    \method{seriesNamesOutput}{MonteCarloSimulations}(obj)
+    \method{seriesNamesOutput}{forecast}(x)
+    \method{seriesNamesOutput}{featherForecasts}(x)
+    \method{seriesNamesOutput}{MonteCarloSimulations}(x)
 }
 \arguments{
-    \item{obj}{an object from which to extract the names of the input or output
+    \item{x}{an object from which to extract the names of the input or output
       series.}
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

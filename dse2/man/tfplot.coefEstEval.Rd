@@ -4,12 +4,12 @@
 \title{Specific tfplot methods for coefEstEval (EstEval) objects}
 \description{See the generic function description.}
 \usage{
-    \method{tfplot}{coefEstEval}(x, cum=TRUE, norm=FALSE, bounds=TRUE,
+    \method{tfplot}{coefEstEval}(x, cumulate=TRUE, norm=FALSE, bounds=TRUE,
         invert=FALSE, Sort=FALSE, graphs.per.page = 5)
 }
 \arguments{
     \item{x}{an object for which a tfplot is to be produced.}
-    \item{cum}{logical indicating if the cumulative sum of roots should be
+    \item{cumulate}{logical indicating if the cumulative average of roots should be
        plotted}
     \item{invert}{logical indicating if the inverse of roots should be
        plotted}
@@ -23,10 +23,10 @@
 }
 
 \details{
- If cum is true the cummulative average is plotted.
+ If cumulate is true the cumulative average is plotted.
  If norm is true the norm is used, each parameter is plotted.
- If invert is true the reciprical is used (before cummulating).
- If Sort is true then sort is applied (before cum). This is not usually
+ If invert is true the reciprical is used (before cumulating).
+ If Sort is true then sort is applied (before ave). This is not usually
    recommended but of interest
    with estimation methods like black.box which may not return parameters
    of the same length or in the same order.
@@ -37,6 +37,6 @@
     \code{\link[tframe]{tfplot}}
     \code{\link{EstEval}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

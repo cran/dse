@@ -43,9 +43,18 @@ with \code{estimates$pred} and the result is an object of class TSdata (or a
 list of objects of class TSdata).
 }
 \details{
-If code{cumulate} is TRUE then the data is cumulated first. \code{cumulate} can be
-a logical vector with elements corresponding to columns of m.
-}
+  Calculate the percent change relative to the data lag periods prior.
+  obj should be  a  matrix or vector.
+ 
+  If code{cumulate} is TRUE then the data is cumulated first. \code{cumulate} can be
+  a logical vector with elements corresponding to columns of m.
+
+  For a TSmodel the percent change calculation is done
+  with input and output and the result is an object of class TSdata.
+
+  For a TSestModel the percent change calculation is done
+  with $estimates$pred and the result is an object of class TSdata
+  }
 \seealso{
 \code{\link{ytoypc}}
 }
@@ -53,6 +62,6 @@ a logical vector with elements corresponding to columns of m.
 if(is.R()) data("eg1.DSE.data", package="dse1")
 z <- percentChange(outputData(eg1.DSE.data))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

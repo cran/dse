@@ -31,6 +31,6 @@
     \code{\link[tframe]{end}},
     \code{\link[tframe]{frequency}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

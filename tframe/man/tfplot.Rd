@@ -10,18 +10,20 @@
 \usage{
     tfplot(x, ...)
 
-    \method{tfplot}{default}(x, ..., start.=NULL, end.=NULL, tf=NULL,
+    \method{tfplot}{default}(x, ..., tf=tfspan(x, ...), start=tfstart(tf), end=tfend(tf),
        series=seq(nseries(x)), Title=NULL, xlab=NULL, ylab=seriesNames(x), 
        graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    tfOnePlot(x, xlab=NULL, ylab=NULL, ...)
+    tfOnePlot(x, xlab=NULL, ylab=NULL, 
+              tf=tframe(x), start=tfstart(tf), end=tfend(tf),...)
 }
 
 \arguments{
     \item{x}{a tframe or tframed object to plot.}
     \item{...}{any additional tframed objects for the same plot.}
-    \item{start.}{start of plot. (passed to tfwindow)}
-    \item{end.}{end of plot. (passed to tfwindow)}
-    \item{tf}{a tframe or tframed object}
+    \item{start}{start of plot. (passed to tfwindow)}
+    \item{end}{end of plot. (passed to tfwindow)}
+    \item{tf}{a tframe or tframed object which can be used to specify start and
+    end.}
     \item{series}{series to be plotted. (passed to selectSeries)}
     \item{Title}{string to use for plot title.}
     \item{xlab}{string to use for x label (passed to plot).}
@@ -47,9 +49,9 @@
     New classes of time series may define
     there own \code{tfplot} (and \code{plot}) methods.
     
-    Note that the start and end arguments to tfplot are "start." and "end.".
-    In some situations truncation works and these can be abreviated, but
-    often it does not work and the error message is opague.
+    The start and end arguments to tfplot 
+    determine the start and end of the plot. The argument tf is an alternate way
+    to specify the start and end. It is ignored if start and end are specified.
 }
 \sideffects{An object is plotted.}
 \seealso{
@@ -61,7 +63,7 @@
 }
 \examples{
     tfplot(ts(rnorm(100), start=c(1982,1), frequency=12))
-    tfplot(ts(rnorm(100), start=c(1982,1), frequency=12), start.=c(1985,6))
+    tfplot(ts(rnorm(100), start=c(1982,1), frequency=12), start=c(1985,6))
 }
 \keyword{programming}
 \keyword{utilities}

@@ -53,6 +53,6 @@ Gilbert (1995).
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  estBlackBox2(eg1.DSE.data.diff)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

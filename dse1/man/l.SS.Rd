@@ -57,20 +57,62 @@ errors are calculated up to the horizon indicated
 by the length of error.weights. The weights are applied to the squared
 error at each period ahead.
 
+
+\code{sampleT} is the length of data which should be used for calculating
+one step ahead predictions. \code{y} must be at least as
+long as \code{sampleT}. If \code{predictT} is large than \code{sampleT} 
+then the model is simulated to 
+\code{predictT}. \code{y} is used if it is long enough. \code{u} must 
+be at least as long as \code{predictT}.
+The default \code{result=0} returns a list of all the results. Otherwise 
+only the indicated list element is return (eg. \code{result=1} return the 
+likelihood and \code{result=3} returns the one step ahead predictions.
+
+If \code{z0} is supplied in the model object it is used as the estimate 
+of the state at time 0. If not supplied it is set to zero.
+
+If \code{P0} is supplied  in the model object it is used as the initial 
+tracking error P(t=1|t=0). If not supplied it is set to the identity matrix.
+
+Additional objects in the result are
+ \code{Om} is the estimated output cov matrix.
+ \code{pred} is the time series of the one-step ahead predictions, E[y(t)|y(t-1),u(t)].
+ The series of prediction error is given by \code{y - pred}
+     If error.weights is greater than zero then weighted prediction 
+     errors are calculated up to the horizon indicated
+     by the length of error.weights. The weights are applied to the squared
+     error at each period ahead.
+ \code{trackError} is the time series of P, the one step ahead estimate 
+       of the state tracking error matrix at each 
+       period, Cov{z(t)-E[z(t)|t-1]}
+       The tracking error can only be calculated if Q and R are provided 
+       (i.e. non innovations form models).
+       Using the Kalman Innov K directly these are not necessary 
+       for the likelihood calculation,
+       but the tracking error cannot be calculated.
 }
+
+\reference{B. D. O.Anderson & J. B.Moore \emph{Optimal Filtering} p.39,44.}
+
 \seealso{
 \code{\link{SS}}
 \code{\link{l}}
 \code{\link{l.ARMA}}
 \code{\link{TSmodel}}
+\code{\link{TSestModel}}
 \code{\link{TSestModel.object}}
+\code{\link{state}}
 \code{\link{smoother}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
 lmodel <- l.SS(model,eg1.DSE.data.diff)
+summary(lmodel)
+tfplot(lmodel)
+lmodel <- l.SS(model,eg1.DSE.data.diff, return.state=TRUE)
+tfplot(state(lmodel, filter=TRUE))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

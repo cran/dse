@@ -40,6 +40,6 @@ up an object of class c("TSPADIdata", "TSdata").
 \code{\link{TSestModel.object}}
 \code{\link[dsepadi]{TSPADIdata}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

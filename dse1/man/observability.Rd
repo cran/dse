@@ -32,6 +32,6 @@
     model <- toSS(estVARXls(eg1.DSE.data.diff))
     observability(model)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

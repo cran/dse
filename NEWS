@@ -1,3 +1,91 @@
+
+    o  #fortan split into pieces in different packages
+    o   NAMESPACES??
+    o   revised tframe docmentation?, demo?, unbundled?
+               
+
+                CHANGES IN DSE AND DSEPLUS VERSION 2004.?-1
+ 
+Changes (Possibly) Affecting Users
+ 
+    o  The NEWS file for setRNG is now maintained separately in that package.
+
+    o  Started using separate version numbers for setRNG and syskern, but still
+       using a common one for all dse and dseplus packages.
+
+    o   moved some more documentation from the code into the help files. There
+        is still some clean up to do.
+
+    o   fixed documentation mistakes, bugs and error checking in
+        simulations with user supplied random numbers.
+
+    o  TREND in ARMA models generalized and documented better and to indicate
+       that this term in ARMA models handles more than just trends.
+
+    o  added "state" extraction utility and examples in SS, l.SS and 
+       smoother documentation 
+
+    o  added a check in seriesNames<- that the number of names matched the 
+       number of series.
+    
+    o added \concept{DSE} in the documentation. 
+
+Changes Affecting Development
+          
+    o  require(ts) and require(mva) changed to require(stats) for R 1.9.0
+      
+    o  continuing Makefile cleanup.
+
+    o  moved bundle constuction to Bundle directory.
+
+
+                CHANGES IN DSE, setRNG,  AND DSEPLUS VERSION 2004.4-1
+ 
+Changes (Possibly) Affecting Users
+ 
+    o   fixed window.default (tfwindow) warnings in vignettes
+          
+    o   fixed a bug in the constructor TSdata.default which prevented
+        tframe and series name information from being properly used
+	in the resulting TSdata object.
+
+Changes Affecting Development
+          
+    o   fixed some version number tests which will not work correctly in R-2.0.
+
+
+		CHANGES IN DSE, setRNG, AND DSEPLUS VERSION 2004.3-1
+
+Changes (Possibly) Affecting Users
+
+    o	setRNG has been unbundled from dse and is distributed as a standalone
+        package, but is required by dse.
+    
+    o	the tframe package was reworked to avoid the need to override generic
+        functions (start, end, frequency, time, and diff) in base, as this is
+	not allowed in 1.9.0. New generic functions (tfstart, ...) were 
+	added to look after some programming situations where the old 
+	generics do not work. Users typically should not need to use these 
+	methods at the command line (but may prefer to for programming). The
+	method periods() was renamed tfperiods() to give a consistent naming
+	convention.
+	
+    o	a tf (time frame) argument, which can replace start, end and frequency,
+        was added to several functions.	
+	
+    o	start. and end. where replaced by start and end in tfwindow, tfplot, and
+        simulate methods, since the code can now distinguish the function 
+	start() from the variable start.
+	
+    o	the names of some method arguments were modified to match generic
+        arguments (as caught be R 1.9.0 tools).
+
+Changes Affecting Development
+
+    o	makefiles were re-arranged and cleaned up.
+
+    o	as.double() and double() calls to .Fortran changed slightly.
+
 		CHANGES IN DSE AND DSEPLUS VERSION 2003.9-1
 
 Changes (Possibly) Affecting Users

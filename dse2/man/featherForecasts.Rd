@@ -51,6 +51,6 @@ model <- estVARXls(egJofF.1dec93.data)
 pr <- featherForecasts(model, egJofF.1dec93.data)
 tfplot(pr)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

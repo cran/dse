@@ -55,12 +55,13 @@ If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
     model <- estVARXls(TSdata(output=outputData(eg1.DSE.data.diff)))
     z <-  EstEval(model, 
        estimation="estVARXls", estimation.args=list(max.lag=2))
+    tfplot(z)
     zz <-  EstEval(model, 
        estimation="estVARXls", estimation.args=list(max.lag=2),
        simulation.args=list(sampleT=50, sd=1.5))
     is.EstEval(z)
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

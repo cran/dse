@@ -52,6 +52,6 @@ squares estimation of a VAR model.
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  estBlackBox3(eg1.DSE.data.diff)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

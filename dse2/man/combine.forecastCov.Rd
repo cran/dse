@@ -30,7 +30,7 @@ without re-doing the initial object.
 \code{\link{forecastCov}}
 }
 \examples{#z <-  combine(obj1, obj2)}
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 
