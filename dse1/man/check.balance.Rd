@@ -3,9 +3,7 @@
 \alias{check.balance.SS}
 \alias{check.balance.ARMA}
 \alias{check.balance.TSestModel}
-\alias{check.balance.Mittnik.ARMA}
-\alias{check.balance.Mittnik.SS}
-\alias{check.balance.Mittnik.TSestModel}
+
 \title{Check Balance of a TSmodel}
 \description{
 Calculate the difference between observability and reachability gramians.}
@@ -14,10 +12,7 @@ Calculate the difference between observability and reachability gramians.}
     \method{check.balance}{SS}(model)
     \method{check.balance}{ARMA}(model)
     \method{check.balance}{TSestModel}(model)
-    \method{check.balance}{Mittnik.ARMA}(model)
-    \method{check.balance}{Mittnik.SS}(model)
-    \method{check.balance}{Mittnik.TSestModel}(model)
-    }
+   }
 \arguments{
     \item{model}{A TSmodel object.}
 }
@@ -29,7 +24,7 @@ Differences  between the observability and reachability gramians are printed.
 Balanced models should have equal observability and reachability gramians.
 }
 \seealso{
-    \code{\link{check.balance.Mittnik}}
+    \code{\link{check.balanceMittnik}}
     \code{\link[dse2]{reduction.Mittnik}}
 }
 \examples{

@@ -10,7 +10,11 @@ estimation information.}
     TSestModel(model)
     is.TSestModel(obj)
 }
-
+\arguments{
+    \item{obj}{An object.}
+    \item{...}{Another object containing a TSmodel or TSdata}
+    \item{model}{A list to be made into a TSestModel object.}
+}
 \details{
 This class of objects contains a time series model (TSmodel), 
 data (TSdata), and information obtained by evaluating the model 

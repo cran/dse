@@ -20,6 +20,7 @@ Calculate the McMillan degree of an ARMA TSmodel.
     \item{fuzz}{Roots within fuzz distance are counted as equivalent.}
     \item{verbose}{If T roots are printed.}
     \item{warn}{If F then warnings about unit roots added for TREND are not printed.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{
 A list with elements gross and distinct containing all roots 

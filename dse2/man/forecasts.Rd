@@ -1,14 +1,17 @@
 \name{forecasts}
 \alias{forecasts}
 \alias{forecasts.forecast}
-\alias{forecasts.feather.forecasts}
-\alias{forecasts.horizon.forecasts}
+\alias{forecasts.featherForecasts}
+\alias{forecasts.horizonForecasts}
 \title{Extract Forecasts}
 \description{Extract forecasts from and object.}
 \usage{
-    forecasts(obj, ...)
+    forecasts(obj)
+    \method{forecasts}{forecast}(obj)
+    \method{forecasts}{featherForecasts}(obj)
+    \method{forecasts}{horizonForecasts}(obj)
 }
-\arguments {
+\arguments{
     \item{obj}{An object which contains forecasts.}
 }
 \value{The forecasts from an object which contains forecasts.}

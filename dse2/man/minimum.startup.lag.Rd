@@ -10,7 +10,7 @@
 \usage{
     minimum.startup.lag(model)
 }
-\arguments {
+\arguments{
     \item{model}{A TSmodel or object containing a TSmodel.}
 }
 \value{An integer.}

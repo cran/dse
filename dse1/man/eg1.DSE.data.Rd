@@ -40,20 +40,13 @@
 	data(eg1.DSE.data.diff)
 }
 
-\arguments{
-	\item{input series 1}{R90}
-	\item{output series 1}{M1}
-	\item{output series 2}{GDP lagged two months}
-	\item{output series 3}{CPI}
-}
-
 \format{
 	The objects eg1.DSE.data and eg1.DSE.data.diff are TSdata objects.
 	The file eg1.dat is an ASCII file with 5 columns, the first enumerating
 	the observations, the second giving the input series, and the third to
 	fifth giving the output series. 
 	The input series name  is  "R90" and the output series names are
-	"M1", "GDPl2" and "CPI".
+	"M1", "GDPl2" and "CPI". GDPl2 is GDP lagged two months
 }
 
 \source{

@@ -5,11 +5,11 @@
 \title{Extract a Subset of Series}
 \description{Extract a subset of series from a tframed object.}
 \usage{
-    select.series(x, ...)
-    \method{select.series}{default}(x, series=seq(ncol(x)))
+    select.series(x, series = seqN(nseries(x)))
+    \method{select.series}{default}(x, series = seqN(nseries(x)))
     }
 
-\arguments {
+\arguments{
     \item{x}{A tframed object.}
     \item{series}{The subset of series to retain.}
 }

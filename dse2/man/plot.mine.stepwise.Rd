@@ -5,7 +5,7 @@
 \usage{
     plot.mine.stepwise(x)
 }
-\arguments {
+\arguments{
     \item{x}{Object returned by mine.stepwise.}
 }
 \value{None}

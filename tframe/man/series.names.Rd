@@ -1,12 +1,11 @@
 \name{series.names}
 \alias{series.names}
 \alias{series.names.default}
-\alias{series.names.tfPADIdata}
 \alias{series.names<-}
 \alias{series.names<-.default}
 
-\title{Names of Series in a tframed object}
-\description{Extract or set names of series in a tframed object.}
+\title{Names of Series in a time series object}
+\description{Extract or set names of series in a time series object.}
 \usage{
     series.names(x)
     \method{series.names}{default}(x)
@@ -14,11 +13,13 @@
     series.names(data) <- names 
 }
 \arguments{
-    \item{data}{A tframed object.}
+    \item{x}{a time series object.}
+    \item{data}{a time series object.}
 }
 \value{
-The first usage gives a vector of strings with the series names.
-The second usage assigns a vector of strings to be the series names of data.
+The first usage returns a vector of strings with the series names. 
+The assignment method makes \code{names} (a vector of strings) 
+the series names of data.
 }
 \seealso{
     \code{\link{tframed}},

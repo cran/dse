@@ -34,7 +34,7 @@ estimate of the state (sometimes called a two sided filter).
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 #smoother requires an non-innovations form model
-model <- TSmodel(to.SS.Chol(est.VARX.ls(eg1.DSE.data.diff))) 
+model <- TSmodel(to.SSChol(est.VARX.ls(eg1.DSE.data.diff))) 
 smoothed.model <- smoother(model, eg1.DSE.data.diff, compiled=F)
 }
 %\keyword{DSE}

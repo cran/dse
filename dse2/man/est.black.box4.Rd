@@ -14,27 +14,30 @@
 }
 \arguments{
     \item{data}{A TSdata object.}
-    \item{estimation}{A character string indicating the estimation method to use.}
-    \item{lag.weight}{Weighting to apply to lagged observations. }
+    \item{estimation}{a character string indicating the estimation method to use.}
+    \item{lag.weight}{weighting to apply to lagged observations. }
     \item{variable.weights}{
-    Weighting to apply to series if estimation method is est.wt.variables. }
-    \item{reduction}{Character string indicating reduction procedure to use. }
-    \item{criterion}{Character string indicating model selection criteria. }
-    \item{trend}{If T include a trend in the model. }
+       weighting to apply to series if estimation method is est.wt.variables.}
+    \item{reduction}{character string indicating reduction procedure to use.}
+    \item{criterion}{criterion to be used for model 
+       selection. see \code{information.tests.calculations}.}
+    \item{trend}{if T include a trend in the model.}
     \item{subtract.means}{
-    If T the mean is subtracted from the data before estimation.}
+       if T the mean is subtracted from the data before estimation.}
     \item{re.add.means}{
-    If subtract.means is T then if re.add.means is T the estimated model is
-    converted back to a model for data without the mean subtracted.}
+       if subtract.means is T then if re.add.means is T the estimated model is
+       converted back to a model for data without the mean subtracted.}
     \item{standardize}{
-    If T the data is transformed so that all variables have the same variance.}
+     if T the data is transformed so that all variables have the same variance.}
     \item{verbose}{
-    If T then additional information from the estimation and reduction 
-    procedures is printed.}
+       if T then additional information from the estimation and reduction 
+       procedures is printed.}
     \item{max.lag}{VAR estimation is done for each lag up to max.lag.}
     \item{sample.start}{
-    The starting point to use for calculating information criteria in the 
-    final selection.}
+       the starting point to use for calculating information criteria in the 
+       final selection.}
+    \item{warn}{logical indicating if warning messages should be suppressed.}
+    \item{...}{arguments passed to est.black.box4.}
 }
 \value{A TSestModel.}
 \details{
@@ -53,6 +56,7 @@ is described as the brute force technique (bft) in Gilbert (1995).
 \code{\link{est.black.box1}},
 \code{\link{est.black.box2}}
 \code{\link{est.black.box3}}
+\code{\link[dse1]{information.tests.calculations}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

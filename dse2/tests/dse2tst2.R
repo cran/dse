@@ -64,9 +64,9 @@ dse2.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.la
   modSS<-z
 
   if (verbose) cat("dse2 test 5 ... ")
-  z <- feather.forecasts( modSS,  from.periods=c(250,300))
+  z <- featherForecasts( modSS,  from.periods=c(250,300))
   error <- max(abs
-       (c(z$feather.forecasts[[1]][286,],z$feather.forecasts[[2]][336,])
+       (c(z$featherForecasts[[1]][286,],z$featherForecasts[[2]][336,])
        -c(-0.00092229286770808757701, -0.0086020067525247358164, 
            0.0043454851777852505565,  -0.0066741302949233430319,
           -0.0089398331205012854933,   0.0021769124280658046222)))
@@ -138,7 +138,7 @@ dse2.graphics.tests <- function(verbose=T, synopsis=T)
   mod1 <- TSmodel(est.VARX.ls(data,max.lag=3))
   modSS <- l(to.SS(mod1),data)
 
-  z <- feather.forecasts( modSS,  from.periods=c(230,250))
+  z <- featherForecasts( modSS,  from.periods=c(230,250))
   tfplot(z, start.=c(1980,1))
   if (verbose) cat("ok\n")
 

@@ -23,6 +23,9 @@
     \method{identifiers}{TSdata}(obj)
     \method{identifiers}{TSestModel}(obj)    
 }
+\arguments{
+    \item{obj}{An object of class TSdata or TSestModel.}
+}
 
 \seealso{ \code{\link[dsepadi]{source.info}} }
 

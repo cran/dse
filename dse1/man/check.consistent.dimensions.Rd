@@ -10,13 +10,15 @@
 \description{Check that dimensions of a model and data agree.}
 \usage{
     check.consistent.dimensions(obj, ...)
-    \method{check.consistent.dimensions}{default}(obj,...)
-    \method{check.consistent.dimensions}{ARMA}(obj,data)
-    \method{check.consistent.dimensions}{SS}(obj,data)
+    \method{check.consistent.dimensions}{default}(obj, ...)
+    \method{check.consistent.dimensions}{ARMA}(obj, data)
+    \method{check.consistent.dimensions}{SS}(obj, data)
     \method{check.consistent.dimensions}{TSdata}(obj, model)
-    \method{check.consistent.dimensions}{TSestModel}(obj,data)
+    \method{check.consistent.dimensions}{TSestModel}(obj, data)
     }
-\arguments {
+\arguments{
+    \item{obj}{An object containing a TSmodel or TSdata}
+    \item{...}{Another object containing a TSmodel or TSdata}
     \item{model}{A TSmodel}
     \item{data}{TSdata}
 }

@@ -1,34 +1,44 @@
 \name{input.periods}
-\alias{ input.periods}
+\alias{input.periods}
+\alias{input.periods.TSdata}
+\alias{input.periods.TSestModel}
+
 \alias{output.periods}
-\alias{ input.periods.TSdata}
 \alias{output.periods.TSdata}
-\alias{ input.periods.TSestModel}
 \alias{output.periods.TSestModel}
 
-\alias{ input.start}
+\alias{input.start}
+\alias{input.start.TSdata}
+\alias{input.start.TSestModel}
+
 \alias{output.start}
-\alias{ input.start.TSdata}
 \alias{output.start.TSdata}
+\alias{output.start.TSestModel}
 
-\alias{ input.end}
+\alias{input.end}
+\alias{input.end.TSdata}
+\alias{input.end.TSestModel}
+
 \alias{output.end}
-\alias{ input.end.TSdata}
 \alias{output.end.TSdata}
+\alias{output.end.TSestModel}
 
-\alias{ input.frequency}
+\alias{input.frequency}
+\alias{input.frequency.TSdata}
+\alias{input.frequency.TSestModel}
+
 \alias{output.frequency}
-\alias{ input.frequency.TSdata}
 \alias{output.frequency.TSdata}
+\alias{output.frequency.TSestModel}
 
 \title{TSdata Periods}
 \description{Apply a method to the input or output data.}
 \usage{
-    input.periods(x, ...)
+    input.periods(x)
     \method{input.periods}{TSdata}(x)
     \method{input.periods}{TSestModel}(x)
 
-    output.periods(x, ...)
+    output.periods(x)
     \method{output.periods}{TSdata}(x)
     \method{output.periods}{TSestModel}(x)
 
@@ -57,7 +67,7 @@
     \method{output.frequency}{TSestModel}(x)
 
 }
-\arguments {
+\arguments{
     \item{x}{An object containing TSdata.}
 }
 \value{Depends.}

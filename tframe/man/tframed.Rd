@@ -26,8 +26,11 @@
 }
 
 \arguments{
-    \item{x}{A tframed object or an object to be tframed.}
-    \item{tf}{A tframe.}
+    \item{x}{a tframed object or an object to be tframed.}
+    \item{tf}{a tframe.}
+    \item{names}{optional vector of strings to specify new series names.}
+    \item{value}{a tframe attribute to be applied to x.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{A tframed object.}
 \details{

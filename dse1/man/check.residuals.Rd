@@ -15,7 +15,7 @@ matrix or TSdata or residuals of a TSestModel}
     \method{check.residuals}{TSestModel}(obj, ...)
 }
 \arguments{
-    \item{model}{An TSestModel or TSdata object.}
+    \item{obj}{An TSestModel or TSdata object.}
     \item{ac}{If T the auto-correlation function is plotted.}
     \item{pac}{If T the partial auto-correlation function is plotted.}
     \item{select}{
@@ -26,9 +26,12 @@ matrix or TSdata or residuals of a TSestModel}
       All residuals are used with the default (NULL).Typically this can be used 
       to get rid of bad initial conditions (eg. drop=seq(10) ) or outliers.}
     \item{plot.}{If F then plots are not produced.}
+    \item{graphs.per.page}{Integer indicating number of graphs to place on a
+    page.}
     \item{verbose}{
         If T then the auto-correlations and partial auto-correlations 
         are printed if they are calculated.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{
     A list with residual diagnostic information: residuals, mean, cov, 

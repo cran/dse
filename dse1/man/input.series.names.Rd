@@ -35,7 +35,7 @@
     output.series.names(x) <- value
 }
 \arguments{
-    \item{data}{Object of class TSdata.}
+    \item{x}{Object of class TSdata, TSmodel or TSestModel.}
 }
 \value{
 The first usages gives a vector of strings with the series names.

@@ -9,7 +9,7 @@
     gen.mine.data(umodel, ymodel, uinput=NULL, sampleT=100, 
     unoise=NULL, usd=1,ynoise=NULL, ysd=1, rng=NULL))
 }
-\arguments {
+\arguments{
     \item{umodel}{Model for input data.}
     \item{ymodel}{Model for output data.}
     \item{sampleT}{Number of periods of data to generate.}

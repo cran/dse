@@ -30,7 +30,7 @@
     (see below.)}
 }
 \value{
-The returned result contains a list (\code{forecast.cov}) of the forecast
+The returned result contains a list (\code{forecastCov}) of the forecast
 covariance on the essential data for the various models and data
 subsets. It can be plotted with the generic function tfplot. Additional
 information in the result comes from the function arguments.
@@ -70,7 +70,7 @@ Essential.data indicates the subset of output variables to included in all
   level expression is complete.
   The class of an intermediate result is mine.strip.intermediate.result and
   the class of the final result is
-         c('forecast.cov.estimators.wrt.data.subsets', 'forecast.cov')
+         c('forecastCov.estimatorsWRTdata.subsets', 'forecastCov')
   If the final result is used in a call to mine.strip then it is just 
   returned, so extra calls do not cause errors and are very quick.
   This is useful when you are too lazy to calculate the exact number of steps.

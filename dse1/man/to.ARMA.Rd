@@ -20,6 +20,7 @@ by the Cayley Hamilton theorem.
     \item{model}{An object of class TSmodel.}
     \item{fuzz}{Parameters closer than fuzz to one or zero are set to 1.0
      or 0.0 respectively}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{
 An object of class 'ARMA' 'TSmodel' containing an ARMA model.

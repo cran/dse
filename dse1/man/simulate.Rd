@@ -45,6 +45,7 @@ regenerate a simulation.}
     \item{compiled}{
     Specifies the compiled version of the code should be used (instead of 
     the S code version).}
+    \item{...}{arguments to be passed to other methods.}
 }
 
 \value{

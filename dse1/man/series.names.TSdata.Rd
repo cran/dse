@@ -13,6 +13,9 @@
     
     series.names(data) <- names
 }
+\arguments{
+    \item{x}{an object from which series names can be extracted.}
+}
 
 \seealso{ \code{\link{series.names}} }
 

@@ -11,6 +11,8 @@
 \arguments{
     \item{data}{
     An object with the structure of an object of class TSdata (see TSdata).}
+    \item{warn}{Logical indicating if warnings should be printed (T) or
+    suppressed (F).}
     \item{...}{See arguements to est.VARX.ls}}
 
 \value{A state space model in an object of class TSestModel.}

@@ -8,7 +8,7 @@
       subtract.means=F,  standardize=F, 
       lags.in=6, lags.out=6, trend=F, plot.=T)
 }
-\arguments {
+\arguments{
     \item{data}{TSdata}
     \item{essential.data}{An integer vector indication important data.}
     \item{method}{method to pass to stepwise.}

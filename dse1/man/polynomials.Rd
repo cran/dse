@@ -1,4 +1,4 @@
-\name{polynomials}
+\name{Polynomials}
 \alias{characteristic.poly}
 \alias{companion.matrix}
 \alias{poly.value}
@@ -18,9 +18,13 @@
     polysum(a, b)
     polyroot.det(A)
 }
-\arguments {
-    \item{x}{An array representing a polynomial.}
-    \item{y}{An array representing a polynomial.}
+\arguments{
+    \item{A}{An array representing a matrix polynomial.}
+    \item{B}{An array representing a matrix polynomial.}
+    \item{a}{An array representing a matrix polynomial.}
+    \item{b}{An array representing a matrix polynomial.}
+    \item{coef}{Coefficients of a polynomial.}
+    \item{z}{Value at which the polynomial is to be evaluated.}
 }
 \value{depends}
 \details{

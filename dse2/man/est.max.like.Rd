@@ -13,11 +13,12 @@
     \method{est.max.like}{TSdata}(obj, model, ...) 
 }
 \arguments{
-    \item{obj}{An object of class TSmodel, TSdata or TSestModel}
-    \item{data}{A TSdata object.}
-    \item{model}{A TSmodel object.}
-    \item{algorithm}{The algorithm ('optim', 'nlm' or 'nlmin') to use for maximization.}
-    \item{algorithm.args}{Arguments for the optimization algorithm.}
+    \item{obj}{an object of class TSmodel, TSdata or TSestModel}
+    \item{data}{a TSdata object.}
+    \item{model}{a TSmodel object.}
+    \item{algorithm}{the algorithm ('optim', 'nlm' or 'nlmin') to use for maximization.}
+    \item{algorithm.args}{arguments for the optimization algorithm.}
+    \item{...}{arguments passed on to other methods.}
 }
 \value{
 The value returned is an object of class TSestModel with  additional

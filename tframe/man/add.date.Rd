@@ -8,7 +8,7 @@
 \usage{
     add.date(date, periods, freq)
 }
-\arguments {
+\arguments{
     \item{date}{A two element date as used by tsp i.e c(year, period).}
     \item{periods}{A number of periods.}
     \item{freq}{The number of periods in a year.}

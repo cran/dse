@@ -21,6 +21,11 @@
     \method{print}{summary.ARMA}(x, digits=options()$digits)
     \method{print}{summary.TSestModel}(x, digits=options()$digits)
     }
+\arguments{
+    \item{object}{an object to be summarized.}
+    \item{x}{a summary object to be printed.}
+    \item{digits}{number of significant digits to use for printing.}
+}
 
 \seealso{
     \code{\link{print}}, 

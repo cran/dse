@@ -5,11 +5,11 @@
 \title{Trim NAs from Time Series}
 \description{Trim NAs from the start and end of a time series object.}
 \usage{
-    trim.na(x, ...)
-    \method{trim.na}{default}(x, start.=T, end.=T)
+    trim.na(x, start. = TRUE, end. = TRUE)
+    \method{trim.na}{default}(x, start. = TRUE, end. = TRUE)
     }
 \arguments{
-    \item{obj}{A time series matrix or an object of class TSdata.}
+    \item{x}{A time series matrix or an object of class TSdata.}
     \item{start.}{If start.=F then beginning NAs are not trimmed.}
     \item{end.}{If end.=F   then ending NAs are not trimmed.}
 }

@@ -1,12 +1,13 @@
 See 00Intro or 00Intro.dse1 for a general description of this package,
 A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
 See also the related packages syskern tframe dse1 dse2 in the dse bundle
-   and packages curve juice  dsepadi monitor   in the dseplus bundle.
+   and packages dsepadi curve juice monitor   in the dseplus bundle.
 00Intro.dse1             DSE
 ARMA                     ARMA Model Constructor
 DSE.utilities            DSE Utilities
 DSECOMPILED              Use Compiled or S/R Code
 McMillan.degree          Calculate McMillan Degree
+Polynomials              Polynomial Utilities
 Portmanteau              Calculate Portmanteau statistic
 Riccati                  Riccati Equation
 SS                       State Space Models
@@ -17,11 +18,12 @@ TSmodel                  Time Series Models
 acf.M                    Calculate Auto-Covariance
 add.plot.roots           Add Model Roots to a plot
 balance.Mittnik          Balance a state space model
-check.balance.Mittnik    Check Balance of a TSmodel
 check.balance            Check Balance of a TSmodel
+check.balanceMittnik     Check Balance of a TSmodel
 check.consistent.dimensions
                          Check Consistent Dimensions
 check.residuals          Autocorrelations Diagnostics
+coef.TSmodel             Extract Model Parameters
 combine                  Combine two objects.
 combine.TSdata           Combine series from two TSdata objects.
 diff.log                 Calculate the difference of log data
@@ -33,7 +35,8 @@ est.VARX.ar              Estimate a VAR TSmodel
 est.VARX.ls              Estimate a VAR TSmodel
 example                  TS Examples
 findg                    Find Equivalence Transformation
-fix.constants            Fix TSmodel Parameters to Constants
+fix.constants            Fix TSmodel Coefficients (Parameters) to
+                         Constants
 fixF                     Set SS Model F Matrix to Constants
 get.RNG                  get the RND and seed from an object
 gmap                     Basis Transformation of a Model.
@@ -51,11 +54,9 @@ l.SS                     Evaluate a state space TSmodel
 load.DSE.fortran         Load compiled routines for time series models
 markov.parms             Markov Parameters
 observability            Calculate Model Observability Matrix
-parms                    Extract Model Parameters.
 percent.change           Calculate percent change
 periods.TSdata           Specific Methods for tframed Data
 plot.roots               Plot Model Roots
-polynomials              Polynomial Utilities
 print.TSdata             Print Specific Methods
 print.TSestModel         Display TSmodel Arrays
 reachability             Calculate Model Reachability Matrix
@@ -71,15 +72,14 @@ source.info.TSdata       tfPADI Specific Methods
 stability                Calculate Stability of a TSmodel
 standardize              standardize data
 sum.sqerror              Calculate sum of squared prediction errors
-summary                  Display Summary Information.
 summary.TSdata           Specific Methods for Summary
 test.equal.ARMA          Specific Methods for Testing Equality
-tfplot                   Time Series Plots
 tfplot.TSdata            Tfplot Specific Methods
+tframed.TSdata           Specific Methods for tframed Data
 to.ARMA                  Convert to an ARMA Model
-to.SS.Chol               Convert to Non-Innovation State Space Model
-to.SS.Oform              Convert to Oform
 to.SS                    Convert to State Space Model
 to.SS.innov              Convert to State Space Innovations Model
+to.SSChol                Convert to Non-Innovation State Space Model
+to.SSOform               Convert to Oform
 version.dse              Print Version Information
 ytoypc                   Convert to year to year percent change

@@ -13,10 +13,12 @@
 
 \arguments{
     \item{x}{A time series object.}
+    \item{...}{arguments to be passed to other methods.}
     \item{start.}{A start date of a format compatible with the time series}
     \item{end.}{An end date of a format compatible with the time series}
     \item{tf}{A tframe or tframed object}
     \item{warn}{A logical indicating if warning should be produced}
+    \item{eps}{comparison tolerance for ts period comparisons. See ts.}
 }
 \value{
 A time series object similar to x, but typically spanning a shorter time period.

@@ -15,10 +15,11 @@
     \method{stability}{TSestModel}(obj, ...)
     }
 \arguments{
-    \item{model}{An object of class TSmodel.}
+    \item{obj}{An object of class TSmodel.}
     \item{fuzz}{Roots within fuzz are considered equal.}
     \item{digits}{Printing precision.}
     \item{verbose}{Print roots and there moduli.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{True or False if the model is stable or not stable.}
 \sideffects{

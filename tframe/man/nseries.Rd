@@ -9,7 +9,7 @@
     \method{nseries}{default}(x)
     }
 
-\arguments {
+\arguments{
     \item{x}{A time series object.}
 }
 \value{An integer.}

@@ -69,15 +69,15 @@ tframe's specific class is tstframe.
 
 When implementing a new time series class, suppose it is called zzz, the most 
 important methods which need to be
-supported are tframe.zzz(), start.tframe.zzz(), end.tframe.zzz(), and 
-periods.tframe.zzz().
-While frequency.tframe.zzz() should not in theory be necessary, it makes 
+supported are tframe.zzz(), tframeStart.zzz(), tframeEnd.zzz(), and 
+tframePeriods.zzz().
+While tframeFrequency.zzz() should not in theory be necessary, it makes 
 porting code much easier. Other methods which should be supported are
-time.tframe.zzz(), is.consistent.tframe.zzz(), tftruncate.tframe.zzz(), 
-tfexpand.tframe.zzz(), 
-earliest.start.index.tframe.zzz(),
-earliest.end.index.tframe.zzz(), latest.start.index.tframe.zzz(), and
-latest.end.index.tframe.zzz().
+tframeTime.zzz(), check.tframeConsistent.zzz(), tframeTruncate.zzz(), 
+tframeExpand.zzz(), 
+tframeEarliestStartIndex.zzz(),
+tframeEarliestEndIndex.zzz(), tframeLatestStartIndex.zzz(), and
+tframeLatestEndIndex.zzz().
 
 The method tfwindow is used in this library and is typically just the same as
 window, but the new name has been used because of historical changes and bugs

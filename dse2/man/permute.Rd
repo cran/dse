@@ -10,7 +10,7 @@
 \usage{
     permute(M)
 }
-\arguments {
+\arguments{
     \item{M}{An integer.}
 }
 \value{A matrix.}

@@ -10,7 +10,7 @@
 \usage{
     tfplot(obj, ...)
 
-    \method{tfplot}{default}(..., xlab=NULL, ylab=NULL,graphs.per.page=5,
+    \method{tfplot}{default}(..., xlab=NULL, ylab=NULL, graphs.per.page = 5,
                          start.=NULL, end.=NULL,
              series=seq(nseries(list(...)[[1]])), mar=par()$mar)
 
@@ -18,7 +18,16 @@
 }
 
 \arguments{
-    \item{...}{A tframe or tframed object or objects to plot.}
+    \item{obj}{a tframe or tframed object to plot.}
+    \item{...}{any additional tframe or tframed objects for the same plot.}
+    \item{graphs.per.page}{integer indicating number of graphs to place on a
+       page.}
+    \item{xlab}{string to use for x label (passed to plot).}
+    \item{ylab}{string to use for y label (passed to plot).}
+    \item{start.}{start of plot. (passed to tfwindow)}
+    \item{end.}{end of plot. (passed to tfwindow)}
+    \item{series}{series to be plotted. (passed to select.series)}
+    \item{mar}{margins passed to plot. See par.)}
 }
 \value{None.}
 \details{

@@ -1,32 +1,28 @@
 \name{scale.TSdata}
 \alias{scale.TSdata}
-\alias{scale.TSmodel}
 \alias{scale.TSestModel}
-\alias{scale.default}
 \alias{scale.ARMA}
 \alias{scale.innov}
 \alias{scale.non.innov}
-\alias{scale.check}
-\alias{scale.check.TSestModel}
-\alias{scale.check.TSmodel}
+\alias{check.scale}
+\alias{check.scale.TSestModel}
+\alias{check.scale.TSmodel}
 
 \title{Scale Methods for TS objects}
 \description{Scale data or a model by a given factor.}
 \usage{
     \method{scale}{TSdata}(x, scale)
-    \method{scale}{TSmodel}(x, scale)
     \method{scale}{TSestModel}(x, scale)
-    \method{scale}{default}(x, scale)
     \method{scale}{ARMA}(x, scale)
     \method{scale}{innov}(x, scale)
     \method{scale}{non.innov}(x, scale)
     
-    scale.check(x, scale)
-    \method{scale.check}{TSestModel}(x, scale)
-    \method{scale.check}{TSmodel}(x, scale)
+    check.scale(x, scale)
+    \method{check.scale}{TSestModel}(x, scale)
+    \method{check.scale}{TSmodel}(x, scale)
     }
 \arguments{
-    \item{obj}{TSdata, TSmodel or an object containing these.}
+    \item{x}{TSdata, TSmodel or an object containing these.}
     \item{scale}{
     A list with two matrices or vectors, named input and output,
     giving the multiplication factor for inputs and outputs.
@@ -59,7 +55,7 @@
     # to do with the magnitude of the data.
     z <- scale(eg1.DSE.data.diff, 
         list(input=rep(2, input.dimension(eg1.DSE.data.diff)), 
-        output=rep(2,output.dimension(eg1.DSE.data.diff))))
+            output=rep(2,output.dimension(eg1.DSE.data.diff))))
     model <- est.VARX.ls(eg1.DSE.data.diff)
     model <- scale(model, 
         list(input=rep(2, input.dimension(eg1.DSE.data.diff)), 

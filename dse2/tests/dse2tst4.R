@@ -19,13 +19,13 @@ dse4.function.tests <- function(verbose=T, synopsis=T,
  if (verbose) cat("dse4 test 1 ... ")
   z <- mine.strip(eg1.DSE.data.diff, essential.data=c(1,2),
                    estimation.methods=list(est.VARX.ls=list(max.lag=3)))
-  ok <- is.forecast.cov.estimators.wrt.data.subsets(z)
+  ok <- is.forecastCov.estimatorsWRTdata.subsets(z)
   all.ok <-  ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse4 test 2 ... ")
   z1 <- z$multi.model[[
-       select.forecast.cov(z, select.cov.best=1, verbose=F)$selection.index[2]]]
+       select.forecastCov(z, select.cov.best=1, verbose=F)$selection.index[2]]]
   subdata <- TSdata(output=output.data(eg1.DSE.data.diff, series=1:3))
   z2 <- estimate.models(subdata, estimation.sample =182, quiet = T, 
            estimation.methods = list(est.VARX.ls=list(max.lag=3)))

@@ -21,6 +21,10 @@
     \item{unstandardize}{
       If T and standardize is T then the returned model is adjusted to 
       correspond to the original data.}
+    \item{aic}{Passed to function ar.}
+    \item{max.lag}{The maximum number of lags that should be considered.}
+    \item{method}{Passed to function ar.}
+    \item{warn}{If T certain warning message are suppressed.}
 }
 \value{A TSestModel object containing a TSmodel object which is aVAR model.}
 
@@ -50,6 +54,8 @@ Note: ar uses a Yule-Walker approach (uses autocorrelations) so effectively the
     \code{\link[dse2]{est.SS.Mittnik}}
     \code{\link[dse2]{bft}}
     \code{\link{est.VARX.ls}}
+    \code{\link[ts]{ar}}
+    \code{\link{DSE.ar}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

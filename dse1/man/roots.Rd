@@ -9,24 +9,25 @@
 \usage{
     roots(obj, ...)
     \method{roots}{SS}(obj, fuzz=0, randomize=F)
-    \method{roots}{ARMA}(obj, fuzz=0, verbose=T, randomize=F, warn=T, by.poly=F)
+    \method{roots}{ARMA}(obj, fuzz=0, randomize=F, warn=T, by.poly=F)
     \method{roots}{TSestModel}(obj, ...)
     }
 \arguments{
-    \item{model}{An object of class TSmodel.}
-    \item{fuzz}{
-If non-zero then roots within fuzz distance are considered equal.}
+    \item{obj}{An object of class TSmodel.}
+    \item{fuzz}{If non-zero then roots within fuzz 
+       distance are considered equal.}
     \item{randomize}{
-Randomly arrange complex pairs of roots so the one with the positive imaginary
-part is not always first (so random experiments are not biased).}
+       Randomly arrange complex pairs of roots so the one with the positive imaginary
+       part is not always first (so random experiments are not biased).}
     \item{warn}{If F then warnings about unit roots added for TREND are not printed.}
     \item{by.poly}{
-If T then roots are calculated by expanding the determinant of the A
-polynomial.  Otherwise, they are calculated by converting to a state
-space representation and calculating the eigenvalues of F. This second
-method is preferable for speed, accuracy, and because of a limitation
-in the degree of a polynomial which can be handled by polyroot.
-}
+       If T then roots are calculated by expanding the determinant of the A
+       polynomial.  Otherwise, they are calculated by converting to a state
+       space representation and calculating the eigenvalues of F. This second
+       method is preferable for speed, accuracy, and because of a limitation
+       in the degree of a polynomial which can be handled by polyroot.}
+    \item{verbose}{arguments to be passed to other methods.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{
 

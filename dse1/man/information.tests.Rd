@@ -10,9 +10,9 @@
     \item{sample.end}{
     The end of the period to use for criteria calculations. If omitted
     the end of the sample is used.}
-}
     \item{Print}{If FALSE then printing suppressed.}
     \item{warn}{If FALSE then some warning messages are suppressed.}
+}
 
 \value{A matrix of the value for each model on each test returned invisibly.}
 \sideffects{Criteria are tabulated for all models in the list.}

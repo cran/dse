@@ -16,10 +16,10 @@
     \item{estimation}{A character string indicating the estimation method to use.}
     \item{lag.weight}{Weighting to apply to lagged observations. }
     \item{reduction}{Character string indicating reduction procedure to use. }
-    \item{criterion}{
-    Character string indicating model selection criteria. taic might be a
-    better default selection criteria but it is not available for ARMA
-    models.}
+    \item{criterion}{Criterion to be used for model 
+       selection. see \code{information.tests.calculations}. taic might be a
+       better default selection criteria but it is not available for ARMA
+       models.}
     \item{trend}{If T include a trend in the model. }
     \item{subtract.means}{
     If T the mean is subtracted from the data before estimation.}
@@ -46,6 +46,7 @@ squares estimation of a VAR model.
 \code{\link{est.black.box1}},
 \code{\link{est.black.box2}}
 \code{\link{est.black.box4}}
+\code{\link[dse1]{information.tests.calculations}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

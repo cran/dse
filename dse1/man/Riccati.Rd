@@ -5,7 +5,7 @@
 \usage{
     Riccati(A, B, fuzz=1e-10, iterative=F)
 }
-\arguments {
+\arguments{
     \item{A}{A matrix.}
     \item{B}{A matrix.}
     \item{fuzz}{The tolerance used for testing convergence.}

@@ -13,9 +13,11 @@
     is.TSmodel(obj)
 }
 \arguments{
-    \item{obj}{
-    An object containing an object of class TSmodel or a list containing the 
-    information necessary to build an object of class "TSmodel".}
+    \item{obj}{An object.}    
+    \item{model}{
+      An object containing an object of class TSmodel or a list containing the 
+      information necessary to build an object of class "TSmodel".}
+    \item{...}{arguments to be passed to other methods.}
 }
 \details{
 This is a generic method which will extract a "TSmodel" from an object (e.g. a
@@ -28,8 +30,8 @@ according to the description for specific sub-classes (eg "ARMA", "SS").
 The \code{TSmodel} class of objects has methods for the generic functions
 \code{print, test.equal, series.names, input.series.names,
 output.series.names, l, roots, stability,  
-forecast, feather.forecasts, horizon.forecasts,
-simulate, monte.carlo.simulations}
+forecast, featherForecasts, horizonForecasts,
+simulate, MonteCarloSimulations}
 
 Also, the function \code{is.TSmodel} and the functions \code{to.SS, to.ARMA, to.troll} are supported.
 Other model classes inherit from the class \code{TSmodel}.

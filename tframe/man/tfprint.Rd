@@ -2,7 +2,8 @@
 \alias{tfprint}
 \alias{tfprint.default}
 \alias{tfprint.tframe}
-\alias{tfprint.tframe.default}
+\alias{tframePrint}
+\alias{tframePrint.default}
 
 \title{Print Tframed Objects}
 \description{
@@ -10,18 +11,23 @@
 }
 \usage{
     tfprint(x, ...)
+    tframePrint(x, ...)
     \method{tfprint}{default}(x, ...)
     \method{tfprint}{tframe}(x, ...)
-    \method{tfprint}{tframe.default}(x, digits=NULL, quote=T, prefix="", ...)
+    \method{tframePrint}{default}(x, digits=NULL, quote=T, prefix="", ...)
 }
 
 \arguments{
-    \item{x}{A tframe or tframed object.}
+    \item{x}{a tframe or tframed object.}
+    \item{digits}{see the generic method.}
+    \item{quote}{see the generic method.}
+    \item{prefix}{see the generic method.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{tfprint methods return the object invisibly.}
 \details{
     \code{tfprint} prints data in a tframed object while 
-    \code{tfprint.tframe} prints the tframe.
+    \code{tframePrint} prints the tframe.
     In many cases these are the same as print methods. 
     However, tfprint tries to provide an alternate generic
     mechanism that is consistent with the tframe view of the data.

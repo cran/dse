@@ -24,16 +24,16 @@ latest.start(t2, tbind(t1,t2,t3))
 ok <- ok & all(c(1992,1) == latest.start(t2, tbind(t1,t2,t3)))
 ok
 
-latest.start.index(t1,t2,t3)  # position of t2 in the argument list
-ok <- ok & 2 == latest.start.index(t1,t2,t3)
+latest.startIndex(t1,t2,t3)  # position of t2 in the argument list
+ok <- ok & 2 == latest.startIndex(t1,t2,t3)
 ok
 
-latest.end.index(t1,t2,t3)  # position of t2 in the argument list
-ok <- ok & 2 == latest.end.index(t1,t2,t3)
+latest.endIndex(t1,t2,t3)  # position of t2 in the argument list
+ok <- ok & 2 == latest.endIndex(t1,t2,t3)
 ok
 
-earliest.end.index(t1,t2,t3)  # position of t2 in the argument list
-ok <- ok & 1 == earliest.end.index(t1,t2,t3)
+earliest.endIndex(t1,t2,t3)  # position of t2 in the argument list
+ok <- ok & 1 == earliest.endIndex(t1,t2,t3)
 ok
 
 earliest.start(t1,t2) # 1991 1

@@ -17,17 +17,19 @@
     \method{acf.M}{TSestModel}(obj, ...)
 }
 \arguments{
-    \item{object}{An object of class TSdata or TSmodel.}
+    \item{obj}{An object of class TSdata or TSmodel.}
+    \item{lag}{Number of lags for which to calculate the autocorrelations.}
     \item{type}{
         With the defaults the blocks are auto-covariances. 
         If type == 'correlation' the result is scaled to give 
         autocorrelations.}
-    \item{sub.means}{
+    \item{sub.mean}{
         Only valid if object is of class TSdata. If F then means 
         are not subtracted.}
     \item{Psi}{
         A matrix of innovation covariance. Only valid if object 
         is of class TSmodel.}
+    \item{...}{arguments to be passed to other methods.}
 }
 
 \value{

@@ -10,10 +10,10 @@
 }
 \usage{
     percent.change(obj, ...)
-    \method{percent.change}{default}(obj, base=NULL, lag=1, cumulate=F, e=F)
-    \method{percent.change}{TSdata}(obj, base=NULL, lag=1, cumulate=F, e=F)
-    \method{percent.change}{TSestModel}(obj, base=NULL, lag=1, cumulate=F, e=F)
-    percent.change.list(obj, ..., base=NULL, lag=1, cumulate=F, e=F)
+    \method{percent.change}{default}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE)
+    \method{percent.change}{TSdata}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE)
+    \method{percent.change}{TSestModel}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE)
+    percent.change.list(obj, ..., base=NULL, lag=1, cumulate=FALSE, e=FALSE)
     }
 \arguments{
     \item{obj}{
@@ -25,10 +25,15 @@ individually), or a list of one of these kinds of objects. (called m below)}
 if cumulate is T). e can be
 a logical vector with elements corresponding to columns of m.}
     \item{base}{
-    If base is provided it is treated as the first period value 
-(that is, prior to differencing). It is prefixed to the m prior to 
-cumulating. It should be a vector of length dim(m)[2]. 
-(If e is T then base should be log of the original data).}
+      If base is provided it is treated as the first period value 
+      (that is, prior to differencing). It is prefixed to the m prior to 
+      cumulating. It should be a vector of length dim(m)[2]. 
+      (If e is T then base should be log of the original data).}
+    \item{lag}{integer indicating the number of periods relative to which the
+      percent change should be calculated.}
+    \item{cumulate}{logical indicating if the series should be cumulated before
+      the percent change is calculated.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{
 For an object of class TSdata the percent change calculation is done
@@ -39,7 +44,7 @@ with \code{estimates$pred} and the result is an object of class TSdata (or a
 list of objects of class TSdata).
 }
 \details{
-If cumulate is T then the data is cumulated first. cumulate can be
+If code{cumulate} is TRUE then the data is cumulated first. \code{cumulate} can be
 a logical vector with elements corresponding to columns of m.
 }
 \seealso{
