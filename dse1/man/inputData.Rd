@@ -6,7 +6,6 @@
 \alias{inputData<-}
 \alias{inputData<-.default}
 \alias{inputData<-.TSdata}
-\alias{inputData<-.TSestModel}
 
 \alias{outputData}
 \alias{outputData.default}
@@ -15,7 +14,6 @@
 \alias{outputData<-}
 \alias{outputData<-.default}
 \alias{outputData<-.TSdata}
-\alias{outputData<-.TSestModel}
 
 \title{TSdata Series}
 \description{Extract or set input or output series in a TSdata object.}

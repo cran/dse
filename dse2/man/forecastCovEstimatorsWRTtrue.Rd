@@ -9,7 +9,7 @@
                        simulation.args=NULL,
                        est.replications = 2, pred.replications = 2,
                        discard.before = 10, horizons = 1:12, quiet =FALSE,
-                       estimation.methods=NULL, compiled=.DSECOMPILED, 
+                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED, 
                        Spawn=if (exists(".SPAWN")) .SPAWN else FALSE
 		       )
     is.forecastCovEstimatorsWRTtrue(obj)

@@ -4,7 +4,7 @@
 \alias{forecastCovCompiled.SS}
 \alias{forecastCovCompiled.innov}
 \alias{forecastCovCompiled.nonInnov}
-\alias{forecastCovSingle.TSmodel}
+\alias{forecastCovSingleModel}
 
 \title{Forecast covariance for different models - internal}
 \description{See forecastCov.}
@@ -19,8 +19,8 @@
          discard.before=minimumStartupLag(model))
     \method{forecastCovCompiled}{nonInnov}(model, data, horizons = 1:12,
          discard.before=minimumStartupLag(model))
-     forecastCovSingle.TSmodel( model, data=NULL, horizons=1:12, 
-          discard.before=minimumStartupLag(model), compiled=.DSECOMPILED)
+     forecastCovSingleModel( model, data=NULL, horizons=1:12, 
+          discard.before=minimumStartupLag(model), compiled=.DSEflags()$COMPILED)
 }
 \arguments{
     \item{obj}{TSdata or one or more TSmodels or TSestModels}

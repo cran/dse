@@ -10,10 +10,10 @@
     simulate(model, ...)
     \method{simulate}{ARMA}(model, y0=NULL, input=NULL, input0=NULL,
         start=NULL, freq=NULL, sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
-        rng=NULL, noise.model=NULL, compiled=.DSECOMPILED, ...)
+        rng=NULL, noise.model=NULL, compiled=.DSEflags()$COMPILED, ...)
     \method{simulate}{SS}(model, input=NULL, 
         start=NULL, freq=NULL,sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
-	rng=NULL, compiled=.DSECOMPILED, ...)
+	rng=NULL, compiled=.DSEflags()$COMPILED, ...)
     \method{simulate}{TSestModel}(model, input=inputData(model),
 			sd=NULL, SIGMA=NULL, ...)
 }
@@ -73,23 +73,28 @@ using other supplied information or defaults. The rng will be set first if
 it is specified.
 
 The default noise generation will be N(0,I) 
-If Q is not square in a non innovations state space model (i.e. the system
+If \code{Q} is not square in a non innovations state space model (i.e. the system
 noise has a dimension less than the state dimension), then it is
 padded with zeros, so generated noise of higher dimension has no
 effect.  If sd is supplied, then w as describe below will be N(0,sqr(sd)).
-sd can be a vector of p elements corresponding to each of the p
+sd can be a vector of \code{p} elements corresponding to each of the \code{p}
 outputs.
 
 If noise is supplied it should
 be a list of the necessary noise processes. For non-innovation form state
-space models the list must have elements w, e, and w0. (w0 is w for t=0 in
+space models the list must have elements \code{w}, \code{e}, and \code{w0}. 
+(\code{w0} is \code{w} for \code{t=0} in
 state space model and prior lags in ARMA models.) For innovation form state
-space models and ARMA models with MA components the list must have elements
-w and w0. If w0 is not specied it is set to zero. For ARMA models with no 
-MA components (i.e. VAR models) the list 
-needs only w, and in this case a matrix may be supplied in place of a
-list. w should be a sampleT by p matrix giving the noise for t=1 to sampleT. 
-If noise is specified sampleT will be set to the number of periods in w.
+space models and ARMA models with MA components the list should have elements
+\code{w} and \code{w0}, but if \code{w0} is not specified it is set to zero. 
+For ARMA models with no  MA components (i.e. VAR models) the list needs 
+only \code{w}.
+In this case, and in the innovations form state space model with \code{w0=0}, 
+a matrix may be supplied in place of a list. \code{w} should be 
+a \code{sampleT} by \code{p} matrix giving the noise for \code{t=1} 
+to \code{sampleT}. 
+If noise is specified \code{sampleT} will be set to the number of periods 
+in \code{w}.
  
 
 If \code{noise$w0} is a matrix (rather than a vector) for a state space model 
@@ -99,12 +104,12 @@ models with no lags in B). In general ARMA and SS simulations will
 not produce exactly the same results because it is impossible to
 determine necessary transformation of initial conditions and w0.
 
-Input must be specified for ARMA models with model$C not NULL and
-state space models with model$G not NULL..
+Input must be specified for ARMA models with \code{model$C} not NULL and
+state space models with \code{model$G} not NULL..
 
 In general ARMA and SS simulations will
 not produce exactly the same results because it is impossible to
-determine necessary transformation of initial conditions and w0.
+determine necessary transformation of initial conditions and \code{w0}.
 }
 
 \seealso{
@@ -142,6 +147,14 @@ determine necessary transformation of initial conditions and w0.
 
     print(ss)
     simData <- simulate(ss)
+
+    testEqual(simData, simulate(ss))
+    testEqual(simData, simulate(ss, rng=getRNG(simData)))
+
+    simData2 <- simulate(ss,
+        noise=list(w=matrix(runif(300), 150,2), w0=runif(2)))
+
+    simData3 <- simulate(ss, noise=matrix(runif(400), 200,2))
     }
 \concept{DSE}
 \keyword{ts}

@@ -20,8 +20,8 @@
   returned. (For example, the likelihood can be returned. This is useful for
   optimization routines.)}
 \details{
-This function determines whether the model is in state space or 
-ARMA form and calls l.SS or l.ARMA.
+For state space models \code{l.SS} is called and for 
+ARMA models \code{l.ARMA} is called.
 }
 \seealso{
 \code{\link{l.SS}},
@@ -30,8 +30,9 @@ ARMA form and calls l.SS or l.ARMA.
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
-evalutated.model <- l(model, eg1.DSE.data.diff)
+evaluated.model <- l(model, eg1.DSE.data.diff)
 }
 \concept{DSE}
 \keyword{ts}
+
 

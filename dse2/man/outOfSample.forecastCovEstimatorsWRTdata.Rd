@@ -5,7 +5,7 @@
 \usage{
     outOfSample.forecastCovEstimatorsWRTdata(data, zero=FALSE, trend=FALSE,
                        estimation.sample=.5, horizons=1:12,quiet=FALSE,
-                       estimation.methods=NULL, compiled=.DSECOMPILED)
+                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED)
 }
 \arguments{
     \item{data}{an object of class TSdata.}

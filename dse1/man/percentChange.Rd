@@ -2,7 +2,6 @@
 \alias{percentChange}
 \alias{percentChange.default}
 \alias{percentChange.TSdata}
-\alias{percentChange.list}
 \alias{percentChange.TSestModel}
  
 \title{Calculate percent change}

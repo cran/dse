@@ -15,7 +15,7 @@
         series=1:dim(x$forecastCov[[1]])[2], 
         select.cov=1:length(x$forecastCov),
         select.zero=TRUE, select.trend=TRUE,
-        graphs.per.page = 5, mar=par()$mar, reset.screen=TRUE, lty=NULL)
+        graphs.per.page = 5, mar=par()$mar, reset.screen=TRUE, lty=NULL, ...)
 }
 \arguments{
     \item{x}{The result of forecastCov.}
@@ -39,7 +39,9 @@
     \item{y.limit}{optional limit on the y scale. Covariance values larger
        than y.limit will not be shown.}
     \item{line.labels}{logical indicating line labels should be printed.}
-    \item{...}{additional objects to be plotted.}
+    \item{...}{For forecastCov objects this allows additional objects to be 
+       plotted. For forecastCovEstimatorsWRTdata ... are passed to other 
+       methods.}
 }
 \value{None}
 \details{

@@ -12,7 +12,7 @@
     is.horizonForecasts(obj)
     horizonForecasts(obj, ...)
     \method{horizonForecasts}{TSmodel}(obj, data, horizons=1:4,
-	 discard.before=minimumStartupLag(obj), compiled=.DSECOMPILED, ...)
+	 discard.before=minimumStartupLag(obj), compiled=.DSEflags()$COMPILED, ...)
     \method{horizonForecasts}{TSestModel}(obj, data=NULL, ...)
     \method{horizonForecasts}{TSdata}(obj, model, ...)
     \method{horizonForecasts}{forecastCov}(obj,horizons=NULL, 

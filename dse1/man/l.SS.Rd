@@ -6,7 +6,7 @@
 \usage{
     \method{l}{SS}(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
          return.state=FALSE, return.track=FALSE, result=NULL, 
-	 compiled=.DSECOMPILED,
+	 compiled=.DSEflags()$COMPILED,
          warn=TRUE, return.debug.info=FALSE, ...)
 }
 \arguments{
@@ -107,10 +107,10 @@ Additional objects in the result are
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
-lmodel <- l.SS(model,eg1.DSE.data.diff)
+lmodel <- l(model,eg1.DSE.data.diff)
 summary(lmodel)
 tfplot(lmodel)
-lmodel <- l.SS(model,eg1.DSE.data.diff, return.state=TRUE)
+lmodel <- l(model,eg1.DSE.data.diff, return.state=TRUE)
 tfplot(state(lmodel, filter=TRUE))
 }
 \concept{DSE}

@@ -29,5 +29,3 @@
 \keyword{ts}
 \keyword{chron}
 
-
-

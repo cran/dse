@@ -1,0 +1,376 @@
+useDynLib(dse1)
+
+import("stats")
+import("tframe")
+##import("setRNG")
+
+export("DSEversion")
+export(".DSEflags")
+
+S3method("print", "TSestModel")
+S3method("print", "SS")
+S3method("print", "ARMA")
+S3method("print", "TSdata")
+
+S3method("summary", "TSdata")
+S3method("summary", "SS")
+S3method("summary", "ARMA")
+S3method("summary", "TSestModel")
+
+S3method("print", "summary.TSdata")
+S3method("print", "summary.SS")
+S3method("print", "summary.ARMA")
+S3method("print", "summary.TSestModel")
+
+S3method("periods", "TSdata")
+S3method("periods", "TSestModel")
+
+S3method("start", "TSdata")
+S3method("start", "TSestModel")
+
+S3method("end", "TSdata")
+S3method("end", "TSestModel")
+
+S3method("frequency", "TSdata")
+S3method("frequency", "TSestModel")
+
+S3method("tframed", "TSdata")
+S3method("tframe<-", "TSdata")
+S3method("tfwindow", "TSdata")
+S3method("tbind", "TSdata")
+S3method("trimNA", "TSdata")
+S3method("window", "TSdata")
+
+S3method("tfplot", "TSdata")
+S3method("tfplot", "TSestModel")
+
+S3method("seriesNames", "TSdata")
+S3method("seriesNames", "TSmodel")
+S3method("seriesNames", "TSestModel")
+S3method("seriesNames<-", "TSdata")
+S3method("seriesNames<-", "TSmodel")
+S3method("seriesNames<-", "TSestModel")
+
+S3method("testEqual", "ARMA")
+S3method("testEqual", "SS")
+S3method("testEqual", "TSdata")
+S3method("testEqual", "TSmodel")
+S3method("testEqual", "TSestModel")
+
+export("McMillanDegree")
+S3method("McMillanDegree", "ARMA")
+S3method("McMillanDegree", "SS")
+S3method("McMillanDegree", "TSestModel")
+
+export("stability")
+S3method("stability", "ARMA")
+S3method("stability", "roots")
+S3method("stability", "TSmodel")
+S3method("stability", "TSestModel")
+
+export("roots")
+S3method("roots", "SS")
+S3method("roots", "ARMA")
+S3method("roots", "TSestModel")
+
+S3method("plot", "roots")
+
+export("addPlotRoots")
+
+export("observability")
+S3method("observability", "ARMA")
+S3method("observability", "SS")
+S3method("observability", "TSestModel")
+
+export("reachability")
+S3method("reachability", "ARMA")
+S3method("reachability", "SS")
+S3method("reachability", "TSestModel")
+
+export("checkBalance")
+S3method("checkBalance", "SS")
+S3method("checkBalance", "ARMA")
+S3method("checkBalance", "TSestModel")
+
+export("checkBalanceMittnik")
+S3method("checkBalanceMittnik", "ARMA")
+S3method("checkBalanceMittnik", "SS")
+S3method("checkBalanceMittnik", "TSestModel")
+
+export("toSS")
+S3method("toSS", "ARMA")
+S3method("toSS", "SS")
+S3method("toSS", "TSestModel")
+
+export("toSSaugment")
+S3method("toSSaugment", "ARMA")
+S3method("toSSaugment", "TSestModel")
+
+export("toSSnested")
+S3method("toSSnested", "SS")
+S3method("toSSnested", "ARMA")
+S3method("toSSnested", "TSestModel")
+
+export("gmap")
+export("findg")
+export("fixConstants")
+
+export("toSSinnov")
+
+export("toSSOform")
+S3method("toSSOform", "TSmodel")
+S3method("toSSOform", "TSestModel")
+
+export("fixF")
+
+export("toSSChol")
+S3method("toSSChol", "TSmodel")
+S3method("toSSChol", "TSestModel")
+
+export("toARMA")
+S3method("toARMA", "ARMA")
+S3method("toARMA", "SS")
+S3method("toARMA", "TSestModel")
+
+export("acfM")
+S3method("acfM", "TSdata")
+S3method("acfM", "TSmodel")
+S3method("acfM", "TSestModel")
+
+export("Riccati")
+export("markovParms")
+export("characteristicPoly")
+export("companionMatrix")
+export("polyvalue")
+export("polydet")
+export("polyprod")
+export("polysum")
+export("polyrootDet")
+
+export("nseriesInput")
+S3method("nseriesInput", "default")
+S3method("nseriesInput", "TSdata")
+S3method("nseriesInput", "SS")
+S3method("nseriesInput", "ARMA")
+S3method("nseriesInput", "TSestModel")
+
+export("nseriesOutput")
+S3method("nseriesOutput", "default")
+S3method("nseriesOutput", "TSdata")
+S3method("nseriesOutput", "SS")
+S3method("nseriesOutput", "ARMA")
+S3method("nseriesOutput", "TSestModel")
+
+export("checkConsistentDimensions")
+S3method("checkConsistentDimensions", "default")
+S3method("checkConsistentDimensions", "ARMA")
+S3method("checkConsistentDimensions", "SS")
+S3method("checkConsistentDimensions", "TSdata")
+S3method("checkConsistentDimensions", "TSestModel")
+
+export("TSestModel")
+S3method("TSestModel", "TSestModel")
+
+export("is.TSestModel")
+
+export("TSmodel")
+S3method("TSmodel", "TSmodel")
+S3method("TSmodel", "TSestModel")
+
+export("is.TSmodel")
+export("ARMA")
+export("is.ARMA")
+
+export("SS")
+export("is.SS")
+export("is.innov.SS")
+export("is.nonInnov.SS")
+
+S3method("coef", "TSmodel")
+S3method("coef", "TSestModel")
+
+export("coef<-")
+S3method("coef<-", "default")
+
+export("setTSmodelParameters")
+S3method("setTSmodelParameters", "default")
+S3method("setTSmodelParameters", "ARMA")
+S3method("setTSmodelParameters", "SS")
+
+export("setArrays")
+S3method("setArrays", "ARMA")
+S3method("setArrays", "SS")
+S3method("setArrays", "TSestModel")
+
+export("simulate")
+S3method("simulate", "ARMA")
+S3method("simulate", "SS")
+S3method("simulate", "TSestModel")
+
+export("residualStats")
+export("sumSqerror")
+
+export("l")
+S3method("l", "TSdata")
+S3method("l", "TSestModel")
+S3method("l", "ARMA")
+S3method("l", "SS")
+
+export("smoother")
+S3method("smoother", "default")
+S3method("smoother", "TSestModel")
+
+export("state")
+
+export("estVARXls")
+export("estVARXar")
+
+##export("old.estVARXar")
+
+export("estSSfromVARX")
+export("estWtVariables")
+
+export("estMaxLik")
+
+S3method("estMaxLik", "TSdata")
+S3method("estMaxLik", "TSmodel")
+S3method("estMaxLik", "TSestModel")
+
+export("estBlackBox")
+export("estBlackBox1")
+export("estSSMittnik")
+export("MittnikReduction")
+export("MittnikReduction.from.Hankel")
+
+export("balanceMittnik")
+export("SVDbalanceMittnik")
+export("MittnikReducedModels")
+export("estBlackBox2")
+export("bestTSestModel")
+export("estBlackBox3")
+export("estBlackBox4")
+export("bft")
+
+export("Portmanteau")
+
+export("checkResiduals")
+S3method("checkResiduals", "default")
+S3method("checkResiduals", "TSdata")
+S3method("checkResiduals", "TSestModel")
+
+export("informationTests")
+export("informationTestsCalculations")
+
+export("combine")
+S3method("combine", "default")
+S3method("combine", "TSdata")
+
+export("diffLog")
+export("ytoypc")
+export("percentChange")
+S3method("percentChange", "default")
+S3method("percentChange", "TSdata")
+S3method("percentChange", "TSestModel")
+
+export("standardize")
+
+S3method("scale", "TSdata")
+S3method("scale", "TSestModel")
+S3method("scale", "ARMA")
+S3method("scale", "innov")
+S3method("scale", "nonInnov")
+
+export("checkScale")
+S3method("checkScale", "TSestModel")
+S3method("checkScale", "TSmodel")
+
+export("periodsInput")
+S3method("periodsInput", "TSdata")
+S3method("periodsInput", "TSestModel")
+export("periodsOutput")
+S3method("periodsOutput", "TSdata")
+S3method("periodsOutput", "TSestModel")
+export("startInput")
+S3method("startInput", "TSdata")
+S3method("startInput", "TSestModel")
+export("startOutput")
+S3method("startOutput", "TSdata")
+S3method("startOutput", "TSestModel")
+export("endInput")
+S3method("endInput", "TSdata")
+S3method("endInput", "TSestModel")
+export("endOutput")
+S3method("endOutput", "TSdata")
+S3method("endOutput", "TSestModel")
+export("frequencyInput")
+S3method("frequencyInput", "TSdata")
+S3method("frequencyInput", "TSestModel")
+export("frequencyOutput")
+S3method("frequencyOutput", "TSdata")
+S3method("frequencyOutput", "TSestModel")
+
+export("inputData")
+S3method("inputData", "default")
+S3method("inputData", "TSdata")
+S3method("inputData", "TSestModel")
+
+export("inputData<-")
+S3method("inputData<-", "default")
+S3method("inputData<-", "TSdata")
+
+export("outputData")
+S3method("outputData", "default")
+S3method("outputData", "TSdata")
+S3method("outputData", "TSestModel")
+
+export("outputData<-")
+S3method("outputData<-", "default")
+S3method("outputData<-", "TSdata")
+
+export("seriesNamesInput")
+S3method("seriesNamesInput", "TSdata")
+S3method("seriesNamesInput", "TSmodel")
+S3method("seriesNamesInput", "TSestModel")
+
+export("seriesNamesInput<-")
+S3method("seriesNamesInput<-", "TSdata")
+S3method("seriesNamesInput<-", "TSmodel")
+S3method("seriesNamesInput<-", "TSestModel")
+
+export("seriesNamesOutput")
+S3method("seriesNamesOutput", "TSdata")
+S3method("seriesNamesOutput", "TSmodel")
+S3method("seriesNamesOutput", "TSestModel")
+
+export("seriesNamesOutput<-")
+S3method("seriesNamesOutput<-", "TSdata")
+S3method("seriesNamesOutput<-", "TSmodel")
+S3method("seriesNamesOutput<-", "TSestModel")
+
+export("TSdata")
+S3method("TSdata", "default")
+S3method("TSdata", "TSdata")
+S3method("TSdata", "TSestModel")
+
+export("is.TSdata")
+export("as.TSdata")
+export("DSE.ar")
+export("criteria.table.heading")
+export("criteria.table.legend")
+export("criteria.table.nheading")
+
+export("dseclass")
+export("dseclass<-")
+export("estVARXmean.correction")
+export("fake.TSestModel.missing.data")
+export("printTestValue")
+export("dsescan")
+export("read.int")
+export("svd.criteria")
+export("makeTSnoise")
+
+## it seems dataset should not be exported
+##export("eg1.DSE.data")
+##export("eg1.DSE.data.diff")
+##export("eg1.dat")
+##export("egJofF.1dec93.data")

@@ -1,0 +1,42 @@
+citHeader("To cite package 'dse' in publications please use one or more of:")
+
+citFooter("For BibTex versions of citations use: toBibtex(citation('CDNmoney'))")
+
+citEntry(entry="manual",
+  title        = "Brief User's Guide: Dynamic Systems Estimation Library",
+  author       = "Gilbert, P. D.",
+  organization = "Bank of Canada",
+  address      = "Ottawa, Canada",
+  year         = 2004,
+  url          = "http:www.bank-banque-canada.ca/pgilbert/"
+  )
+
+citEntry(entry="techreport",
+  author =      "Gilbert, P.D.",
+  title =       "State Space and ARMA Models: An Overview of the Equivalence",
+  institution = "Bank of Canada",
+  address =     "Ottawa, Canada",
+  type =        "Working Paper",
+  number =      "93-4",
+  note =    "Also available at www.bank-banque-canada.ca/pgilbert/dsedesc.htm",
+  year =         1993
+  )
+
+citEntry(entry="articlet",
+  author =    "Gilbert, P.D.",
+  year =      1995,
+  title =     "Combining VAR Estimation and State Space Model Reduction for 
+                Simple Good Predictions", 
+  journal =   "J. of Forecasting: Special Issue on VAR Modelling",
+  volume =    14,
+  pages =     "229-250"
+  )
+
+citEntry(entry="article",
+  author =    "Gilbert, P.D.",
+  year =      2000,
+  title =     "A note on the computation of time series model roots", 
+  journal =   "Applied Economics Letters",
+  volume =    7,
+  pages =     "423-424"
+  )

@@ -15,8 +15,12 @@
 # # example.tests(eg1.DSE.data.diff,fuzz.small=1e-12, verbose=TRUE)
 
 #####################
-
+ Sys.getenv("R_LIBS")
+ library()
+ 
  require("dse1")
+ search()
+
  Sys.info()
  DSEversion()
  data("eg1.DSE.data.diff", package="dse1") 

@@ -1,3 +1,6 @@
+C     removed PARM IS for scratch arrays in KF and calls but do more clean up
+C  RR can be p*p, QQ can be n*n
+
 C           Copyright 1993, 1994, 1995, 1996  Bank of Canada.
 C           Copyright 1996, 1997  Paul Gilbert.
 C           Copyright 1998, 2001, 2004  Bank of Canada.
@@ -70,35 +73,35 @@ C               f77 -c -o dsefor.Sun5.large.o dsefor.f
 C  
 C   
 C        1         2         3         4         5         6         712       8
-      SUBROUTINE ERROR(STR,L, IS,N)
-C  STR is a string of length L and IS is an integer vector of length N
-      INTEGER L,N
-      INTEGER IS(N)
-      CHARACTER STR(L)
-C      CALL INTPR(STR,L,IS,N)
-C      WRITE(STR,IS)
-      RETURN 
-      END
+C      SUBROUTINE ERROR(STR,L, IS,N)
+CC  STR is a string of length L and IS is an integer vector of length N
+C      INTEGER L,N
+C      INTEGER IS(N)
+C      CHARACTER STR(L)
+CC      CALL INTPR(STR,L,IS,N)
+CC      WRITE(STR,IS)
+C      RETURN 
+C      END
 
-      SUBROUTINE DBPR(STR,L, IS,N)
-C  STR is a string of length L and IS is an integer vector of length N
-      INTEGER L,N
-      INTEGER IS(N)
-      CHARACTER STR(L)
-C      CALL INTPR(STR,L,IS,N)
-C      WRITE(STR,IS)
-      RETURN 
-      END
+C      SUBROUTINE DBPR(STR,L, IS,N)
+CC  STR is a string of length L and IS is an integer vector of length N
+C      INTEGER L,N
+C      INTEGER IS(N)
+C      CHARACTER STR(L)
+CC      CALL INTPR(STR,L,IS,N)
+CC      WRITE(STR,IS)
+C      RETURN 
+C      END
 
-      SUBROUTINE DBPRDB(STR,L, R,N)
-C  STR is a string of length L and R is an double real vector of length N
-      INTEGER L,N
-      DOUBLE PRECISION R(N)
-      CHARACTER STR(L)
-C      CALL DBLEPR(STR,L, R, N)
-C      WRITE(STR,R)
-      RETURN 
-      END
+C      SUBROUTINE DBPRDB(STR,L, R,N)
+CC  STR is a string of length L and R is an double real vector of length N
+C      INTEGER L,N
+C      DOUBLE PRECISION R(N)
+C      CHARACTER STR(L)
+CC      CALL DBLEPR(STR,L, R, N)
+CC      WRITE(STR,R)
+C      RETURN 
+C      END
 
 
       SUBROUTINE SIMSS(Y,Z,M,N,P,NSMPL,U,W,E,F,G,H,FK,Q,R, GAIN)
@@ -146,7 +149,7 @@ C
       ELSE
          DO 2015 I=1,P
            DO 2015 K=1,P
-2015        Y(IT,I)=Y(IT,I)+R(I,K)*E(IT,K)
+2015        Y(IT,I)=Y(IT,I)+R(I,K)*W(IT,K)
       ENDIF
 1000  CONTINUE
       RETURN 
@@ -312,7 +315,8 @@ C
 
       SUBROUTINE KF(EY, HPERR,PRDERR,ERRWT, LSTATE,STATE,
      + LTKERR,TRKERR,
-     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 C
 C   Calculate the likelihood value for the model:
 C
@@ -360,7 +364,8 @@ C   IS is the maximum state dimension  and the maximum output
 C     dimension  (used for working arrays)
 C    NSTART is not properly implemented and must be set to 1.
 C
-      PARAMETER (IS=100,NSTART=1)
+C      PARAMETER (IS=100,NSTART=1)
+      PARAMETER (NSTART=1)
 
       INTEGER HPERR, M,N,P, NSMPL, NACC
 
@@ -373,9 +378,11 @@ C
       INTEGER LSTATE, LTKERR, GAIN
 C   
 C
-      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),DETOM
-      DOUBLE PRECISION QQ(IS,IS),RR(IS,IS)
-      DOUBLE PRECISION Z(IS), ZZ(IS),WW(IS)
+      DOUBLE PRECISION DETOM
+
+      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
+      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
+
       DOUBLE PRECISION HW
       INTEGER LPERR
 C
@@ -394,14 +401,6 @@ C      ENDIF
 C      CALL DBPRDB('Q  ',3,Q,N*N)
 C      CALL DBPR('HPERR ',6, HPERR,1)
       
-      IF (IS.LT.N) THEN
-         CALL ERROR('ERROR: state dimension cannot exceed ',48, IS,1)
-         RETURN
-      ENDIF
-      IF ( IS.LT.P)  THEN
-         CALL ERROR('ERROR: output dimensions cannot exceed ',48, IS,1)
-         RETURN
-      ENDIF
       LPERR= 0
       IF (HPERR.GT.0) THEN
          DO 500 I=1,HPERR
@@ -1116,7 +1115,8 @@ C      CALL DBPRDB('DET ',4, DET,1)
              
       SUBROUTINE KFP(EY, HPERR, PRDERR, ERRWT,
      + M,N,P,NSMPL,NPRED,NACC,U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     + ITH,PARM,AP,IP,JP,ICT,CONST,AN,IN,JN)
+     + ITH,PARM,AP,IP,JP,ICT,CONST,AN,IN,JN,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
 C
 C Put parameters into arrays (as in S function setArrays) and call KF
@@ -1142,6 +1142,9 @@ C      DOUBLE PRECISION STATE(NPRED,N),TRKERR(NPRED,N,N)
 
       INTEGER LSTATE, LTKERR
       INTEGER GAIN
+
+      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
+      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
 C
 C..bug in S: passing characters is unreliable
 C   use integer for AP and AN...
@@ -1217,13 +1220,15 @@ C
       ENDIF
 
       CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR, TRKERR,
-     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
       RETURN
       END
 C
 
       SUBROUTINE KFPRJ(PROJ, DSCARD, HORIZ, NHO,
-     + EY, M,N,P, NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+     + EY, M,N,P, NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
 C  multiple calls to KF for prediction at given horizons.
 C     See S program project.
@@ -1240,6 +1245,9 @@ C  The state and tracking error are not calculate.
       DOUBLE PRECISION  Z0(N), P0(N,N)
 
       INTEGER GAIN
+
+      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
+      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
 
 C  state and trkerr are not used but must be passed to KF
 C 
@@ -1264,8 +1272,8 @@ C            CALL DBPR('NHO   ',6, NHO,1)
         ENDIF
 
         CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR,TRKERR,
-     +     M,N,P, IT , NACC,NACC,  U,Y, F,G,H,FK, Q,R, 
-     +     GAIN,Z0,P0)
+     +     M,N,P, IT , NACC,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
+     +     IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
         DO 4 HO=1,NHO
             DO 4 J=1,P
@@ -1277,7 +1285,8 @@ C            CALL DBPR('NHO   ',6, NHO,1)
       END
 
       SUBROUTINE KFEPR(COV, DSCARD, HORIZ, NH, NT,
-     + EY, M,N,P, NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+     + EY, M,N,P, NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
 C  multiple calls to KF for prediction evaluation.
 C     See S program predictions.cov.TSmodel
@@ -1294,6 +1303,9 @@ C  The state and tracking error are not calculate.
       DOUBLE PRECISION  Z0(N), P0(N,N)
 
       INTEGER GAIN
+
+      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
+      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
 
 C  state and trkerr are not used but must be passed to KF
 C 
@@ -1320,7 +1332,8 @@ C        CALL DBPR('DSCARD',7, DSCARD,1)
       DO 10 IT=DSCARD, 1+NPRED-HORIZ(1)
 
         CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR,TRKERR,
-     +     M,N,P, IT ,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+     +     M,N,P, IT ,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
+     +     IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 C       this assumes HORIZ is sorted in ascending order
 
 
@@ -1588,7 +1601,8 @@ C
      + DAPROX, X, DELTA,F1,F2,
      + M,P,NSMPL,NACC,  U,Y , 
      + AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + NS,Z0,P0,F,G,H,FK,Q,R,GAIN)
+     + NS,Z0,P0,F,G,H,FK,Q,R,GAIN,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 C 
 C
 C      The function must have a single vector arguement X.
@@ -1644,22 +1658,18 @@ C      DOUBLE PRECISION Z(NSMPL,NS),TRKERR(NSMPL,NS,NS)
       DOUBLE PRECISION FK(NS,P),Q(NS,NS),R(P,P)
 
       INTEGER GAIN         
+
+      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
+      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
 C
 C..bug in S: passing characters is unreliable
 C   use integer for AP and AN...
       INTEGER AP(ITH),AN(ICT)
       DOUBLE PRECISION CONST(ICT)
 
-      CALL DBPR('starting gend N=',16, N,1)
-      CALL DBPR('            ITH=',16, ITH,1)
-      CALL DBPR('             ND=',16, ND,1)
-
-      IF    (NS.LT. MAX(M,P))  THEN
-         CALL ERROR('warning: scratch (NS too small) in GEND.',40, NS,1)
-      ENDIF
-      IF    (NS.LT. (P*P))  THEN
-         CALL ERROR('warning: scratch (P too big) in GEND.',37, NS,1)
-      ENDIF
+C      CALL DBPR('starting gend N=',16, N,1)
+C      CALL DBPR('            ITH=',16, ITH,1)
+C      CALL DBPR('             ND=',16, ND,1)
 
       HPERR = 0
       V=2.0
@@ -1667,7 +1677,8 @@ C   use integer for AP and AN...
 1          X(II) =X0(II)
       CALL KFP(F0, HPERR,PRDERR, ERRWT,
      +      M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +      ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+     +      ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
 C                   each parameter  - first deriv. & hessian diagonal
       DO 100 I=1,ITH
@@ -1681,12 +1692,14 @@ C   DELTA, but accumulated round off error seems to affect the result.
             X(I)=X0(I)+DELTA(I)
             CALL KFP(F1, HPERR,PRDERR, ERRWT,
      +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
             X(I)=X0(I)-DELTA(I) 
             CALL KFP(F2, HPERR,PRDERR, ERRWT,
      +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
             X(I)=X0(I) 
             DO 15 II=1,N   
@@ -1711,11 +1724,11 @@ C   DELTA, but accumulated round off error seems to affect the result.
 C
 C                  2nd derivative  - do lower half of hessian only
       UP = ITH
-      CALL DBPR('2nd deriv. UP=\n',16, UP,1)
+C      CALL DBPR('2nd deriv. UP=\n',16, UP,1)
       DO 200 I=1,ITH   
          DO 200 J=1,I 
             UP = UP + 1
-      CALL DBPR('      UP=\n',11, UP,1)
+C      CALL DBPR('      UP=\n',11, UP,1)
             IF (I.EQ.J) THEN
                DO 120 II=1,N   
 120               D(II,UP) = HDIAG(II,I)
@@ -1728,13 +1741,15 @@ C                                successively reduce DELTA
                  X(J)=X0(J)+DELTA(J) 
                  CALL KFP(F1, HPERR,PRDERR, ERRWT,
      +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
                  X(I)=X0(I)-DELTA(I) 
                  X(J)=X0(J)-DELTA(J) 
                  CALL KFP(F2, HPERR,PRDERR, ERRWT,
      +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
+     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW)
 
                  X(I)=X0(I) 
                  X(J)=X0(J) 
@@ -1827,16 +1842,10 @@ C   use integer for AP and AN...
       INTEGER AP(ITH),AN(ICT)
       DOUBLE PRECISION CONST(ICT)
 
-      CALL DBPR('starting gend N=',16, N,1)
-      CALL DBPR('            ITH=',16, ITH,1)
-      CALL DBPR('             ND=',16, ND,1)
+C      CALL DBPR('starting gend N=',16, N,1)
+C      CALL DBPR('            ITH=',16, ITH,1)
+C      CALL DBPR('             ND=',16, ND,1)
 
-      IF    (NS.LT. MAX(M,P))  THEN
-         CALL ERROR('warning: scratch (NS too small) in GEND.',40, NS,1)
-      ENDIF
-      IF    (NS.LT. (P*P))  THEN
-         CALL ERROR('warning: scratch (P too big) in GEND.',37, NS,1)
-      ENDIF
 
       HPERR = 0
       V=2.0
@@ -1891,11 +1900,11 @@ C   DELTA, but accumulated round off error seems to affect the result.
 C
 C                  2nd derivative  - do lower half of hessian only
       UP = ITH
-      CALL DBPR('2nd deriv. UP=\n',16, UP,1)
+C      CALL DBPR('2nd deriv. UP=\n',16, UP,1)
       DO 200 I=1,ITH   
          DO 200 J=1,I 
             UP = UP + 1
-      CALL DBPR('      UP=\n',11, UP,1)
+C      CALL DBPR('      UP=\n',11, UP,1)
             IF (I.EQ.J) THEN
                DO 120 II=1,N   
 120               D(II,UP) = HDIAG(II,I)

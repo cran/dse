@@ -5,7 +5,7 @@
 \description{See the generic function description.}
 \usage{
     \method{tfplot}{coefEstEval}(x, cumulate=TRUE, norm=FALSE, bounds=TRUE,
-        invert=FALSE, Sort=FALSE, graphs.per.page = 5)
+        invert=FALSE, Sort=FALSE, graphs.per.page = 5, ...)
 }
 \arguments{
     \item{x}{an object for which a tfplot is to be produced.}
@@ -20,6 +20,7 @@
        plotted (square root of the sum of squared roots).}
     \item{bounds}{logical indicating if estimated one standard error bounds
        should be plotted around the lines for the true roots.}
+    \item{...}{arguments passed to other methods.}
 }
 
 \details{

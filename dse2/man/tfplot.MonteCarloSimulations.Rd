@@ -7,7 +7,7 @@
     tf=tframe(x$simulations), start=tfstart(tf), end=tfend(tf),
     series=seq((dim(x$simulations)[2])), 
     select.simulations=seq(dim(x$simulations)[3]),
-    graphs.per.page=5, mar=par()$mar)
+    graphs.per.page=5, mar=par()$mar, ...)
 }
 \arguments{
     \item{x}{The result of MonteCarloSimulations.}
@@ -21,6 +21,7 @@
     The default plots all simulations.}
     \item{graphs.per.page}{The number of graphs to put on a page.}
     \item{mar}{Plot margins (see \code{par}).}
+    \item{...}{arguments passed to other methods.}
 }
 \value{None}
 \details{

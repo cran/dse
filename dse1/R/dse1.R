@@ -3,6 +3,28 @@
 ###    should be moved to help files.
 ###
 
+.onLoad  <- function(library, section) {
+   .DSEflags(list(COMPILED=TRUE, DUP=TRUE))
+   invisible(TRUE)
+   }
+
+.DSEflags <- local({
+   .DSE.flags <- character(0)
+   function(new) {
+       if(!missing(new))
+           .DSE.flags <<- new
+       else
+           .DSE.flags
+       }
+})
+
+# With NAMESPACEs use .onLoad instead of .First.Lib 
+#.First.lib <- function(library, section) {
+#   assign(".DSEflags()$COMPILED", TRUE, env = .GlobalEnv)
+#   assign(".DSEDUP",      TRUE, env = .GlobalEnv)
+#   invisible(library.dynam("dse1"))
+#   }
+  
 
 DSEversion <- function() 
   {if (!is.R()) return("version cannot be determined.") else
@@ -21,9 +43,10 @@ DSEversion <- function()
 ##############################################################################
 
 # There is a short section containing installation dependent strings
-# following below any general documentation which might appear next.
-# (documentation may not appear here as my make procedures usually
-#  filter it to a separate file.)
+# following below .
+
+# Actually, "installation dependent strings" only applies to old versions
+#   used in Splus, I just have not clean up.
 
 ##############################################################################
 
@@ -37,47 +60,45 @@ DSEversion <- function()
 # previously        eg1.DSE.data.diff  was called  eg1.DSE.data.diff.all
 
 
-   .DSECOMPILED <- TRUE
-   .DSEDUP      <- TRUE
-
-.First.lib <- function(library, section)
-  {# a previous version tried to load several functions into frame 0 to 
-   # prevent problems even if the library is not attached with first=T, 
-   # however, this version take the less drastic step of issuing a warning
-   # if the library is not close to the beginning of the search list.
-   
-   if (is.R())
-     {if (.DSECOMPILED) library.dynam("dse1") #, local=FALSE)
-      ok <-  require("setRNG", warn.conflicts=TRUE)
-      ok <- ok & require("tframe",  warn.conflicts=TRUE)
-      if(!ok) warning("This package requires the setRNG and tframe packages.")
-     } else if (!is.R())
-     {# assuming is.S()
-      DSE.HOME <- paste(library, "/", section, sep="")
-      from <- paste(DSE.HOME,"/lib", sep="")
-      large <- FALSE
-      if (pmatch(DSE.HOME,search()) >2)
-         warning("The DSE library may not work properly if it is not near the beginning of the search list. Use library(..., first=T)")
-     if ( .DSECOMPILED && (0 != nchar(from)) &&
-     "/" != substring(from, first=nchar(from))) from <- paste(from,"/", sep="")
-    {# assuming is.S()
-     if("windows" == Platform()$OS.type)
-          {# The following variable is used in Windows dll.load
-	  dse.win.for.tab <- c("simss" ,"smooth" ,"kfp" ,"kfprj" ,"kfepr" ,
-	       "kf" ,"simarma"
-             ,"armap" ,"armaprj" ,"armaepr" ,"arma" ,"dataepr","inverse"
-              ,"gend","cstat_f","efcurve_f","rlcurve_f","wep")
-	   r <- dll.load(paste(from,"dsefor.dll", sep=""),dse.win.for.tab)
-           if (1!=r) warning("dll load was NOT successful.")
-          }
-     else 
-        {if (large) r <- dyn.load(paste(from,"dsefor.large.o", sep=""))
-         else       r <- dyn.load(paste(from,"dsefor.o", sep=""))
-    }   }
-     }
-
-   invisible(ok)
-  }
+# This old .First.lib was used in Splus and R until switching to namespaces
+#.First.lib <- function(library, section)
+#  {# a previous version tried to load several functions into frame 0 to 
+#   # prevent problems even if the library is not attached with first=T, 
+#   # however, this version take the less drastic step of issuing a warning
+#   # if the library is not close to the beginning of the search list.
+#   
+#   if (is.R())
+#     {if (.DSEflags()$COMPILED) library.dynam("dse1") #, local=FALSE)
+#      ok <-  require("setRNG", warn.conflicts=TRUE)
+#      ok <- ok & require("tframe",  warn.conflicts=TRUE)
+#      if(!ok) warning("This package requires the setRNG and tframe packages.")
+#     } else if (!is.R())
+#     {# assuming is.S()
+#      DSE.HOME <- paste(library, "/", section, sep="")
+#      from <- paste(DSE.HOME,"/lib", sep="")
+#      large <- FALSE
+#      if (pmatch(DSE.HOME,search()) >2)
+#	  warning("The DSE library may not work properly if it is not near the beginning of the search list. Use library(..., first=T)")
+#     if ( .DSEflags()$COMPILED && (0 != nchar(from)) &&
+#     "/" != substring(from, first=nchar(from))) from <- paste(from,"/", sep="")
+#    {# assuming is.S()
+#     if("windows" == Platform()$OS.type)
+#	   {# The following variable is used in Windows dll.load
+#	   dse.win.for.tab <- c("simss" ,"smooth" ,"kfp" ,"kfprj" ,"kfepr" ,
+#		"kf" ,"simarma"
+#	      ,"armap" ,"armaprj" ,"armaepr" ,"arma" ,"dataepr","inverse"
+#	       ,"gend","cstat_f","efcurve_f","rlcurve_f","wep")
+#	    r <- dll.load(paste(from,"dsefor.dll", sep=""),dse.win.for.tab)
+#	    if (1!=r) warning("dll load was NOT successful.")
+#	   }
+#     else 
+#	 {if (large) r <- dyn.load(paste(from,"dsefor.large.o", sep=""))
+#	  else       r <- dyn.load(paste(from,"dsefor.o", sep=""))
+#    }   }
+#     }
+#
+#   invisible(ok)
+#  }
 
 
 ##############################################################################
@@ -640,7 +661,8 @@ plot.roots <- function(x, pch='*', fuzz=0, ...)
     points(Re(x),Im(x), pch=pch)
    }
  else
-   {plot.default(Re(x),Im(x), pch=pch, xlab='Im', ylab='Re')
+   {#plot.default(Re(x),Im(x), pch=pch, xlab='Im', ylab='Re')
+    plot(Re(x),Im(x), pch=pch, xlab='Im', ylab='Re')
     points(sin(i),cos(i),pch='.')
    }
  points(0,0,pch='+')
@@ -2096,17 +2118,37 @@ DSE.ar <- function(data, ...) {
   res
   }
 
-printTestValue <- function(x, digits=16)
-  {cat("c( ")
-   if (all(is.na(x))) cat("NAs")
-   else if (is.null(x)) cat("NULL")
-   else if (is.logical(x)) cat(x)
-   else if (!is.R()) print(x, digits=digits)
-   else 
-     for (i in  1:length(x)) cat(", ", formatC(x[i], digits=digits, format="g"))
-   cat(")\n")
-   invisible()
-  }
+#printTestValue <- function(x, digits=16)
+#  {cat("c( ")
+#   if (all(is.na(x))) cat("NAs")
+#   else if (is.null(x)) cat("NULL")
+#   else if (is.logical(x)) cat(x)
+#   else if (!is.R()) print(x, digits=digits)
+#   else 
+#     for (i in  1:length(x)) cat(", ", formatC(x[i], digits=digits, format="g"))
+#   cat(")\n")
+#   invisible()
+#  }
+
+printTestValue <- function (x, digits = 16){
+    cat("c( ")
+    if (all(is.na(x)))       cat("NAs")
+    else if (is.null(x))     cat("NULL")
+    else if (is.logical(x))  cat(x)
+    else if (!is.R())        print(x, digits = digits)
+    else if (is.matrix(x)) {
+       for (i in 1:nrow(x)) {
+	 cat("\n      ")
+         for (j in 1:ncol(x)) 
+	   cat(formatC(x[i,j], digits=digits, format="g"), ", ")
+	 }
+       cat("), ", ncol(x), ", ", nrow(x), ")\n")
+       }
+    else for (i in 1:length(x)) cat(", ", formatC(x[i], digits=digits, format="g"))
+    cat(")\n")
+    invisible()
+    }
+
 
 ############################################################
 
@@ -2127,7 +2169,7 @@ simulate.TSestModel <- function(model, input=inputData(model),
 simulate.SS <- function(model, input=NULL,
                  start=NULL, freq=NULL, sampleT=100, 
                  noise=NULL, sd=1, SIGMA=NULL, rng=NULL, 
-                 compiled=.DSECOMPILED, ...)
+                 compiled=.DSEflags()$COMPILED, ...)
 {#  (... further arguments, currently disregarded)
 if (is.TSestModel(model)) model <- TSmodel(model)
 if (!is.SS(model)) stop("simulate.SS expecting an SS TSmodel.")
@@ -2200,18 +2242,24 @@ else set.ts <-  FALSE
       }
    }
  else
-   {if (is.null(noise$w0) || is.null(noise$w) || is.null(noise$e))
-       stop("supplied noise structure is not correct.")
+   {#  noise is not null
+   if (is.matrix(noise)) noise <- list(w=noise)
+   if (is.null(noise$w))
+       stop("supplied noise structure is not correct. w must be specified.")
+   if (is.null(noise$w0)) noise$w0 <- rep(0,p)
+   if ((!is.innov.SS(model)) &&  is.null(noise$e))
+       stop("supplied noise structure is not correct. e must be specified for non-innovations form models.")
+
     w0 <- noise$w0
-    if (is.matrix(w0)) w0 <- rep(0,p) # see note above re VAR
-    w<-noise$w
-    e<-noise$e
-    sampleT<-dim(noise$w)[1]
+    if (is.matrix(w0)) w0 <- rep(0,p) # see note in man re VAR compatiblity
+    w <- noise$w
+    e <- noise$e
+    sampleT <- periods(w)
    }
 
  y <- matrix(0,sampleT,p)
  state <- matrix(0,sampleT,n)
- if(is.null(model$z0)) z <-rep(0,n) # initial state
+ if(is.null(model$z0)) z <- rep(0,n) # initial state
  else  z <- model$z0        
 
  if (is.innov.SS(model)) 
@@ -2264,7 +2312,7 @@ else set.ts <-  FALSE
                          if(is.double(K)) K else as.double(K), 
                          if(is.double(Q)) Q else as.double(Q),	 
                          if(is.double(R)) R else as.double(R),    
-                         as.integer(is.innov.SS(model)), DUP=.DSEDUP,
+                         as.integer(is.innov.SS(model)), DUP=.DSEflags()$DUP,
 			 PACKAGE="dse1"
 			 )[c("y","state")]
     y <- r$y
@@ -2295,7 +2343,7 @@ simulate.ARMA <- function(model, y0=NULL, input=NULL, input0=NULL,
                 start=NULL, freq=NULL, sampleT=100,
                 noise=NULL, sd=1, SIGMA=NULL,
                 rng=NULL, noise.model=NULL, 
-                compiled=.DSECOMPILED, ...)
+                compiled=.DSEflags()$COMPILED, ...)
 {# see details in help("ARMA") and help("simulate.ARMA")
 
 if (is.TSestModel(model)) model <- TSmodel(model)
@@ -2386,7 +2434,7 @@ if (is.null(sampleT)) sampleT<-noise$sampleT
                          if(is.double(B)) B else as.double(B),   
                          if(is.double(C)) C else as.double(C),
                          if(is.double(TREND)) TREND else as.double(TREND), 
-			 DUP=.DSEDUP,
+			 DUP=.DSEflags()$DUP,
 			 PACKAGE="dse1"
 			 ) [["y"]]
 
@@ -2488,7 +2536,7 @@ l.TSestModel <- function(obj1, obj2, ...) {l(TSmodel(obj1), obj2, ...)}
 
 
 l.ARMA <- function(obj1, obj2, sampleT=NULL, predictT=NULL,result=NULL,
-                error.weights=0,  compiled=.DSECOMPILED, 
+                error.weights=0,  compiled=.DSEflags()$COMPILED, 
 		warn=TRUE, return.debug.info=FALSE, ...)
 {#  (... further arguments, currently disregarded)
   #  see help("l.ARMA")
@@ -2566,7 +2614,7 @@ if (compiled)
                          matrix(double(1),is,is),  # scratch array
                          matrix(double(1),is,is),  # scratch array
                          double(is),         # scratch array
-                         DUP=.DSEDUP,
+                         DUP=.DSEflags()$DUP,
 			 PACKAGE="dse1"
 			 ) [c("pred", "weighted.sqerror")]
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
@@ -2675,7 +2723,7 @@ stop("should never get to here in l.ARMA.")
 
 l.SS <- function(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
                  return.state=FALSE, return.track=FALSE, result=NULL, 
-		 compiled=.DSECOMPILED,
+		 compiled=.DSEflags()$COMPILED,
                  warn=TRUE, return.debug.info=FALSE, ...)
 {#  (... further arguments, currently disregarded)
  # see  help("l.SS") and help("SS")
@@ -2752,7 +2800,7 @@ if (compiled)
 #   storage.mode(R)     <- "double"
 #   storage.mode(z)     <- "double"
 #   storage.mode(P)     <- "double"
-
+IS <- max(n,p)
    r <- .Fortran("kf",
                   pred=matrix(double(1),predictT,p), #note, as.double messes dim of pred    
                   as.integer(length(error.weights)), 
@@ -2780,8 +2828,17 @@ if (compiled)
                   if(is.double(R)) R else as.double(R),	 
                   as.integer(Innov),
                   if(is.double(z)) z else as.double(z),
-                  if(is.double(P)) P else as.double(P), 
-		  DUP=.DSEDUP,
+                  if(is.double(P)) P else as.double(P),
+	    as.integer(IS),           # scratch arrays for KF, IS
+	    matrix(double(1),IS,IS),  #A
+	    matrix(double(1),IS,IS),  # AA
+	    matrix(double(1),IS,IS),  # PP
+	    matrix(double(1),n,n),  # QQ
+	    matrix(double(1),p,p),  # RR 
+	    rep(double(1),IS),  # Z
+	    rep(double(1),IS), # ZZ
+	    rep(double(1),IS), # WW		   
+		  DUP=.DSEflags()$DUP,
 		  PACKAGE="dse1"
 		  ) [c("pred","state","track","weighted.sqerror")]
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
@@ -2887,12 +2944,12 @@ else
 
 
 
-smoother <- function(model, data, compiled=.DSECOMPILED) UseMethod("smoother")
+smoother <- function(model, data, compiled=.DSEflags()$COMPILED) UseMethod("smoother")
 
 smoother.TSestModel <- function(model, data=TSdata(model),
-      compiled=.DSECOMPILED) smoother(TSmodel(model), data,compiled=compiled)
+      compiled=.DSEflags()$COMPILED) smoother(TSmodel(model), data,compiled=compiled)
 
-smoother.default <- function(model, data, compiled=.DSECOMPILED){
+smoother.default <- function(model, data, compiled=.DSEflags()$COMPILED){
  # See help("smoother") and help("SS") for details of the model:
  filter <- NULL
  estimates <- NULL
@@ -2949,7 +3006,7 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
                          matrix(double(1),n,n),   # scratch array
                          matrix(double(1),n,n),   # scratch array
                          double(n),         # scratch array
-                         DUP=.DSEDUP,
+                         DUP=.DSEflags()$DUP,
 			 PACKAGE="dse1"
 			 ) [c("state","track")]
    }
@@ -4393,11 +4450,6 @@ seriesNames.TSestModel <- function(x)
     x
    }
 
-identifiers.TSestModel <- function(obj){identifiers(TSdata(obj))}
-sourcedb.TSestModel <- function(obj){sourcedb(TSdata(obj))}
-sourceserver.TSestModel <- function(obj){sourceserver(TSdata(obj))}
-sourceInfo.TSestModel <- function(obj){sourceInfo(TSdata(obj))}
-
 
 ############################################################################
 
@@ -4407,42 +4459,6 @@ sourceInfo.TSestModel <- function(obj){sourceInfo(TSdata(obj))}
 ############################################################################
 
 is.TSdata <- function(obj) { inherits(obj, "TSdata")}
-
-#print.TSdata <- function(x, ...)
-#{  if(0 != (nseriesInput(x)))
-#     {cat("input data:\n")
-#      print(inputData(x),...)
-#      if(!is.null(x$input.transformations))
-#	   {cat("input.transformations:\n")
-#	    print(x$input.transformations, ...)
-#	   }
-#      if(!is.null(seriesNamesInput(x)))
-#	   {cat("input.names:\n")
-#	    print(seriesNamesInput(x), ...)
-#	   }
-#      cat("\n")
-#     }
-#  if(0 != (nseriesOutput(x)))
-#     {cat("output data:\n")
-#      print(outputData(x),...)
-#      if(!is.null(x$output.transformations))
-#	  {cat("output.transformations:\n")
-#	   print(x$output.transformations, ...)
-#	  }
-#      if(!is.null(seriesNamesOutput(x)))
-#	  {cat("output.names:\n")
-#	   print(seriesNamesOutput(x), ...)
-#	  }
-#     }
-#   cat("\n")
-#   if(!is.null(x$retrieval.date))
-#      cat("retrieval date: ", x$retrieval.date, "   ")
-#   if(!is.null(x$source)) 
-#     {cat("source:\n")
-#      print(x$source)
-#     }
-#  invisible(x)
-#}
 
 print.TSdata <- function(x, ...)
  {print.tframed <- function(x, ...)
@@ -4696,10 +4712,10 @@ frequencyOutput.TSdata <- function(x)
  }
 
 
-periods.TSdata <- function(x, ...) UseMethod("periodsOutput")
+periods.TSdata <- function(x, ...) periods(outputData(x))
 #  (... further arguments, currently disregarded)
-periodsOutput.TSdata <- function(x)  dim(outputData(x))[1]
-periodsInput.TSdata <- function(x)  dim(inputData(x))[1]
+periodsOutput.TSdata <- function(x)  periods(outputData(x))[1]
+periodsInput.TSdata  <- function(x)  periods( inputData(x))[1]
 
 tbind.TSdata <- function(x, d2, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
  {if( ! (is.TSdata(x) & is.TSdata(d2)))
@@ -4719,20 +4735,14 @@ testEqual.TSdata <- function(obj1, obj2, fuzz=1e-16)
   {r <- TRUE
    if (r & (!is.null(obj1$input)))
      {if(is.null(obj2$input)) r <- FALSE
-      else  r <-testEqual.matrix(obj1$input, obj2$input, fuzz=fuzz)
+      else  r <-testEqual(obj1$input, obj2$input, fuzz=fuzz)
      }
    if (r & (!is.null(obj1$output)))
      {if(is.null(obj2$output)) r <- FALSE
-      else r <-testEqual.matrix(obj1$output, obj2$output, fuzz=fuzz)
+      else r <-testEqual(obj1$output, obj2$output, fuzz=fuzz)
      }
    r
   }
-
-
-identifiers.TSdata <- function(obj) {identifiers(obj$source)}
-sourcedb.TSdata <- function(obj) {sourcedb(obj$source)}
-sourceserver.TSdata <- function(obj) {sourceserver(obj$source)}
-sourceInfo.TSdata <- function(obj) {sourceInfo(obj$source)}
 
 
 
@@ -4786,3 +4796,94 @@ tframed.TSdata <- function(x, tf=NULL, names=NULL)
  x
 }  
 
+
+############################################################
+
+#  Utility function for time series noise   <<<<<<<<<<
+
+############################################################
+
+makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
+                        SIGMA=NULL, sd=1, noise.model=NULL,
+                        noise.baseline=0,
+                        tf=NULL, start=NULL,frequency=NULL)
+ {# CAUTION: changes here can affect historical comparisons.
+  # noise.baseline is added to noise. It should be either a scalar, a matrix of
+  #   the same dimension as noise (or noise generated by noise.model), or a
+  #   vector of length equal to the dimension of the noise process (which will
+  #   be replicated for all periods.)
+ if(!require("setRNG")) stop("This function requires the setRNG package.")
+ if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
+ else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
+
+  if ( (!is.null(noise)) & (!is.null(noise.model)) )
+    stop("noise and noise.model cannot both be specified.")
+
+  if(!is.null(noise.baseline) && is.matrix(noise.baseline) &&
+    (sampleT < dim(noise.baseline)[1]))
+      {warning("sampleT (and start date) for noise adjusted to match noise.baseline")
+       sampleT <- dim(noise.baseline)[1]
+      }
+
+ # Note: noise is added to initial conditions.
+ if (!is.null(noise.model))
+   {if(!require("dse1"))
+       stop("Generating noise with a TSmodel requires the dse1 package.")
+    noise <- outputData(simulate(noise.model, sampleT=sampleT+lags))
+    noise <- list(w0=noise[1:lags,,drop=FALSE], w=noise[lags+seq(sampleT),,drop=FALSE])
+   }
+  if (is.null(noise)) {
+    w0 <-matrix(NA,lags,p)
+    w <- matrix(NA,sampleT,p)
+    if (!is.null(SIGMA)) {
+        if(length(SIGMA) == 1) SIGMA <- diag(SIGMA, p)
+	W <- t(chol(SIGMA))
+        w <- t(W %*% t(matrix(rnorm((lags+sampleT)*p),(lags+sampleT),p)))
+#  above has unfortunate effect that w0 was not from the first p values below
+#   would be better, but changes a lot? of tests
+#        w <- t(W %*% matrix(rnorm((lags+sampleT)*p),p, (lags+sampleT)))
+	w0 <- w[1:lags,]
+	w  <- w[-c(1:lags),]
+        }
+    else {
+       if (length(sd)==1) sd <-rep(sd,p)
+       for (i in 1:p)
+         {w0[,i] <- rnorm(lags,sd=sd[i])
+          w[,i]  <- rnorm(sampleT,sd=sd[i])
+         }
+       }
+    noise <- list(w=w, w0=w0)
+    }
+  else {
+     if (is.null(noise$w0) || is.null(noise$w) )
+       stop("supplied noise structure is not correct.")
+     }
+       
+  if(!is.null(noise.baseline))
+     {if (is.vector(noise.baseline))
+        {if(length(noise.baseline)==1) noise$w <- noise$w + noise.baseline
+         else if(length(noise.baseline)==1)
+           noise$w <-noise$w + t(array(noise.baseline, rev(dim(noise$w))))
+         else stop("noise.baseline vector is not correct length.")
+        }
+      else  noise$w <- noise$w + noise.baseline
+     }
+
+  if(!is.null(tf)) tframe(noise$w) <- tf
+  else if(!is.null(start))
+      {if (is.null(frequency))
+         {frequency <- 1
+          warning("start set but frequency not specified. Using frequency=1.")
+         }
+       else noise$w <-tframed(noise$w, list(start=start, frequency=frequency))
+       if (is.tframed(noise.baseline) &&
+           testEqual(tframe(noise.baseline),tframe(noise$w)))
+           {warning("tframe of noise set to tframe of noise.baseline.")
+            tframe(noise$w )<-tframe(noise.baseline)
+            if(!all(dimnames(noise$w)[[2]] == dimnames(noise.baseline)[[2]]))
+              warning("noise names and noise.baseline names do not correspond.")
+           }
+      }
+  append(noise, list(sampleT=sampleT, rng=rng,
+     SIGMA=SIGMA, sd=sd, noise.model=noise.model,version=as.vector(version)))
+ }

@@ -5,10 +5,10 @@
 \title{Evaluate a smoother with a TSmodel}
 \description{Evaluate a state space model.}
 \usage{
-    smoother(model, data, compiled=.DSECOMPILED)
-    \method{smoother}{default}(model, data, compiled=.DSECOMPILED)
+    smoother(model, data, compiled=.DSEflags()$COMPILED)
+    \method{smoother}{default}(model, data, compiled=.DSEflags()$COMPILED)
     \method{smoother}{TSestModel}(model, data=TSdata(model),
-      compiled=.DSECOMPILED)
+      compiled=.DSEflags()$COMPILED)
 }
 \arguments{
     \item{model}{

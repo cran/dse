@@ -7,7 +7,7 @@
  given sample}
 \usage{
     forecastCovEstimatorsWRTdata(data, estimation.sample=NULL, 
-                       compiled=.DSECOMPILED, discard.before=10,
+                       compiled=.DSEflags()$COMPILED, discard.before=10,
                        horizons=1:12, zero=FALSE, trend=FALSE,quiet=FALSE,
                        estimation.methods=NULL)
     is.forecastCovEstimatorsWRTdata(obj)

@@ -4,7 +4,7 @@
 \description{Evaluate an ARMA TSmodel.}
 \usage{
     \method{l}{ARMA}(obj1, obj2, sampleT=NULL, predictT=NULL,result=NULL,
-       error.weights=0,  compiled=.DSECOMPILED, warn=TRUE, 
+       error.weights=0,  compiled=.DSEflags()$COMPILED, warn=TRUE, 
        return.debug.info=FALSE, ...)
 }
 \arguments{
@@ -61,7 +61,7 @@ error at each period ahead.
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- TSmodel(estVARXls(eg1.DSE.data.diff))
-    evalutated.model <- l.ARMA(model,eg1.DSE.data.diff)
+    evaluated.model <- l(model,eg1.DSE.data.diff)
 }
 \concept{DSE}
 \keyword{ts}
