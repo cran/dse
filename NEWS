@@ -1,3 +1,18 @@
+                CHANGES IN DSE AND DSEPLUS VERSION 2004.4-1
+ 
+Changes (Possibly) Affecting Users
+ 
+    o   fixed window.default (tfwindow) warnings in vignettes
+          
+    o   fixed a bug in the constructor TSdata.default which prevented
+        tframe and series name information from being properly used
+	in the resulting TSdata object.
+
+Changes Affecting Development
+          
+    o   fixed some version number tests which will not work correctly in R-2.0.
+
+
 		CHANGES IN DSE, setRNG, AND DSEPLUS VERSION 2004.3-1
 
 Changes (Possibly) Affecting Users

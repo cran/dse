@@ -4944,10 +4944,12 @@ TSdata <- function (data=NULL, ...) UseMethod("TSdata")
 
 TSdata.default <- function(data=NULL, input=NULL, output=NULL, ...)  
 {if (is.null(data) && (!is.null(input) | !is.null(output) ))
-    {if(!is.null(input) && is.vector(input))
-           input <- matrix(input, length(input),1)
-     if(!is.null(output) && is.vector(output))
-           input <- matrix(output, length(output),1)
+    {if(!is.null(input) && is.vector(input)) input <- 
+	   tframed(matrix(input, length(input),1), tf=tframe(input),
+	           names=seriesNames(input))
+     if(!is.null(output) && is.vector(output)) output <- 
+	   tframed(matrix(output, length(output),1), tf=tframe(output),
+	           names=seriesNames(output))
      data <- classed(list(input=input, output=output), "TSdata") # constructor
   }else 
      data <- classed(data, "TSdata")   # constructor keeps other list elements
