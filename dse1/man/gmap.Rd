@@ -1,6 +1,6 @@
 \name{gmap}
 \alias{gmap}
-\title{Basis transformation of a model.}
+\title{Basis Transformation of a Model.}
 \description{
 Transform the basis for the state by a given invertible matrix.
 }

@@ -1,0 +1,14 @@
+# Expecting results from 1 tests
+
+# vsize 12000000 is too small at B5
+# vsize 20000000 is too small at B6
+
+#       Feb 26, 1999.
+# next works and all tests complete ok with R 0.63.3pre but it is slow and
+#    needs to be run on a fast computer with lots of memory
+#R --vsize=35M --nsize=300K 
+# gcinfo(1)
+  require("dse2"); require("curve")  #,  warn.conflicts=F)
+ system.info()
+ version.dse()
+ dsecurvature.function.testsB(verbose=T, print.values=T) 

@@ -9,8 +9,10 @@
 \usage{
 	print(...)}
 
-\seealso{ \code{\link{print}} }
-\seealso{ \code{\link{summary}} }
+\seealso{
+	\code{\link{print}}
+	\code{\link{summary}}
+}
 
 \keyword{DSE}
 \keyword{ts}

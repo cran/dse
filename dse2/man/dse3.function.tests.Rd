@@ -1,7 +1,7 @@
 \name{dse3.function.tests}
 \alias{dse3.function.tests}
 \alias{dse3.graphics.tests}
-\title{dse3.function.tests}
+\title{Function Tests for Part of DSE Bundle}
 \description{Test proper functioning of part of the DSE library.}
 \usage{
 	dse3.function.tests(verbose=T, synopsis=T,

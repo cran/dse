@@ -1,10 +1,20 @@
 00General_Description    DSE
-acf.M                    Calculate auto-covariance
-add.plot.roots           add roots of a TSmodel to a plot
 ARMA                     ARMA Model Constructor
+DSE.utilities            DSE Utilities
+DSECOMPILED              Use Compiled or S/R Code
+McMillan.degree          Calculate McMillan Degree
+Portmanteau              Calculate Portmanteau statistic
+Riccati                  Riccati Equation
+SS                       State Space Models
+TSdata                   Construct TSdata time series object
+TSdata.object            time series data object
+TSestModel               Estimated Time Series Model
+TSmodel                  Time Series Models
+acf.M                    Calculate Auto-Covariance
+add.plot.roots           Add Model Roots to a plot
 balance.Mittnik          Balance a state space model
-check.balance.Mittnik    check balance of a TSmodel
-check.balance            check balance of a TSmodel
+check.balance.Mittnik    Check Balance of a TSmodel
+check.balance            Check Balance of a TSmodel
 check.consistent.dimensions
                          Check Consistent Dimensions
 check.residuals          check residuals of a TSmodel or autocorrelations
@@ -12,10 +22,8 @@ check.residuals          check residuals of a TSmodel or autocorrelations
 combine                  Combine two objects.
 combine.TSdata           Combine series from two TSdata objects.
 diff.log                 Calculate the difference of log data
-display                  Display TSmodel arrays
-DSE.utilities            DSE Utilities
+display                  Display TSmodel Arrays
 dse1.function.tests      dse1.function.tests
-DSECOMPILED              Use Compiled or S/R Code
 eg1.DSE.data             Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data       Eleven Time Series used in Gilbert (1995)
 est.SS.from.VARX         Estimate a state space TSmodel using VAR
@@ -23,15 +31,15 @@ est.SS.from.VARX         Estimate a state space TSmodel using VAR
 est.VARX.ar              Estimate a VAR TSmodel
 est.VARX.ls              Estimate a VAR TSmodel
 example                  TS Examples
-findg                    find equivalence transformation
-fix.constants            fix TSmodel parameters to constants
+findg                    Find Equivalence Transformation
+fix.constants            Fix TSmodel Parameters to Constants
 fixF                     Set SS Model F Matrix to Constants
 get.RNG                  get the RND and seed from an object
-gmap                     Basis transformation of a model.
+gmap                     Basis Transformation of a Model.
 help.start.DSE           Start DSE Help in S
+information.tests        Tabulates selection criteria
 information.tests.calculations
                          Calculate selection criteria
-information.tests        Tabulates selection criteria
 input.data               TSdata Series
 input.dimension          Number of Series in in Input or Output
 input.periods            TSdata Periods
@@ -41,19 +49,16 @@ l                        Evaluate a TSmodel
 l.SS                     Evaluate a state space TSmodel
 load.DSE.fortran         Load compiled routines for time series models
 markov.parms             Markov Parameters
-McMillan.degree          calculate McMillan degree
-observability            Calculate observability of a TSmodel
-parms                    Extract model parameters.
+observability            Calculate Model Observability Matrix
+parms                    Extract Model Parameters.
 percent.change           Calculate percent change
 periods.TSdata           Specific Methods for Tframed data
-plot.roots               plot roots of a TSmodel
+plot.roots               Plot Model Roots
 polynomials              Polynomial Utilities
-Portmanteau              Calculate Portmanteau statistic
 print.TSdata             Print Specific Methods
-reachability             Calculate reachability of a TSmodel
+reachability             Calculate Model Reachability Matrix
 residual.stats           Calculate Residuals Statistics and Likelihood
-Riccati                  Riccati Equation
-roots                    Calculate roots of a TSmodel
+roots                    Calculate Model Roots
 scale.TSdata             Scale Methods for TS objects
 series.names.TSdata      Series Names Specific Methods
 set.arrays               Set TSmodel Array Information
@@ -61,24 +66,19 @@ set.parameters           Set TSmodel Parameter Information
 simulate                 Simulate a TSmodel
 smoother                 Evaluate a smoother with a TSmodel
 source.info.TSdata       tfPADI Specific Methods
-SS                       State Space Models
-stability                Calculate stability of a TSmodel
+stability                Calculate Stability of a TSmodel
 standardize              standardize data
 sum.sqerror              Calculate sum of squared prediction errors
-summary                  Display summary information.
+summary                  Display Summary Information.
 summary.TSdata           Specific Methods for Summary
 test.equal.ARMA          Specific Methods for Testing Equality
-tfplot                   Plots of TSdata or TSestModel objects
+tfplot                   Time Series Plots
 tfplot.TSdata            Tfplot Specific Methods
-to.ARMA                  to.ARMA
-to.parsim                convert to parsimonious form
-to.SS.Chol               Convert to non-innovation state space TSmodel
-to.SS.innov              Convert to state space innovations TSmodel
+to.ARMA                  Convert to an ARMA Model
+to.SS.Chol               Convert to Non-Innovation State Space Model
 to.SS.Oform              Convert to Oform
-to.SS                    Convert to state space form
-TSdata.object            time series data object
-TSdata                   Construct TSdata time series object
-TSestModel               Estimated Time Series Model
-TSmodel                  Time Series Models
-version.dse              Print version information
+to.SS                    Convert to State Space Model
+to.SS.innov              Convert to State Space Innovations Model
+to.parsim                Convert to Parsimonious Form
+version.dse              Print Version Information
 ytoypc                   Convert to year to year percent change

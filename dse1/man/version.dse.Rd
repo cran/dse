@@ -1,7 +1,7 @@
 \name{version.dse}
 \alias{version.dse}
 \alias{dse.version.information}
-\title{Print version information}
+\title{Print Version Information}
 \description{Print version information.}
 \usage{
 	version.dse()}

@@ -1,6 +1,6 @@
 \name{phase.plots}
 \alias{phase.plots}
-\title{Calculate phase plots}
+\title{Calculate Phase Plots}
 \description{Calculate phase plots}
 \usage{
 	phase.plots(data, max.lag=5,diff=F)

@@ -1,6 +1,6 @@
 \name{plot.roots}
 \alias{plot.roots}
-\title{plot roots of a TSmodel}
+\title{Plot Model Roots}
 \description{Calculate and plot roots of a model.}
 \usage{
 	plot.roots(v, fuzz=0)}

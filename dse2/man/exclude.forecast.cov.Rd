@@ -1,6 +1,6 @@
 \name{exclude.forecast.cov}
 \alias{exclude.forecast.cov}
-\title{Filter object to remove forecasts}
+\title{Filter Object to Remove Forecasts}
 \description{Filter object to remove forecasts.}
 \usage{
 	exclude.forecast.cov(obj, exclude.series=NULL)

@@ -3,7 +3,7 @@
 \alias{to.parsim.TSmodel}
 \alias{to.parsim.TSestModel}
 
-\title{convert to parsimonious form}
+\title{Convert to Parsimonious Form}
 \description{Try to find a more parsimonious parameterization.}
 \usage{
 	to.parsim(model, minf = nlmin, small=1e-5, equiv=F,max.iter=100,max.fcal=200)

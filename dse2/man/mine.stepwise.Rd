@@ -1,6 +1,6 @@
 \name{mine.stepwise}
 \alias{mine.stepwise}
-\title{mine.stepwise}
+\title{Mine Stepwise}
 \description{mine.stepwise}
 \usage{
 	mine.stepwise(data, essential.data=1,

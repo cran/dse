@@ -12,7 +12,7 @@
 \alias{to.SS.nested.ARMA}
 \alias{to.SS.nested.TSestModel}
 
-\title{Convert to state space form}
+\title{Convert to State Space Model}
 \description{
 Convert a model to state space form.
 }

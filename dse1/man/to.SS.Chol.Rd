@@ -3,7 +3,7 @@
 \alias{to.SS.Chol.TSmodel}
 \alias{to.SS.Chol.TSestModel}
 
-\title{Convert to non-innovation state space TSmodel}
+\title{Convert to Non-Innovation State Space Model}
 \description{
 
 Convert to a non-innovations state space representation using 

@@ -1,6 +1,6 @@
 \name{est.SS.Mittnik}
 \alias{est.SS.Mittnik}
-\title{Estimate a state space model}
+\title{Estimate a State Space Model}
 \description{Estimate a state space model using Mittnik's markov parameter estimation.
 }
 \usage{

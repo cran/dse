@@ -5,7 +5,6 @@
 \alias{test.equal.forecast.cov}
 \alias{test.equal.horizon.forecasts}
 \alias{test.equal.monte.carlo.simulations}
-\alias{test.equal.tagged}
 
 \title{Specific Methods for Testing Equality}
 \description{See the generic function description.}

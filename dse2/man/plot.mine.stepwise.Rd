@@ -1,6 +1,6 @@
 \name{plot.mine.stepwise}
 \alias{plot.mine.stepwise}
-\title{plot.mine.stepwise}
+\title{Plot Mine Stepwise Object}
 \description{plot.mine.stepwise}
 \usage{
 	plot.mine.stepwise(x)

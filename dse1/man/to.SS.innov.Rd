@@ -1,6 +1,6 @@
 \name{to.SS.innov}
 \alias{to.SS.innov}
-\title{Convert to state space innovations TSmodel}
+\title{Convert to State Space Innovations Model}
 \description{Convert to a state space innovations representation.}
 \usage{
 	to.SS.innov(model)}

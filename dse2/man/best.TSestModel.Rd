@@ -1,6 +1,6 @@
 \name{best.TSestModel}
 \alias{best.TSestModel}
-\title{Select the best model}
+\title{Select Best Model}
 \description{Select the best model.}
 \usage{
 	best.TSestModel(models, sample.start=10, sample.end=NULL,

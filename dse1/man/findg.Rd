@@ -1,6 +1,6 @@
 \name{findg}
 \alias{findg}
-\title{find equivalence transformation}
+\title{Find Equivalence Transformation}
 \description{
 
 Try to find a matrix g which makes two models equivalent.

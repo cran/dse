@@ -1,6 +1,6 @@
 \name{add.plot.roots}
 \alias{add.plot.roots}
-\title{add roots of a TSmodel to a plot}
+\title{Add Model Roots to a plot}
 \description{
 
 Calculate and plot roots of a model.

@@ -1,0 +1,9 @@
+00General_Description    Syskern
+SPAWN                    Global variable
+global.assign            Utilities to handle small S/R differences
+is.S                     S/R Version Information
+is.unix                  Determine the Operating System
+set.RNG                  Set the random number generator
+system.call              Operating system requests
+system.info              Get information about the system
+whoami                   Operating System Information
