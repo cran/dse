@@ -6,7 +6,7 @@
 \title{Compare Two Time Frames}
 \description{
 Generic function to compare two time frames.  The methods return a 
-logical value, T if the time frames are the same type and value and F otherwise.
+logical value, TRUE if the time frames are the same type and value and FALSE otherwise.
 }
 \usage{
     test.Equaltframes(tf1,tf2)
@@ -16,9 +16,7 @@ logical value, T if the time frames are the same type and value and F otherwise.
 \arguments{
     \item{tf1, tf2}{Time frames of the same class.}
 }
-\value{
-T or F.
-}
+\value{TRUE or FALSE}
 \details{
 Time frames are compared. Time frames need to be of the same class (although it would be nice if they did
 not need to be).

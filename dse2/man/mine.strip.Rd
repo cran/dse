@@ -5,7 +5,7 @@
 \usage{
     mine.strip(all.data, essential.data=1, 
                        estimation.sample=.5, 
-                       discard.before=1, horizons=1:12,quiet=F,
+                       discard.before=1, horizons=1:12,quiet=FALSE,
                        estimation.methods=NULL,
                        step.size=NULL)
 }
@@ -17,7 +17,7 @@
     Period before which data should be disacrded when calculating the 
     forecast covariances.}
     \item{horizons}{Forecast horizons which should be considered.}
-    \item{quiet}{If T then estimation information is not printed. quiet=T may also have to be
+    \item{quiet}{If T then estimation information is not printed. quiet=TRUE may also have to be
     set in the arguments to estimation methods.}
     \item{estimation.methods}{
     A list indicating the model estimation method to use. The list should contain
@@ -81,7 +81,7 @@ Essential.data indicates the subset of output variables to included in all
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- mine.strip(eg1.DSE.data.diff, 
-    estimation.methods=list(bft=list(max.lag=2, verbose=F)))
+    estimation.methods=list(bft=list(max.lag=2, verbose=FALSE)))
 }
 %\keyword{DSE}
 \keyword{ts}

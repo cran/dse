@@ -17,7 +17,7 @@
 }
 \value{A tframed object.}
 \details{
-    This is like [ , , drop=F] but retains class, series name and tframe 
+    This is like [ , , drop=FALSE] but retains class, series name and tframe 
     information. It
     also provides a methods which works with multivariate series which 
     are not matrices (e.g. tfPADIdata).

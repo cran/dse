@@ -56,8 +56,8 @@ est.wt.variables <- function(data, variable.weights,
  dimnames(inv.wts)          <-list(NULL, seriesNamesOutput(data))
  dimnames(variable.weights) <-list(NULL, seriesNamesOutput(data))
  scaled.model <- do.call(estimation, append(list(
-           freeze(scale(data, list(output=inv.wts)))), estimation.args))
- model <-scale(TSmodel(scaled.model), list(output=variable.weights))
+           freeze(scale(data, scale=list(output=inv.wts)))), estimation.args))
+ model <-scale(TSmodel(scaled.model), scale=list(output=variable.weights))
  model$description <- 
     paste("model estimated by est.wt.variables with", estimation)
  l(model, data)
@@ -549,14 +549,18 @@ test.equal.forecast <- function(obj1, obj2, fuzz=1e-14)
 
 tfplot.forecast <- function(x, start.=NULL, end.=NULL,
         series = seq(length=nseriesOutput(x$data)),
-        names = seriesNamesOutput(x$data), mar=par()$mar)
+	Title="Predictions (dotted) and actual data (solid)",
+        ylab = seriesNamesOutput(x$data), 
+	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
 {#The default starting point (start.) for plots is the start data.
  #The default ending point (end.) for plots is the end of forecast.
    if (is.null(x$forecast[[1]]))
       stop("Object to be plotted contains no forecast")
    output <- trim.na(output.data(x$data))
-   old.par <- par(mfcol = c(length(series), 1), mar= mar) #c(5.1,6.1,4.1,2.1))
-   on.exit(par(old.par))
+   Ngraphs <- min(length(series), graphs.per.page)
+   if(reset.screen) {
+      old.par <- par(mfcol = c(Ngraphs, 1), mar= mar) #c(5.1,6.1,4.1,2.1))
+      on.exit(par(old.par)) }
    N <- length(x$forecast)
    H <- 0
    for (t in 1:N) H <- max(H, dim(x$forecast[[t]])[1])
@@ -572,9 +576,8 @@ tfplot.forecast <- function(x, start.=NULL, end.=NULL,
          tframe(z) <- tf
          if (!is.null(start.)) z <- tfwindow(z,start=start., warn=FALSE)
          if (!is.null(end.))   z <- tfwindow(z,end=end., warn=FALSE)
-         tfOnePlot(z, ylab = names[i])
-         if(i == series[1]) 
-             title(main = "Predictions (dotted) and actual data (solid)")
+         tfOnePlot(z, ylab = ylab[i])
+         if(i == series[1]) title(main = Title)
         }
    invisible()
 }
@@ -602,6 +605,8 @@ seriesNamesInput.forecast <- function(obj)
 ############################################################################
 
 is.featherForecasts <- function(obj) inherits(obj, "featherForecasts")
+
+nseries.featherForecasts <- function(x) nseries(x$featherForecasts[[1]])
 
 seriesNamesOutput.featherForecasts <- function(obj) seriesNamesOutput(obj$data)
  seriesNamesInput.featherForecasts <- function(obj)  seriesNamesInput(obj$data)
@@ -633,7 +638,7 @@ featherForecasts.TSmodel <- function(obj, data, horizon=36,
      if ((!is.na(periodsInput(data))) && 
         ((max(from.periods)+horizon) > periodsInput(data) ))
        stop("forecasts cannot exceed available input data.")
-   shf <- start.shift(obj,data,y0=NULL)  # ? y0=y0)
+   shf <- startShift(obj,data,y0=NULL)  # ? y0=y0)
    proj <- NULL
    for (sampleT in from.periods)
      {pr <- l(obj, data, sampleT=sampleT, 
@@ -654,17 +659,18 @@ featherForecasts.TSmodel <- function(obj, data, horizon=36,
 forecasts.featherForecasts <- function(obj){obj$featherForecasts}
 
 tfplot.featherForecasts <- function(x, start.=NULL, end.=NULL, 
-   series=NULL, graphs.per.page=5, reset.screen=TRUE, mar=par()$mar)
+   series=seq(nseries(x)), 
+   Title="Predictions (dotted) and actual data (solid)", 
+   ylab=seriesNamesOutput(x),
+   graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
 {#The default starting point (start.) for plots is the start of data.
  #The default ending point (end.) for plots is the end of forecasts.
-   p <- dim(x$featherForecasts[[1]])[2]
    freq <- frequency(x$data)
    names <- seriesNamesOutput(x)
-   if(is.null(names)) names <- paste("output", 1:p)
+   if(is.null(names)) names <- paste("output", series)
    if (is.null(start.)) start. <- start(x$data)
    if (is.null(end.))   end.   <- add.date(end(output.data(x$data)),
                                    max(x$horizon), frequency(x$data))
-   if (is.null(series)) series <- 1:p
    if (!is.numeric(series)) series <- match(series, names)
    if(reset.screen) 
      {Ngraphs <- length(series)
@@ -684,9 +690,8 @@ tfplot.featherForecasts <- function(x, start.=NULL, end.=NULL,
            }
          for (t in 1:length(x$from.periods))
             zz <- tbind(zz, select.series(x$featherForecasts[[t]], i))
-         tfOnePlot(tfwindow(zz,start=start.,end=end., warn=FALSE), ylab=names[i], lty=ltys)
-         if(i == series[1]) 
-             title(main = "Predictions (dotted) and actual data (solid)")
+         tfOnePlot(tfwindow(zz,start=start.,end=end., warn=FALSE), ylab=ylab[i], lty=ltys)
+         if(i == series[1]) title(main = Title)
         }
    invisible()
 }
@@ -783,7 +788,7 @@ minimum.startup.lag.ARMA <- function(model)
 
 minimum.startup.lag.SS <- function(model)  { 1+dim(model$F)[2] }
 
-start.shift <- function(model,data, y0=NULL)
+startShift <- function(model,data, y0=NULL)
  {# there is some redundancy between this and  minimum.startup.lag which 
   #   should be cleaned up.
   # This function is used to determine the number of lags (and leads) needed
@@ -1971,12 +1976,12 @@ horizonForecasts.compiled.SS <- function( model, data, horizons=1:4,
 forecasts.horizonForecasts <- function(obj){obj$horizonForecasts}
 
 tfplot.horizonForecasts <- function(x, start.=NULL, end.=NULL,
-   series=NULL, names=seriesNamesOutput(x$data), mar=par()$mar)
+   series=NULL, ylab=seriesNamesOutput(x$data), mar=par()$mar)
 {#If series is not NULL then only indicated variables are plotted
  # if start. is null it is set to the beginning of the data.
  # if end. is null it is set to the end of the data.
    output <-output.data(x$data)
-   if(is.null(names)) names <- rep(" ", dim(output)[2])
+   if(is.null(ylab)) ylab <- rep(" ", dim(output)[2])
    if (is.null(series)) series <- 1: dim(output)[2]
    if (is.null(start.)) start. <- start(output)
    if (is.null(end.)) end. <- end(output)
@@ -1987,7 +1992,7 @@ tfplot.horizonForecasts <- function(x, start.=NULL, end.=NULL,
      {#unclass below in because x$horizonForecasts is not tframed and tbind
       #   complains if the frequencies do not match
       zz<- tframed(tbind(unclass(output)[,i],t((x$horizonForecasts)[,,i])), tf)
-      tfplot(tfwindow(zz,start=start.,end=end., warn=FALSE), ylab =names[i])
+      tfplot(tfwindow(zz,start=start.,end=end., warn=FALSE), ylab =ylab[i])
       if(i == series[1]) title(main = "Actual data (solid)")
      }
    invisible()
@@ -2218,7 +2223,7 @@ forecastCov.single.TSmodel <- function( model, data=NULL, horizons=1:12,
      		 discard.before=discard.before)
   else
     { p <- nseriesOutput(data)
-      shf <- start.shift(model,data) #,y0=y0)
+      shf <- startShift(model,data) #,y0=y0)
       TT  <-periods(data)-(shf$shift)*(shf$lags+shf$terminal.periods)
       cov <- array(0,c(length(horizons), p,p))
       N <- rep(0,length(horizons))   # the sample size used at each horizon
@@ -2489,16 +2494,17 @@ total.forecastCov <- function(obj, select=NULL)
 
 
 
-tfplot.forecastCov <- function(x, series = 1:dim(x$forecastCov[[1]])[2], 
+tfplot.forecastCov <- function(x, ..., series = 1:dim(x$forecastCov[[1]])[2], 
     select.cov = 1:length(x$forecastCov), select.true = TRUE, 
     select.zero = TRUE, select.trend = TRUE, y.limit = NULL, line.labels = FALSE, 
-    lty = NULL, Legend = NULL, Title = NULL, graphs.per.page = 5, mar=par()$mar, 
-    ...) 
+    lty = NULL, Legend = NULL, Title = NULL, 
+    graphs.per.page = 5, mar=par()$mar, reset.screen=TRUE) 
 {
     p <- dim((x$forecastCov)[[1]])[2]
     Ngraph <- 1 + min(length(series), graphs.per.page)
-    old.par <- par(mfcol = c(Ngraph, 1), mar = mar) #c(5.1, 6.1, 4.1, 2.1))
-    on.exit(par(old.par))
+    if (reset.screen) {
+       old.par <- par(mfcol = c(Ngraph, 1), mar = mar) #c(5.1, 6.1, 4.1, 2.1))
+       on.exit(par(old.par)) }
     par(...)
     if (is.null(lty)) 
         lty <- seq(length(select.cov) + 
@@ -2674,17 +2680,19 @@ tfplot.forecastCov.estimatorsWRTdata <- function(x,
     series=1:dim(x$forecastCov[[1]])[2], 
     select.cov=1:length(x$forecastCov),
     select.zero=TRUE, select.trend=TRUE,
-    lty=NULL, mar=par()$mar,  ...)  # ,  lty=1:5
+    graphs.per.page = 5, mar=par()$mar, reset.screen=TRUE, lty=NULL)  # ,  lty=1:5
 {# ... should be arguments to par(). See tfplot.forecastCov for more details.
 Legend<- paste(names(x$estimation.methods), x$estimation.methods)[select.cov]
  if(select.trend & !is.null(x$forecastCov.trend))
        Legend  <- c("trend",Legend)
  if(select.zero  & !is.null(x$forecastCov.zero))
        Legend  <- c( "zero",Legend)
- tfplot.forecastCov(x, series=series, lty=lty,
+ tfplot.forecastCov(x, series=series, 
         select.cov=select.cov, select.true=FALSE,
         select.zero=select.zero, select.trend=select.trend, Legend=Legend, 
-        Title="Prediction variance relative to given data.", mar=mar, ...)
+        Title="Prediction variance relative to given data.", 
+	graphs.per.page = graphs.per.page, mar=mar, reset.screen=reset.screen, 
+	lty=lty)
  invisible()
 }
 
@@ -3417,7 +3425,7 @@ mine.stepwise <- function(data, essential.data=1,
    if (standardize)
      {svd.cov <- svd(var(output.data(data)))
       scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
-      data <- scale(data, list(output=scalefac))
+      data <- scale(data, scale=list(output=scalefac))
      }
    if (subtract.means)
     {if(m!=0)

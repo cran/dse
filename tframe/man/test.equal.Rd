@@ -9,7 +9,7 @@
 \title{Compare Two Objects}
 \description{
 Generic function to compare two objects.  The methods return a 
-logical value, T if the objects are the same type and value and F otherwise.
+logical value, TRUE if the objects are the same type and value and FALSE otherwise.
 The default compares array values but not attributes or class.
 Some descriptive information in the objects may be ignored.
 }

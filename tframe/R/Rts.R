@@ -54,8 +54,10 @@ tfwindow.ts <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
 
 # The .tstframe methods should work on tframe(ts(whatever))  from ts objects. 
 
-start.tstframe <- function(x) c(floor(x[1]), round(1 + (x[1]%%1)*x[3]))
-end.tstframe   <- function(x) c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))
+start.tstframe <- function(x) c(floor(x[1]+getOption("ts.eps")),
+    round(1 + ((x[1]+getOption("ts.eps"))%%1)*x[3]))
+end.tstframe   <- function(x) c(floor(x[2]+getOption("ts.eps")),
+    round(1 + ((x[2]+getOption("ts.eps"))%%1)*x[3]))
 periods.tstframe <- function(x)  {1+round((x[2]-x[1])*x[3])}
 frequency.tstframe <- function(x) x[3]
 time.tstframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}

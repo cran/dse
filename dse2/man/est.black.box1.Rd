@@ -5,7 +5,7 @@
 \usage{
     est.black.box1(data, estimation="est.VARX.ls", 
         reduction="reduction.Mittnik", 
-        criterion="taic", trend=F, subtract.means=F, verbose=T, max.lag=6)
+        criterion="taic", trend=FALSE, subtract.means=FALSE, verbose=TRUE, max.lag=6)
 }
 \arguments{
     \item{data}{Data in an object of class TSdata.}
@@ -22,7 +22,7 @@
 }
 \value{A state space model in an object of class TSestModel.}
 \sideffects{
-If verbose is T then estimation information is printed and check.residuals is run, 
+If verbose is TRUE then estimation information is printed and check.residuals is run, 
 which gives plots of information about the residuals.
 }
 \seealso{

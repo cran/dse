@@ -7,12 +7,12 @@
     and convert to state space.
 }
 \usage{
-    est.SS.from.VARX(data, warn=T, ...)}
+    est.SS.from.VARX(data, warn=TRUE, ...)}
 \arguments{
     \item{data}{
     An object with the structure of an object of class TSdata (see TSdata).}
-    \item{warn}{Logical indicating if warnings should be printed (T) or
-    suppressed (F).}
+    \item{warn}{Logical indicating if warnings should be printed (TRUE) or
+    suppressed (FALSE).}
     \item{...}{See arguements to est.VARX.ls}}
 
 \value{A state space model in an object of class TSestModel.}

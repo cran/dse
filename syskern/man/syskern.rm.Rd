@@ -18,7 +18,7 @@
 \value{misc.}
 \details{
     Utilities to handle small S/R differences. 
-    \code{syskern.rm} does unlink with default recursive=T.
+    \code{syskern.rm} does unlink with default recursive=TRUE.
 }
 \seealso{
     \code{\link{set.RNG}}

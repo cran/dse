@@ -3,7 +3,6 @@
 \alias{tfplot.TSestModel.ee}
 \alias{tfplot.featherForecasts}
 \alias{tfplot.forecast}
-\alias{tfplot.forecastCov.estimatorsWRTdata}
 \alias{tfplot.horizonForecasts}
 \alias{tfplot.multi.model.horizonForecasts}
 
@@ -15,16 +14,17 @@
     \method{tfplot}{TSestModel.ee}(x, graph.args=NULL,
                        criterion ="coef", criterion.args=NULL)
     \method{tfplot}{featherForecasts}(x, start.=NULL, end.=NULL, 
-      series=NULL, graphs.per.page=5, reset.screen=T, mar=par()$mar)
+        series=seq(nseries(x)), 
+        Title="Predictions (dotted) and actual data (solid)", 
+        ylab=seriesNamesOutput(x),
+        graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
     \method{tfplot}{forecast}(x, start.=NULL, end.=NULL,
         series = seq(length=nseriesOutput(x$data)),
-        names = seriesNamesOutput(x$data), mar=par()$mar)
-    \method{tfplot}{forecastCov.estimatorsWRTdata}(x, 
-        series=1:dim(x$forecastCov[[1]])[2], 
-        select.cov=1:length(x$forecastCov),
-        select.zero=T, select.trend=T, lty=NULL, mar=par()$mar,  ...)
+	Title="Predictions (dotted) and actual data (solid)",
+        ylab = seriesNamesOutput(x$data), 
+	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
     \method{tfplot}{horizonForecasts}(x, start.=NULL, end.=NULL,
-         series=NULL, names=seriesNamesOutput(x$data), mar=par()$mar)
+         series=NULL, ylab=seriesNamesOutput(x$data), mar=par()$mar)
     \method{tfplot}{multi.model.horizonForecasts}(x, start.=NULL, end.=NULL,
          series=NULL)
 }
@@ -32,13 +32,12 @@
     \item{x}{an object for which a tfplot is to be produced.}
     \item{start.}{see \code{tfplot}.}
     \item{end.}{see \code{tfplot}.}
-    \item{names}{vector of strings for y axis labelling (ylab).}
-    \item{...}{object or objects to be plotted.}
+    \item{Title}{string of characters to use for title.}
+    \item{ylab}{vector of strings for y axis labelling.}
     \item{graphs.per.page}{integer indicating number of graphs to place on a
        page.}
     \item{reset.screen}{logical indicating if the plot window should be cleared
        before starting.}
-
     \item{series}{integer or string indicating
       the series which should be plotted.}
     \item{select.cov}{logical indicating that

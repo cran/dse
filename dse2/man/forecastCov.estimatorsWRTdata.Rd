@@ -8,7 +8,7 @@
 \usage{
     forecastCov.estimatorsWRTdata(data, estimation.sample=NULL, 
                        compiled=.DSECOMPILED, discard.before=10,
-                       horizons=1:12, zero=F, trend=F,quiet=F,
+                       horizons=1:12, zero=FALSE, trend=FALSE,quiet=FALSE,
                        estimation.methods=NULL)
     is.forecastCov.estimatorsWRTdata(obj)
 }
@@ -18,17 +18,17 @@
     \item{discard.before}{
        an integer indicating the number of points in the
        beginning of forecasts to discard for calculating covariances.}
-    \item{zero}{if T then forecastCov is also calculated for a 
+    \item{zero}{if TRUE then forecastCov is also calculated for a 
        forecast of zero.}
     \item{trend}{
-      if T then forecastCov is also calculated for a forecast of a linear trend.}
+      if TRUE then forecastCov is also calculated for a forecast of a linear trend.}
     \item{estimation.sample}{
        an integer indicating the number of points in the
        sample to use for estimation. If it is NULL the whole sample is used.}
     \item{horizons}{horizons for which forecast covariance should be calculated.}
-    \item{quiet}{if T then estimation information is not printed.}
+    \item{quiet}{if TRUE then estimation information is not printed.}
     \item{compiled}{a logical indicating if the compiled version of the code
-       should be used. (F would typically only be used for debugging.)}
+       should be used. (FALSE would typically only be used for debugging.)}
     \item{obj}{an object.}
 }
 \value{

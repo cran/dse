@@ -9,7 +9,7 @@
     est.max.like(obj, ...) 
     \method{est.max.like}{TSmodel}(obj, data, algorithm="optim",
 	algorithm.args=list(method="BFGS", upper=Inf, lower=-Inf, hessian=TRUE))
-    \method{est.max.like}{TSestModel}(obj, data=TSdata(obj), ...)
+    \method{est.max.like}{TSestModel}(obj, data=TRUESdata(obj), ...)
     \method{est.max.like}{TSdata}(obj, model, ...) 
 }
 \arguments{
@@ -22,7 +22,7 @@
 }
 \value{
 The value returned is an object of class TSestModel with  additional
-elements \code{est$converged}, which is T or F indicating convergence, 
+elements \code{est$converged}, which is TRUE or FALSE indicating convergence, 
 and \code{est$results}. The hessian and gradient in results could potentially 
 be used for restarting in the case of non-convergence, but that has not 
 yet been implemented.

@@ -27,7 +27,7 @@
     a vector of integers indicating the horizon at which forecasts should be 
     produced.}
     \item{discard.before}{period before which forecasts are not calculated.}
-    \item{compiled}{if T compiled code is called.}
+    \item{compiled}{if TRUE compiled code is called.}
     \item{...}{arguments to be passed to other methods.}
 }
 \value{

@@ -18,7 +18,7 @@
 \value{
     An object of class 'SS' 'TSmodel' with parameters near 0.0 or 1.0 set 
     as constants 0.0 or 1.0. If constants is not NULL then it should be a list 
-       with logical (T/F) arrays named const.F, const.G ..., for any 
+       with logical arrays named const.F, const.G ..., for any 
        arrays in which there are elements (not == 0 or 1) which are to 
        be treated as constant.
 }

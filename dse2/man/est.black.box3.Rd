@@ -7,9 +7,9 @@
           lag.weight=1.0, 
           reduction='reduction.Mittnik', 
           criterion='aic', 
-          trend=F, 
-          subtract.means=F,  re.add.means=T, 
-          standardize=F, verbose=T, max.lag=12, sample.start=10)
+          trend=FALSE, 
+          subtract.means=FALSE,  re.add.means=TRUE, 
+          standardize=FALSE, verbose=TRUE, max.lag=12, sample.start=10)
 }
 \arguments{
     \item{data}{A TSdata object.}
@@ -20,16 +20,16 @@
        selection. see \code{information.tests.calculations}. taic might be a
        better default selection criteria but it is not available for ARMA
        models.}
-    \item{trend}{If T include a trend in the model. }
+    \item{trend}{If TRUE include a trend in the model. }
     \item{subtract.means}{
-    If T the mean is subtracted from the data before estimation.}
+    If TRUE the mean is subtracted from the data before estimation.}
     \item{re.add.means}{
-    If subtract.means is T then if re.add.means is T the estimated model is
+    If subtract.means is TRUE then if re.add.means is T the estimated model is
 converted back to a model for data without the mean subtracted.}
     \item{standardize}{
-    If T the data is transformed so that all variables have the same variance.}
+    If TRUE the data is transformed so that all variables have the same variance.}
     \item{verbose}{
-    If T then additional information from the estimation and reduction 
+    If TRUE then additional information from the estimation and reduction 
 procedures is printed.}
     \item{max.lag}{The number of lags to include in the VAR estimation.}
     \item{sample.start}{The starting point to use for calculating information criteria.}

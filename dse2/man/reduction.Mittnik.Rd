@@ -7,7 +7,7 @@
 Balance and reduce the state dimension of a state space model a la Mittnik.
 }
 \usage{
-    reduction.Mittnik(model, data=NULL, criterion=NULL, verbose=T,warn=T)
+    reduction.Mittnik(model, data=NULL, criterion=NULL, verbose=TRUE,warn=TRUE)
 }
 \arguments{
     \item{model}{An object of class TSmodel or TSestModel.}

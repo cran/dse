@@ -3,71 +3,76 @@ A Users' Guide is available in dse1/doc/guide.pdf
   and also at 'http://www.bank-banque-canada.ca/pgilbert'
 See also the bundle dseplus with related
  packages dsepadi monitor juice curve .
-EstEval                  Evaluate an estimation method
-MonteCarloSimulations    Generate simulations
-TSdata.forecastCov       TS Extractor Specific Methods
-best.TSestModel          Select Best Model
-coef.TSmodel.ee          Specific Methods for coef
-combine.forecastCov      Combine 2 Forecast Cov Objects
+EstEval                 Evaluate an estimation method
+MonteCarloSimulations   Generate simulations
+TSdata.forecastCov      TS Extractor Specific Methods
+best.TSestModel         Select Best Model
+coef.TSmodel.ee         Specific Methods for coef
+combine.forecastCov     Combine 2 Forecast Cov Objects
 distribution.MonteCarloSimulations
-                         Generate distribution plots of Monte Carlo
-                         simulations
-distribution             Plot distribution of estimates
-est.SS.Mittnik           Estimate a State Space Model
-est.black.box            Estimate a TSmodel
-est.black.box1           Estimate a TSmodel
-est.black.box2           Estimate a TSmodel
-est.black.box3           Estimate a TSmodel
-est.black.box4           Estimate a TSmodel
-est.max.like             Maximum Likelihood Estimation
-est.wt.variables         Weighted Estimation
-estimate.models          Estimate Models
+                        Generate distribution plots of Monte Carlo
+                        simulations
+distribution            Plot distribution of estimates
+est.SS.Mittnik          Estimate a State Space Model
+est.black.box           Estimate a TSmodel
+est.black.box1          Estimate a TSmodel
+est.black.box2          Estimate a TSmodel
+est.black.box3          Estimate a TSmodel
+est.black.box4          Estimate a TSmodel
+est.max.like            Maximum Likelihood Estimation
+est.wt.variables        Weighted Estimation
+estimate.models         Estimate Models
 estimators.horizonForecasts
-                         Estimate models and forecast at given horizons
-exclude.forecastCov      Filter Object to Remove Forecasts
-extract.forecastCov      Extract Forecast Covariance
-featherForecasts         Multiple Horizon-Step Ahead Forecasts
-forecast                 Forecast Multiple Steps Ahead
-forecastCov              Forecast covariance for different models
+                        Estimate models and forecast at given horizons
+exclude.forecastCov     Filter Object to Remove Forecasts
+extract.forecastCov     Extract Forecast Covariance
+featherForecasts        Multiple Horizon-Step Ahead Forecasts
+forecast                Forecast Multiple Steps Ahead
+forecastCov             Forecast covariance for different models
 forecastCov.estimatorsWRTdata
-                         Calculate Forecast Cov of Estimators WRT Data
+                        Calculate Forecast Cov of Estimators WRT Data
 forecastCov.estimatorsWRTtrue
-                         Compare Forecasts Cov Relative to True Model
-                         Output
-forecastCovWRTtrue       Compare Forecasts to True Model Output
-forecasts                Extract Forecasts
-gen.mine.data            Generate Data
-generate.model.SS        Randomly generate a state space model
-horizonForecasts         Calculate forecasts at specified horizons
+                        Compare Forecasts Cov Relative to True Model
+                        Output
+forecastCovWRTtrue      Compare Forecasts to True Model Output
+forecasts               Extract Forecasts
+gen.mine.data           Generate Data
+generate.model.SS       Randomly generate a state space model
+horizonForecasts        Calculate forecasts at specified horizons
 is.forecastCov.estimatorsWRTdata.subsets
-                         Check Inheritance
-min.forecastCov          Minimum Forecast Cov Models
-mine.stepwise            Mine Stepwise
-mine.strip               Select a Data Subset and Model
-minimum.startup.lag      Starting Periods Required
+                        Check Inheritance
+min.forecastCov         Minimum Forecast Cov Models
+mine.stepwise           Mine Stepwise
+mine.strip              Select a Data Subset and Model
+minimum.startup.lag     Starting Periods Required
+nseriesfeatherForecasts
+                        Number of Series
 out.of.sample.forecastCov.estimatorsWRTdata
-                         Calculate Out-of-Sample Forecasts
-permute                  Permute
-phase.plots              Calculate Phase Plots
-plot.mine.stepwise       Plot Mine Stepwise Object
-print.estimated.models   Print Specific Methods
-reduced.models.Mittnik   Reduced Models via Mittnik SVD balancing
-reduction.Mittnik        Balance and Reduce a Model
-roots.estimated.models   Roots Specific Methods
-select.forecastCov       Select Forecast Covariances Meeting Criteria
+                        Calculate Out-of-Sample Forecasts
+permute                 Permute
+phase.plots             Calculate Phase Plots
+plot.mine.stepwise      Plot Mine Stepwise Object
+print.estimated.models
+                        Print Specific Methods
+reduced.models.Mittnik
+                        Reduced Models via Mittnik SVD balancing
+reduction.Mittnik       Balance and Reduce a Model
+roots.estimated.models
+                        Roots Specific Methods
+select.forecastCov      Select Forecast Covariances Meeting Criteria
 seriesNamesInput.forecast
-                         TS Input and Output Specific Methods
-shock.decomposition      Shock Decomposition
+                        TS Input and Output Specific Methods
+shock.decomposition     Shock Decomposition
 summary.estimated.models
-                         Summary Specific Methods
+                        Summary Specific Methods
 test.equal.estimated.models
-                         Specific Methods for Testing Equality
+                        Specific Methods for Testing Equality
 tfplot.MonteCarloSimulations
-                         Generate plots of Monte Carlo simulations
-tfplot.TSdata.ee         Specific Methods for tfplot
-tfplot.coef.ee           Specific tfplot methods for coef.ee (EstEval)
-                         objects
-tfplot.forecastCov       Plots of Forecast Variance
-tfplot.roots.ee          Specific tfplot methods for roots.ee (EstEval)
-                         objects
-total.forecastCov        Sum covariance of forecasts across all series
+                        Generate plots of Monte Carlo simulations
+tfplot.TSdata.ee        Specific Methods for tfplot
+tfplot.coef.ee          Specific tfplot methods for coef.ee (EstEval)
+                        objects
+tfplot.forecastCov      Plots of Forecast Variance
+tfplot.roots.ee         Specific tfplot methods for roots.ee (EstEval)
+                        objects
+total.forecastCov       Sum covariance of forecasts across all series

@@ -14,9 +14,9 @@
     MonteCarloSimulations(model, simulation.args=NULL, 
            replications=100, rng=NULL, ...)
     \method{MonteCarloSimulations}{default}(model, simulation.args = NULL, 
- 		replications = 100, rng = NULL, quiet = FALSE)
+ 		replications = 100, rng = NULL, quiet =FALSE)
     \method{MonteCarloSimulations}{TSmodel}(model, simulation.args=NULL,
-          replications=100, rng=NULL, Spawn=.SPAWN, quiet=F)
+          replications=100, rng=NULL, Spawn=.SPAWN, quiet=FALSE)
     \method{MonteCarloSimulations}{TSestModel}(model, simulation.args=NULL, 
            replications=100, rng=NULL, ...)
     \method{MonteCarloSimulations}{EstEval}(model,...)
@@ -29,7 +29,7 @@
     simulate.}
     \item{replications}{The number of simulations.}
     \item{rng}{The RNG and starting seed.}
-    \item{Spawn}{If T "For" loops are used in Splus.}
+    \item{Spawn}{If TRUE "For" loops are used in Splus.}
     \item{quiet}{logical indicating if printing and many warning messages should
        be suppressed.}
     \item{obj}{an object.}

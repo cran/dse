@@ -6,14 +6,13 @@
 \title{Truncate a Time Series}
 \description{Truncate a time series object to a time window.}
 \usage{
-    tfwindow(x, ...)
+    tfwindow(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
     \method{tfwindow}{default}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
     \method{tfwindow}{ts}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
     }
 
 \arguments{
     \item{x}{A time series object.}
-    \item{...}{arguments to be passed to other methods.}
     \item{start.}{A start date of a format compatible with the time series}
     \item{end.}{An end date of a format compatible with the time series}
     \item{tf}{A tframe or tframed object}

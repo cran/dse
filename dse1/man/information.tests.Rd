@@ -3,7 +3,7 @@
 \title{Tabulates selection criteria}
 \description{Tabulates several model selection criteria.}
 \usage{
-    information.tests(..., sample.start=1,sample.end=NULL, Print=T, warn=T)}
+    information.tests(..., sample.start=1,sample.end=NULL, Print=TRUE, warn=TRUE)}
 \arguments{
     \item{...}{At least one object of class TSestModel.}
     \item{sample.start}{The start of the period to use for criteria calculations.}

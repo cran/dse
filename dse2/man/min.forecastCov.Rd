@@ -3,7 +3,7 @@
 \title{Minimum Forecast Cov Models}
 \description{Extract the minimum forecastCov at each horizon}
 \usage{
-    min.forecastCov(obj, series=1, verbose=T)
+    min.forecastCov(obj, series=1, verbose=TRUE)
 }
 \arguments{
     \item{obj}{An object as returned by mine.strip.}

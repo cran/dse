@@ -1,14 +1,21 @@
 \name{tfplot.forecastCov}
 \alias{tfplot.forecastCov}
+\alias{tfplot.forecastCov.estimatorsWRTdata}
+
 \title{Plots of Forecast Variance}
 \description{Generate plots of forecast variance calculated by forecastCov.}
 \usage{
-    \method{tfplot}{forecastCov}(x,
+    \method{tfplot}{forecastCov}(x, ...,
        series = 1:dim(x$forecastCov[[1]])[2], 
-       select.cov = 1:length(x$forecastCov), select.true = T, 
-       select.zero = T, select.trend = T, y.limit = NULL, line.labels = F, 
+       select.cov = 1:length(x$forecastCov), select.true =TRUE, 
+       select.zero =TRUE, select.trend =TRUE, y.limit = NULL, line.labels =FALSE, 
        lty = NULL, Legend = NULL, Title = NULL,
-       graphs.per.page = 5, mar=par()$mar,  ...)
+       graphs.per.page = 5, mar=par()$mar, reset.screen)
+    \method{tfplot}{forecastCov.estimatorsWRTdata}(x, 
+        series=1:dim(x$forecastCov[[1]])[2], 
+        select.cov=1:length(x$forecastCov),
+        select.zero=TRUE, select.trend=TRUE,
+        graphs.per.page = 5, mar=par()$mar, reset.screen=TRUE, lty=NULL)
 }
 \arguments{
     \item{x}{The result of forecastCov.}
@@ -24,21 +31,23 @@
       trend should be plotted.}
     \item{graphs.per.page}{The number of graphs to put on a page.}
     \item{mar}{plot margins (see \code{par}).}
+    \item{reset.screen}{logical indicating if the plot window should be cleared
+       before starting.}
     \item{lty}{see details.}
     \item{Legend}{optional legend passed to \code{legend}.}
     \item{Title}{optional legend passed to \code{title}.}
     \item{y.limit}{optional limit on the y scale. Covariance values larger
        than y.limit will not be shown.}
     \item{line.labels}{logical indicating line labels should be printed.}
-    \item{...}{arguments to \code{par}.}
+    \item{...}{additional objects to be plotted.}
 }
 \value{None}
 \details{
     This function produces plots of the variance at different horizons.
-Output graphics can be paused between pages by setting par(ask=T).
+Output graphics can be paused between pages by setting par(ask=TRUE).
 If lty is NULL (default) it is set to
      seq(length(select.cov) +select.true+select.zero+select.trend),
- and corrected if these are T but not in the object.
+ and corrected if these are TRUE but not in the object.
 
 }
 \seealso{

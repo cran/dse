@@ -133,6 +133,22 @@ Sys.mail <- function(address = Sys.info()$user,
   }  # end of if is.R
 
 
+get.RNG <- function(e)UseMethod("get.RNG")
+get.RNG.default <- function(e=NULL)
+  {if (is.null(e)) return(set.RNG())
+   if      (!is.null(e$version))  v <- e$version
+   else if (!is.null(e$noise))    v <- e$noise$version
+   else v <- NULL
+   if (is.null(v)) warning("version cannot be verified getting random seed.")
+   else if (!all(unlist(version) == unlist(v)))
+     warning("Seed used but version does not correspond to original. Differences may occur.")
+  if      (!is.null(e$rng))  k <- e$rng
+  else if (!is.null(e$noise)) k <- e$noise$rng
+  else stop("RNG info not found.")
+  k
+ }
+
+
 #########################################################
 
 #   test function (This test is run by other tests so it should

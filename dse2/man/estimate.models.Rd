@@ -5,7 +5,7 @@
 \title{Estimate Models}
 \description{Estimate models using given estimation method}
 \usage{
-    estimate.models(data, estimation.sample = NULL, trend = FALSE, quiet = FALSE,
+    estimate.models(data, estimation.sample = NULL, trend =FALSE, quiet =FALSE,
                        estimation.methods = NULL)
     is.estimated.models(obj)
 }
@@ -42,7 +42,7 @@ estimation.methods with resulting models as elements.
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  estimate.models(eg1.DSE.data.diff, estimation.methods= list(
-        bft=list(verbose=F), 
+        bft=list(verbose=FALSE), 
         est.VARX.ar=list(max.lag=3)))
 }
 %\keyword{DSE}

@@ -18,10 +18,10 @@
     is.forecastCov(obj)
     forecastCov(obj, ...)
     \method{forecastCov}{TSmodel}(obj, ..., data=NULL, discard.before=NULL,
-       horizons=1:12, zero=F, trend=F, estimation.sample= periods(data),
+       horizons=1:12, zero=FALSE, trend=FALSE, estimation.sample= periods(data),
        compiled=.DSECOMPILED)
     \method{forecastCov}{TSestModel}(obj, data=NULL, ..., discard.before=NULL,
-       horizons=1:12, zero=F, trend=F, estimation.sample= NULL,
+       horizons=1:12, zero=FALSE, trend=FALSE, estimation.sample= NULL,
        compiled=.DSECOMPILED)
     \method{forecastCov}{TSdata}(obj, data=NULL, horizons=1:12, discard.before=1,
    compiled=.DSECOMPILED)
@@ -32,8 +32,8 @@
     \item{discard.before}{
        period before which forecasts should be discarded when calculating covariance.}
     \item{horizons}{horizons for which forecast covariance should be calculated.}
-    \item{zero}{if T the covariance is calculated for a forecast of zero.}
-    \item{trend}{if T the covariance is calculated for a forecast of trend.}
+    \item{zero}{if TRUE the covariance is calculated for a forecast of zero.}
+    \item{trend}{if TRUE the covariance is calculated for a forecast of trend.}
     \item{estimation.sample}{portion of the sample to use for calculating the trend.}
     \item{compiled}{a logical indicating if compiled code should be
       used. (Usually true except for debugging.)}
@@ -56,8 +56,8 @@ discard.before is an integer indicating the number of points in the
 beginning of forecasts to discard before calculating covariances.
 If it is the default, NULL, then the default (minimum.startup.lag) will
 be used for each model and the default (1) will be used for trend and zero.
-If zero  is T then forecastCov is also calculated for a forecast of zero.
-If trend is T then forecastCov is also calculated for a forecast of a linear 
+If zero  is TRUE then forecastCov is also calculated for a forecast of zero.
+If trend is TRUE then forecastCov is also calculated for a forecast of a linear 
 trend using data to estimation.sample.
 }
 \examples{

@@ -4,7 +4,7 @@
 \title{Load compiled routines for time series models}
 \description{Load compiled routines for time series models (Splus only).}
 \usage{
-    load.DSE.fortran(from=NULL, large=F)}
+    load.DSE.fortran(from=NULL, large=FALSE)}
 \arguments{
     \item{from}{Directory where the compiled object code is stored.}
     \item{large}{

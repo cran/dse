@@ -9,7 +9,7 @@
 \title{Roots Specific Methods}
 \description{See the generic function description.}
 \usage{
-    \method{roots}{estimated.models}(obj, digits = 4, mod = FALSE)
+    \method{roots}{estimated.models}(obj, digits = 4, mod =FALSE)
     \method{roots}{forecastCov.estimatorsWRTtrue}(obj, digits, mod)
     \method{roots}{coef.ee}(obj, criterion.args)
     \method{roots}{roots.ee}(obj, ...)

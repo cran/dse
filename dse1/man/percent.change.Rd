@@ -21,14 +21,14 @@
 a matrix with columns corresponding to series (which are treated 
 individually), or a list of one of these kinds of objects. (called m below)}
     \item{e}{
-    If e is T the exponent of the series is used (after cumulating 
-if cumulate is T). e can be
+    If e is TRUE the exponent of the series is used (after cumulating 
+if cumulate is TRUE). e can be
 a logical vector with elements corresponding to columns of m.}
     \item{base}{
       If base is provided it is treated as the first period value 
       (that is, prior to differencing). It is prefixed to the m prior to 
       cumulating. It should be a vector of length dim(m)[2]. 
-      (If e is T then base should be log of the original data).}
+      (If e is TRUE then base should be log of the original data).}
     \item{lag}{integer indicating the number of periods relative to which the
       percent change should be calculated.}
     \item{cumulate}{logical indicating if the series should be cumulated before

@@ -47,8 +47,8 @@ cat("dse1 test 11...\n")
    scale.fac <- list(output=scale.fac)
 
    good <- scale.pred
-   tst  <- l(scale(VARmodel$model, scale.fac), 
-          scale(eg1.DSE.data.diff, scale.fac), warn=F)$estimates$pred
+   tst  <- l(scale(VARmodel$model, scale=scale.fac), 
+          scale(eg1.DSE.data.diff, scale=scale.fac), warn=F)$estimates$pred
    error <- max(abs(good - tst))
    cat("max. error ", max(error), "\n")
  
@@ -61,8 +61,8 @@ cat("dse1 test 11...\n")
 cat("dse1 test 12...\n")
 
    good <- scale.pred
-   tst  <- l(scale(SSmodel, scale.fac), 
-             scale(eg1.DSE.data.diff, scale.fac))$estimates$pred
+   tst  <- l(scale(SSmodel, scale=scale.fac), 
+             scale(eg1.DSE.data.diff, scale=scale.fac))$estimates$pred
    error <- max(abs(good - tst))
    cat("max. error ", max(error), "\n")
  

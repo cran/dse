@@ -31,7 +31,7 @@ structure.  \code{TSPADIdata} makes it possible to retrieve data from
 an external database when it is needed. These subclass objects do not
 contain the actual data, but only the names of the series and the data
 base where they are located. The function set.TSPADIdata can be used to set
-up an object of class c("TSPADIdata", TSdata").
+up an object of class c("TSPADIdata", "TSdata").
 }
 
 \seealso{

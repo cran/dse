@@ -9,7 +9,7 @@ Display TSmodel arrays.
 }
 \usage{
     \method{print}{SS}(x, digits=options()$digits)
-    \method{print}{ARMA}(x, digits=options()$digits, L=T, fuzz=1e-10)
+    \method{print}{ARMA}(x, digits=options()$digits, L=TRUE, fuzz=1e-10)
     \method{print}{TSestModel}(x, ...)
     }
 
@@ -17,7 +17,7 @@ Display TSmodel arrays.
     \item{x}{An object of class TSmodel or TSestModel.}
     \item{digits}{the number of significant digits}
     \item{L}{
-      if T then ARMA model arrays are displayed as a polynomial matrix 
+      if TRUE then ARMA model arrays are displayed as a polynomial matrix 
       with L indicating lags. Otherwise, each lag of the array is 
       displayed as a matrix.}
     \item{fuzz}{

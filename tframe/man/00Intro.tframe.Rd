@@ -104,7 +104,7 @@ Operations which should be possible on tframed data:
   In other dimensions
   
      -tbind  (like cbind) with shift to align the the tframe 
-                 (and NA pad.start, pad.end, pad=T/F) 
+                 (and NA pad.start, pad.end, pad=TRUE/FALSE) 
          
      - [  ]   without losing the tframe. This is done with select.series().
 

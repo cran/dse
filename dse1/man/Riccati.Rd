@@ -3,13 +3,13 @@
 \title{Riccati Equation}
 \description{Solve a Matrix Riccati Equation}
 \usage{
-    Riccati(A, B, fuzz=1e-10, iterative=F)
+    Riccati(A, B, fuzz=1e-10, iterative=FALSE)
 }
 \arguments{
     \item{A}{A matrix.}
     \item{B}{A matrix.}
     \item{fuzz}{The tolerance used for testing convergence.}
-    \item{iterative}{If T an iterative solution technique is used.}
+    \item{iterative}{If TRUE an iterative solution technique is used.}
 }
 \value{xxx}
 \details{

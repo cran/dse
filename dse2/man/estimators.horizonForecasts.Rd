@@ -4,7 +4,7 @@
 \description{Estimate models and forecast at given horizons.}
 \usage{
     estimators.horizonForecasts(data, 
-                       estimation.sample=.5, horizons=1:12,quiet=F,
+                       estimation.sample=.5, horizons=1:12,quiet=FALSE,
                        estimation.methods=NULL)
 }
 \arguments{

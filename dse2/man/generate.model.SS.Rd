@@ -3,11 +3,11 @@
 \title{Randomly generate a state space model}
 \description{Randomly generate a state space model.}
 \usage{
-    generate.model.SS(m,n,p, stable=F)
+    generate.model.SS(m,n,p, stable=FALSE)
 }
 \arguments{
     \item{n,m,p}{Input, state and output dimensions.}
-    \item{stable}{T or F indicating if the model must be stable.}
+    \item{stable}{TRUE or FALSE indicating if the model must be stable.}
 }
 \value{An SS TSmodel.}
 \details{

@@ -53,12 +53,12 @@ or a non-innovations form.
 
 The state space (SS) model is defined by:
 
-      z(t) = Fz(t-1) + Gu(t) + Qe(t)
+      z(t) =Fz(t-1) + Gu(t) + Qe(t)
       y(t) = Hz(t)  + Rw(t)
 
 or the innovations model:
 
-       z(t) = Fz(t-1) + Gu(t) + Kw(t-1)
+       z(t) =Fz(t-1) + Gu(t) + Kw(t-1)
        y(t) = Hz(t)  + w(t)
 
     \item{F}{(nxn) is the state transition matrix F.}

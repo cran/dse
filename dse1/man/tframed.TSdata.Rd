@@ -12,9 +12,9 @@
 \usage{
     \method{tframed}{TSdata}(x, tf=NULL, input.names=NULL, output.names=NULL)
 %    \method{tframe<-}{TSdata}(x, value)
-    \method{tfwindow}{TSdata}(x, start=NULL, end=NULL, tf=NULL, warn=T)
+    \method{tfwindow}{TSdata}(x, start=NULL, end=NULL, tf=NULL, warn=TRUE)
     \method{tbind}{TSdata}(d1, d2)
-    \method{trim.na}{TSdata}(x, start.=T, end.=T)
+    \method{trim.na}{TSdata}(x, start.=TRUE, end.=TRUE)
 }
 \arguments{
     \item{x}{See the generic function.}

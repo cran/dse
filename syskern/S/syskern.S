@@ -28,7 +28,15 @@ is.Splus.pre3.3 <- function()
 
     # faking R compatibility:
     
-    require <- function(...){T} 
+    require <- function(package, ...)
+      {if(package == "padi")
+           {if("" == Sys.getenv("PADI_LDLIB")) return(FALSE)
+	    else if (! exists("load.padi"))    return(FALSE)
+	    load.padi()  
+	    return(TRUE)}
+       else TRUE 
+      }
+        
     Sys.getenv <- getenv
 
     Platform <- function()

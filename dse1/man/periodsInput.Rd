@@ -7,29 +7,29 @@
 \alias{periodsOutput.TSdata}
 \alias{periodsOutput.TSestModel}
 
-\alias{input.start}
-\alias{input.start.TSdata}
-\alias{input.start.TSestModel}
+\alias{startInput}
+\alias{startInput.TSdata}
+\alias{startInput.TSestModel}
 
-\alias{output.start}
-\alias{output.start.TSdata}
-\alias{output.start.TSestModel}
+\alias{startOutput}
+\alias{startOutput.TSdata}
+\alias{startOutput.TSestModel}
 
-\alias{input.end}
-\alias{input.end.TSdata}
-\alias{input.end.TSestModel}
+\alias{endInput}
+\alias{endInput.TSdata}
+\alias{endInput.TSestModel}
 
-\alias{output.end}
-\alias{output.end.TSdata}
-\alias{output.end.TSestModel}
+\alias{endOutput}
+\alias{endOutput.TSdata}
+\alias{endOutput.TSestModel}
 
-\alias{input.frequency}
-\alias{input.frequency.TSdata}
-\alias{input.frequency.TSestModel}
+\alias{frequencyInput}
+\alias{frequencyInput.TSdata}
+\alias{frequencyInput.TSestModel}
 
-\alias{output.frequency}
-\alias{output.frequency.TSdata}
-\alias{output.frequency.TSestModel}
+\alias{frequencyOutput}
+\alias{frequencyOutput.TSdata}
+\alias{frequencyOutput.TSestModel}
 
 \title{TSdata Periods}
 \description{Apply a method to the input or output data.}
@@ -42,29 +42,29 @@
     \method{periodsOutput}{TSdata}(x)
     \method{periodsOutput}{TSestModel}(x)
 
-    input.start(x)
-    \method{input.start}{TSdata}(x)
-    \method{input.start}{TSestModel}(x)
+    startInput(x)
+    \method{startInput}{TSdata}(x)
+    \method{startInput}{TSestModel}(x)
 
-    output.start(x)
-    \method{output.start}{TSdata}(x)
-    \method{output.start}{TSestModel}(x)
+    startOutput(x)
+    \method{startOutput}{TSdata}(x)
+    \method{startOutput}{TSestModel}(x)
 
-    input.end(x)
-    \method{input.end}{TSdata}(x)
-    \method{input.end}{TSestModel}(x)
+    endInput(x)
+    \method{endInput}{TSdata}(x)
+    \method{endInput}{TSestModel}(x)
 
-    output.end(x)
-    \method{output.end}{TSdata}(x)
-    \method{output.end}{TSestModel}(x)
+    endOutput(x)
+    \method{endOutput}{TSdata}(x)
+    \method{endOutput}{TSestModel}(x)
 
-    input.frequency(x)
-    \method{input.frequency}{TSdata}(x)
-    \method{input.frequency}{TSestModel}(x)
+    frequencyInput(x)
+    \method{frequencyInput}{TSdata}(x)
+    \method{frequencyInput}{TSestModel}(x)
 
-    output.frequency(x)
-    \method{output.frequency}{TSdata}(x)
-    \method{output.frequency}{TSestModel}(x)
+    frequencyOutput(x)
+    \method{frequencyOutput}{TSdata}(x)
+    \method{frequencyOutput}{TSestModel}(x)
 
 }
 \arguments{

@@ -12,7 +12,7 @@ BundleDescription: Multivariate Time Series Library
   numbers in S and R.
   Package tframe is a kernal of methods for program with time series.
   See also the related bundle dseplus.
-Version: 2001.12-1
+Version: 2002.4-1
 License: Free. See the LICENCE file for details.
 Author: Paul Gilbert <pgilbert@bank-banque-canada.ca>
 Maintainer: Paul Gilbert <pgilbert@bank-banque-canada.ca>

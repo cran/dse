@@ -6,7 +6,7 @@
 \title{Evaluate an estimation method}
 \description{Evaluate an estimation method.}
 \usage{
-    EstEval(model, replications=100, rng=NULL, quiet=F, 
+    EstEval(model, replications=100, rng=NULL, quiet=FALSE, 
                        simulation.args=NULL,
                        estimation=NULL, estimation.args=NULL, 
                        criterion ="coef", criterion.args =NULL, spawn=.SPAWN)
@@ -16,7 +16,7 @@
     \item{model}{A TSmodel.} 
     \item{replications}{The number of simulations.}
     \item{rng}{The RNG and starting seed.}
-    \item{quiet}{If T then no information is printed during estimation.}
+    \item{quiet}{If TRUE then no information is printed during estimation.}
     \item{simulation.args}{A list of any arguments to pass to simulate.}
     \item{estimation}{A character string indicating the estimation routine to use.}
     \item{estimation.args}{A list of any arguments to pass to the estimation routine.}
@@ -42,7 +42,7 @@ criterion can be { 'coef', 'roots', 'TSmodel', 'TSestModel'}
 With the default (coef) or with TSmodel the other criteria can be reconstructed
 (when the estimation method finds a known form for the model - which
 is not always the case, for example with est.black.box methods).
-If criterion = 'roots' then criterion.args= list(verbose=F) is advised.
+If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
 }
 \seealso{
 \code{\link{simulate}}

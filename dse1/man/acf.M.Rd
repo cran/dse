@@ -12,7 +12,7 @@
 \usage{
     acf.M(obj, ...)
     \method{acf.M}{TSdata}(obj, lag=round(6*log(periods(obj))), 
-        type ="covariance", sub.mean=T)
+        type ="covariance", sub.mean=TRUE)
     \method{acf.M}{TSmodel}(obj, lag=NULL, type ="covariance", Psi=NULL)
     \method{acf.M}{TSestModel}(obj, ...)
 }
@@ -24,7 +24,7 @@
         If type == 'correlation' the result is scaled to give 
         autocorrelations.}
     \item{sub.mean}{
-        Only valid if object is of class TSdata. If F then means 
+        Only valid if object is of class TSdata. If FALSE then means 
         are not subtracted.}
     \item{Psi}{
         A matrix of innovation covariance. Only valid if object 

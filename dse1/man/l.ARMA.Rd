@@ -4,7 +4,7 @@
 \description{Evaluate an ARMA TSmodel.}
 \usage{
 l.ARMA(obj1, dat, sampleT=NULL, predictT=NULL,result=NULL,
-       error.weights=0,  compiled=.DSECOMPILED, warn=TRUE, return.debug.info=F)
+       error.weights=0,  compiled=.DSECOMPILED, warn=TRUE, return.debug.info=FALSE)
 }
 \arguments{
     \item{obj1}{an 'ARMA' 'TSmodel' object.}
@@ -28,7 +28,7 @@ l.ARMA(obj1, dat, sampleT=NULL, predictT=NULL,result=NULL,
 \details{
 This function is called by the function l() when the argument to l is an ARMA
 model. Using l() is usually preferable to calling l.ARMA directly.
-l.ARMA calls a compiled program unless compiled=F. The compiled version is much 
+l.ARMA calls a compiled program unless compiled=FALSE. The compiled version is much 
 faster. 
 
 Output data must be at least as long as sampleT. If sampleT is not supplied it

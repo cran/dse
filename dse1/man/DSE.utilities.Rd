@@ -9,7 +9,6 @@
 \alias{est.VARX.mean.correction}
 \alias{fake.TSestModel.missing.data}
 \alias{is.TSm.or.em}
-\alias{make.TSnoise}
 \alias{print.test.value}
 \alias{dsescan}
 \alias{read.int}

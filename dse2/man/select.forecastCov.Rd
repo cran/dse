@@ -7,7 +7,7 @@
     select.cov.best=1,
     select.cov.bound=NULL,
     ranked.on.cov.bound=NULL,
-    verbose=T)
+    verbose=TRUE)
 }
 \arguments{
     \item{obj}{an object as returned by mine.strip.}
@@ -16,7 +16,7 @@
     \item{select.cov.best}{the number of 'best' forecasts to select.}
     \item{select.cov.bound}{a bound to use as criteria for selection.}
     \item{ranked.on.cov.bound}{see details.}
-    \item{verbose}{if verbose=T then summary results are printed.}
+    \item{verbose}{if verbose=TRUE then summary results are printed.}
 }
 \value{
 The returned result is a forecastCov object like obj, but filtered
@@ -45,7 +45,7 @@ in which case corresponding elements are applied to the different series.
  \code{select.cov.bound} can be a vector of the same length as 
  \code{series},
   in which case corresponding elements are applied to the different series.
- If \code{verbose=T} then summary results are printed.
+ If \code{verbose=TRUE} then summary results are printed.
  The returned result is a \code{forecastCov} object like obj, but filtered
   to remove models which do not meet criteria.
 }

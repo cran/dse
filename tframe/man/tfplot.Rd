@@ -8,26 +8,28 @@
     Plot tframe or tframed objects. 
 }
 \usage{
-    tfplot(obj, ...)
+    tfplot(x, ...)
 
-    \method{tfplot}{default}(..., xlab=NULL, ylab=NULL, graphs.per.page = 5,
-                         start.=NULL, end.=NULL,
-             series=seq(nseries(list(...)[[1]])), mar=par()$mar)
-
-    tfOnePlot(obj, xlab=NULL, ylab=NULL, start.=NULL, end.=NULL, ...)
+    \method{tfplot}{default}(x, ..., start.=NULL, end.=NULL, series=seq(nseries(x)), 
+       Title=NULL, xlab=NULL, ylab=seriesNames(x), graphs.per.page=5, 
+       mar=par()$mar, reset.screen=TRUE)
+    tfOnePlot(x, xlab=NULL, ylab=NULL, ...)
 }
 
 \arguments{
-    \item{obj}{a tframe or tframed object to plot.}
+    \item{x}{a tframe or tframed object to plot.}
     \item{...}{any additional tframe or tframed objects for the same plot.}
-    \item{graphs.per.page}{integer indicating number of graphs to place on a
-       page.}
-    \item{xlab}{string to use for x label (passed to plot).}
-    \item{ylab}{string to use for y label (passed to plot).}
     \item{start.}{start of plot. (passed to tfwindow)}
     \item{end.}{end of plot. (passed to tfwindow)}
     \item{series}{series to be plotted. (passed to select.series)}
+    \item{Title}{string to use for plot title.}
+    \item{xlab}{string to use for x label (passed to plot).}
+    \item{ylab}{string to use for y label (passed to plot).}
+    \item{graphs.per.page}{integer indicating number of graphs to place on a
+       page.}
     \item{mar}{margins passed to plot. See par.)}
+    \item{reset.screen}{logical indicating if the plot window should be cleared
+       before starting. If this is not TRUE then mar values will have no effect.}
 }
 \value{None.}
 \details{

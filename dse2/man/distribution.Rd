@@ -14,7 +14,7 @@
              select.outputs= seq(length=nseriesOutput(obj)))
      \method{distribution}{default}(obj, bandwidth=0.2, series=NULL)
      \method{distribution}{EstEval}(obj, ...)
-     \method{distribution}{coef.ee}(obj,  Sort=F, bandwidth=0.2,
+     \method{distribution}{coef.ee}(obj,  Sort=FALSE, bandwidth=0.2,
 	graphs.per.page=5)
      \method{distribution}{roots.ee}(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
         bandwidth=0.2, select=NULL)

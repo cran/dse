@@ -25,8 +25,8 @@ Bind together (in non-time dimension) two time series objects.
 \details{
 Bind data as in cbind or tsmatrix align time dimension aligned. 
 The default action pads series with NA to time union. 
-If pad.start and/or pad.end is F and the intersection is empty then NULL
-is returned and a warning is issued if warn=T.
+If pad.start and/or pad.end is FALSE and the intersection is empty then NULL
+is returned and a warning is issued if warn=TRUE.
 }
 
 \seealso{

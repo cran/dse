@@ -20,16 +20,16 @@
        necessary only to sampleT. If NULL predictT is set to sampleT.}
     \item{error.weights}{a vector of weights to be applied to the 
        squared prediction errors.}
-    \item{return.state}{if T the element \code{filter$state} 
+    \item{return.state}{if TRUE the element \code{filter$state} 
        containing E[z(t)|y(t-1), u(t)] is returned as part of the 
        result. This can be a fairly large matrix.}
-    \item{return.track}{if T the element \code{filter$track} containing
+    \item{return.track}{if TRUE the element \code{filter$track} containing
        the expectation of the tracking error given y(t-1) and u(t) is 
        returned as part of the result. This can be an very large array. }
     \item{result}{if result is not specified an object of class 
        TSestModel is returned. Otherwise, the specified element 
        of \code{TSestModel$estimates} is returned.}
-    \item{compiled}{if T the compiled version of the code is used. 
+    \item{compiled}{if TRUE the compiled version of the code is used. 
        Otherwise the S/R version is used.}
     \item{warn}{if FALSE then certain warning messages are turned off.}
     \item{return.debug.info}{logical indicating if additional debugging
@@ -41,7 +41,7 @@ Usually an object of class TSestModel (see TSestModel), but see result above.}
 \details{
 This function is called by the function l() when the argument to l is a state
 space model. Using l() is usually preferable to calling l.SS directly.
-l.SS calls a compiled program unless compiled=F. The compiled version is much faster
+l.SS calls a compiled program unless compiled=FALSE. The compiled version is much faster
 than the S version.
 
 Output data must be at least as long as sampleT. If sampleT is not supplied it

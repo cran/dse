@@ -7,7 +7,7 @@
     Generate forecasts and compare them against the output of a true model.}
 \usage{
     forecastCovWRTtrue(models, true.model, 
-        pred.replications=1, simulation.args=NULL, quiet=F, 
+        pred.replications=1, simulation.args=NULL, quiet=FALSE, 
         rng=NULL, Spawn=.SPAWN, compiled=.DSECOMPILED,
         horizons=1:12, discard.before=10, trend=NULL, zero=NULL)
     is.forecastCovWRTdata(obj)
@@ -18,8 +18,8 @@
     \item{discard.before}{
     An integer indicating the number of points in the
     beginning of forecasts to discard for calculating covariances.}
-    \item{zero}{If T then forecastCov is also calculated for a forecast of zero.}
-    \item{trend}{If T then forecastCov is also calculated for a forecast of a linear trend.}
+    \item{zero}{If TRUE then forecastCov is also calculated for a forecast of zero.}
+    \item{trend}{If TRUE then forecastCov is also calculated for a forecast of a linear trend.}
     \item{pred.replications}{integer indicating the number of times simulated
        data is generated.}
     \item{simulation.args}{
@@ -27,8 +27,8 @@
     in order to simulate the true model.}
     \item{horizons}{Horizons for which forecast covariance should be calculated.}
     \item{rng}{If specified then it is used to set RNG.}
-    \item{Spawn}{If T then Splus For loops are used.}
-    \item{quiet}{If T then some messages are not printed.}
+    \item{Spawn}{If TRUE then Splus For loops are used.}
+    \item{quiet}{If TRUE then some messages are not printed.}
     \item{compiled}{a logical indicating if compiled code should be
       used. (Usually true except for debugging.)}
     \item{obj}{an object.}

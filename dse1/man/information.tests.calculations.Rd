@@ -4,7 +4,7 @@
 \title{Calculate selection criteria}
 \description{Calculates several model selection criteria.}
 \usage{
-    information.tests.calculations(lst, sample.start=1,sample.end=NULL, warn=T)
+    information.tests.calculations(lst, sample.start=1,sample.end=NULL, warn=TRUE)
 }
 \arguments{
     \item{lst}{One or more objects of class TSestModel.}

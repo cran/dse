@@ -4,9 +4,9 @@
 \description{mine.stepwise}
 \usage{
     mine.stepwise(data, essential.data=1,
-      method="efroymson", f.crit=2, intercept=T,
-      subtract.means=F,  standardize=F, 
-      lags.in=6, lags.out=6, trend=F, plot.=T)
+      method="efroymson", f.crit=2, intercept=TRUE,
+      subtract.means=FALSE,  standardize=FALSE, 
+      lags.in=6, lags.out=6, trend=FALSE, plot.=TRUE)
 }
 \arguments{
     \item{data}{TSdata}
@@ -28,7 +28,7 @@
     The result is a list with the results of stepwise,..., and
     several vectors indicating information about the columns of the matrix
     passed to stepwise: 
-    io.indicator indicating an input (F) or output (T) variable
+    io.indicator indicating an input (FALSE) or output (TRUE) variable
     v.indicator  indicating which series
     lag.indicator indicating the lag
     s.input.indicator and s.output.indicator are logic matrices

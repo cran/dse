@@ -28,8 +28,8 @@
 }
 
 \details{
-If complex.plane is T then all results are plotted on a complex plane and 
-   the arguements cum and Sort do not apply. If complex.plane is F 
+If complex.plane is TRUE then all results are plotted on a complex plane and 
+   the arguements cum and Sort do not apply. If complex.plane is FALSE 
    then a sequential plot of the real and imaginary parts is produced.
  If cum is true the cummulative average is plotted.
  If mod is true the modulus is used, otherwise real and imaginary are separated.

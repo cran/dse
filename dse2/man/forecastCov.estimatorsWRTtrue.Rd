@@ -8,7 +8,7 @@
     forecastCov.estimatorsWRTtrue(true.model, Spawn=.SPAWN, rng=NULL,
                        simulation.args=NULL,
                        est.replications = 2, pred.replications = 2,
-                       discard.before = 10, horizons = 1:12, quiet = FALSE,
+                       discard.before = 10, horizons = 1:12, quiet =FALSE,
                        estimation.methods=NULL, compiled=.DSECOMPILED)
     is.forecastCov.estimatorsWRTtrue(obj)
 }
@@ -29,7 +29,7 @@
     \item{Spawn}{If TRUE then Splus For loops are used.}
     \item{quiet}{If TRUE then some messages are not printed.}
     \item{compiled}{a logical indicating if the compiled version of the code
-       should be used. (F would typically only be used for debugging.)}
+       should be used. (FALSE would typically only be used for debugging.)}
     \item{obj}{an object.}
 }
 \value{
