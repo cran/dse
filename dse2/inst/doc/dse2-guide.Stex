@@ -190,7 +190,7 @@ there is only one, but the same structures are used for other purposes
 discussed below. To see a subset of the data use \emph{tfwindow}:
 
 \begin{Scode}
-tfwindow(forecasts(z)[[1]], start=c(1994,1)) 
+tfwindow(forecasts(z)[[1]], start=c(1994,1), warn=FALSE) 
 \end{Scode}
 
 

@@ -365,15 +365,20 @@ It is also possible to select a subsample of the data:
 \begin{Scode}
 subsample.data <- tfwindow(eg1.DSE.data, 
 
-                    start=c(1972,1), end=c(1992,12)) 
+                    start=c(1972,1), end=c(1992,12), warn=FALSE) 
 \end{Scode}
 
 
 This creates a new variable with data starting in January 1972 and
 ending in December 1992. The R function \emph{window} also usually works,
 however the function \emph{tfwindow} is typically used in DSE
-and this guide because of some programming advantages. Various functions can 
-be applied to the estimation result
+and this guide because of some programming advantages. The argument
+\emph{warn=FALSE} prevents some warning messages from being printed. For
+example, when the specified start or end date corresponds to the start or end
+date of the data, then the default \emph{warn=TRUE} results in a warning that
+the sample has not been truncated.
+
+Various functions can be applied to the estimation result
 
 \begin{Scode}
 summary(model.eg1.ls)

@@ -37,7 +37,7 @@ all.ok <- TRUE
      #   These tests use the old version named "Buggy Kinderman-Ramage" to
      #   get old results for comparison.
      test.rng1 <- test.rng2 <- test.rng3 <- test.rng4 <- 
-      if (version$major >= 1 && version$minor >= 7.1)
+      if (as.numeric(version$major)+0.1*as.numeric(version$minor) >= 1.71 )
            list(kind="Wichmann-Hill", normal.kind="Buggy Kinderman-Ramage",
 	        seed=c(979, 1479, 1542)) else
            list(kind="Wichmann-Hill", normal.kind="Kinderman-Ramage",
