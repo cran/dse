@@ -1,4 +1,5 @@
 \name{egJofF.1dec93.data}
+\docType{data}
 \alias{egJofF.1dec93.data}
 \title{Eleven Time Series used in Gilbert (1995)}
 

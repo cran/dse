@@ -25,7 +25,9 @@ by the Cayley Hamilton theorem.
 \value{
 An object of class 'ARMA' 'TSmodel' containing an ARMA model.
 }
-\references{See for example Aoki(1989)}
+\references{See, for example, 
+  M. Aoki(1990)\emph{State Space Modelling of Time Series}. 2d ed. rev. 
+  and enl., Springer-Verlag}
 \seealso{
 \code{\link{toSS}}
 \code{\link{fixConstants}}

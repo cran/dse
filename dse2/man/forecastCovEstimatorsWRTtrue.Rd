@@ -23,9 +23,6 @@
     \item{discard.before}{
       An integer indicating the number of points in the
       beginning of forecasts to discard for calculating covariances.}
-    \item{zero}{If TRUE then forecastCov is also calculated for a forecast of zero.}
-    \item{trend}{If TRUE then forecastCov is also calculated for a 
-      forecast of a linear trend.}
     \item{horizons}{Horizons for which forecast covariance should be calculated.}
     \item{rng}{If specified then it is used to set RNG.}
     \item{Spawn}{If TRUE then Splus For loops are used.}

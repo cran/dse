@@ -26,16 +26,7 @@
     \code{\link{SVDbalanceMittnik}}
 }
 \references{
-    S.Mittnik (1989), Multivariate Time Series Analysis With State 
-    Space Models, Computers Math Appl. Vol 17, No 8/9, pp1189-1201.
-   
-    S.Mittnik (1990), Macroeconomic Forecasting Experience With 
-    Balance State Space Models,  
-    International Journal Of Forecasting, Vol 6, pp337-348.
-  
-    S.Mittnik (1990), Forecasting With Balanced State Space 
-    Representations of Multivariate Distributed Lag Models. 
-    J. of Forecasting, Vol.9, 207-218.  
+    See references for \code{\link{MittnikReduction}}. 
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")

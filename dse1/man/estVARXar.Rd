@@ -62,8 +62,8 @@ the model for the exog. variable (as estimated by ar() is  discarded.
     <www.bank-banque-canada.ca/pgilbert>
 
     Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" J. of Forecasting: 
-    Special Issue on VAR Modelling. 14:229-250.
+    Model Reduction for Simple Good Predictions" \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling.} 14:229-250.
 }
 \seealso{
     \code{\link{estSSfromVARX}}

@@ -65,19 +65,19 @@ estSSMittnik.
     <www.bank-banque-canada.ca/pgilbert>
 
     Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" J. of Forecasting: 
-    Special Issue on VAR Modelling. 14:229-250.
+    Model Reduction for Simple Good Predictions" \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling}. 14:229-250.
 
     Mittnik, S. (1989), Multivariate Time Series Analysis With State 
-    Space Models, Computers Math Appl. Vol 17, No 8/9, pp1189-1201.
+    Space Models, \emph{Computers Math Appl.} Vol 17, No 8/9, pp1189-1201.
    
     Mittnik, S. (1990), Macroeconomic Forecasting Experience With 
     Balance State Space Models,  
-    International Journal Of Forecasting, Vol 6, pp337-348.
+    \emph{International Journal Of Forecasting}, Vol 6, pp337-348.
   
     Mittnik, S. (1990), Forecasting With Balanced State Space 
     Representations of Multivariate Distributed Lag Models. 
-    J. of Forecasting, Vol.9, 207-218.  
+    \emph{J. of Forecasting}, Vol.9, 207-218.  
 }
 \seealso{
     \code{\link{estVARXls}}

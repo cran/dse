@@ -27,8 +27,6 @@
     \item{rng}{If specified then it is used to set RNG.}
     \item{Spawn}{If TRUE then Splus For loops are used.}
     \item{quiet}{If TRUE then some messages are not printed.}
-    \item{zero}{if TRUE the covariance is calculated for a forecast of zero.}
-    \item{trend}{if TRUE the covariance is calculated for a forecast of trend.}
     \item{estimation.methods}{a list as used by estimateModels.}
     \item{criteria}{a ...}
     \item{compiled}{a logical indicating if compiled code should be

@@ -30,7 +30,7 @@ dimension is not specified then the singular values of the Hankel matrix are
 printed and the user is prompted for the state dimension.
 }
 \references{
-    See references for MittnikReduction. 
+    See references for \code{\link{MittnikReduction}}. 
 }
 \seealso{
     \code{\link{MittnikReduction}}

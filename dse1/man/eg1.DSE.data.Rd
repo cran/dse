@@ -1,4 +1,5 @@
 \name{eg1.DSE.data}
+\docType{data}
 \alias{eg1.DSE.data}
 \alias{eg1.DSE.data.diff}
 \alias{eg1.dat}

@@ -2,10 +2,10 @@
 %Å‚Å„ÅœÅ”
 1 0 obj
 <<
-/CreationDate (D:20030617224514)
-/ModDate (D:20030617224514)
+/CreationDate (D:20030919112308)
+/ModDate (D:20030919112308)
 /Title (R Graphics Output)
-/Producer (R 1.7.1)
+/Producer (R 1.8.0)
 /Creator (R)
 >>
 endobj
@@ -406,9 +406,9 @@ Q q 38.97 48.47 1525.08 344.56 re W n
 46.09 364.52 m 60.35 364.52 l S
 BT
 0.000 0.000 0.000 rg
-/F1 1 Tf 8.00 0.00 -0.00 8.00 67.48 380.72 Tm (trend) Tj
-/F1 1 Tf 8.00 0.00 -0.00 8.00 67.48 371.23 Tm (estVARXar NULL) Tj
-/F1 1 Tf 8.00 0.00 -0.00 8.00 67.48 361.73 Tm (estVARXls NULL) Tj
+/F1 1 Tf 8.00 0.00 -0.00 8.00 67.48 380.66 Tm (trend) Tj
+/F1 1 Tf 8.00 0.00 -0.00 8.00 67.48 371.15 Tm (estVARXar NULL) Tj
+/F1 1 Tf 8.00 0.00 -0.00 8.00 67.48 361.65 Tm (estVARXls NULL) Tj
 ET
 Q
 endstream

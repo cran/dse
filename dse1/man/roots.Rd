@@ -26,7 +26,6 @@
        space representation and calculating the eigenvalues of F. This second
        method is preferable for speed, accuracy, and because of a limitation
        in the degree of a polynomial which can be handled by polyroot.}
-    \item{verbose}{arguments to be passed to other methods.}
     \item{...}{arguments passed to other methods.}
 }
 \value{

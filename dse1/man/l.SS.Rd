@@ -59,6 +59,7 @@ error at each period ahead.
 
 }
 \seealso{
+\code{\link{SS}}
 \code{\link{l}}
 \code{\link{l.ARMA}}
 \code{\link{TSmodel}}

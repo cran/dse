@@ -1,26 +1,24 @@
 \name{Polynomials}
-\alias{characteristic.poly}
-\alias{companion.matrix}
-\alias{poly.value}
+\alias{characteristicPoly}
+\alias{companionMatrix}
+\alias{polyvalue}
 \alias{polydet}
 \alias{polyprod}
 \alias{polysum}
-\alias{polyroot.det}
+\alias{polyrootDet}
         
 \title{Polynomial Utilities}
 \description{Polynomial utility functions used by DSE.}
 \usage{
-    characteristic.poly(A)
-    companion.matrix(A)
-    poly.value(coef, z)
-    polydet(A)
+    characteristicPoly(a)
+    companionMatrix(a)
+    polyvalue(coef, z)
+    polydet(a)
     polyprod(a, b)
     polysum(a, b)
-    polyroot.det(A)
+    polyrootDet(a)
 }
 \arguments{
-    \item{A}{An array representing a matrix polynomial.}
-    \item{B}{An array representing a matrix polynomial.}
     \item{a}{An array representing a matrix polynomial.}
     \item{b}{An array representing a matrix polynomial.}
     \item{coef}{Coefficients of a polynomial.}
