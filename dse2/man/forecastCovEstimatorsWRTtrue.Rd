@@ -9,7 +9,7 @@
                        simulation.args=NULL,
                        est.replications = 2, pred.replications = 2,
                        discard.before = 10, horizons = 1:12, quiet =FALSE,
-                       estimation.methods=NULL, compiled=.DSECOMPILED, 
+                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED, 
                        Spawn=if (exists(".SPAWN")) .SPAWN else FALSE
 		       )
     is.forecastCovEstimatorsWRTtrue(obj)
@@ -61,6 +61,6 @@ true.model <- estVARXls(eg1.DSE.data.diff) # just to have a starting model
 z <-  forecastCovEstimatorsWRTtrue(true.model, 
     estimation.methods=list(estVARXls=list(max.lag=4)))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

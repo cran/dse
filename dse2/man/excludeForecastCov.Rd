@@ -28,7 +28,7 @@ z <- stripMine(eg1.DSE.data.diff, essential.data=c(1,2),
                    estimation.methods=list(estVARXls=list(max.lag=3)))
 z <-  excludeForecastCov(z, exclude.series=3)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

@@ -53,6 +53,6 @@ Output graphics can be paused between pages by setting par(ask=TRUE).
     model <- estVARXls(eg1.DSE.data.diff)
     checkResiduals(model)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -11,32 +11,32 @@
 \description{See the generic function description.}
 \usage{
     \method{tfplot}{TSmodelEstEval}(x, graph.args=NULL,
-                       criterion ="coef", criterion.args=NULL)
+                       criterion ="coef", criterion.args=NULL, ...)
     \method{tfplot}{TSestModelEstEval}(x, graph.args=NULL,
-                       criterion ="coef", criterion.args=NULL)
+                       criterion ="coef", criterion.args=NULL, ...)
     \method{tfplot}{featherForecasts}(x, tf=NULL, start=tfstart(tf), end=tfend(tf), 
         series=seq(nseries(x)), 
         Title="Predictions (dotted) and actual data (solid)", 
         ylab=seriesNamesOutput(x),
-        graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
+        graphs.per.page=5, mar=par()$mar, reset.screen=TRUE, ...)
     \method{tfplot}{forecast}(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
         series = seq(length=nseriesOutput(x$data)),
 	Title="Predictions (dotted) and actual data (solid)",
         ylab = seriesNamesOutput(x$data), 
-	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
+	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE, ...)
     \method{tfplot}{EstEval}(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
         truth= if(is.TSdata(x$truth)) outputData(x$truth) else x$truth,
         series = seq(length=nseries(truth)),
 	Title="Estimated (and true) results",
         ylab = seriesNames(truth), remove.mean = FALSE,
-	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
+	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE, ...)
     \method{tfplot}{horizonForecasts}(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
          series=seq(length=nseriesOutput(x$data)),
 	 Title="Predictions (dotted) and actual data (solid)", 
 	 ylab=seriesNamesOutput(x$data), 
-	 graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
+	 graphs.per.page=5, mar=par()$mar, reset.screen=TRUE, ...)
     \method{tfplot}{multiModelHorizonForecasts}(x, 
-         tf=NULL, start=tfstart(tf), end=tfend(tf), series=NULL)
+         tf=NULL, start=tfstart(tf), end=tfend(tf), series=NULL, ...)
 }
 \arguments{
     \item{x}{an object for which a tfplot is to be produced.}
@@ -60,12 +60,13 @@
     \item{criterion}{criterion which should be used to extract something from
          the object which will then be plotted. See \code{EstEval}.}
     \item{criterion.args}{arguments to be passed to code{criterion}.}
+    \item{...}{arguments passed to other methods.}
 }
 
 \seealso{
     \code{\link[tframe]{tfplot}}
     \code{\link{EstEval}} }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

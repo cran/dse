@@ -64,6 +64,6 @@ yet been implemented.
   est.model
   tfplot(est.model)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

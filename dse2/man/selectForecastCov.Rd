@@ -61,6 +61,6 @@ z <-  selectForecastCov(z)
 tfplot(selectForecastCov(z, select.cov.bound=20000))
 tfplot(selectForecastCov(z, select.cov.best=1))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

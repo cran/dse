@@ -45,6 +45,6 @@ z <-  estimateModels(eg1.DSE.data.diff, estimation.methods= list(
         bft=list(verbose=FALSE), 
         estVARXar=list(max.lag=3)))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

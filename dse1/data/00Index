@@ -1,0 +1,3 @@
+eg1.DSE.data             Four Time Series used in Gilbert (1993)
+eg1.DSE.data.diff        Differenced version of eg1.DSE.data
+egJofF.1dec93.data       Eleven Time Series used in Gilbert (1995)

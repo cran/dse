@@ -33,7 +33,9 @@
     \item{warn}{logical indicating if some warning messages should be suppressed.}
     \item{...}{arguments passed to other functions.}
 }
-
+\details{
+   The generic function is applied to input and to output data.
+   }
 \seealso{
     \code{\link[tframe]{tframed}},
     \code{\link[tframe]{tfwindow}},
@@ -41,6 +43,7 @@
     \code{\link[tframe]{trimNA}}
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
+
 

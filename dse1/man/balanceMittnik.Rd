@@ -57,7 +57,7 @@ See also \code{MittnikReduction} and references.
     newmodel <-balanceMittnik(model, n=18)
 
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

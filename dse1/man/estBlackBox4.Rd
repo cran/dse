@@ -62,7 +62,7 @@ is described as the brute force technique (bft) in Gilbert (1995).
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  bft(eg1.DSE.data.diff)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
 

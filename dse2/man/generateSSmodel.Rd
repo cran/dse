@@ -17,6 +17,6 @@ largest root will have magnitude less than 1.0.
 \examples{
 z <-  generateSSmodel(2,3,1)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

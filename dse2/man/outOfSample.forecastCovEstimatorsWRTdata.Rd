@@ -5,7 +5,7 @@
 \usage{
     outOfSample.forecastCovEstimatorsWRTdata(data, zero=FALSE, trend=FALSE,
                        estimation.sample=.5, horizons=1:12,quiet=FALSE,
-                       estimation.methods=NULL, compiled=.DSECOMPILED)
+                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED)
 }
 \arguments{
     \item{data}{an object of class TSdata.}
@@ -39,6 +39,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  outOfSample.forecastCovEstimatorsWRTdata(eg1.DSE.data.diff,
            estimation.methods=list(estVARXls=list(max.lag=4)))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -44,6 +44,8 @@ nseries.featherForecasts
                         Number of Series
 outOfSample.forecastCovEstimatorsWRTdata
                         Calculate Out-of-Sample Forecasts
+periods.MonteCarloSimulations
+                        Tframe or Number of Periods
 permute                 Permute
 phasePlots              Calculate Phase Plots
 plot.mineStepwise       Plot Mine Stepwise Object

@@ -337,6 +337,55 @@ not assigned to a variable in the above example, but used in the evaluation
 of \emph{l()}. The models are returned as part of the \emph{TSestModel} returned
 by \emph{l()}.
 
+For state space models there is often interest in the underlying state series.
+These can be extracted from an estimated model with the function \emph{state}.
+
+\begin{Scode}
+tfplot(state(ss))
+\end{Scode}
+
+For an innovations form model the state is defined as an expectation given past
+information, so the Kalman filter estimates the state exactly. For an
+non-innovations form model the filter and smoother give slightly different
+estimates. (These are often called one-sided and two-sided filters in the
+economics literature.) An innovations form model would usually be specified 
+based on some additional information about the structure of the system,
+typically a physical understanding of the system in engineering, or some
+theory in economics. In the absence of this, an arbitary technique is to use a
+Cholesky decomposition to convert an innovations form model to an
+non-innovations form model.
+
+The filter values are automatically returned by
+\emph{l()} but, because of the additional time and space requirements, the
+smoother values are not. The smoother is run separately by the function 
+\emph{smoother()}. 
+
+\begin{Scode}
+ssc <- toSSChol(ss) 
+
+ssc <- smoother(ssc)
+\end{Scode}
+
+\begin{Scode}
+tfplot(state(ssc, filter=TRUE))
+
+tfplot(state(ssc, smoother=TRUE))
+\end{Scode}
+
+These can be compared more easily with
+
+\begin{Scode}
+tfplot(state(ssc, smoother=TRUE), state(ssc, filter=TRUE))
+\end{Scode}
+
+The term \emph{state estimate} is well established, but these should not
+be confused with model parameter estimates. The error in the model parameter
+estimates converges to zero as the length of the series increase to infinity 
+(with good estimators and assuming estimation assumptions are satisfied). State
+estimation errors never converge to zero, and some authors prefer the term
+\emph{state prediction} because of this. The state tracking error can also be
+extracted from an non-innovations form model.
+
 
 \subsection{Model Estimation}
 

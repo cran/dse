@@ -8,7 +8,7 @@
 \usage{
     forecastCovWRTtrue(models, true.model, 
         pred.replications=1, simulation.args=NULL, quiet=FALSE, rng=NULL, 
-	compiled=.DSECOMPILED,
+	compiled=.DSEflags()$COMPILED,
         horizons=1:12, discard.before=10, trend=NULL, zero=NULL, 
 	Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
     is.forecastCovWRTdata(obj)
@@ -64,6 +64,6 @@ data <- simulate(true.model)
 models <- list(TSmodel(estVARXar(data)),TSmodel(estVARXls(data)))
 z <-  forecastCovWRTtrue( models, true.model)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

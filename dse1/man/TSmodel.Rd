@@ -51,6 +51,6 @@ these types of models.
     \code{\link{TSestModel}},
     \code{\link{TSdata}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

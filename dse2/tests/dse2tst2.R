@@ -1,4 +1,5 @@
-  require("mva"); require("ts"); require("dse2") 
+  require("stats")
+  require("dse2") 
  #x11()
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,

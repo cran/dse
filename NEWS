@@ -1,4 +1,82 @@
-                CHANGES IN DSE AND DSEPLUS VERSION 2004.4-1
+
+                CHANGES IN DSE AND DSEPLUS VERSION 2005.1-1
+ 
+Changes (Possibly) Affecting Users
+
+    o added NAMESPACES to all packages (except setRNG). Exporting generics but 
+      not specific methods means calling specific methods must be avoided.
+      NAMESPACES in bundles seemed to require switching .DSECOMPILED and .DSEDUP
+      global flags to "dynamic variables" using a local function.
+          
+    o moved makeTSnoise from tframe to dse1 so tframe does not require setRNG.
+          
+    o fortran code for state space models was changed to pass scratch arrays
+      from R, so state and output dimension can now be arbitrarily large.
+      Previously the state and output dimensions could not exceed a fortran 
+      parameter IS=100 without being recompiled, and an error was not always
+      indicated. (There still seems to be a bug in maximum likelihood 
+      estimation when the state or output dimension exceeds 100.) 
+          
+    o fixed fortran code (SIMSS) to use w instead of e as measurement 
+      equation noise for non-innovations models (as in S version of code) and 
+      fixed related test. 
+
+Changes Affecting Development
+
+    o revise makefiles QC system to combine Rcode and codetest targets, which 
+      are now called $(CODETEST). This has a target that is the tested 
+      lib/package rather than a flag, which is more reliable and makes 
+      reading the makefiles much easier. The tarball target was changed in the
+      same way.
+
+    o revise makefiles QC system to use configure so that QC can take place in
+      a separate directory. Testing of different architectures and different R
+      versions should now take place in a different directory, so the TMP and 
+      FLAGS naming convention was simplified.
+          
+    o revise makefiles to test demos separately, and other makefile cleanup.
+          
+    o reversed dependency between padi and dsepadi as generic is now in 
+      dsepadi (so that padi is not necessary for most things).
+
+                CHANGES IN DSE AND DSEPLUS VERSION 2004.10-1
+ 
+Changes (Possibly) Affecting Users
+ 
+    o  The NEWS file for setRNG is now maintained separately in that package.
+
+    o  Started using separate version numbers for setRNG and syskern, but still
+       using a common one for all dse and dseplus packages.
+
+    o   moved some more documentation from the code into the help files. There
+        is still some clean up to do.
+
+    o   fixed documentation mistakes, bugs and error checking in
+        simulations with user supplied random numbers.
+
+    o  TREND in ARMA models generalized and documented better and to indicate
+       that this term in ARMA models handles more than just trends.
+
+    o  added "state" extraction utility and examples in SS, l.SS and 
+       smoother documentation 
+
+    o  added a check in seriesNames<- that the number of names matched the 
+       number of series.
+    
+    o added \concept{DSE} in the documentation. 
+
+Changes Affecting Development
+          
+    o  require(ts) and require(mva) changed to require(stats) for R 1.9.0
+      
+    o  continuing Makefile cleanup.
+
+    o  moved bundle constuction to Bundle directory.
+
+    o  moved NEWS to Bundle directory.
+
+
+                CHANGES IN DSE, setRNG,  AND DSEPLUS VERSION 2004.4-1
  
 Changes (Possibly) Affecting Users
  

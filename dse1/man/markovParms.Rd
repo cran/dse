@@ -33,7 +33,7 @@
     model <- estVARXls(eg1.DSE.data.diff)
     markovParms(model)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 \keyword{algebra}
 

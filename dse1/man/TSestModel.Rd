@@ -63,6 +63,6 @@ This is NULL for innovations models.}
     \code{\link{TSmodel}},
     \code{\link{TSdata}}
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

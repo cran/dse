@@ -54,13 +54,17 @@ or the innovations model:
        
        y(t) = Hz(t)  + w(t)
 
-Matrices are as specified above in the aguments, and 
+Matrices are as specified above in the arguments, and 
     \item{y}{is the p dimensional output data.}
     \item{u}{is the m dimensional exogenous (input) data.}
     \item{z}{is the n dimensional (estimated) state at time t,  
-    E[z(t)|y(t-1), u(t)] denoted E[z(t)|t-1]. An initial value for z can 
-    be specified as z0 and an initial one step ahead state tracking 
-    error (for non-innovations models) as P0.}
+       E[z(t)|y(t-1), u(t)] denoted E[z(t)|t-1]. Note: In the case where 
+       there is no input u this corresponds to what
+       would usually be called the predicted state - not the filtered state.
+       An initial value for z can 
+       be specified as z0 and an initial one step ahead state tracking 
+       error (for non-innovations models) as P0. In the object returned 
+       by \code{l.ss}, \code{state} is a time series matrix corresponding to z.}
     \item{z0}{An initial value for z can be specified as z0.}
     \item{P0}{An initial one step ahead state tracking error (for 
     non-innovations models) can be specified as P0.}  
@@ -96,6 +100,8 @@ Matrices are as specified above in the aguments, and
     \code{\link{ARMA}}
     \code{\link{simulate.SS}}
     \code{\link{l.SS}}
+    \code{\link{state}}
+    \code{\link{smoother}}
     \code{\link{fixConstants}}
 }
 \examples{
@@ -107,6 +113,6 @@ Matrices are as specified above in the aguments, and
     ss
 }
 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

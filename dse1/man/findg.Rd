@@ -2,9 +2,8 @@
 \alias{findg}
 \title{Find Equivalence Transformation}
 \description{
-
-Try to find a matrix g which makes two models equivalent.
-}
+   Try to find a matrix g which makes two models equivalent.
+   }
 \usage{
     findg(model1, model2, minf=nlmin)
 }
@@ -18,13 +17,15 @@ Try to find a matrix g which makes two models equivalent.
 This is set up as a minimization problem with the objective 
 to reduce the squared difference between parameters.
 }
-\note{WARNING: This program does not work very well.}
+\note{WARNING: This program does not work very well.
+  It is also rather crude and can be very slow.
+  }
 \seealso{
     \code{\link{gmap}}
 }
 \examples{
 # findg(model1, model2)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

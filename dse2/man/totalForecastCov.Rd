@@ -21,6 +21,6 @@ model2 <- estVARXls(eg1.DSE.data.diff)
 z <-  totalForecastCov(forecastCov(model1, model2,
                          data=trimNA(eg1.DSE.data.diff)))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

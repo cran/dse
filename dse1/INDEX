@@ -21,7 +21,7 @@ coef.TSmodel            Extract Model Parameters
 combine                 Combine two objects.
 combine.TSdata          Combine series from two TSdata objects.
 diffLog                 Calculate the difference of log data
-.DSECOMPILED            Use Compiled or S/R Code
+.DSEflags               Flags to Indicate Use of Compiled Code
 DSEversion              Print Version Information
 eg1.DSE.data            Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data      Eleven Time Series used in Gilbert (1995)
@@ -72,10 +72,10 @@ seriesNames.TSdata      Series Names Specific Methods
 setTSmodelParameters    Set TSmodel Parameter Information
 simulate                Simulate a TSmodel
 smoother                Evaluate a smoother with a TSmodel
-sourceInfo.TSdata       tfPADI Specific Methods
 SS                      State Space Models
 stability               Calculate Stability of a TSmodel
 standardize             standardize data
+state                   Extract State
 summary.TSdata          Specific Methods for Summary
 sumSqerror              Calculate sum of squared prediction errors
 testEqual.ARMA          Specific Methods for Testing Equality

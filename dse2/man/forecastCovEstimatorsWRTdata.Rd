@@ -7,7 +7,7 @@
  given sample}
 \usage{
     forecastCovEstimatorsWRTdata(data, estimation.sample=NULL, 
-                       compiled=.DSECOMPILED, discard.before=10,
+                       compiled=.DSEflags()$COMPILED, discard.before=10,
                        horizons=1:12, zero=FALSE, trend=FALSE,quiet=FALSE,
                        estimation.methods=NULL)
     is.forecastCovEstimatorsWRTdata(obj)
@@ -51,6 +51,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- forecastCovEstimatorsWRTdata(eg1.DSE.data.diff, 
     estimation.methods=list(estVARXls=list(max.lag=4)))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -9,7 +9,7 @@
                        est.replications=2, pred.replications=2,
                        discard.before=10, horizons=1:12,quiet=FALSE,
                        estimation.methods=NULL,
-                       criteria=NULL, compiled=.DSECOMPILED, 
+                       criteria=NULL, compiled=.DSEflags()$COMPILED, 
                        Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 }
 \arguments{
@@ -46,6 +46,6 @@
    is accounted separately. (ie. it is added to the beginning of the list of
   estimated models)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

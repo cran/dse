@@ -19,7 +19,16 @@
     \item{verbose}{if TRUE then additional information is printed.}
 }
 \value{A TSestModel}
-\details{Information criteria are calculated and the best model returned.}
+\details{
+   Information criteria are calculated and 
+   return the best model from ... according to criterion
+   models should be a list of TSestModel's.
+   models[[i]]$estimates$pred is not recalculated but a sub-sample identified by 
+   sample.start and  sample.end is used and the likelihood is recalculated. 
+   If sample.end=NULL data is used to the end of the sample.
+   taic might be a better default selection criteria but it is 
+   not available for ARMA models.
+}
 \seealso{
 \code{\link{estBlackBox1}},
 \code{\link{estBlackBox2}}
@@ -32,6 +41,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 models <- list(estVARXls(eg1.DSE.data.diff), estVARXar(eg1.DSE.data.diff))
 z <-  bestTSestModel(models)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

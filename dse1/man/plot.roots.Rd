@@ -27,6 +27,6 @@ determinant of the AR polynomial are returned invisibly.
     model <- estVARXls(eg1.DSE.data.diff)
     plot(roots(model))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -67,6 +67,6 @@ z <-  MonteCarloSimulations(model, simulation.args=list(sampleT=100))
 tfplot(z)
 distribution(z)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

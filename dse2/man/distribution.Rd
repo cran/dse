@@ -54,6 +54,6 @@ z <-  EstEval(model,
 distribution(z) 
 tfplot(z)
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -19,6 +19,6 @@ values will result in NAs.
 if(is.R()) data("eg1.DSE.data", package="dse1")
 z <- diffLog(outputData(eg1.DSE.data))
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -82,6 +82,6 @@ the last value of input.
     #tfplot(pr) Rbug 0.90.1
     is.forecast(pr)
 } 
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 

@@ -19,6 +19,6 @@ if(is.R()) {data("eg1.DSE.data.diff", package="dse1")
             data("eg1.DSE.data", package="dse1") }
 new.data.set <- combine(eg1.DSE.data.diff, eg1.DSE.data) 
 }
-%\keyword{DSE}
+\concept{DSE}
 \keyword{ts}
 
