@@ -24,8 +24,7 @@ The eigenvalues of the state transition matrix or the inverse of the roots of th
 determinant of the AR polynomial are returned invisibly.
 }
 \seealso{
-
-\code{\link{plot.roots}}
+	\code{\link{plot.roots}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

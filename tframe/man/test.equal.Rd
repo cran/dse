@@ -19,8 +19,8 @@ Some descriptive information in the objects may be ignored.
 \usage{
 	test.equal(obj1,obj2, fuzz=0)}
 \arguments{
-\item{ obj1, obj2}{Objects of the same class.}
-\item{ fuzz}{Differences less than fuzz are ignored.}
+	\item{ obj1, obj2}{Objects of the same class.}
+	\item{ fuzz}{Differences less than fuzz are ignored.}
 }
 \value{
 T or F.

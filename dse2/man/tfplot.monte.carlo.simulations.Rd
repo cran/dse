@@ -25,7 +25,7 @@
 \value{None}
 \details{
 This function produces plots of the simulated series.
-Use dev.ask(T) to pause plotting between pages.
+Output graphics can be paused between pages by setting par(ask=T).
 }
 \seealso{
 \code{\link{distribution.monte.carlo.simulations}}

@@ -22,7 +22,6 @@ combine                  Combine two objects.
 combine.TSdata           Combine series from two TSdata objects.
 diff.log                 Calculate the difference of log data
 display                  Display TSmodel Arrays
-dse1.function.tests      dse1.function.tests
 eg1.DSE.data             Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data       Eleven Time Series used in Gilbert (1995)
 est.SS.from.VARX         Estimate a state space TSmodel using VAR
@@ -78,6 +77,5 @@ to.SS.Chol               Convert to Non-Innovation State Space Model
 to.SS.Oform              Convert to Oform
 to.SS                    Convert to State Space Model
 to.SS.innov              Convert to State Space Innovations Model
-to.parsim                Convert to Parsimonious Form
 version.dse              Print Version Information
 ytoypc                   Convert to year to year percent change

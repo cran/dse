@@ -115,10 +115,9 @@ the other dimensions.
 Many of the functions in the library are not yet individually documented 
 (and were it exists the documentation is a draft) however, the functions
 are all very short and can be examined easily. 
-The function \code{tframe.function.tests} provides a short set of tests and may
+The code in the tests subdirectory provides a short set of tests and may
 serve as an example.
 }
-\examples{tframe.function.tests()}
 
 \keyword{programming}
 \keyword{interface}

@@ -12,7 +12,7 @@
 	series.names(data) <- names 
 }
 \arguments{
-\item{data}{A tframed object.}
+	\item{data}{A tframed object.}
 }
 \value{
 The first usage gives a vector of strings with the series names.

@@ -40,7 +40,7 @@ calculated by subtracting the output data from the model predictions.}
 
 \sideffects{
 	Diagnostic information is printed and plotted if a device is available.
-	Use dev.ask(T) to pause plotting between pages.
+Output graphics can be paused between pages by setting par(ask=T).
 }
 \examples{
 	if(is.R()) data("eg1.DSE.data.diff", package="dse1")

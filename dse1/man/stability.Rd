@@ -22,7 +22,6 @@ The eigenvalues of the state transition matrix or the roots of the
 determinant of the AR polynomial are printed if verbose is T.
 }
 \seealso{
-
 \code{\link{McMillan.degree}}
 }
 \examples{

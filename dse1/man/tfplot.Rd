@@ -26,7 +26,7 @@ If the arguments are of class TSdata then the input and output data are
 plotted (subject to select.inputs and select.outputs).
 If the arguments are of class TSestModel then model one step ahead predictions
 are also plotted.
-Use dev.ask(T) to pause plotting between pages.
+Output graphics can be paused between pages by setting par(ask=T).
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

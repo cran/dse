@@ -1,9 +1,0 @@
-# Expecting results from 1 tests
-
-#R --vsize=7000000 --nsize=300000  
-
-# gcinfo(1)
- require("dse2"); require("curve") 
-  system.info()
-  version.dse()
-  curvature.function.tests(verbose=T) # 3 fails as usual

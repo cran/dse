@@ -1,4 +1,3 @@
-#   20%E% %U% 
 
 # retrieve data from file eg1.dat
 # Define some example generic model evaluation functions and
@@ -275,7 +274,7 @@ example.BOC.93.4.paper.tests <- function(example.data, example.raw.data, verbose
    cat("Stability of ARMA model:\n")
    stability(ARMA.model)
 
-   if(exists.graphics.device()) 
+   if( dev.cur() != 1 ) 
      {tfplot(VAR.model, Title="VAR model")
       cat("Remark: These are not advertised as best estimates. There is a bias.\n")
       cat("This estimation technique may be improved by setting some of the\n") 

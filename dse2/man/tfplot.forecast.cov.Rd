@@ -23,7 +23,7 @@
 \value{None}
 \details{
 	This function produces plots of the variance at different horizons.
-	Use dev.ask(T) to pause plotting between pages.
+Output graphics can be paused between pages by setting par(ask=T).
 }
 \seealso{
 	\code{\link{plot}}

@@ -37,7 +37,7 @@ invisible()
 
 ############################################################################
 
-#  functions for model estimation (see also VARX in dse.s) and reduction   <<<<<<<<<<<<<
+#  functions for model estimation (see also VARX ) and reduction   <<<<<<<<<<<<<
 
 ############################################################################
 
@@ -69,75 +69,82 @@ est.min.sqerror <- function(data, init.model, error.weights=1, ...)
 }
 
 
-est.max.like <- function(emodel, algorithm="nlm",
-      max.iter=20, ftol=1e-5, gtol=1e-3,
-      dfunc=numerical.grad, line.search="nlm", 
-      obj.func=like, obj.func.args=NULL) 
-{# maximum likelihood estimation...
- # emodel is an object of class TSestModel (with initial parameter values and data). 
- # max.iter is an integer indicating the maximum number of iterations.
- # The value returned is an object of class TSestModel with  additional
- #  elements $converged, which is T or F indicating convergence, 
- #  and $dfpMin.results or $nlmin.results.
- # If this function calls dfp the Hessian,etc are return as  $dfpMin.results
- # If this function is called again and those results are
- # available then they are used. 
- # This could cause problems if $model is modified. If that is
- # done then $dfpMin.results should be set to NULL.
- # algorithm in {"nlm", "dfpMin", "nlmin", "nlsimplex"}
+est.max.like <- function(Shape, ...) {UseMethod("est.max.like")}
 
-stop("The current version of est.max.like is superficially broken.")
- if(!is.TSestModel(emodel)) TS.error.exit()
- est  <- emodel$estimates
- Shape <- emodel$model
- Data <- freeze(emodel$data)
- global.assign("Obj.Func.ARGS" , append(list(model=Shape, data=Data),
-        obj.func.args))
- if (algorithm=="dfpMin")
-    {if (is.null(emodel$dfpMin.results)) parms <- Shape$parms
-     else parms <- emodel$dfpMin.results
-     dfpMin.results <- dfpMin(obj.func, parms, dfunc=dfunc, 
-         max.iter=max.iter, ftol=ftol, gtol=gtol, line.search=line.search) 
-     Shape$parms <- dfpMin.results$parms
-     emodel <- l(set.arrays(Shape),Data)
-     emodel$dfpMin.results <- dfpMin.results
-     emodel$converged <- dfpMin.results$converged
-     emodel$model$description <- paste("Estimated with max.like/dfpMin (",
+est.max.like.TSestModel <- function(Shape, data=TSdata(Shape), ...) {
+	 # if Shape is result from a previous est.max.like then the gradient
+	 # hessian and other information should be extracted, but
+	 est.max.like(TSmodel(Shape), data, ...) }
+
+est.max.like.TSdata <- function(data, Shape, ...) {
+	 est.max.like(data, TSmodel(Shape), ...) }
+
+est.max.like.TSmodel <- function(Shape, data, 
+	algorithm="optim",
+	algorithm.args=list(method="BFGS", upper=Inf, lower=-Inf, hessian=TRUE)
+	)
+{# maximum likelihood estimation
+ # "nml" algorithm.args=list(hessian=T, iterlim=20, 
+ #     dfunc=numerical.grad, line.search="nlm",ftol=1e-5, gtol=1e-3,)
+ data <- freeze(data)
+ func.like <- function(parms,Shape,data)
+      {l(set.arrays(Shape,parms=parms),data,result="like") }
+
+ if (algorithm=="optim")
+    {results <- optim(Shape$parms, func.like, method=algorithm.args$method,
+	gr=algorithm.args$gr, 
+	lower=algorithm.args$lower, upper=algorithm.args$upper,
+	control=algorithm.args$control, hessian=algorithm.args$hessian,
+	Shape, data) 
+     emodel <- l(set.arrays(Shape, parms=results$par),data)
+     emodel$est$algorithm <- algorithm
+     emodel$est$results <- results
+     emodel$est$converged <- results$converged
+     emodel$model$description <- paste("Estimated with max.like/optim (",
        c("not converged", "converged")[1+emodel$converged],
        ") from initial model: ", emodel$model$description)
     }
- else if (algorithm=="nlmin")
-   {nlmin.results <-nlmin(obj.func,Shape$parms, max.iter=max.iter, max.fcal=5*max.iter, ckfc=0.01)
-    Shape$parms <- nlmin.results$x
-    emodel <- l(set.arrays(Shape),Data)
-    emodel$nlmin.results <- nlmin.results
-    emodel$converged <- nlmin.results$converged  # this should be improved with conv.type info
-    emodel$model$description <- paste("Estimated with max.like/nlmin (",
-       c("not converged", "converged")[1+emodel$converged],
-       ") from initial model: ", emodel$model$description)
-   }
  else if (algorithm=="nlm")
-   {nlm.results <-nlm(obj.func,Shape$parms, hessian=T, iterlim=max.iter)
-    Shape$parms <- nlm.results$estimate
-    emodel <- l(set.arrays(Shape),Data)
-    emodel$nlm.results <- nlm.results
-    emodel$converged <- (nlm.results$code<=2)  
+   {warning("This has not been tested recently (and there have been changes which may affect it.")
+    results <-nlm(func.like,Shape$parms, hessian=algorithm.args$hessian, 
+    	iterlim=algorithm.args$iterlim)
+    emodel <- l(set.arrays(Shape, parms=results$estimate),data)
+    emodel$est$algorithm <- algorithm
+    emodel$est$results <- results
+    emodel$est$converged <- results$code <= 2
     emodel$model$description <- paste("Estimated with max.like/nlm (",
        c("not converged", "converged")[1+emodel$converged],
        ") from initial model: ", emodel$model$description)
    }
- else if (algorithm=="nlsimplex")
-   {results <-nlsimplex(obj.func,Shape$parms, max.iter=max.iter)
-    Shape$parms <- results$x
-    emodel <- l(set.arrays(Shape),Data)
-    emodel$nlsimplex.results <- results
-    emodel$converged <- results$converged  # this should be improved with conv.type info
-    emodel$model$description <- paste("Estimated with max.like/nlsimplex (",
+ else if (algorithm=="nlmin")
+   {warning("This has not been tested recently (and there have been changes which may affect it.")
+     results <-nlmin(func.like,Shape$parms, max.iter=algorithm.args$max.iter, 
+     	max.fcal=5*algorithm.args$max.iter, ckfc=0.01)
+     emodel <- l(set.arrays(Shape, parms=results$parms),data)
+     emodel$est$algorithm <- algorithm
+     emodel$est$results <- results
+     emodel$est$converged <- results$converged
+    # above should be improved with conv.type info
+    emodel$model$description <- paste("Estimated with max.like/nlmin (",
        c("not converged", "converged")[1+emodel$converged],
        ") from initial model: ", emodel$model$description)
    }
+ else if (algorithm=="dfpMin")
+    {stop("This optimization method is no longer supported.")
+     results <- dfpMin(func.like, Shape$parms, 
+	dfunc=algorithm.args$dfunc, 
+	max.iter=algorithm.args$max.iter, 
+	ftol=algorithm.args$ftol, gtol=algorithm.args$gtol, 
+	line.search=algorithm.args$line.search) 
+     emodel <- l(set.arrays(Shape, parms=results$parms),data)
+     emodel$est$algorithm <- algorithm
+     emodel$est$results <- results
+     emodel$est$converged <- results$converged
+     emodel$model$description <- paste("Estimated with max.like/dfpMin (",
+       c("not converged", "converged")[1+emodel$converged],
+       ") from initial model: ", emodel$model$description)
+    }
   else stop(paste("Minimization method ", algorithm, " not supported."))
-# remove(c("Obj.Func.ARGS"), where=1)
  emodel
 }    
 
@@ -184,7 +191,7 @@ est.black.box1 <- function(data,estimation="est.VARX.ls", reduction="reduction.M
        cat("Final reduced state space model, n= ", dim(model$model$F)[1],
            ", -log likelihood = ", model$estimates$like[1], "\n")
    }
-  if (verbose && exists.graphics.device()) check.residuals(model)
+  if (verbose &&  dev.cur() != 1 ) check.residuals(model)
  model
 }
 
@@ -692,172 +699,10 @@ tfplot.feather.forecasts <- function(x, start.=NULL, end.=NULL, select.series=NU
 
 
 
-############################################################################
-#
-#       procedure for testing functions   <<<<<<<<<<<<<
-#
-############################################################################
-
-
-
-dse2.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.large=1e-8, graphics=T)
-{max.error <- NA
- if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
- else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-
- if (synopsis & !verbose) cat("All dse2 tests ...") 
- if (verbose) cat("dse2 test 0 ... ")
-  z <- eg1.DSE.data.diff
-  z$input <- NULL
-  mod1 <- TSmodel(est.VARX.ar(z, re.add.means=F, warn=F))
-  ok <- is.TSmodel(mod1)
-  all.ok <- ok 
-  if (verbose)  {if (ok) cat("ok\n") else  cat("failed!\n") }
-
-  if (verbose) cat("dse2 test 1 ... ")
-  z <- est.black.box1(eg1.DSE.data.diff, verbose=F, max.lag=2)
-  error <- max(abs(z$estimates$like[1]+4025.943051342767))
-  ok <- is.TSestModel(z) &  (fuzz.large > error )
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
-
-  if (verbose) cat("dse2 test 2 ... ")
-  z <- est.wt.variables(eg1.DSE.data.diff, c(1,10,10),
-                        estimation="est.VARX.ls")
-  error <- max(abs(z$estimates$like[1]+4125.05572604540066)) 
-  ok <- is.TSestModel(z) &   (fuzz.large > error)
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
-
-  if (verbose) cat("dse2 test 3 ... ")
-  z <- est.SS.Mittnik(eg1.DSE.data.diff, max.lag=2, n=3)
-  error <- max(abs(z$estimates$like[1]+3794.0394069904219))
-  ok <- is.SS(z$model) &   (fuzz.large > error )
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
-
-  if (verbose) cat("dse2 test 4 ... ")
-  z <- l( reduction.Mittnik(z, criterion="taic", verbose=F), 
-         eg1.DSE.data.diff)
-  error <- max(abs(z$estimates$like[1]+3795.6760513068380)) 
-  ok <- is.SS(z$model)  &  (fuzz.large > error )
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
-
-  modSS<-z
-
-  if (verbose) cat("dse2 test 5 ... ")
-  z <- feather.forecasts( modSS,  from.periods=c(250,300))
-  error <- max(abs
-       (c(z$feather.forecasts[[1]][286,],z$feather.forecasts[[2]][336,])
-       -c(-0.00092229286770808757701, -0.0086020067525247358164, 
-           0.0043454851777852505565,  -0.0066741302949233430319,
-          -0.0089398331205012854933,   0.0021769124280658046222)))
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
-
-  if (verbose) cat("dse2 test 6 ... ")
-  # previously end=c(1969,6) when .diff data had wrong start date
-  output.data(modSS$data) <- tfwindow(output.data(modSS), end=c(1969,7))
-  # it should be possible to do the following instead, but tsp seems to
-  # sometimes get mixed up in forecast and cause System terminating: bad address
-  # output.data(modSS$data) <- output.data(modSS$data)[1:100,]
-  z <- forecast(modSS, percent=c(90,100,110))
-
-# previously 136 below
-  error <- max(abs(
-    c(z$forecast[[1]][36,],z$forecast[[2]][36,], z$forecast[[3]][36,])
-     -c(-0.00310702417651131587, -0.00604105559321206804,0.00214657444656118738,
-      -0.00345224972784219028, -0.00671228396225603124,0.00238508249578931863,
-      -0.00379747527917305948, -0.00738351233129999531,0.00262359054501745074)))
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
-
-if (graphics) 
- {if (verbose) cat("dse2 test 7 (graphics) ... ")
-  ok <- dse2.graphics.tests(verbose=verbose, pause=T)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
- }
-
-  if (synopsis) 
-    {if (verbose) cat("All dse2 tests completed")
-     if (all.ok) cat(" OK\n")
-     else    
-       {cat(", some FAILED!")
-        if(max.error > fuzz.small)
-            cat(" max. error magnitude= ", max.error,")")
-        cat("\n")
-       }
-    }
-
-  invisible(all.ok)
-}
-
-dse2.graphics.tests <- function(verbose=T, synopsis=T,  pause=F)
-{# graphics tests do not do any value comparisons
-  if (synopsis & !verbose) cat("dse2 graphics tests ...")
-  
-  if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-
-  if (verbose) cat("  dse2 graphics test 1 ...")
-
-  # If no device is active then write to postscript file 
-  if (!exists.graphics.device())
-      {postscript(file="zot.postscript.test.ps",width=6,height=6,pointsize=10,
-                   onefile=F, print.it=F, append=F)
-       on.exit((function()
-             {dev.off(); synchronize(1); rm("zot.postscript.test.ps")})())
-      }
-  if(pause) dev.ask(ask=T)
-
-  data <- eg1.DSE.data.diff
-  mod1 <- TSmodel(est.VARX.ls(data,max.lag=3))
-  modSS <- l(to.SS(mod1),data)
-
-  z <- feather.forecasts( modSS,  from.periods=c(230,250))
-  tfplot(z, start.=c(1980,1))
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse2 graphics test 2 ...")
-  z <- forecast(modSS, percent=c(90,100,110))
-  tfplot(z, start.=c(1985,1))
-  if (verbose) cat("ok\n")
-
-  if (synopsis) 
-    {if (verbose) cat("All dse2 graphics tests completed\n")
-     else cat("completed\n")
-    }
-      
-
-  invisible(T)
-}
-
-
-############################################################################
-#
-#       end
-#
-############################################################################
 
 ############################################################################
 
-# Functions in dse3a.s and dse3b.s file are mainly for evaluating estimation techniques.
+# Functions in the next group are mainly for evaluating estimation techniques.
 
 # The first group are for generating simulations (ie- generate multiple
 #   stochastic simulations of a model using simulate.)
@@ -2085,8 +1930,8 @@ horizon.forecasts.compiled.ARMA <- function( model, data, horizons=1:4,
                   as.integer(is),  # scratch array dim
                   as.double(matrix(0,is,is)),  # scratch array
                   as.double(matrix(0,is,is)),  # scratch array
-                  as.double(rep(0,is))         # scratch array
-             )$proj
+                  as.double(rep(0,is)),         # scratch array
+                  DUP=TRUE)$proj
 }
 
 horizon.forecasts.compiled.SS <- function( model, data, horizons=1:4,
@@ -2144,9 +1989,10 @@ horizon.forecasts.compiled.SS <- function( model, data, horizons=1:4,
                   as.double(K), 
                   as.double(Q),      
                   as.double(R),    
-                  as.logical(gain),
+                  as.integer(gain),
                   as.double(z),
-                  as.double(P))$proj
+                  as.double(P), 
+		  DUP=TRUE)$proj
 }
 
 
@@ -2289,7 +2135,8 @@ forecast.cov.TSdata <- function( pred, data=NULL, horizons=1:12, discard.before=
                   sample.size=as.integer(rep(0, length(horizons))),
                   as.integer(p), 
                   predictT=as.integer(TT), 
-                  as.double(err)) [c("forecast.cov","sample.size")]
+                  as.double(err), 
+		  DUP=TRUE) [c("forecast.cov","sample.size")]
      }
    else
      {for (t in discard.before:(TT-horizons[1]+1))
@@ -2480,8 +2327,8 @@ forecast.cov.compiled.ARMA <- function( model, data, horizons=1:12 , discard.bef
                   as.integer(is),  # scratch array dim
                   as.double(matrix(0,is,is)),  # scratch array
                   as.double(matrix(0,is,is)),  # scratch array
-                  as.double(rep(0,is))         # scratch array
-              )[c("forecast.cov","sample.size")]
+                  as.double(rep(0,is)),         # scratch array
+                  DUP=TRUE)[c("forecast.cov","sample.size")]
 }
 
 forecast.cov.compiled.innov <- function(obj, ...)
@@ -2526,7 +2373,7 @@ forecast.cov.compiled.SS <- function( model, data, horizons=1:12 , discard.befor
      else  P <- model$P0              # this is not used in innov. models
 
      storage.mode(cov) <-"double"
-     r <- .Fortran("kfepr",
+     .Fortran("kfepr",
                   forecast.cov=cov,    
                   as.integer(discard.before), 
                   as.integer(horizons), 
@@ -2546,10 +2393,10 @@ forecast.cov.compiled.SS <- function( model, data, horizons=1:12 , discard.befor
                   as.double(K), 
                   as.double(Q),      
                   as.double(R),    
-                  as.logical(gain),
+                  as.integer(gain),
                   as.double(z),
-                  as.double(P)) [c("forecast.cov","sample.size")]
-  r
+                  as.double(P), 
+		  DUP=TRUE) [c("forecast.cov","sample.size")]
 }
 
 is.forecast.cov <- function(obj)
@@ -3363,7 +3210,7 @@ est.black.box2 <- function(data, estimation="est.VARX.ls",
     if (verbose) cat("Final reduced state space model, n= ",
               dim(model$model$F)[1], ", -log likelihood = ", model$estimates$like[1], "\n")
    }
-  if (verbose && exists.graphics.device()) check.residuals(model)
+  if (verbose &&  dev.cur() != 1 ) check.residuals(model)
  model
 }
 
@@ -3429,7 +3276,7 @@ est.black.box3 <- function(data, estimation="est.VARX.ls",
     if (verbose) cat("Final reduced state space model, n= ",
               dim(model$model$F)[1], ", -log likelihood = ", model$estimates$like[1], "\n")
    }
-  if (verbose && exists.graphics.device()) check.residuals(model)
+  if (verbose &&  dev.cur() != 1 ) check.residuals(model)
  model
 }
 
@@ -3484,7 +3331,7 @@ est.black.box4 <- function(data, estimation="est.VARX.ls",
      models[[i]] <- model
    }
  model <- best.TSestModel(models, criterion=criterion, sample.start=sample.start, verbose=verbose)
- if (verbose && exists.graphics.device()) check.residuals(model)
+ if (verbose &&  dev.cur() != 1 ) check.residuals(model)
  model
 }
 
@@ -3492,285 +3339,7 @@ est.black.box4 <- function(data, estimation="est.VARX.ls",
 
 
 
-############################################################################
-#
-#       procedure for testing functions   <<<<<<<<<<
-#
-############################################################################
-
-
-
-
-dse3.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.large=1e-8, graphics=T)
-{ max.error <- NA
-  if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-
-
-# The seed is not important for most of these tests, but AIC eliminates all
-#  parameters occassionally in some model selection tests.
- test.rng <- list(kind="Wichmann-Hill", normal.kind="Box-Muller", seed=c(979,1479,1542))
-# set.RNG(test.rng)
-
-  if (synopsis & !verbose) cat("All dse3 tests ...")
-  if (verbose) cat("dse3 test 0 ... ")
-  data <- eg1.DSE.data.diff
-  input.data(data) <- NULL
-  mod1 <- TSmodel(est.VARX.ls(data))
-  mod2 <- TSmodel(est.VARX.ar(data, re.add.means=F, warn=F))
-  ok <- is.TSmodel(mod1)
-  all.ok <- ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 1 ... ")
-  z <- monte.carlo.simulations(mod1, replications=5, quiet=T)
-  ok <- is.monte.carlo.simulation(z)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 2 ... ")
-  ok <- test.equal(z, monte.carlo.simulations(mod1, replications=5,
-                                     rng=get.RNG(z), quiet=T))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 3 ... ")
-  z <- eval.estimation(mod1, replications=3,  estimation="est.VARX.ls",
-            estimation.args=NULL, criterion="TSmodel", quiet=T)
-  ok <- is.estimation.evaluation(z)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 4 ... ")
-  zz <-summary(parms(z), verbose=F)
-  ok <- T   # could be improved
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 5 ... ")
-  zz <- summary(roots(z), verbose=F)
-  ok <- T   # could be improved
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 6 ... ")
-  zz <- parms(z)
-  ok <- is.estimation.evaluation(zz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 7 ... ")
-  zz <- roots(z)
-  ok <- is.estimation.evaluation(zz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 8a... ")
-  z <- horizon.forecasts(mod1, data, horizons=c(6,12), discard.before=20)
-  error <- max(abs( c(z$horizon.forecasts[,100,])  -
- c(0.0048425425521641824594, 0.0031489473295282835973, 0.0037730234730729999594,
- 0.0024354234760485438289, 0.0040593859721713481878, 0.0031982930612152113414)))
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 8b... ")
-  z <- horizon.forecasts(l(to.SS(mod1), data),
-                         horizons=c(6,12), discard.before=20)
-  error <- max(abs( c(z$horizon.forecasts[,100,]) -
- c(0.0048425425521641824594, 0.0031489473295282844646, 0.0037730234730729995257,
- 0.0024354234760485446963, 0.0040593859721713499225, 0.0031982930612152122088)))
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse3 test 9 ... ")
-  zzz<-l(mod1,simulate(mod1))
-  zz<-forecast.cov(zzz, discard.before=50, horizons=1:4)
-  ok <- is.forecast.cov(zz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 10... ")
-  ok <- test.equal(zz, forecast.cov(zzz$model, 
-             data=zzz$data, discard.before=50, horizons=1:4))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 11... ")
-  zz <-forecast.cov(mod1,mod2, data=data, discard.before=30, zero=T, trend=T)
-
-  ok <- is.forecast.cov(zz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 12... ")
-  zzz <-forecast.cov(to.SS(mod1),to.SS(mod2), data=data, 
-                 discard.before=30, zero=T, trend=T)
-
-  ok <- test.equal(zz,zzz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 13... ")
-  zz <-out.of.sample.forecast.cov.estimators.wrt.data(data,
-               estimation.methods = list(est.VARX.ar= list(max.lag=2, warn=F), 
-                                         est.VARX.ls= list(max.lag=2)))
-  ok <- is.forecast.cov(zz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 14... ")
-  zz <- forecast.cov.wrt.true(list(mod1,mod2),mod1, 
-               pred.replications=2, Spawn=F, quiet=T, trend=NULL, zero=T)
-  ok <- is.forecast.cov(zz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 15... ")
-  ok <- test.equal(zz, forecast.cov.wrt.true(list(mod1,mod2),mod1, 
-          pred.replications=2, Spawn=.SPAWN, quiet=T, trend=NULL, zero=T,
-          rng=get.RNG(zz)))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 16... ")
-#  zz <- forecast.cov.estimators.wrt.true(mod1, Spawn=.SPAWN, quiet=T, 
-# This seems to cause a problem in Splus when .SPAWN is T although it may
-#  work with default rng (at least it used to) but test.rng is now set
-#  to give same results as in R.
-  zz <- forecast.cov.estimators.wrt.true(mod1, Spawn=F, quiet=T, 
-         estimation.methods=list(est.VARX.ls=NULL, est.VARX.ar=list(warn=F)), 
-         est.replications=2, pred.replications=2, rng=test.rng)
-  ok <- is.forecast.cov(zz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse3 test 17... ")
-  ok <- test.equal(zz, forecast.cov.estimators.wrt.true(mod1, Spawn=F, 
-           estimation.methods=list(est.VARX.ls=NULL,est.VARX.ar=list(warn=F)), 
-           est.replications=2, pred.replications=2, rng=get.RNG(zz)))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (graphics)
-      {ok <- dse3.graphics.tests(verbose=verbose,  pause=F)
-       all.ok <- all.ok & ok 
-       if (verbose) cat("dse3 test 18 (graphics) ... ")
-       if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-      }
-
-  if (synopsis) 
-    {if (verbose) cat("All dse3 tests completed")
-     if (all.ok) cat(" OK\n") 
-     else  cat(" some FAILED! max.error = ", max.error,"\n")
-    }
-
-  invisible(all.ok)
-}
-
-
-
-
-dse3.graphics.tests <- function(verbose=T, synopsis=T,  pause=F)
-{ if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-
-  if (synopsis & !verbose) cat("dse3 graphics tests ...")
-  if (verbose) cat("  dse3 graphics test 1 ...")
-  # If no device is active then write to postscript file 
-  if (!exists.graphics.device())
-      {postscript(file="zot.postscript.test.ps",
-                   width=6,height=6,pointsize=10,
-                   onefile=F, print.it=F, append=F)
-       on.exit((function()
-            {dev.off(); synchronize(1); rm("zot.postscript.test.ps")})())
-      }
-  if(pause) dev.ask(ask=T)
-
-# The seed is not important for most of these tests, but AIC eliminates all
-#  parameters occassionally in some model selection tests.
- test.rng <- list(kind="Wichmann-Hill", normal.kind="Box-Muller", seed=c(979,1479,1542))
-
-  data <- eg1.DSE.data.diff
-  input.data(data) <- NULL
-  output.data(data) <- output.data(data, series=1)  # [,1,drop=F]
-  mod1 <- TSmodel(est.VARX.ls(data,max.lag=3))
-  mod2 <- TSmodel(est.VARX.ar(data,max.lag=3, aic=F, warn=F))
-
-  z <- eval.estimation(mod1, replications=10,  estimation="est.VARX.ls",
-            estimation.args=list(max.lag=3), criterion="TSmodel", quiet=T)
-  distribution(parms(z)) 
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse3 graphics test 2 ...")
-  distribution(roots(z))
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse3 graphics test 3 ...")
-  z <- horizon.forecasts(mod1, data, horizons=c(6,12), discard.before=20)
-  tfplot(z, start.=c(1985,1))
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse3 graphics test 4 ...")
-  zz <-forecast.cov(mod1,mod2, data=data,
-                     discard.before=10, zero=T, trend=T)
-  tfplot(zz)
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse3 graphics test 5 ...")
-  tfplot(zz, select.cov=c(1), select.trend=F)
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse3 graphics test 6 ...")
-
-  data <- eg1.DSE.data.diff
-  input.data(data) <- NULL
-# next causes Error ... all lags eliminated by AIC order selection.
-#  output.data(data) <- output.data(data, series=1)  # [,1,drop=F]
-  zz <-out.of.sample.forecast.cov.estimators.wrt.data(data,
-               estimation.methods = list(est.VARX.ar=list(max.lag=2,warn=F),
-                                         est.VARX.ls=list(max.lag=2))) 
-  tfplot(zz, select.series=c(1))
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse3 graphics test 7 ...")
-  zz <- forecast.cov.wrt.true(list(mod1,mod2),mod1, rng=test.rng,
-               pred.replications=2, Spawn=.SPAWN, trend=NULL, zero=T, quiet=T)
-  tfplot(zz, select.cov=c(1))
-  if (verbose) cat("ok\n")
-
-  if (verbose) cat("  dse3 graphics test 8 ...")
-  zz <- forecast.cov.estimators.wrt.true(mod1, Spawn=.SPAWN,  rng=test.rng,
-         estimation.methods=list(est.VARX.ls=NULL,est.VARX.ls=list(max.lag=2)), 
-#        estimation.methods=list(est.VARX.ls=NULL,est.VARX.ar=NULL), 
-         est.replications=2, pred.replications=2, quiet=T)
-  tfplot(zz, select.cov=c(1))
-  if (verbose) cat("ok\n")
-
-  if (synopsis) 
-    {if (verbose) cat("All dse3 graphics tests completed\n")
-     else cat("completed\n")
-    }
-      
-  invisible(T)
-}
-
-
-############################################################################
-#
-#       end
-#
-############################################################################
-#   2000/04/18 11:15:49
-############################################################################
-
-# Functions in this file are mainly for evaluating the information <<<<<<<<<<<<<
+# Functions in the next group are mainly for evaluating the information <<<<<<<<<<<<<
 #    content of data series for predicting other series.           <<<<<<<<<<<<<
 
 
@@ -3967,7 +3536,7 @@ mine.stepwise <- function(data, essential.data=1,
                c(t(matrix(1:lags.out,  lags.out, p))), sep=""),
          paste(c(paste("in.v", matrix(1:m, m, lags.in), "L",sep="")),
                c(t(matrix(0:lags.in, 1+lags.in,  m))), sep="")) )
-   plot. <- plot. & exists.graphics.device()
+   plot. <- plot. &  dev.cur() != 1 
    if (plot.) par(mfcol=c(2,1))
    M <- stepwise(Past,Present, method=method,f.crit=f.crit, intercept=intercept,
                  plot=plot.)
@@ -4249,114 +3818,6 @@ exclude.forecast.cov <- function(obj, exclude.series=NULL)
      }
    invisible(obj)
   }
-
-############################################################################
-#
-#       procedure for testing functions     <<<<<<<<<<<<<
-#
-############################################################################
-
-
-
-dse4.function.tests <- function(verbose=T, synopsis=T, 
-		fuzz.small=1e-14, fuzz.large=1e-7, graphics=T)
-{max.error <- 0
-  if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-
- if (synopsis & !verbose) cat("All dse4 tests ...") 
- if (verbose) cat("dse4 test 1 ... ")
-  z <- mine.strip(eg1.DSE.data.diff, essential.data=c(1,2),
-                   estimation.methods=list(est.VARX.ls=list(max.lag=3)))
-  ok <- is.forecast.cov.estimators.wrt.data.subsets(z)
-  all.ok <-  ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse4 test 2 ... ")
-  z1 <- z$multi.model[[
-       select.forecast.cov(z, select.cov.best=1, verbose=F)$selection.index[2]]]
-  subdata <- TSdata(output=output.data(eg1.DSE.data.diff, series=1:3))
-  z2 <- estimate.models(subdata, estimation.sample =182, quiet = T, 
-           estimation.methods = list(est.VARX.ls=list(max.lag=3)))
-  output.data(subdata) <- output.data(subdata)[1:182,,drop=F]
-#  input.data(subdata)  <- input.data(subdata) [1:182,,drop=F] not in subdata
-  z3 <- est.VARX.ls(subdata, max.lag=3)
-  ok <-      test.equal(z2$multi.model[[1]],z3$model)
-  ok <- ok & test.equal(z2$multi.model[[1]],  z1)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse4 test 3 ... ")
-#Rbug needs stepwise
-if (is.R()) warning("skipping test 4 (requires stepwise).")
-else
- {
-   all.data <- TSdata(input=eg1.DSE.data.diff$output, 
-                   output=eg1.DSE.data.diff$input )
-   umodel <- build.input.models(all.data, max.lag=2)
-   umodel <- build.diagonal.model(umodel)
-   z  <- TSdata(output=output.data(all.data), 
-                input=input.data(all.data, series=1:2))
-	# previously ??input=input.data(extract(all.data, outputs=1, inputs=1:2)))
-  ymodel <- est.VARX.ls(z, max.lag=3)$model 
-  z <- ymodel$C
-  ymodel$C <- array(0, c(dim(z)[1:2], output.dimension(umodel))) 
-  ymodel$C[1:(dim(z)[1]), 1:(dim(z)[2]), 1:(dim(z)[3])] <- z 
-  sim.data <- gen.mine.data(umodel, ymodel,
-    rng= list(kind="default",seed=c(21,46,16,12, 51, 2, 31, 8, 42, 60, 7, 3)) )
-  m.step <- mine.stepwise(sim.data, method="backward")
-  error <- max(abs(m.step$stepwise$rss[c(1,27)] -
-               c(47.537312899054931847, 4088283.2706551752053)))
-  ok <- fuzz.large > error
-  if (!ok) max.error <- max(error, max.error)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
- }
-
-  if (graphics)
-   {ok <- dse4.graphics.tests(verbose=verbose, pause=F)
-    all.ok <- all.ok & ok 
-   }
-
-  if (synopsis) 
-    {if (verbose) cat("All dse4 tests completed")
-     if (all.ok) cat(" OK\n")
-     else    
-       {cat(", some FAILED!")
-        if(max.error > fuzz.small)
-            cat(" max. error magnitude= ", max.error,")")
-        cat("\n")
-       }
-    }
-  invisible(all.ok)
-}
-
-dse4.graphics.tests <- function(verbose=T, synopsis=T,  pause=F)
-{ if (synopsis & !verbose) cat("dse4 graphics tests ...")
-  if (verbose) cat("  dse4 graphics test 1 ...")
-
-  # If no device is active then write to postscript file 
-  if (!exists.graphics.device())
-      {postscript(file="zot.postscript.test.ps",width=6,height=6,pointsize=10,
-                   onefile=F, print.it=F, append=F)
-       on.exit((function()
-             {dev.off(); synchronize(1); rm("zot.postscript.test.ps")})())
-      }
-  if(pause) dev.ask(ask=T)
-
-  z <- mine.strip(eg1.DSE.data.diff, essential.data=c(1,2),
-                   estimation.methods=list(est.VARX.ls=list(max.lag=3)))
-  zz <- tfplot(z)
-
-  if (verbose) cat("ok\n")
-
-  if (synopsis) 
-    {if (verbose) cat("All dse4 graphics tests completed\n")
-     else cat("completed\n")
-    }
-      
-  invisible(T)
-}
 
 
 ############################################################################

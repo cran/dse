@@ -1,4 +1,3 @@
-#   20%E% %U% 
 
 example.VAR.SVD <- function(d,d.all, d.all.raw)
  {V.1 <- est.VARX.ar(d) # estimates a VAR model using the truncated sample.
@@ -46,7 +45,7 @@ example.VAR.SVD <- function(d,d.all, d.all.raw)
   M12.shift4 <- est.SS.Mittnik(d,max.lag=4, n=15)
   M12.shift4 <- reduction.Mittnik(M12.shift4, data=d, criterion="taic")  
 
-  if(exists.graphics.device()) # eg.-OpenLook() or Suntools() 
+  if( dev.cur() != 1 ) # eg.-OpenLook() or Suntools() 
      example.show.ytoy.cpi (o.V.1,d.all.raw,start=240)
   else  cat("Exhibit 8. graphic requires graphic device. \n")
   invisible()

@@ -1,7 +1,6 @@
-C     2000/03/21 14:42:07 
 C           Copyright 1993, 1994, 1995, 1996  Bank of Canada.
 C           Copyright 1996, 1997  Paul Gilbert.
-C           Copyright 1998  Bank of Canada.
+C           Copyright 1998, 2001  Bank of Canada.
 
 C  Any person using this software has the right to use,
 C        reproduce and distribute it.
@@ -107,7 +106,7 @@ C
 C  Simulate a state space model model.
 C  See s code simulate.ss for details 
       INTEGER M,N,P, NSMPL
-      LOGICAL GAIN
+      INTEGER GAIN
       DOUBLE PRECISION Z(NSMPL,N)
       DOUBLE PRECISION Y(NSMPL,P),U(NSMPL,M) 
       DOUBLE PRECISION W(NSMPL,P),E(NSMPL,N) 
@@ -127,7 +126,7 @@ C
             DO 2003 K=1,M
 2003          Z(IT,I)=Z(IT,I)+G(I,K)*U(IT,K)
       ENDIF
-      IF (GAIN) THEN
+      IF (GAIN .EQ. 1) THEN
         DO 2004 I=1,N
           DO 2004 K=1,P
 2004        Z(IT,I)=Z(IT,I)+FK(I,K)*W(IT-1,K)
@@ -141,7 +140,7 @@ C
          Y(IT,I)=0.0
          DO 2010 J=1,N
 2010        Y(IT,I)= Y(IT,I) + H(I,J)*Z(IT,J)
-      IF (GAIN) THEN
+      IF (GAIN .EQ. 1) THEN
          DO 2014 I=1,P
 2014        Y(IT,I)=Y(IT,I)+W(IT,I)
       ELSE
@@ -345,8 +344,8 @@ C      DOUBLE PRECISION STATE(NPRED,N),TRKERR(NPRED,N,N)
       DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
       DOUBLE PRECISION  Z0(N), P0(N,N)
 
-      LOGICAL LSTATE, LTKERR
-      LOGICAL GAIN
+      INTEGER LSTATE, LTKERR
+      INTEGER GAIN
 C
 C..bug in S: passing characters is unreliable
 C   use integer for AP and AN...
@@ -355,8 +354,8 @@ C  state and trkerr are not used but must be passed to KF
 C 
       INTEGER I,J
 C
-      LSTATE = .FALSE.
-      LTKERR = .FALSE.
+      LSTATE = 0
+      LTKERR = 0
 
       DO 1 I=1,N
             DO 1 J=1,N
@@ -444,19 +443,19 @@ C  The state and tracking error are not calculate.
       DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
       DOUBLE PRECISION  Z0(N), P0(N,N)
 
-      LOGICAL GAIN
+      INTEGER GAIN
 
 C  state and trkerr are not used but must be passed to KF
 C 
-      LOGICAL LSTATE, LTKERR
+      INTEGER LSTATE, LTKERR
       INTEGER HO,J, IT, MHORIZ
       INTEGER HPERR
       DOUBLE PRECISION PRDERR(1,1), ERRWT(1)
       DOUBLE PRECISION STATE(1,1),TRKERR(1,1,1)
 
-      LSTATE = .FALSE.
-      LTKERR = .FALSE.
-      HPERR = 0
+      LSTATE = 0
+      LTKERR = 0
+      HPERR  = 0
       MHORIZ = HORIZ(1)
       DO 1 I=2, NHO
  1       MHORIZ=MIN(MHORIZ,HORIZ(I))
@@ -498,11 +497,11 @@ C  The state and tracking error are not calculate.
       DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
       DOUBLE PRECISION  Z0(N), P0(N,N)
 
-      LOGICAL GAIN
+      INTEGER GAIN
 
 C  state and trkerr are not used but must be passed to KF
 C 
-      LOGICAL LSTATE, LTKERR
+      INTEGER LSTATE, LTKERR
       INTEGER I,J, IT, HI
       INTEGER HPERR
       DOUBLE PRECISION PRDERR(1,1), ERRWT(1), MF
@@ -512,9 +511,9 @@ C
 C        CALL DBPR('NPRED ',6, NPRED,1)
 C        CALL DBPR('HORIZ ',6, HORIZ(1),1)
 C        CALL DBPR('DSCARD',7, DSCARD,1)
-      LSTATE = .FALSE.
-      LTKERR = .FALSE.
-      HPERR = 0
+      LSTATE = 0
+      LTKERR = 0
+      HPERR  = 0
       DO 1 I=1,NH
 1        NT(I) = 0
       DO 2 K=1,NH
@@ -609,14 +608,14 @@ C
       DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
       DOUBLE PRECISION F(N,N),G(N,M),H(P,N),R(P,P),Q(N,N),FK(N,P)
 
-      LOGICAL LSTATE, LTKERR, GAIN
+      INTEGER LSTATE, LTKERR, GAIN
 C   
 C
       DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),DETOM
       DOUBLE PRECISION QQ(IS,IS),RR(IS,IS)
       DOUBLE PRECISION Z(IS), ZZ(IS),WW(IS)
       DOUBLE PRECISION HW
-      LOGICAL LPERR
+      INTEGER LPERR
 C
 C      CALL DBPR('M     ',6, M,1)
 C      CALL DBPR('N     ',6, N,1)
@@ -625,7 +624,7 @@ C      CALL DBPR('NSMPL  ',6, NSMPL,1)
 C      CALL DBPR('NPRED  ',6, NPRED,1)
 C      CALL DBPR('NACC  ',6, NACC,1)
 C      CALL DBPRDB('R  ',3,R,9)
-C      IF ( GAIN) THEN 
+C      IF (GAIN.EQ.1) THEN 
 C         CALL DBPR('GAIN is T',9, 1,0)
 C      ELSE
 C         CALL DBPR('GAIN is F',9, 1,0)
@@ -641,10 +640,10 @@ C      CALL DBPR('HPERR ',6, HPERR,1)
          CALL ERROR('ERROR: output dimensions cannot exceed ',48, IS,1)
          RETURN
       ENDIF
-      LPERR= .FALSE.
+      LPERR= 0
       IF (HPERR.GT.0) THEN
          DO 500 I=1,HPERR
-           IF (ERRWT(I).GT.0.0)  LPERR=.TRUE.
+           IF (ERRWT(I).GT.0.0)  LPERR= 1
  500     CONTINUE    
       ENDIF
 C
@@ -655,7 +654,7 @@ C     initial state.
       DO 210 I=1,N
  210         ZZ(I)=Z0(I) 
 C
-      IF (.NOT. GAIN ) THEN
+      IF (GAIN .NE. 1) THEN
 C        initial tracking error.
          DO 220 I=1,N
             DO 220 J=1,N
@@ -679,7 +678,7 @@ C
 C    Start Time loop
 C
       DO 1000 IT=NSTART,NSMPL
-      IF (.NOT. GAIN) THEN  
+      IF (GAIN .NE. 1) THEN  
 C
 C                                      
 C   Kalman gain  FK = F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
@@ -749,7 +748,7 @@ C     force symetry to avoid numerical round off problems
 C      IF (IT.EQ.1) THEN
 C         CALL DBPRDB('PP  ',4,PP,IS*IS)
 C      ENDIF
-      IF(LTKERR) THEN
+      IF(LTKERR .EQ. 1) THEN
          DO 21 I=1,N
             DO 21 J=1,N
   21           TRKERR(IT,I,J)=PP(I,J)
@@ -772,7 +771,7 @@ C
   23        Z(I)=Z(I)+G(I,K)*U(IT,K)
       DO 24 I=1,N
  24         ZZ(I)=Z(I)
-      IF (LSTATE) THEN
+      IF (LSTATE .EQ. 1) THEN
          DO 25 I=1,N
  25         STATE(IT,I)=Z(I)
       ENDIF
@@ -793,7 +792,7 @@ C   EY stores history of predition error WW to reconstruct predictions
 C      CALL DBPRDB('WW ',3,WW,P)
 
 C   Return weighted prediction error
-      IF (LPERR) THEN
+      IF (LPERR .EQ. 1) THEN
          DO 401 I=1,P
  401          PRDERR(IT,I)= ERRWT(1)*WW(I)**2
          IF (HPERR.GT.1) THEN
@@ -860,7 +859,7 @@ C   use prediction error from last sample point (i.e. for first prediction)
             DO 2004 K=1,P
 2004           Z(I)=Z(I)+FK(I,K)*WW(K)
       ENDIF
-      IF (LSTATE) THEN
+      IF (LSTATE .EQ. 1) THEN
          DO 2005 I=1,N
 2005        STATE(IT,I)=Z(I)
       ENDIF
@@ -1196,7 +1195,7 @@ C   IS should be max(P,M)
       DOUBLE PRECISION AA(IS,IS),BB(IS,IS),WW(IS)
 C   
 C
-      LOGICAL LPERR
+      INTEGER LPERR
       DOUBLE PRECISION DETOM
 C
 C       CALL DBPRDB('inARMA ',7, 1,1)
@@ -1213,10 +1212,10 @@ C       CALL DBPRDB('B     ',6, B,(IB*P*P))
 C       CALL DBPRDB('C     ',6, C,(IC*P*M))
 
 
-      LPERR= .FALSE.
+      LPERR= 0
       IF (HPERR.GT.0) THEN
          DO 500 I=1,HPERR
-           IF (ERRWT(I).GT.0.0)  LPERR=.TRUE.
+           IF (ERRWT(I).GT.0.0)  LPERR= 1
  500     CONTINUE    
       ENDIF
 C
@@ -1309,7 +1308,7 @@ C   EY stores history of predition error WW to reconstruct predictions
 10         EY(IT,I)=WW(I)
 
 C   Return weighted prediction error
-      IF (LPERR) THEN
+      IF (LPERR .EQ. 1) THEN
          DO 410 I=1,P
  410          PRDERR(IT,I)= ERRWT(1)*WW(I)**2
          IF (HPERR.GT.1) THEN
@@ -1591,7 +1590,7 @@ C
      + M,P,NSMPL,NACC,  U,Y , 
      + AP,IP,JP,ICT,CONST,AN,IN,JN,
      + LP,LN,IA,IB,IC,A,B,C,
-     + NS,Z0,P0,F,G,H,FK,R,Q,GAIN)
+     + NS,Z0,P0,F,G,H,FK,Q,R,GAIN)
 C 
 C  Z0 is TREND for ARMA models.
 C
@@ -1647,7 +1646,7 @@ C      DOUBLE PRECISION Z(NSMPL,NS),TRKERR(NSMPL,NS,NS)
       DOUBLE PRECISION F(NS,NS),G(NS,M),H(P,NS)
       DOUBLE PRECISION FK(NS,P),Q(NS,NS),R(P,P)
 
-      LOGICAL GAIN         
+      INTEGER GAIN         
 C
 C..bug in S: passing characters is unreliable
 C   use integer for AP and AN...

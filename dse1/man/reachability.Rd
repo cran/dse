@@ -20,7 +20,6 @@ If all singular values are significantly different from zero the
 model is controllable.
 }
 \seealso{
-
 \code{\link{observability}},
 \code{\link{stability}}
 \code{\link{roots}}

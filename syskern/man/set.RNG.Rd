@@ -37,9 +37,7 @@
 \examples{
 set.RNG(kind="Wichmann-Hill", seed=c(979,1479,1542), normal.kind="Box-Muller")
 rnorm(10)
-random.number.test()
 }
 \keyword{syskern}
-\keyword{OS}
 \keyword{S/R}
 

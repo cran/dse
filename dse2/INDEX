@@ -5,9 +5,6 @@ distribution             Plot distribution of estimates
 distribution.monte.carlo.simulations
                          Generate distribution plots of Monte Carlo
                          simulations
-dse2.function.tests      Function Tests for part of DSE Bundle
-dse3.function.tests      Function Tests for Part of DSE Bundle
-dse4.function.tests      Test Functions of Part of DSE Package
 est.SS.Mittnik           Estimate a State Space Model
 est.black.box            Estimate a TSmodel
 est.black.box1           Estimate a TSmodel
@@ -35,7 +32,6 @@ forecast.cov.wrt.true    Compare Forecasts to True Model Output
 forecasts                Extract Forecasts
 gen.mine.data            Generate Data
 generate.model.SS        Randomly generate a state space model
-guide.example.tests      Users Guide Tests
 horizon.forecasts        Calculate forecasts at specified horizons
 input.series.names.forecast
                          TS Input and Output Specific Methods

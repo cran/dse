@@ -10,8 +10,8 @@ not have to correspond.
 \usage{
 	splice(m1,m2)}
 \arguments{
-\item{obj1}{A time series object.}
-\item{obj2}{A time series object.}
+	\item{obj1}{A time series object.}
+	\item{obj2}{A time series object.}
 }
 \value{A time series object}
 \details{

@@ -7,10 +7,9 @@
 \usage{
 	trim.na(obj, start.=T, end.=T)}
 \arguments{
-\item{obj}
-{A time series matrix or an object of class TSdata.}
-\item{ start.}{If start.=F then beginning NAs are not trimmed.}
-\item{ end.} {If end.=F   then ending NAs are not trimmed.}
+	\item{obj}{A time series matrix or an object of class TSdata.}
+	\item{start.}{If start.=F then beginning NAs are not trimmed.}
+	\item{end.} {If end.=F   then ending NAs are not trimmed.}
 }
 \value{A time series object which is windowed to the subset of 
  data which is not NAs (usually the available data).}

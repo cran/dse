@@ -62,3 +62,4 @@ z <-  bft(eg1.DSE.data.diff)
 \keyword{DSE}
 \keyword{ts}
 
+

@@ -9,11 +9,11 @@
 	tfwindow(x, start.=NULL, end.=NULL, tf=NULL, warn=T)}
 
 \arguments{
-\item{x}{A time series object.}
-\item{start.}{A start date of a format compatible with the time series}
-\item{end.}   {An end date of a format compatible with the time series}
-\item{tf}   {A tframe or tframed object}
-\item{warn}{A logical indicating if warning should be produced}
+	\item{x}{A time series object.}
+	\item{start.}{A start date of a format compatible with the time series}
+	\item{end.}{An end date of a format compatible with the time series}
+	\item{tf}{A tframe or tframed object}
+	\item{warn}{A logical indicating if warning should be produced}
 }
 \value{
 A time series object similar to x, but typically spanning a shorter time period.

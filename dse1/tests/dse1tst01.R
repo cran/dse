@@ -1,0 +1,79 @@
+#####################
+# All of the checks in this tests subdirectory were previously run with the
+# following commented code.
+
+# require("mva"); require("ts"); require("dse1") # adds dse, tframe, and syskern
+# #x11()
+#   postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
+#              # width=6, height=8, pointsize=10,
+#    system.info()
+#    version.dse()
+#    random.number.test() 
+#    dse1.function.tests(verbose=T)    
+#    example.verify.data(eg1.DSE.data.diff, fuzz.small=1e-12, verbose=T)  
+# # The following gave several..NOT CORRECT in R. It needs est.VARX.ar (not in earlier versions of R).
+# # example.tests(eg1.DSE.data.diff,fuzz.small=1e-12, verbose=T)
+
+#####################
+
+ require("dse1")
+ Sys.info()
+ version.dse()
+ if      (is.R()) data("eg1.DSE.data.diff", package="dse1") else 
+ if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+
+ if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
+ 
+fuzz.small <- 1e-14
+fuzz.large <- 1e-10
+digits <- 18
+all.ok <- T  
+
+
+test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Muller")
+
+  random.number.test()
+
+
+ cat("dse1 test 0 ...\n")
+  # check "window"
+  z <- tfwindow(output.data(eg1.DSE.data.diff), start=c(1980,1), end=c(1980,1))
+  ok <- all( c (c(1,3)==dim(z), c(1980,1)==start(z), c(1980,1)==end(z)))
+  z <- tfwindow(output.data(eg1.DSE.data.diff), start=c(1980,1), end=c(1982,12))
+  ok <- ok & all( c (c(36,3)==dim(z), c(1980,1)==start(z), c(1982,12)==end(z)))
+  all.ok <- ok
+
+
+ cat("dse1 test 1 ...\n")
+  z <- est.VARX.ls(eg1.DSE.data.diff)
+#  z <-eg1.DSE.data.diff
+#  lsfit produces warning messages in the following
+#  z$output[100,] <-NA
+#  z <- est.VARX.ls(z, warn=F)
+  VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=F, warn=F)
+  SSmodel  <- to.SS(VARmodel)
+  ok <- fuzz.large > abs(VARmodel$estimates$like[1] -
+               l(SSmodel, eg1.DSE.data.diff, warn=F)$estimates$like[1])
+  ok <- ok & is.TSestModel(VARmodel) & is.TSmodel(VARmodel$model)
+  ok <- ok & (input.dimension(VARmodel) == input.dimension(SSmodel))
+  ok <- ok & (input.dimension(VARmodel) == input.dimension(VARmodel$data))
+  ok <- ok & (output.dimension(VARmodel) == output.dimension(SSmodel))
+  ok <- ok & (output.dimension(VARmodel) == output.dimension(VARmodel$data))
+  VARmodelB <- TSmodel(VARmodel)
+  B <- t(chol(VARmodel$estimates$cov))
+  VARmodelB$B <- array(B, c(1,dim(B)))  # has B != I
+  VARmodelB <- set.parameters(VARmodelB)
+  VARmodelB <- l(VARmodelB,VARmodel$data, warn=F)
+
+   good <- VARmodel$estimates$pred
+   tst  <- VARmodelB$estimates$pred
+   error <- max(abs(good-tst))
+   cat("max. error ", max(error))
+
+   if (any(is.na(error)) || any(is.nan(error)) || fuzz.large < error) 
+     {print.test.value(c(tst), digits=18)
+      all.ok <- F  
+     }
+
+  if (! all.ok) stop("some tests FAILED")
+

@@ -1,21 +1,13 @@
-\name{global.assign}
-\alias{global.assign}
-\alias{exists.graphics.device}
-\alias{open.graphics.device}
-\alias{dev.ask}
-\alias{list.add<-}
+\name{syskern.rm}
+\alias{syskern.rm}
+\alias{file.date.info}
 \alias{date.parsed}
 \alias{synchronize}
-\alias{syskern.rm}
 
 \title{Utilities to handle small S/R differences}
 \description{Utilities to handle small S/R differences.}
 
 \usage{
-	global.assign()
-	exists.graphics.device()
-	open.graphics.device()
-	dev.ask()
 	date.parsed()
 	synchronize()
 	syskern.rm()  # unlink with default recursive=T
@@ -30,9 +22,12 @@
 \seealso{
 	\code{\link{set.RNG}}
 	\code{\link{is.S}}
+	\code{\link{file.copy}}
+	\code{\link{Sys.info}}
 }
 \examples{date.parsed() }
 \keyword{syskern}
 \keyword{OS}
 \keyword{S/R}
+
 

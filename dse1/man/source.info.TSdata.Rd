@@ -17,7 +17,7 @@
 	identifiers(x)
 }
 
-\seealso{ \code{\link{source.info}} }
+\seealso{ \code{\link[dsepadi]{source.info}} }
 
 \keyword{DSE}
 \keyword{ts}

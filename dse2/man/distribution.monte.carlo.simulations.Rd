@@ -21,7 +21,7 @@
 \value{None}
 \details{
 Kernel estimates of the densities (series by series, not joint densities) are estimated using ksmooth (if available) or density (if available) to produces density plots.
-Use dev.ask(T) to pause plotting between pages.
+Output graphics can be paused between pages by setting par(ask=T).
 }
 \seealso{
 \code{\link{tfplot.monte.carlo.simulations}}

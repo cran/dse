@@ -1,6 +1,5 @@
 
-# For installation instructions see the file read.me or the brief user's
-#    guide (postscipt file guide.ps).
+version.dse <- function() cat(dse.version.information, "\n")
 
 ##############################################################################
 
@@ -47,7 +46,7 @@
       if(!ok) warning("This package requires the syskern and tframe packages.")
 
 
-      global.assign("DSE.HOME", DSE.HOME)            
+      assign("DSE.HOME",DSE.HOME, envir=.GlobalEnv)            
 #      if (pmatch("package:dse1", search()) >4)
 #         warning("The DSE library may not work properly if it is not near the beginning of the search list.")
 #     source(paste(DSE.HOME,"/data/egJofF.1dec93.data.R", sep=""))
@@ -65,7 +64,7 @@
 
      } else
    if (is.S())
-     {global.assign("DSE.HOME", DSE.HOME)
+     {assign("DSE.HOME",DSE.HOME, where = 1)
       if (pmatch(DSE.HOME,search()) >2)
          warning("The DSE library may not work properly if it is not near the beginning of the search list. Use library(..., first=T)")
      }
@@ -89,13 +88,11 @@ dse.win.for.tab <- c("simss" ,"smooth" ,"kfp" ,"kfprj" ,"kfepr" ,"kf" ,"simarma"
           ,"gend","cstat_f","efcurve_f","rlcurve_f","wep")
 
 load.DSE.fortran <- function(from=paste(DSE.HOME,"/lib", sep=""), large=F)
-{#   if(is.MSwindows()) from <- paste(from, "/_Data", sep="")
- #   else               from <- paste(from, "/.Data", sep="")
- if ( (0 != nchar(from)) &
+{if ( (0 != nchar(from)) &
      "/" != substring(from, first=nchar(from))) from <- paste(from,"/", sep="")
  if (is.R()) r <- library.dynam("dse1")  # does not use from
  else if (is.S())
-    {if(is.MSwindows()) 
+    {if("windows" == Platform()$OS.type)
           {r <- dll.load(paste(from,"dsefor.dll", sep=""),dse.win.for.tab)
            if (1!=r) warning("dll load was NOT successful.")
           }
@@ -112,41 +109,14 @@ help.start.DSE <- function(browser = "netscape")
    {#browser = "netscape -mono"
     #browser = "mosaic"
     #redirecting standard input and output is necessary in order to return to S 
-    system.call(paste(browser, " ", DSE.HOME,"/help/dsehome.htm </dev/null >/dev/null &", sep=""))
+    if(is.R()) help.start() else if ("unix" == Platform()$OS.type())
+    system(paste(browser, " ", DSE.HOME,"/help/dsehome.htm </dev/null >/dev/null &", sep=""))
     invisible()
    }
 
 ##############################################################################
 
 #  end of section containing installation dependent strings.
-
-##############################################################################
-
-##############################################################################
-
-#  section containing documentation "stubs" (specific methods 
-#    for generic functions) and utility functions
-#       so that R CMD build does not complain.
-
-##############################################################################
-
-
-
-
-
-
-
-
-
-
-       
-
-
-##############################################################################
-
-#  end of section containing documentation "stubs" (specific methods 
-#    for generic functions) and utility functions
-#       so that R CMD build does not complain.
 
 ##############################################################################
 
@@ -167,7 +137,39 @@ if (is.S())
     dsescan <- function(file="",quiet=T, ...){scan(file=file, ...)}
   }
 
-
+#   next is no longer necessary
+# if (is.R()) {
+#    "list.add<-" <- function(x, replace, value)
+#      {# replace or add elements to a list. 
+#       if (is.numeric(replace))
+# 	  {# x<- do.call("default.[[<-", list(x,replace,value))   # use default
+# 	   x[[replace]] <- value
+# 	   return(x)
+# 	  }
+# 	if (is.null(value))  value <- list(NULL)
+# 	if (!is.list(value)) value <- list(value)
+# 	if (1 == length(value))
+# 	 {for (i in seq(length(replace)))
+# 	    x<- do.call("$<-", list(x,replace[i],value[[1]]))
+# 	 }
+# 	else
+# 	  {if(length(value) != length(replace) )
+# 	   stop("number of replacement values != number of elements to replace")
+# 	   for (i in seq(length(replace)))
+# 	      x<- do.call("$<-", list(x,replace[i],value[[i]]))
+# 	  }
+# 	x
+#      }
+#    }
+#
+# if (is.S()) {
+#     "list.add<-" <- function(x, replace, value)
+# 	 {# replace or add elements to a list.
+# 	  x[replace] <- value
+# 	  # x[[replace]] <- value  would be more logical but doesn't work
+#        x
+#       }
+#   }
 ##############################################################################
 
 ##############################################################################
@@ -213,16 +215,12 @@ if (is.S())
 
 ##############################################################################
 
-
-
-version.dse <- function() cat(dse.version.information, "\n")
-
 ##############################################################################
 
-# The code in files dse1a.s, dse1b.s dse1c.s and dse1d.s was divided roughly into 
+# The code was divided roughly into 
 #   the groups listed below, but the organization has changed a little bit.
 #   The actual grouping can be seen by grep ing on the string '<<<<<<' eg:
-#    grep "<<<<<<" dse1*.s
+#    grep "<<<<<<" dse1.R
 
 #    Functions which work on a model (i.e. if a model with data is allowed as
 #             an arguement then the data is ignored):
@@ -1100,101 +1098,6 @@ fix.constants <- function(model, fuzz=1e-5, constants=NULL)
 }
 
 
-to.parsim <- function(model, ...) {UseMethod("to.parsim") }
-to.parsim.TSestModel <- function(model, ...)
-   {l(to.parsim(TSmodel(model), ...), TSdata(model))}
-
-
-to.parsim.TSmodel <- function(model, minf = nlmin, small=1e-5, equiv=F,
-                   max.iter=100,max.fcal=200)
-{ # find a model with fewer non-constant matrix entries.. not working well
-# Find a parsimonious almost equivalent ARMA model by finding an invertible
-# pxp matrix which pre-multiplies A,B, and C to make more entries zero or one
-# (1 & 0 are treated as constants not as parameters).
-# Numerically it is necessary to set very small parameters to 0 (.. 1.0). 
-# The judgement about small is crude.
-# The idea in the objective func is to highly penalize small deviations from
-# 1 or zero, but not penalize large deviations much more.
-# If equiv is TRUE then the resulting model is forced to have the same noise cov
-# determinant (up to numerical accuracy, which can be bad if the system is
-#  degenerate and det(cov) is very small), otherwise,  parameters may be further 
-#  eliminated but the cov of the residual and
-# the resulting likelihood (|cov| component) will change.
-# This may actually be a linear problem? Using least squares would be faster but 
-#  requires some more work!
-  warning("This function does not work yet.")
-  if ( !is.ARMA(model)) stop("parsim still only attempted for ARMA models")
-	A <- model$A
- 	B <- model$B
-	C <- model$C
-	global.assign("A",A,frame=1)
-	global.assign("B",B,frame=1)
-	global.assign("C",C,frame=1)
-	global.assign("equiv",equiv,frame=1)
-	funcAC <- function(para)
-	{
-		zA <- A	
-		zB <- B 
-		zC <- C
-		p <- dim(zA)[2]
-		g <- matrix(para, p, p)
-		g[p, p] <- p - sum(diag(g)[1:(p - 1)])	# force trace =p
-		for(l in 1:dim(zA)[1]) zA[l,  ,  ] <- g %*% A[l,  ,  ]	
-#		for(l in 1:dim(zB)[1]) zB[l,  ,  ] <- g %*% B[l,  ,  ]
-		for(l in 1:dim(zC)[1]) zC[l,  ,  ] <- g %*% C[l,  ,  ]
-		error <- c(zA, zC)
-#		sum(log(1e-100+pmin(error^2, (error-1)^2))) # may not be differentiable.
-#		sum(log(1e-100+error^2))
-		sum(error^2)
-	}
-	funcB <- function(para)
-	{
-		zB <-B # opt separately by post mult.(affects only cov of Om)
-		p <- dim(zB)[2]
-		g <- matrix(para, p, p)
-		g[p, p] <- p - sum(diag(g)[1:(p - 1)])	 # force trace =p
-		if (equiv) g <-g/(prod(svd(g)$d)^(1/p)) # force det =1
-		for(l in 1:dim(zB)[1]) zB[l,  ,  ] <- B[l,  ,  ] %*% g
-		error <- c(zB)
-#		sum(log(1e-100+pmin(error^2, (error-1)^2)))
-#		sum(log(1e-100+error^2))
-		sum(error^2)
-	}
-	p <- dim(A)[2]               # first A and C
-	para <- c(diag(1, p))
-	para <- para[1:(p^2 - 1)]
-	para <- minf(funcAC, para, max.iter=max.iter, max.fcal=max.fcal)
-	print(para[[2]])
-	print(para[[3]])
-	g <- matrix(para[[1]], p, p)
-	g[p, p] <- p - sum(diag(g)[1:(p - 1)])
-	for(l in 1:dim(A)[1]) A[l,  ,  ] <- g %*% A[l, ,]	
-	for(l in 1:dim(B)[1]) B[l,  ,  ] <- g %*% B[l, ,]
-	for(l in 1:dim(C)[1]) C[l,  ,  ] <- g %*% C[l, ,]
-	A[abs(A) < small] <- 0.0
-	B[abs(B) < small] <- 0.0
-	C[abs(C) < small] <- 0.0
-	A[abs(A-1) < small] <- 1.0
-	B[abs(B-1) < small] <- 1.0
-	C[abs(C-1) < small] <- 1.0
-	para <- c(diag(1, p))           # now B
-        para <- para[1:(p^2 - 1)]
-	para <- minf(funcB, para, max.iter=max.iter, max.fcal=max.fcal)
-	print(para[[2]])
-	print(para[[3]])
-	g <- matrix(para[[1]], p, p)
-	g[p, p] <- p - sum(diag(g)[1:(p - 1)])
-        if (equiv) g <-g/prod(svd(g)$d) # force det =1
-	for(l in 1:dim(B)[1]) B[l,  ,  ] <- B[l, ,] %*% g
-	B[abs(B) < small] <- 0.0
-        B[abs(B-1) < small] <- 1.0
-        model$A <- A
-	model$B <- B
-	model$C <- C
-	set.parameters(model)
-}
-
-
 to.SS.innov <- function(model)
 { # convert to an equivalent state space innovations representation
 # This assumes that the noise processes in the arbitrary SS representation are 
@@ -1308,7 +1211,7 @@ to.ARMA.TSestModel <- function(model, ...)
 
 to.ARMA.ARMA <- function(model) {model}
 
-to.ARMA.SS <- function(model)
+to.ARMA.SS <- function(model, fuzz=1e-10)
 { # convert to an ARMA representation by Cayley Hamilton 
   #  (not very parsimonious)
   #ref. Aoki and Havenner, Econometric Reviews v.10,No.1, 1991, p13.
@@ -1363,8 +1266,8 @@ to.ARMA.SS <- function(model)
          }
        if(any(is.na(C))) stop("error in calculation of C in to.ARMA.")
       }
- ARMA(A=A,B=B,C=C, input.names =  input.series.names(model),
-                  output.names = output.series.names(model))
+ fix.constants(ARMA(A=A,B=B,C=C, input.names =  input.series.names(model),
+                  output.names = output.series.names(model)), fuzz=fuzz)
 }
 
 
@@ -2154,7 +2057,8 @@ set.parameters.TSmodel.SS <- function(model) {
        plist <- locateSS(model$R,model$const.R,"R",p,p,plist)
       }
 
-    list.add(model, names(plist) ) <- plist
+#    list.add(model, names(plist) ) <- plist
+    model[ names(plist) ] <- plist
     model
 } #end set.parameters.SS
 
@@ -2218,7 +2122,8 @@ set.parameters.TSmodel.ARMA <- function  (model) {
        if(!is.null(model$TREND)) 
             plist <- locateARMA(model$TREND,"t",p,m,cc,plist)
 
-       list.add(model, names(plist) ) <- plist
+#       list.add(model, names(plist) ) <- plist
+       model[ names(plist) ] <- plist
        model
 } #end set.parameters.ARMA
 
@@ -2356,12 +2261,6 @@ set.arrays.ARMA <- function(model, parms=NULL) {
       else              model$TREND <-TREND
       model 
 } #end set.arrays.ARMA
-
-#######################################################################
-
-#                    end
-
-#######################################################################
 
 
 ############################################################
@@ -2667,7 +2566,7 @@ else set.ts <-  F
                          as.double(K), 
                          as.double(Q),      
                          as.double(R),    
-                         as.logical(is.innov.SS(model)))[c("y","state")]
+                         as.integer(is.innov.SS(model)), DUP=TRUE)[c("y","state")]
     y <- r$y
     state <- r$state
     if (m==0) input <- NULL
@@ -2774,23 +2673,8 @@ if (is.null(sampleT)) sampleT<-noise$sampleT
     if (is.null(TREND)) TREND<- rep(0,p)
 #    yo<- list(y=y, y0,m,p, a, b, cc, sampleT,input,input0,w,w0,A,B, C,TREND)
     storage.mode(y)     <- "double"
-#    prior.args<- list(y=y, 
-#                         as.double(y0),
-#                         as.integer(m),
-#                         as.integer(p), 
-#                         as.integer(a), 
-#                         as.integer(b), 
-#                         as.integer(cc), 
-#                         as.integer(sampleT),  
-#                         as.double(input[1:sampleT,]),
-#                         as.double(input0),
-#                         as.double(noise$w),
-#                         as.double(noise$w0),
-#                         as.double(A),
-#                         as.double(B),   
-#                         as.double(C),
-#                         as.double(TREND))  # [["y"]]
-    post.args <-.Fortran("simrma",y=y, 
+
+    y <-.Fortran("simrma",y=y, 
                          as.double(y0),
                          as.integer(m),
                          as.integer(p), 
@@ -2805,10 +2689,8 @@ if (is.null(sampleT)) sampleT<-noise$sampleT
                          as.double(A),
                          as.double(B),   
                          as.double(C),
-                         as.double(TREND))  # [["y"]]
+                         as.double(TREND), DUP=TRUE) [["y"]]
 
-#    if (any(is.na(y$y))) browser()
-    y <- post.args[["y"]]
     if (m==0) 
       {input  <- NULL
        input0 <- NULL
@@ -2941,7 +2823,7 @@ sum.sqerror <- function(parms, model=NULL, data=NULL, error.weights=NULL)
 
 l <- function(obj1, obj2, ...)UseMethod("l")
 l.TSdata <- function(data, model,...) {l(model, data, ...) }
-l.TSestModel <- function(model, data,...) {l(model$model,data, ...)}
+l.TSestModel <- function(model, data,...) {l(TSmodel(model),data, ...)}
 
 
 l.ARMA <- function(model, dat, sampleT=NULL, predictT=NULL,result=NULL,
@@ -3033,8 +2915,8 @@ if (compiled)
                          as.integer(is),  # scratch array dim
                          as.double(matrix(0,is,is)),  # scratch array
                          as.double(matrix(0,is,is)),  # scratch array
-                         as.double(rep(0,is))         # scratch array
-                  ) [c("pred", "weighted.sqerror")]
+                         as.double(rep(0,is)),         # scratch array
+                         DUP=TRUE) [c("pred", "weighted.sqerror")]
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
   }
 else   # start S version
@@ -3260,9 +3142,9 @@ if (compiled)
                   as.integer(length(error.weights)), 
                   weighted.sqerror=matrix(0,sampleT,p),
                   error.weights=as.double(error.weights),   
-                  as.logical(return.state),
+                  as.integer(return.state),
                   state=state,         
-                  as.logical(return.track & !gain),
+                  as.integer(return.track & !gain),
                   track=track,                  
                   as.integer(m), 
                   as.integer(n), 
@@ -3278,9 +3160,10 @@ if (compiled)
                   as.double(K), 
                   as.double(Q),      
                   as.double(R),    
-                  as.logical(gain),
+                  as.integer(gain),
                   as.double(z),
-                  as.double(P)) [c("pred","state","track","weighted.sqerror")]
+                  as.double(P), 
+		  DUP=TRUE) [c("pred","state","track","weighted.sqerror")]
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
   }
 else                  #  S version
@@ -3436,8 +3319,8 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
                          as.double(matrix(0,n,n)),   # scratch array
                          as.double(matrix(0,n,n)),   # scratch array
                          as.double(matrix(0,n,n)),   # scratch array
-                         as.double(rep(0,n))         # scratch array
-                   ) [c("state","track")]
+                         as.double(rep(0,n)),         # scratch array
+                         DUP=TRUE) [c("state","track")]
    }
  else   # S version
    {FF<-  model$F
@@ -3984,7 +3867,7 @@ check.residuals.default <- function(data, ac=T, pac=T,
 #  resid0 <- resid - t(array(apply(resid,2,mean),rev(dim(resid)))) # mean 0
   cusum <- apply(resid0,2,cumsum)/ t(array(diag(var(resid0)),rev(dim(resid0))))
   if (is.R()) if (!require("ts", warn.conflicts = F)) stop("package ts is required.")
-  if(plot. && exists.graphics.device()) 
+  if(plot. &&  dev.cur() != 1 ) 
     {graphs.per.page <- min(p, graphs.per.page)
      names <- series.names(resid)
      old.par <-par(mfcol = c(3, graphs.per.page), mar = c(5.1, 4.1,3.1, 0.1) ) #c(5,4.1,5,0.1) c(2.1, 4.1,3.1, 0.1)
@@ -4145,14 +4028,6 @@ svd.criteria <- function(sv){
 }   
 
 #######################################################################
-
-#                    end
-
-#######################################################################
-
-# For installation instructions see the file read.me or the brief user's
-#    guide (postscipt file guide.ps).
-
 ##############################################################################
 
 
@@ -4454,269 +4329,6 @@ scale.ARMA <- function(model, scale)
 }
 
 
-#######################################################################
-
-#    test functions for dse1a.s dse1b.s dse1c.s and dse1d.s   <<<<<<<<<<
-
-#######################################################################
-
-
-
-dse1.function.tests <- function( verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.large=1e-10)
-{# A short set of tests of the main DSE functions using 
- #    eg1.DSE.data.diff.
- # The main short coming of these tests is that they do not test
- # functions which produce output, such as display, summary, graph
- # and check.residuals.
- # Note- using total sample.   Working paper estimated with sub-sample!
-
-#  if (verbose) cat("dse1 test 7 ... ")
-#  ok <- McMillan.degree(VARmodel$model, verbose=F)$distinct ==
-#                McMillan.degree(ARMAmodel, verbose=F)$distinct
-#  all.ok <- all.ok & ok 
-#  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-
-  if (!is.TSdata(eg1.DSE.data.diff))
-     stop("Test data not found. Testing stopped.\n")
-  max.error <- NA
-  if (synopsis & !verbose) cat("All dse1 (kernel) tests ...")
-
-  if (verbose) cat("dse1 test 0 ... ")
-  # check "window"
-  z <- tfwindow(output.data(eg1.DSE.data.diff), start=c(1980,1), end=c(1980,1))
-  ok <- all( c (c(1,3)==dim(z), c(1980,1)==start(z), c(1980,1)==end(z)))
-  z <- tfwindow(output.data(eg1.DSE.data.diff), start=c(1980,1), end=c(1982,12))
-  ok <- ok & all( c (c(36,3)==dim(z), c(1980,1)==start(z), c(1982,12)==end(z)))
-  all.ok <- ok
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 1 ... ")
-  z <- est.VARX.ls(eg1.DSE.data.diff)
-#  z <-eg1.DSE.data.diff
-#  lsfit produces warning messages in the following
-#  z$output[100,] <-NA
-#  z <- est.VARX.ls(z, warn=F)
-  VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=F, warn=F)
-  SSmodel  <- to.SS(VARmodel)
-  ok <- fuzz.large > abs(VARmodel$estimates$like[1] -
-               l(SSmodel, eg1.DSE.data.diff, warn=F)$estimates$like[1])
-  ok <- ok & is.TSestModel(VARmodel) & is.TSmodel(VARmodel$model)
-  ok <- ok & (input.dimension(VARmodel) == input.dimension(SSmodel))
-  ok <- ok & (input.dimension(VARmodel) == input.dimension(VARmodel$data))
-  ok <- ok & (output.dimension(VARmodel) == output.dimension(SSmodel))
-  ok <- ok & (output.dimension(VARmodel) == output.dimension(VARmodel$data))
-  VARmodelB <- TSmodel(VARmodel)
-  B <- t(chol(VARmodel$estimates$cov))
-  VARmodelB$B <- array(B, c(1,dim(B)))  # has B != I
-  VARmodelB <- set.parameters(VARmodelB)
-  VARmodelB <- l(VARmodelB,VARmodel$data, warn=F)
-  error <- max(abs(VARmodel$estimates$pred -VARmodelB$estimates$pred))
-  ok <- ok & fuzz.large > error 
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 2 ... ")
-  error <- abs(VARmodel$estimates$like[1] -
-    l(set.arrays(SSmodel), eg1.DSE.data.diff,warn=F)$estimates$like[1])
-  ok <- fuzz.large > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 3 ... ")
-  error <- abs(VARmodel$estimates$like[1]  - l(set.arrays(VARmodel), 
-                          eg1.DSE.data.diff, warn=F)$estimates$like[1])
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 4 ... ")
-  ARMAmodel <- to.ARMA(SSmodel)
-  error <- abs(VARmodel$estimates$like[1] -
-             l(ARMAmodel, eg1.DSE.data.diff, warn=F)$estimates$like[1])
-  ok <- fuzz.large > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 5 ... ")
-  error <- abs(VARmodel$estimates$like[1] -
-            l(ARMAmodel, eg1.DSE.data.diff,warn=F)$estimates$like[1])
-  ok <- fuzz.large > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 6 ... ")
-  error <- max(abs(sort(Mod(roots(TSmodel(VARmodel),by.poly=T))) -
-                            sort(Mod(roots(SSmodel))) ))
-  ok <-      fuzz.small > error
-  err2 <- max(abs(sort(Mod(roots(TSmodel(VARmodel),by.poly=F))) -
-                            sort(Mod(roots(SSmodel))) ))
-  ok <- ok & fuzz.small > err2
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error,err2)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 7 ... ")
-  d <-20
-  true.roots <- c(-1/seq(d),1/seq(d),-seq(d),seq(d)) 
-  A <- array(0, c(2,length(true.roots),length(true.roots)))
-  A[1,,] <- diag(1,length(true.roots))
-  A[2,,] <- diag(-true.roots, length(true.roots))
-  # the following relies on roots using by.poly=F
-  if(is.Splus()) options(expressions=1024)
-  error <- max(Mod(
-       sort(roots( ARMA(A=A, B=diag(1,length(true.roots)) ),by.poly=F))
-     - sort(true.roots)))
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  #  complex roots test
-
-  i <- pi*(1:10)/10.1  # this is half circle, but conjs also get generated
-  # div by 10.1 instead of 10 prevents a real root with = conj
-  true.roots <- complex(real=cos(i), imaginary=sin(i))  # on unit circle
-  # scale simplifies sorting
-  true.roots <- c(true.roots*(1+.2*1:10), true.roots*(1:10)/10) 
-  A <- array(0, c(3,length(true.roots),length(true.roots)))
-  A[1,,] <- diag(1,length(true.roots))
-  A[2,,] <- diag(-2*Re(true.roots), length(true.roots))
-  A[3,,] <- diag(Re(true.roots*Conj(true.roots)), length(true.roots))
-  est.roots <- roots( ARMA(A=A, B=diag(1,length(true.roots)) ))
-  ec <- 0<=Im(est.roots)
-  error <- max(Mod(est.roots[ ec][order(Mod(est.roots[ ec]))]
-                         - true.roots[order(Mod(true.roots))]))
-  ok <- ok & fuzz.small > error
-  err2 <- max(Mod(est.roots[!ec][order(Mod(est.roots[!ec]))]
-                     - Conj(true.roots)[order(Mod(true.roots))]))
-  ok <- ok & (fuzz.small > err2)
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error,err2)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 8 ... ")
-
-  z  <- simulate(TSmodel(VARmodel), input=input.data(eg1.DSE.data.diff)) 
-  zz <- simulate(TSmodel(VARmodel), rng=get.RNG(z), 
-                     input=input.data(eg1.DSE.data.diff))
-  ok <- test.equal(z, zz, fuzz=fuzz.small)
-
-  sigma <- solve(t(VARmodelB$model$B[1,,]) %*% VARmodelB$model$B[1,,])
-  sigma <- (sigma + t(sigma))/2 # insure symetric - chol is sensitive
-  zzz <- simulate(TSmodel(VARmodelB), rng=get.RNG(z), 
-                     input=input.data(eg1.DSE.data.diff), SIGMA=sigma)
-  error <- max(abs(output.data(z) - output.data(zzz)))
-  ok <- ok & test.equal(z, zzz, fuzz=fuzz.small)
-
-  # next use estimates$cov
-  z  <- simulate(VARmodel, input=input.data(eg1.DSE.data.diff)) 
-  sigma <- VARmodel$estimates$cov
-  sigma <- (sigma + t(sigma))/2 # insure symetric - chol is sensitive
-  zz <- simulate(TSmodel(VARmodel), rng=get.RNG(z), 
-                     input=input.data(eg1.DSE.data.diff), SIGMA=sigma)
-  ok <- ok & test.equal(z, zz, fuzz=fuzz.small)
-
-  ok <- ok & test.equal(summary(zz)$estimates,
-                        summary(zz)$estimates, fuzz=fuzz.small)
-
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("dse1 test 9 ... ")
-  z  <- simulate(SSmodel, input=input.data(eg1.DSE.data.diff)) 
-  ok <- test.equal(z,simulate(SSmodel, rng=get.RNG(z), 
-                      input=input.data(eg1.DSE.data.diff)))
-  ok <- ok & test.equal(summary(z)$estimates,
-                        summary(z)$estimates, fuzz=fuzz.small)
-
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse1 test 10... ")
-  ok <- stability(SSmodel, verbose=F)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse1 test 11 ...")
-  scale.fac <- diag(1:3)
-  scale.fac[1,3] <-.5
-  scale.pred <- VARmodel$estimates$pred %*% t(scale.fac)
-  scale.fac <- list(output=scale.fac)
-  error <- max(abs(scale.pred -
-        l(scale(VARmodel$model, scale.fac), 
-          scale(eg1.DSE.data.diff, scale.fac), warn=F)$estimates$pred))
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-  if (!ok)
-    cat("scale in dse1 test 11 causes an error if DSE is not at the beginning of the search() list")
-
-  if (verbose) cat("dse1 test 12... ")
-  error <- max(abs(scale.pred
-         - l(scale(SSmodel, scale.fac), 
-             scale(eg1.DSE.data.diff, scale.fac))$estimates$pred))
-  ok <- fuzz.small > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
-            else max.error <- max(error, max.error)}
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("dse1 test 13... ")
-  z <- eg1.DSE.data.diff
-  ok <- test.equal(z,
-      TSdata(output=output.data(combine(z,z), series=seq(output.dimension(z))),
-              input= input.data(combine(z,z), series=seq( input.dimension(z))))) 
- 
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (synopsis) 
-    {if (verbose) cat("All dse1 (kernel) tests completed")
-     if (all.ok) cat(" OK\n")
-     else cat(", some FAILED! max.error = ", max.error,"\n")
-    }
-  invisible(all.ok)
-}
-
-
-#######################################################################
-
-#                    end
-
-#######################################################################
-
-#   2000/04/20 14:50:54 
-# For installation instructions see the file read.me or the brief user's
-#    guide (postscipt file guide.ps).
-
-
 ############################################################
 
 #     Methods which are generic for models and TSdata    <<<<<<<<<<
@@ -4972,7 +4584,7 @@ tfplot.TSdata <- function(..., start.=NULL,end.=NULL, Title="", reset.screen=T,
  #   explicit in the arguments to tfplot.TSdata
  # start. is the starting point (date)  and end. the ending point for
  # plotting. If not specified the whole sample is plotted.
- # use dev.ask(T) to pause before a new page is printed
+# output graphics can be paused between pages by setting par(ask=T).
   data <-list(...)[[1]]
   if (!is.TSdata(data)) TS.error.exit(clss="TSdata") 
   data <- freeze(data)
