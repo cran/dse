@@ -5,30 +5,30 @@
 \title{Estimate Models}
 \description{Estimate models using given estimation method}
 \usage{
-	estimate.models(data, estimation.sample=NULL, trend=F,quiet=F,
+    estimate.models(data, estimation.sample=NULL, trend=F,quiet=F,
                        estimation.methods=NULL)
-	is.estimated.models(obj)
+    is.estimated.models(obj)
 }
 \arguments{
-	\item{data}{An object of class TSdata.}
-	\item{estimation.methods}{
-	A named list with the names indicating the estimation method and the
-	value associated with the name is a list of arguments for each the
-	method indicated. Its value should be NULL if no args are needed.}
-	\item{estimation.sample}{
-	An integer indicating the number of points in the sample to use for
-	estimation. If it is NULL the whole sample is used.}
-	\item{trend}{
-	If trend is T then a linear trend is calculated and returned as
-	the element \code{trend.coef}.}
+    \item{data}{An object of class TSdata.}
+    \item{estimation.methods}{
+    A named list with the names indicating the estimation method and the
+    value associated with the name is a list of arguments for each the
+    method indicated. Its value should be NULL if no args are needed.}
+    \item{estimation.sample}{
+    An integer indicating the number of points in the sample to use for
+    estimation. If it is NULL the whole sample is used.}
+    \item{trend}{
+    If trend is T then a linear trend is calculated and returned as
+    the element \code{trend.coef}.}
 }
 \value{
 Element \code{multi.model} in the result is a list of the same length as 
 estimation.methods with resulting models as elements.
 }
 \details{
-	Estimate models from data with estimation methods indicated by 
-	estimation.methods. This is primarily a utility for other functions.
+    Estimate models from data with estimation methods indicated by 
+    estimation.methods. This is primarily a utility for other functions.
 }
 \seealso{
 
@@ -38,9 +38,9 @@ estimation.methods with resulting models as elements.
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  estimate.models(eg1.DSE.data.diff, estimation.methods= list(
-		bft=list(verbose=F), 
-		est.VARX.ar=list(max.lag=3)))
+        bft=list(verbose=F), 
+        est.VARX.ar=list(max.lag=3)))
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

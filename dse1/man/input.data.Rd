@@ -21,27 +21,35 @@
 \title{TSdata Series}
 \description{Extract or set input or output series in a TSdata object.}
 \usage{
-	input.data(data)
-	output.data(data)
-	input.data(data)  <- x
-	output.data(data) <- y
+    input.data(x, ...)
+    \method{input.data}{default}(x)
+    \method{input.data}{TSdata}(x, series=seq(input.dimension(x)))
+    \method{input.data}{TSestModel}(x, ...)
+
+    output.data(x, ...)
+    \method{output.data}{default}(x)
+    \method{output.data}{TSdata}(x, series=seq(output.dimension(x)))
+    \method{output.data}{TSestModel}(x, ...)
+
+    input.data(data)  <- x
+    output.data(data) <- y
 }
 \arguments{
-	\item{data}{Object of class TSdata.}
-	\item{x}{A time series matrix.}
-	\item{y}{A time series matrix.}
+    \item{data}{Object of class TSdata.}
+    \item{x}{A time series matrix.}
+    \item{y}{A time series matrix.}
 }
 \value{
 The first usages returns the input or output series.
 The second usages assigns the input or output series.
 }
 \seealso{
-	\code{\link{TSdata}}
+    \code{\link{TSdata}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data", package="dse1")
 output.data(eg1.DSE.data) 
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

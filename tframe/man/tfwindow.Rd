@@ -6,14 +6,17 @@
 \title{Truncate a Time Series}
 \description{Truncate a time series object to a time window.}
 \usage{
-	tfwindow(x, start.=NULL, end.=NULL, tf=NULL, warn=T)}
+    tfwindow(x, ...)
+    \method{tfwindow}{default}(x, start.=NULL, end.=NULL, tf=NULL, warn=T)
+    \method{tfwindow}{tf}(x, start.=NULL, end.=NULL, warn=T, eps=.Options$ts.eps)
+    }
 
 \arguments{
-	\item{x}{A time series object.}
-	\item{start.}{A start date of a format compatible with the time series}
-	\item{end.}{An end date of a format compatible with the time series}
-	\item{tf}{A tframe or tframed object}
-	\item{warn}{A logical indicating if warning should be produced}
+    \item{x}{A time series object.}
+    \item{start.}{A start date of a format compatible with the time series}
+    \item{end.}{An end date of a format compatible with the time series}
+    \item{tf}{A tframe or tframed object}
+    \item{warn}{A logical indicating if warning should be produced}
 }
 \value{
 A time series object similar to x, but typically spanning a shorter time period.
@@ -31,8 +34,11 @@ argument is frequently useful when tfwindow is used by other code.
 }
 \examples{
 tfwindow(ts(matrix(rnorm(24),24,1), start=c(1980,1), frequency=4), 
-	start=c(1982,2))
+    start=c(1982,2))
 }
-\keyword{tframe}
-\keyword{time series data}
+\keyword{programming}
+\keyword{utilities}
+\keyword{ts}
+\keyword{chron}
+
 

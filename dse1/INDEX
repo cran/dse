@@ -1,4 +1,8 @@
-00General.Description    DSE
+See 00Intro or 00Intro.dse1 for a general description of this package,
+A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
+See also the related packages syskern tframe dse1 dse2 in the dse bundle
+   and packages curve juice  dsepadi monitor   in the dseplus bundle.
+00Intro.dse1             DSE
 ARMA                     ARMA Model Constructor
 DSE.utilities            DSE Utilities
 DSECOMPILED              Use Compiled or S/R Code
@@ -21,7 +25,6 @@ check.residuals          Autocorrelations Diagnostics
 combine                  Combine two objects.
 combine.TSdata           Combine series from two TSdata objects.
 diff.log                 Calculate the difference of log data
-display                  Display TSmodel Arrays
 eg1.DSE.data             Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data       Eleven Time Series used in Gilbert (1995)
 est.SS.from.VARX         Estimate a state space TSmodel using VAR
@@ -54,6 +57,7 @@ periods.TSdata           Specific Methods for tframed Data
 plot.roots               Plot Model Roots
 polynomials              Polynomial Utilities
 print.TSdata             Print Specific Methods
+print.TSestModel         Display TSmodel Arrays
 reachability             Calculate Model Reachability Matrix
 residual.stats           Calculate Residuals Statistics and Likelihood
 roots                    Calculate Model Roots

@@ -5,24 +5,31 @@
 
 \title{Check for a Consistent tframe}
 \description{
-	Check if tframe and a time series are consistent with one another.}
+    Check if tframe and a time series are consistent with one another.}
 \usage{
-	is.consistent.tframe(tf, x)}
+    is.consistent.tframe(tf, x)
+    \method{is.consistent.tframe}{default}(tf, x)
+    \method{is.consistent.tframe}{stamped}(tf, x)
+    }
 
 \arguments {
-	\item{x}{An object)}
+    \item{x}{An object)}
 }
 \value{A logical scalar.}
 \details{Check if the number of periods in the tframe corresponds to the
-	number of observations in the time series.
+    number of observations in the time series.
 }
 \seealso{
-	\code{\link{is.tframe}}
+    \code{\link{is.tframe}}
 }
 
 \examples{
-	z <- ts(rnorm(100), start=c(1982,1), frequency=12)
-	is.consistent.tframe(tframe(z), rnorm(100))
+    z <- ts(rnorm(100), start=c(1982,1), frequency=12)
+    is.consistent.tframe(tframe(z), rnorm(100))
 }
-\keyword{tframe}
+\keyword{programming}
+\keyword{utilities}
 \keyword{ts}
+\keyword{chron}
+
+

@@ -8,26 +8,28 @@
 \description{Utilities to handle small S/R differences.}
 
 \usage{
-	date.parsed()
-	synchronize()
-	syskern.rm()  # unlink with default recursive=T
-	Sys.getenv()
+    date.parsed()
+    synchronize()
+    syskern.rm(file)
+    file.date.info(file)
+    Sys.getenv()
 }
 
 \arguments{misc.}
 \value{misc.}
 \details{
-	Utilities to handle small S/R differences. 
+    Utilities to handle small S/R differences. 
+    \code{syskern.rm} does unlink with default recursive=T.
+    \code{synchronize} does nothing in R.
 }
 \seealso{
-	\code{\link{set.RNG}}
-	\code{\link{is.S}}
-	\code{\link{file.copy}}
-	\code{\link{Sys.info}}
+    \code{\link{set.RNG}}
+    \code{\link{is.S}}
+    \code{\link{file.copy}}
+    \code{\link{Sys.info}}
 }
 \examples{date.parsed() }
-\keyword{syskern}
-\keyword{OS}
-\keyword{S/R}
+\keyword{programming}
+\keyword{utilities}
 
 

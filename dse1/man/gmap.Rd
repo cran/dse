@@ -5,11 +5,11 @@
 Transform the basis for the state by a given invertible matrix.
 }
 \usage{
-	gmap(g, model)
+    gmap(g, model)
 }
 \arguments{
-	\item{g}{An invertible matrix}
-	\item{model}{An object of class TSmodel.}
+    \item{g}{An invertible matrix}
+    \item{model}{An object of class TSmodel.}
 }
 \value{
 
@@ -27,6 +27,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- to.SS(est.VARX.ls(eg1.DSE.data.diff))
 gmap(2, model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

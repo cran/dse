@@ -1,4 +1,7 @@
   require("tframe")
+
+ Sys.info()
+
   #x11()
 #  postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
 #             # width=6, height=8, pointsize=10,
@@ -53,13 +56,13 @@ tframe.function.tests <- function( verbose=T, synopsis=T)
 
   if (verbose) cat("tframe test 8 ... ")
   z <- data[10:90,]
-  tframe(z) <- truncate.tframe(tframe(data), start=10, end=90)
+  tframe(z) <- tftruncate.tframe(tframe(data), start=10, end=90)
   ok <- is.tframed(z)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("tframe test 9 ... ")
-  z <- truncate(data, start=10, end=90)
+  z <- tftruncate(data, start=10, end=90)
   ok <- is.tframed(z)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }

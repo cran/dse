@@ -1,5 +1,5 @@
-\name{00General.Description}
-\alias{00General.Description}
+\name{00Intro.tframe}
+\alias{00Intro.tframe}
 \title{Tframe}
 
 \center{Generic Methods for Handling Time}
@@ -73,8 +73,8 @@ supported are tframe.zzz(), start.tframe.zzz(), end.tframe.zzz(), and
 periods.tframe.zzz().
 While frequency.tframe.zzz() should not in theory be necessary, it makes 
 porting code much easier. Other methods which should be supported are
-time.tframe.zzz(), is.consistent.tframe.zzz(), truncate.tframe.zzz(), 
-expand.tframe.zzz(), 
+time.tframe.zzz(), is.consistent.tframe.zzz(), tftruncate.tframe.zzz(), 
+tfexpand.tframe.zzz(), 
 earliest.start.index.tframe.zzz(),
 earliest.end.index.tframe.zzz(), latest.start.index.tframe.zzz(), and
 latest.end.index.tframe.zzz().
@@ -102,7 +102,7 @@ Operations which should be possible on tframed data:
   
      -tbind  (like cbind) with shift to align the the tframe 
                  (and NA pad.start, pad.end, pad=T/F) 
-		 
+         
      - [  ]   without losing the tframe. This is done with select.series().
 
 
@@ -120,12 +120,8 @@ serve as an example.
 }
 
 \keyword{programming}
-\keyword{interface}
 \keyword{utilities}
 \keyword{ts}
-\keyword{models}
-\keyword{neural}
-\keyword{tframe}
 
 \author{Paul Gilbert}
 

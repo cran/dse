@@ -1,10 +1,12 @@
-00General.Description    Tframe
+See 00Intro or 00Intro.dse1 for a general description of this package,
+A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
+See also the related packages syskern tframe dse1 dse2 in the dse bundle
+   and packages curve juice  dsepadi monitor   in the dseplus bundle.
+00Intro.tframe           Tframe
 add.date                 Add Periods to a Date
 classed                  Tframe Library Utilities
-earliest.end             Start and End for Ragged Multivariate Time
-                         Series
+earliest.end             Start and End for Multiple Time Series Objects
 end                      Generic Time Series Parameters
-expand                   Expand a Tframe or Tframed Object.
 freeze                   Get fixed data snapshot
 is.consistent.tframe     Check for a Consistent tframe
 lag                      Misc Generic Replacements
@@ -14,7 +16,10 @@ series.names             Names of Series in a tframed object
 splice                   Splice Time Series
 tbind                    Bind Time Series
 test.equal               Compare Two Objects
-tfprint                  Print and Plot Tframed Objects
+test.equal.tframe        Compare Two Time Frames
+tfexpand                 Expand a Tframe or Tframed Object.
+tfplot                   Plot Tframed Objects
+tfprint                  Print Tframed Objects
 tframe                   Extract or Set a Tframe
 tframed                  Construct a Tframed Object
 tfwindow                 Truncate a Time Series

@@ -11,11 +11,13 @@ the given matrix as the measurement noise covariance.
 This function may not be working properly.
 }
 \usage{
-	to.SS.Chol(model, Om=NULL)
+    to.SS.Chol(model, ...)
+    \method{to.SS.Chol}{TSmodel}(model, Om=diag(1,output.dimension(model)))
+    \method{to.SS.Chol}{TSestModel}(model, Om=NULL)
 }
 \arguments{
-	\item{model}{An object of class TSmodel.}}
-	\item{Om}{
+    \item{model}{An object of class TSmodel.}}
+    \item{Om}{
 A matrix to be used as the measurement noise covariance. If Om is
 not supplied and model is of class TSestModel then 
 \code{model$estimates$cov} is used. Otherwise, Om is set to the identity matrix.
@@ -32,10 +34,10 @@ decomposition of Om as the coefficient matrix of the output noise.
 \code{\link{to.SS.innov}}
 }
 \examples{
-	if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-	model <- est.VARX.ls(eg1.DSE.data.diff)
-	model <- to.SS.Chol(model)
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    model <- est.VARX.ls(eg1.DSE.data.diff)
+    model <- to.SS.Chol(model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

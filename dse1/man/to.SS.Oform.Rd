@@ -6,22 +6,25 @@
 \title{Convert to Oform}
 \description{Convert a state space model to (observability?) form.}
 \usage{
-	to.SS.Oform(model)}
+    to.SS.Oform(model, ...)
+    \method{to.SS.Oform}{TSmodel}(model)
+    \method{to.SS.Oform}{TSestModel}(model)
+    }
 \arguments{
-	\item{model}{An object of class TSmodel.}
+    \item{model}{An object of class TSmodel.}
 }
 \value{
 An object of class 'SS' 'TSmodel' containing a state space 
 model in observability form (more or less).
  WARNING: This function does not work properly.}
 \seealso{
-	\code{\link{to.SS.innov}}
+    \code{\link{to.SS.innov}}
 }
 \examples{
-	if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-	model <- est.VARX.ls(eg1.DSE.data.diff)
-	model <- to.SS.Oform(model)
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    model <- est.VARX.ls(eg1.DSE.data.diff)
+    model <- to.SS.Oform(model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

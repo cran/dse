@@ -15,24 +15,31 @@
 \title{Forecast covariance for different models}
 \description{Calculate the forecast covariance for different models.}
 \usage{
-	forecast.cov(obj, ..., data=NULL, discard.before=NULL,
-	   horizons=1:12, zero=F, trend=F, estimation.sample= periods(data))
-	is.forecast.cov(obj)
+    is.forecast.cov(obj)
+    forecast.cov(obj, ...)
+    \method{forecast.cov}{TSmodel}(obj, ..., data=NULL, discard.before=NULL,
+       horizons=1:12, zero=F, trend=F, estimation.sample= periods(data),
+       compiled=.DSECOMPILED)
+    \method{forecast.cov}{TSestModel}(obj, data=NULL, ..., discard.before=NULL,
+       horizons=1:12, zero=F, trend=F, estimation.sample= NULL,
+       compiled=.DSECOMPILED)
+    \method{forecast.cov}{TSdata}(obj, data=NULL, horizons=1:12, discard.before=1,
+   compiled=.DSECOMPILED)
 }
 \arguments{
-	\item{obj}{TSdata or one or more TSmodels or TSestModels}
-	\item{data}{An object of class TSdata.}
-	\item{discard.before}{
-	Period before which forecasts should be discarded when calculating covariance.}
-	\item{horizons}{Horizons for which forecast covariance should be calculated.}
-	\item{zero}{If T the covariance is calculated for a forecast of zero.}
-	\item{trend}{If T the covariance is calculated for a forecast of trend.}
-	\item{estimation.sample}{Portion of the sample to use for calculating the trend.}
+    \item{obj}{TSdata or one or more TSmodels or TSestModels}
+    \item{data}{An object of class TSdata.}
+    \item{discard.before}{
+    Period before which forecasts should be discarded when calculating covariance.}
+    \item{horizons}{Horizons for which forecast covariance should be calculated.}
+    \item{zero}{If T the covariance is calculated for a forecast of zero.}
+    \item{trend}{If T the covariance is calculated for a forecast of trend.}
+    \item{estimation.sample}{Portion of the sample to use for calculating the trend.}
 }
 \value{
-	A list with the forecast covariance for supplied models on the given
-	sample. This is in the element \code{forecast.cov} of the result. Other
-	elements contain information in the arguments.
+    A list with the forecast covariance for supplied models on the given
+    sample. This is in the element \code{forecast.cov} of the result. Other
+    elements contain information in the arguments.
 }
 \details{
 Calculate the forecast cov of obj relative to data. If obj is TSdata
@@ -51,12 +58,12 @@ If trend is T then forecast.cov is also calculated for a forecast of a linear
 trend using data to estimation.sample.
 }
 \examples{
-	if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-	model1 <- est.VARX.ar(eg1.DSE.data.diff)
-	model2 <- est.VARX.ls(eg1.DSE.data.diff)
-	z <-  forecast.cov(model1, model2, data=trim.na(eg1.DSE.data.diff))
-	is.forecast.cov(z)
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    model1 <- est.VARX.ar(eg1.DSE.data.diff)
+    model2 <- est.VARX.ls(eg1.DSE.data.diff)
+    z <-  forecast.cov(model1, model2, data=trim.na(eg1.DSE.data.diff))
+    is.forecast.cov(z)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -1,11 +1,11 @@
-\name{00General.Description}
-\alias{00General.Description}
+\name{00Intro.dse1}
+\alias{00Intro.dse1}
 \title{DSE}
 \center{Dynamic Systems Estimation - Multivariate Time Series Package}
+\synopsis{}
 \usage{
    library("dse1") # 1 is the main part
    library("dse2") #   extensions
-   library("dse3") #   extensions
   }
 
 \description{
@@ -71,7 +71,7 @@ To subscribe send mail to
 with the body line \code{subscribe boc\_dse Your Name}
 }
 
-\section{MainDataObjects}{
+\section{MainObjects}{
 The main objects are classes "TSdata", "TSmodel", and  "TSestModel". 
 These are, respectively,  time series data objects, models, and objects with 
 a model, data and some estimation information. For each of these there are 
@@ -83,6 +83,7 @@ several sub classes.
 \code{\link{TSmodel}},
 \code{\link{TSestModel.object}}
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
+
 

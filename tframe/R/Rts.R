@@ -128,16 +128,16 @@ frequency.tframe.tstframe <- function(tf) {tf[3]}
 
 time.tframe.tstframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
 
-truncate.tframe.tstframe <- function(tf, start=NULL, end=NULL) 
-    {if (!is.null(end))   tf[2] <- tf[1] + (end-1)/tf[3]
-     if (!is.null(start)) tf[1] <- tf[1] + (start-1)/tf[3]
-     tf
+tftruncate.tframe.tstframe <- function(x, start=NULL, end=NULL) 
+    {if (!is.null(end))   x[2] <- x[1] + (end-1)/x[3]
+     if (!is.null(start)) x[1] <- x[1] + (start-1)/x[3]
+     x
     }
 
-expand.tframe.tstframe <- function(tf, add.start=0, add.end=0) 
-    {tf[2] <- tf[2] + add.end/tf[3]
-     tf[1] <- tf[1] - add.start/tf[3]
-     tf
+tfexpand.tframe.tstframe <- function(x, add.start=0, add.end=0) 
+    {x[2] <- x[2] + add.end/x[3]
+     x[1] <- x[1] - add.start/x[3]
+     x
     }
 
 

@@ -10,18 +10,26 @@
 \title{Generate simulations}
 \description{Run multiple simulations}
 \usage{
-	monte.carlo.simulations(model, simulation.args=NULL,
-	  replications=100, rng=NULL, Spawn=T, quiet=F)
-	is.monte.carlo.simulation(obj)
+    is.monte.carlo.simulation(obj)
+    monte.carlo.simulations(model, simulation.args=NULL, 
+           replications=100, rng=NULL, ...)
+    \method{monte.carlo.simulations}{default}(model, simulation.args = NULL, 
+ 		replications = 100, rng = NULL, quiet = FALSE)
+    \method{monte.carlo.simulations}{TSmodel}(model, simulation.args=NULL,
+          replications=100, rng=NULL, Spawn=.SPAWN, quiet=F)
+    \method{monte.carlo.simulations}{TSestModel}(model, simulation.args=NULL, 
+           replications=100, rng=NULL, ...)
+    \method{monte.carlo.simulations}{estimation.evaluation}(model,...)
+    \method{monte.carlo.simulations}{monte.carlo.simulation}(model,...)
 }
 \arguments{
-	\item{model}{A model with a simulate method (e.g. a TSmodel).}
-	\item{simulation.args,}{
-	A list of arguments in addition to model which are passed to 
-	simulate.}
-	\item{replications}{The number of simulations.}
-	\item{rng}{The RNG and starting seed.}
-	\item{Spawn}{If T "For" loops are used in Splus.}
+    \item{model}{A model with a simulate method (e.g. a TSmodel).}
+    \item{simulation.args,}{
+    A list of arguments in addition to model which are passed to 
+    simulate.}
+    \item{replications}{The number of simulations.}
+    \item{rng}{The RNG and starting seed.}
+    \item{Spawn}{If T "For" loops are used in Splus.}
 }
 \value{A list of simulations.}
 \details{
@@ -52,6 +60,6 @@ z <-  monte.carlo.simulations(model, simulation.args=list(sampleT=100))
 tfplot(z)
 distribution(z)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

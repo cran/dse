@@ -12,13 +12,21 @@
 \title{Specific Methods for Summary}
 \description{See the generic function description.}
 \usage{
-	summary(obj)}
+    \method{summary}{TSdata}(object)
+    \method{summary}{SS}(object)
+    \method{summary}{ARMA}(object)
+    \method{summary}{TSestModel}(object)
+    \method{print}{summary.TSdata}(x, digits=options()$digits)
+    \method{print}{summary.SS}(x, digits=options()$digits)
+    \method{print}{summary.ARMA}(x, digits=options()$digits)
+    \method{print}{summary.TSestModel}(x, digits=options()$digits)
+    }
 
 \seealso{
-	\code{\link{print}}, 
-	\code{\link{summary}}
+    \code{\link{print}}, 
+    \code{\link{summary}}
 }
 
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

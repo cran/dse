@@ -9,9 +9,9 @@
 \title{TS Input and Output Specific Methods}
 \description{See the generic function description.}
 \usage{
-	input.series.names(x, ...)
-	output.series.names(x, ...)
+    input.series.names(x, ...)
+    output.series.names(x, ...)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

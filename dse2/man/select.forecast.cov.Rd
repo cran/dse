@@ -3,18 +3,19 @@
 \title{Select Forecast Covariances Meeting Criteria}
 \description{Select forecast covariances meeting given criteria.}
 \usage{
-	select.forecast.cov(obj, select.series=1, 
+    select.forecast.cov(obj, select.series=1, 
     select.cov.best=1,
     select.cov.bound=NULL,
+    ranked.on.cov.bound=NULL,
     verbose=T)
 }
 \arguments{
-	\item{obj}{An object as returned by mine.strip.}
-	\item{select.series}{
-	An indication of series to which the tests should be applied.}
-	\item{select.cov.best}{The number of 'best' forecasts to select.}
-	\item{select.cov.bound}{A bound to use as criteria for selection.}
-	\item{verbose}{If verbose=T then summary results are printed.}
+    \item{obj}{An object as returned by mine.strip.}
+    \item{select.series}{
+    An indication of series to which the tests should be applied.}
+    \item{select.cov.best}{The number of 'best' forecasts to select.}
+    \item{select.cov.bound}{A bound to use as criteria for selection.}
+    \item{verbose}{If verbose=T then summary results are printed.}
 }
 \value{
 The returned result is a forecast.cov object like obj, but filtered
@@ -41,6 +42,6 @@ z <-  select.forecast.cov(z)
 tfplot(select.forecast.cov(z, select.cov.bound=20000))
 tfplot(select.forecast.cov(z, select.cov.best=1))
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

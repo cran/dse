@@ -3,13 +3,13 @@
 \title{Minimum Forecast Cov Models}
 \description{Extract the minimum forecast.cov at each horizon}
 \usage{
-	min.forecast.cov(obj, select.series=1, verbose=T)
+    min.forecast.cov(obj, select.series=1, verbose=T)
 }
 \arguments{
-	\item{obj}{An object as returned by mine.strip.}
-	\item{select.series}{
-	An indicator of the series which are to be used as the bases for selection.}
-	\item{verbose}{If true additional information is printed.}
+    \item{obj}{An object as returned by mine.strip.}
+    \item{select.series}{
+    An indicator of the series which are to be used as the bases for selection.}
+    \item{verbose}{If true additional information is printed.}
 }
 \value{
 The returned object is a vector indicating the element of forecast.cov which
@@ -34,6 +34,6 @@ z <- mine.strip(eg1.DSE.data.diff, essential.data=c(1,2),
                    estimation.methods=list(est.VARX.ls=list(max.lag=3)))
 z <-  min.forecast.cov(z)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

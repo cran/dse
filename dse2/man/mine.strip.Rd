@@ -3,31 +3,31 @@
 \title{Select a Data Subset and Model}
 \description{Select a data subset and model.}
 \usage{
-	mine.strip(all.data, essential.data=1, 
+    mine.strip(all.data, essential.data=1, 
                        estimation.sample=.5, 
                        discard.before=1, horizons=1:12,quiet=F,
                        estimation.methods=NULL,
                        step.size=NULL)
 }
 \arguments{
-	\item{all.data}{An object of class TSdata.}
-	\item{essential.data}{A vector indicating the important series.}
-	\item{estimation.sample}{The portion of the data to use for estimation.}
-	\item{discard.before}{
-	Period before which data should be disacrded when calculating the 
-	forecast covariances.}
-	\item{horizons}{Forecast horizons which should be considered.}
-	\item{quiet}{If T then estimation information is not printed. quiet=T may also have to be
-	set in the arguments to estimation methods.}
-	\item{estimation.methods}{
-	A list indicating the model estimation method to use. The list should contain
-	one element. The name of the element indicates the estimation method to use
-	and the value of the element is a list of arguments to pass to the 
-	estimation method.}
-	\item{step.size}{
-	An integer indicting how many dta subset/model steps should be attempted.
-	This may be necessary to accommodate memory constraints on the system. 
-	(see below.)}
+    \item{all.data}{An object of class TSdata.}
+    \item{essential.data}{A vector indicating the important series.}
+    \item{estimation.sample}{The portion of the data to use for estimation.}
+    \item{discard.before}{
+    Period before which data should be disacrded when calculating the 
+    forecast covariances.}
+    \item{horizons}{Forecast horizons which should be considered.}
+    \item{quiet}{If T then estimation information is not printed. quiet=T may also have to be
+    set in the arguments to estimation methods.}
+    \item{estimation.methods}{
+    A list indicating the model estimation method to use. The list should contain
+    one element. The name of the element indicates the estimation method to use
+    and the value of the element is a list of arguments to pass to the 
+    estimation method.}
+    \item{step.size}{
+    An integer indicting how many dta subset/model steps should be attempted.
+    This may be necessary to accommodate memory constraints on the system. 
+    (see below.)}
 }
 \value{
 The returned result contains a list (\code{forecast.cov}) of the forecast
@@ -81,8 +81,8 @@ Essential.data indicates the subset of output variables to included in all
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- mine.strip(eg1.DSE.data.diff, 
-	estimation.methods=list(bft=list(max.lag=2, verbose=F)))
+    estimation.methods=list(bft=list(max.lag=2, verbose=F)))
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

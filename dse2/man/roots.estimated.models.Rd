@@ -9,11 +9,11 @@
 \title{Roots Specific Methods}
 \description{See the generic function description.}
 \usage{
-	roots(obj)
+    roots(obj)
 }
 
 \seealso{ \code{\link{stability}} }
 
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

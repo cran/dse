@@ -1,7 +1,7 @@
 Bundle: dse
 Contains: syskern tframe dse1 dse2
 BundleDescription: Multivariate Time Series Library
-Version: 2001.4-1
+Version: 2001.6-1
 License: Free. See the LICENCE file for details.
 Author: Paul Gilbert <pgilbert@bank-banque-canada.ca>
 Maintainer: Paul Gilbert <pgilbert@bank-banque-canada.ca>

@@ -24,14 +24,14 @@
 \title{Summary Specific Methods}
 \description{See the generic function description.}
 \usage{
-	summary(x, ...)
+    summary(x, ...)
 }
 
 \seealso{
-	\code{\link{summary}}
-	\code{\link{print}}
+    \code{\link{summary}}
+    \code{\link{print}}
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
 

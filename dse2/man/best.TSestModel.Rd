@@ -3,14 +3,14 @@
 \title{Select Best Model}
 \description{Select the best model.}
 \usage{
-	best.TSestModel(models, sample.start=10, sample.end=NULL,
-	 criterion='aic', verbose=T)
+    best.TSestModel(models, sample.start=10, sample.end=NULL,
+     criterion='aic', verbose=T)
 }
 \arguments{
-	\item{models}{A list of TSestModels.}
-	\item{sample.start}{The starting point to use for 
+    \item{models}{A list of TSestModels.}
+    \item{sample.start}{The starting point to use for 
 calculating information criteria.}
-	\item{criteria}
+    \item{criteria}
 {The selection criteria. 'taic' would be a better choice but this is not
 available for VAR and ARMA models.}
 }
@@ -27,6 +27,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 models <- list(est.VARX.ls(eg1.DSE.data.diff), est.VARX.ar(eg1.DSE.data.diff))
 z <-  best.TSestModel(models)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

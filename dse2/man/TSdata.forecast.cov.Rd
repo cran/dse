@@ -7,17 +7,17 @@
 \title{TS Extractor Specific Methods}
 \description{See the generic function description.}
 \usage{
-	TSdata(x, ...)
-	TSestModel(x, ...)
-	TSmodel(x, ...)
+    TSdata(x, ...)
+    TSestModel(x, ...)
+    TSmodel(x, ...)
 }
 
 \seealso{ 
-	\code{\link{TSdata}} 
-	\code{\link{TSestModel}} 
-	\code{\link{TSmodel}} 
+    \code{\link{TSdata}} 
+    \code{\link{TSestModel}} 
+    \code{\link{TSmodel}} 
 }
 
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
