@@ -1,6 +1,6 @@
   require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
  #x11()
-  postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
+  postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
    Sys.info()
    version.dse()
@@ -9,8 +9,8 @@
 
 
 
-dse4.function.tests <- function(verbose=T, synopsis=T, 
-		fuzz.small=1e-14, fuzz.large=1e-7, graphics=T)
+dse4.function.tests <- function(verbose=TRUE, synopsis=TRUE, 
+		fuzz.small=1e-14, fuzz.large=1e-7, graphics=TRUE)
 {max.error <- 0
  if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
  if (is.S()) 
@@ -28,12 +28,12 @@ dse4.function.tests <- function(verbose=T, synopsis=T,
 
   if (verbose) cat("dse4 test 2 ... ")
   z1 <- z$multi.model[[
-       select.forecastCov(z, select.cov.best=1, verbose=F)$selection.index[2]]]
+       select.forecastCov(z, select.cov.best=1, verbose=FALSE)$selection.index[2]]]
   subdata <- TSdata(output=output.data(eg1.DSE.data.diff, series=1:3))
-  z2 <- estimate.models(subdata, estimation.sample =182, quiet = T, 
+  z2 <- estimate.models(subdata, estimation.sample =182, quiet = TRUE, 
            estimation.methods = list(est.VARX.ls=list(max.lag=3)))
-  output.data(subdata) <- output.data(subdata)[1:182,,drop=F]
-#  input.data(subdata)  <- input.data(subdata) [1:182,,drop=F] not in subdata
+  output.data(subdata) <- output.data(subdata)[1:182,,drop=FALSE]
+#  input.data(subdata)  <- input.data(subdata) [1:182,,drop=FALSE] not in subdata
   z3 <- est.VARX.ls(subdata, max.lag=3)
   ok <-      test.equal(z2$multi.model[[1]],z3$model)
   ok <- ok & test.equal(z2$multi.model[[1]],  z1)
@@ -58,7 +58,7 @@ else
   ymodel$C[1:(dim(z)[1]), 1:(dim(z)[2]), 1:(dim(z)[3])] <- z 
   sim.data <- gen.mine.data(umodel, ymodel,
     rng= list(kind="default",seed=c(21,46,16,12, 51, 2, 31, 8, 42, 60, 7, 3)) )
-  m.step <- mine.stepwise(sim.data, method="backward", plot.=F)
+  m.step <- mine.stepwise(sim.data, method="backward", plot.=FALSE)
   error <- max(abs(m.step$stepwise$rss[c(1,27)] -
                 c(5.65168201726030333e+01, 3.06441399376576440e+06)))
   # previously  c(47.537312899054931847,   4088283.2706551752053)))
@@ -69,7 +69,7 @@ else
  }
 
   if (graphics)
-   {ok <- dse4.graphics.tests(verbose=verbose, pause=F)
+   {ok <- dse4.graphics.tests(verbose=verbose, pause=FALSE)
     all.ok <- all.ok & ok 
    }
 
@@ -83,17 +83,17 @@ else
         cat("\n")
        }
     }
-  if (all.ok) invisible(T)  else stop("FAILED")
+  if (all.ok) invisible(TRUE)  else stop("FAILED")
 }
 
-dse4.graphics.tests <- function(verbose=T, synopsis=T)
+dse4.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
 { if (synopsis & !verbose) cat("dse4 graphics tests ...")
   if (verbose) cat("  dse4 graphics test 1 ...")
 
   # If no device is active then write to postscript file 
   if ( dev.cur() == 1 )
       {postscript(file="zot.postscript.test.ps",width=6,height=6,pointsize=10,
-                   onefile=F, print.it=F, append=F)
+                   onefile=FALSE, print.it=FALSE, append=FALSE)
        on.exit((function()
              {dev.off(); synchronize(1); rm("zot.postscript.test.ps")})())
       }
@@ -109,10 +109,10 @@ dse4.graphics.tests <- function(verbose=T, synopsis=T)
      else cat("completed\n")
     }
       
-  invisible(T)
+  invisible(TRUE)
 }
 
 
 
-   dse4.function.tests(verbose=T, graphics=F) 
-   dse4.graphics.tests(verbose=T)  #     test 3 needs stepwise
+   dse4.function.tests(verbose=TRUE, graphics=FALSE) 
+   dse4.graphics.tests(verbose=TRUE)  #     test 3 needs stepwise

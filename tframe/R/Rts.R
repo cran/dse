@@ -4,6 +4,12 @@
 
 ###############################################
 
+"seriesNames<-.ts" <- function (x, value) 
+  {attr(x, "seriesNames") <- value
+   if (is.matrix(x)) dimnames(x) <- list(NULL, value)
+   x
+  }
+
 tframe.ts <- function(x){classed(tsp(x), c("tstframe", "tframe"))} # extractor
 
 "tframe<-.ts" <- function(x, value) {do.call("ts", append(list(x), value))}
@@ -22,8 +28,10 @@ select.series.ts <- function(x, series=seqN(nseries(x))) {
 tbind.ts <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
  {# this is used like old tsmatrix should produce a column matrix from a
   #  single vector
+  nm <- seriesNames(x)
   for (z in list(...)) {
     if (!is.null(z)) {
+      nm <- c(nm, seriesNames(z))
       if (!is.ts(z)) z <- ts(z,start=start(z),end=end(z),frequency=frequency(z))
       x <- cbind(x, z)
       }
@@ -32,6 +40,7 @@ tbind.ts <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
                       start=start(x), end=end(x), frequency=frequency(x))
   if (!pad.start | !pad.end)
      x <- trim.na(x, start. = !pad.start, end. = !pad.end)
+  seriesNames(x) <- nm
   x
  }
 

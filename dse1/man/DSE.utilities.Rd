@@ -1,6 +1,5 @@
 \name{DSE.utilities}
 \alias{DSE.ar}
-\alias{TS.error.exit}
 \alias{criteria.table.heading}
 \alias{criteria.table.legend}
 \alias{criteria.table.nheading}
@@ -8,7 +7,6 @@
 \alias{dseclass<-}
 \alias{est.VARX.mean.correction}
 \alias{fake.TSestModel.missing.data}
-\alias{is.TSm.or.em}
 \alias{print.test.value}
 \alias{dsescan}
 \alias{read.int}

@@ -13,11 +13,11 @@ require("dse2")
  Sys.info()
  version.dse()
 
-print.values <- F
+print.values <- FALSE
 fuzz.small <- 1e-14
 fuzz.large <- 1e-8
 max.error <- NA
-all.ok <- T
+all.ok <- TRUE
 
 
   cat("Guide part 2 test 1 ... \n")
@@ -43,8 +43,8 @@ all.ok <- T
 eg1.DSE.data <- t(matrix(scan(paste(DSE.HOME, "/data/eg1.dat", sep="")),
                          5, 364))[, 2:5] 
 
-eg1.DSE.data <- TSdata(input = eg1.DSE.data[,1,drop = F], 
-                      output = eg1.DSE.data[, 2:4, drop = F])
+eg1.DSE.data <- TSdata(input = eg1.DSE.data[,1,drop = FALSE], 
+                      output = eg1.DSE.data[, 2:4, drop = FALSE])
 		      
 eg1.DSE.data <-tframed(eg1.DSE.data, list(start=c(1961,3), frequency=12))
 
@@ -72,9 +72,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 # Section 4 - Model Estimation
 
   cat("Guide part 2 test 2 ... \n")
-  model.eg1.ls <- est.VARX.ls(trim.na(eg1.DSE.data), warn=F)
+  model.eg1.ls <- est.VARX.ls(trim.na(eg1.DSE.data), warn=FALSE)
 #  opts <-options(warn=-1) 
-    subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12),warn=F)
+    subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12),warn=FALSE)
 #  options(opts)
   # summary(model.eg1.ls)
   # print(model.eg1.ls)
@@ -83,7 +83,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   tfplot(model.eg1.ls, start.=c(1990,1))
 
  
-  z <- check.residuals(model.eg1.ls, plot.=F, pac=T)
+  z <- check.residuals(model.eg1.ls, plot.=FALSE, pac=TRUE)
   check.value <- (
     if (is.S())      
               c(4.67445135116577148, 3274.42578125,      -2371.9997808950302)
@@ -104,8 +104,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   cat("Guide part 2 test 3 ... \n")
   # NB- non-stationary data. ar is not really valid
-  model.eg1.ar <- est.VARX.ar(trim.na(eg1.DSE.data), warn=F) 
-  model.eg1.ss <- est.SS.from.VARX(trim.na(eg1.DSE.data), warn=F) 
+  model.eg1.ar <- est.VARX.ar(trim.na(eg1.DSE.data), warn=FALSE) 
+  model.eg1.ss <- est.SS.from.VARX(trim.na(eg1.DSE.data), warn=FALSE) 
 # model.eg1.mle <- est.max.like(trim.na(eg1.DSE.data),model.eg1.ar) # this may be slow
   if (is.S()) check.value <- c(6738.642280883833, 6921.352391513382) 
   if (is.R()) check.value <- c(6738.562190977154, 6921.352391513382)#ts ar
@@ -132,7 +132,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
  # following is optional 
  # tframe(output.data(eg4.DSE.data))<- tframe(output.data(egJofF.1dec93.data))
 
-  model.eg4.bb <- est.black.box(trim.na(eg4.DSE.data), max.lag=3, verbose=F) 
+  model.eg4.bb <- est.black.box(trim.na(eg4.DSE.data), max.lag=3, verbose=FALSE) 
 
   tst <- model.eg4.bb$estimates$like[1]
   print.test.value(c(tst), digits=18)
@@ -144,7 +144,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
 
   cat("Guide part 2 test 4b... \n")
-  z <- information.tests(model.eg1.ar, model.eg1.ss, Print=F, warn=F)
+  z <- information.tests(model.eg1.ar, model.eg1.ss, Print=FALSE, warn=FALSE)
 #  if (is.S())      check.value <- 231152.464267979725
 #  else if (is.R()) check.value <- 231151.0300943982  # ts ar
 # else if (is.R()) check.value <- 230978.2532793634  bats ar
@@ -212,7 +212,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
         all(start(egJofF.1dec93.data) == c(1974,2)) 
   error <- max(abs(c(5.9414711908521793404 - sum(forecasts(z)[[1]][1:6,]),
                   3.7410224783909828972 - 
-                     sum(tfwindow(forecasts(z)[[1]], start=c(1993,12), warn=F)))))
+                     sum(tfwindow(forecasts(z)[[1]], start=c(1993,12), warn=FALSE)))))
   ok <-  ok & (fuzz.small > error) 
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -254,7 +254,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   tfplot(fc1)
   tfplot(forecastCov(TSmodel(eg4.DSE.model), data=eg4.DSE.data, horizons= 1:4)) 
  
-  fc2 <- forecastCov(TSmodel(eg4.DSE.model), data=eg4.DSE.data, zero=T, trend=T)
+  fc2 <- forecastCov(TSmodel(eg4.DSE.model),
+            data=eg4.DSE.data, zero=TRUE, trend=TRUE)
   tfplot(fc2)
   error <- max(abs(c(14.933660144821400806 - sum(fc1$forecastCov[[1]]),
                         14.933660144821400806 - sum(fc2$forecastCov[[1]]),
@@ -263,7 +264,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
-  if (is.na(ok)) ok <- F
+  if (is.na(ok)) ok <- FALSE
   all.ok <- all.ok & ok 
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
@@ -281,13 +282,13 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
  	rng=test.rng1,
  	simulation.args=list(sampleT=100, sd=1), 
  	estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
- 	criterion="TSmodel", quiet=T)
+ 	criterion="TSmodel", quiet=TRUE)
 
 #    e.ar.mod1 <- EstEval( mod1, replications=100, 
 #   	rng=test.rng1,
 #   	simulation.args=list(sampleT=100, sd=1), 
-#   	estimation="est.VARX.ar", estimation.args=list(max.lag=2, aic=F), 
-#   	criterion="TSmodel", quiet=T)
+#   	estimation="est.VARX.ar", estimation.args=list(max.lag=2, aic=FALSE), 
+#   	criterion="TSmodel", quiet=TRUE)
 #   tfplot(coef(e.ar.mod1))
 
 
@@ -305,14 +306,14 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
                      rng=test.rng2,
                      simulation.args=list(sampleT=100, sd=1), 
                      estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
-                     criterion="TSmodel", quiet=T)
+                     criterion="TSmodel", quiet=TRUE)
      old.par <- par(mfcol=c(2,1)) #set the number of plots on the plotics device
      on.exit(par(old.par))
      tfplot(coef(e.ls.mod1))
      tfplot(coef(e.ls.mod2)) 
      old.par <- c(old.par, par(mfcol=c(2,1)) )
-     tfplot(coef(e.ls.mod1), cum=F, bounds=F) 
-     tfplot(coef(e.ls.mod2), cum=F, bounds=F) 
+     tfplot(coef(e.ls.mod1), cum=FALSE, bounds=FALSE) 
+     tfplot(coef(e.ls.mod2), cum=FALSE, bounds=FALSE) 
      distribution(coef(e.ls.mod1), bandwidth=.2)
      distribution(coef(e.ls.mod2), bandwidth=.2)
     
@@ -330,8 +331,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   e.ls.mod1.roots <- roots(e.ls.mod1)
   
      plot(e.ls.mod1.roots) 
-     plot(e.ls.mod1.roots, complex.plane=F)
-     plot(roots(e.ls.mod2), complex.plane=F) 
+     plot(e.ls.mod1.roots, complex.plane=FALSE)
+     plot(roots(e.ls.mod2), complex.plane=FALSE) 
      distribution(e.ls.mod1.roots, bandwidth=.2) 
      distribution(roots(e.ls.mod2), bandwidth=.1) 
   
@@ -350,7 +351,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   pc <- forecastCov.estimatorsWRTtrue(mod3,
  	rng=test.rng3,
  	estimation.methods=list(est.VARX.ls=list(max.lag=6)),
- 	est.replications=2, pred.replications=10, quiet=T)
+ 	est.replications=2, pred.replications=10, quiet=TRUE)
   # the fuzz.small has to be relaxed here to accomodate differences in rnorm
   #   between Splus3.1 and Splus3.2  (the numbers are from Splus3.2)
 
@@ -370,7 +371,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   pc.rd <- forecastCov.reductionsWRTtrue(mod3,
  	rng=test.rng4,
  	estimation.methods=list(est.VARX.ls=list(max.lag=3)),
- 	est.replications=2, pred.replications=10, quiet=T)
+ 	est.replications=2, pred.replications=10, quiet=TRUE)
 
   if (is.S()) check.value <-
          c(58.75543799264762157,60.451513998215133938, 64.089618782185240775) 
@@ -388,17 +389,17 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   z <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
- 		est.VARX.ar=list(warn=F), 
- 		est.VARX.ls=list(warn=F)), 
- 	trend=T, zero=T)
+ 		est.VARX.ar=list(warn=FALSE), 
+ 		est.VARX.ls=list(warn=FALSE)), 
+ 	trend=TRUE, zero=TRUE)
   tfplot(z)
   opts <- options(warn=-1)
   zz <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
- 		est.black.box4=list(max.lag=3, verbose=F, warn=F),
-		est.VARX.ls=list(max.lag=3, warn=F)), 
-	trend=T, zero=T)
+ 		est.black.box4=list(max.lag=3, verbose=FALSE, warn=FALSE),
+		est.VARX.ls=list(max.lag=3, warn=FALSE)), 
+	trend=TRUE, zero=TRUE)
 
 #    zf<-horizonForecasts(zz$multi.model[[1]],zz$data, horizons=c(1,3,6))
     zf<-horizonForecasts(TSmodel(zz, select=1),TSdata(zz), horizons=c(1,3,6))

@@ -3,6 +3,7 @@
 \alias{seriesNames.default}
 \alias{seriesNames<-}
 \alias{seriesNames<-.default}
+\alias{seriesNames<-.ts}
 
 \title{Names of Series in a time series object}
 \description{Extract or set names of series in a time series object.}
