@@ -11,8 +11,9 @@ addPlotRoots            Add Model Roots to a plot
 ARMA                    ARMA Model Constructor
 balanceMittnik          Balance a state space model
 bestTSestModel          Select Best Model
-checkBalanceMittnik     Check Balance of a TSmodel
+characteristicPoly      Polynomial Utilities
 checkBalance            Check Balance of a TSmodel
+checkBalanceMittnik     Check Balance of a TSmodel
 checkConsistentDimensions
                         Check Consistent Dimensions
 checkResiduals          Autocorrelations Diagnostics
@@ -20,15 +21,15 @@ coef.TSmodel            Extract Model Parameters
 combine                 Combine two objects.
 combine.TSdata          Combine series from two TSdata objects.
 diffLog                 Calculate the difference of log data
-DSECOMPILED             Use Compiled or S/R Code
+.DSECOMPILED            Use Compiled or S/R Code
 DSEversion              Print Version Information
 eg1.DSE.data            Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data      Eleven Time Series used in Gilbert (1995)
+estBlackBox             Estimate a TSmodel
 estBlackBox1            Estimate a TSmodel
 estBlackBox2            Estimate a TSmodel
 estBlackBox3            Estimate a TSmodel
 estBlackBox4            Estimate a TSmodel
-estBlackBox             Estimate a TSmodel
 estMaxLik               Maximum Likelihood Estimation
 estSSfromVARX           Estimate a state space TSmodel using VAR
                         estimation
@@ -41,12 +42,12 @@ fixConstants            Fix TSmodel Coefficients (Parameters) to
                         Constants
 fixF                    Set SS Model F Matrix to Constants
 gmap                    Basis Transformation of a Model.
+informationTests        Tabulates selection criteria
 informationTestsCalculations
                         Calculate selection criteria
-informationTests        Tabulates selection criteria
 inputData               TSdata Series
-l.ARMA                  Evaluate an ARMA TSmodel
 l                       Evaluate a TSmodel
+l.ARMA                  Evaluate an ARMA TSmodel
 l.SS                    Evaluate a state space TSmodel
 markovParms             Markov Parameters
 McMillanDegree          Calculate McMillan Degree
@@ -58,7 +59,6 @@ percentChange           Calculate percent change
 periodsInput            TSdata Periods
 periods.TSdata          Specific Methods for tframed Data
 plot.roots              Plot Model Roots
-Polynomials             Polynomial Utilities
 Portmanteau             Calculate Portmanteau statistic
 print.TSdata            Print Specific Methods
 print.TSestModel        Display TSmodel Arrays
@@ -82,12 +82,12 @@ testEqual.ARMA          Specific Methods for Testing Equality
 tfplot.TSdata           Tfplot Specific Methods
 tframed.TSdata          Specific Methods for tframed Data
 toARMA                  Convert to an ARMA Model
+toSS                    Convert to State Space Model
 toSSChol                Convert to Non-Innovation State Space Model
 toSSinnov               Convert to State Space Innovations Model
 toSSOform               Convert to Oform
-toSS                    Convert to State Space Model
-TSdata.object           time series data object
 TSdata                  Construct TSdata time series object
+TSdata.object           time series data object
 TSestModel              Estimated Time Series Model
 TSmodel                 Time Series Models
 ytoypc                  Convert to year to year percent change

@@ -1,0 +1,23 @@
+\documentclass[english]{article}
+\begin{document}
+
+%\VignetteIndexEntry{tframe Guide}
+\SweaveOpts{eval=TRUE,echo=TRUE,results=hide,fig=FALSE}
+\begin{Scode}{echo=FALSE,results=hide}
+ options(continue="  ")
+\end{Scode}
+
+\section{tframe Functions}
+
+The functions in this package are made available with
+
+\begin{Scode}
+library("tframe")  
+\end{Scode}
+
+The \emph{tframe} functions are programming utilities used by other packages.
+Some functions, such as \emph{tfplot}, are called directly by users.
+These will be described adequately in guides for the other packages.
+For information about using the \emph{tframe} functions for programming,
+see the help documention instead of this User's Guide.
+\end{document}

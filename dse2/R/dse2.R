@@ -142,8 +142,8 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
           warning("model does not take inputs. percent ignored.")
       pr <- l(obj, data, sampleT =sampleT, 
                            predictT=sampleT+horizon)$estimates$pred
-      pred <- tfwindow(pr, end=end(output), warn=FALSE)
-      pr <- tfwindow(pr, start=c(0,1)+end(output), warn=FALSE)
+      pred <- tfwindow(pr, end=tfend(output), warn=FALSE)
+      pr <- tfwindow(pr, start=c(0,1)+tfend(output), warn=FALSE)
     #  pr[1:(sampleT-1),] <- NA
     #  pr[sampleT,] <- output[sampleT,]
       proj <- list(pr)
@@ -169,8 +169,8 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
           conditioning.inputs <- list()
           for (i in 1:length(conditioning.inputs.forecasts) )
             {inp <-tframed(rbind(inputData(data),conditioning.inputs.forecasts[[i]]), 
-              list(start=start(inputData(data)),
-                   frequency=frequency(inputData(data))))
+              list(start=tfstart(inputData(data)),
+                   frequency=tffrequency(inputData(data))))
              conditioning.inputs <- append(conditioning.inputs, list(inp))
          }  }  
    else if (!is.null(percent))   
@@ -178,8 +178,8 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
          for (i in 1:length(percent) )
            {pol <- t(matrix(last.in*percent[i]/100, length(last.in), horizon))
             inp <-ts(rbind(inputData(data)[seq(sampleT),,drop=FALSE],pol), 
-                     start=start(inputData(data)),
-                     frequency=frequency(inputData(data)))
+                     start=tfstart(inputData(data)),
+                     frequency=tffrequency(inputData(data)))
             conditioning.inputs <- append(conditioning.inputs, list(inp))
         }  }  
    else conditioning.inputs <- trimNA(inputData(data))
@@ -189,26 +189,26 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
 
    proj <- NULL
    for (policy in  conditioning.inputs)
-        {pdata <- TSdata(input=policy, output=output)
-         if(2 != length(start(pdata)))
+     {if(!all(tfstart(policy) == tfstart(output)))
             stop("input and output data must have the same starting period (after NAs are removed).")
-      predictT <- dim(policy)[1]
+      pdata <- TSdata(input=policy, output=output)
+      predictT <- periods(policy)
       if (sampleT > predictT) 
          stop("input series must be at least as long as output series (after NAs are removed).")
       horizon <- predictT - sampleT
       pr <- l(obj, pdata, sampleT=sampleT, predictT=predictT)$estimates$pred
 #    The following lines sometimes cause problems if output is output[...,]
 #    See comments in dse2.function.tests
-        if (0 == length(proj)) pred <- tfwindow(pr, end=end(output), warn=FALSE)
-        if(all(end(pr)==end(output)))
+        if (0 == length(proj)) pred <- tfwindow(pr, end=tfend(output), warn=FALSE)
+        if(all(tfend(pr)==tfend(output)))
           {pr <- NULL
            warning("Input is not longer than output data. No forecasts produced.") 
           }
-        else pr <- tfwindow(pr, start=c(0,1)+end(output), warn=FALSE)
+        else pr <- tfwindow(pr, start=c(0,1)+tfend(output), warn=FALSE)
      #    pr[1:(sampleT-1),] <- NA
      #    pr[sampleT,] <- output[sampleT,]  # so plots show first step
          proj <- append(proj, list(pr))
-        }
+    }
    }
  invisible(classed(list(model=obj, data=data,  # forecast constructor
                 horizon=horizon, percent=percent,
@@ -236,13 +236,13 @@ testEqual.forecast <- function(obj1, obj2, fuzz=1e-14)
  r
 }
 
-tfplot.forecast <- function(x, start.=NULL, end.=NULL,
+tfplot.forecast <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
         series = seq(length=nseriesOutput(x$data)),
 	Title="Predictions (dotted) and actual data (solid)",
         ylab = seriesNamesOutput(x$data), 
 	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-{#The default starting point (start.) for plots is the start data.
- #The default ending point (end.) for plots is the end of forecast.
+{#The default starting point for plots is the start data.
+ #The default ending point for plots is the end of forecast.
    if (is.null(x$forecast[[1]]))
       stop("Object to be plotted contains no forecast")
    output <- trimNA(outputData(x$data))
@@ -263,25 +263,23 @@ tfplot.forecast <- function(x, start.=NULL, end.=NULL,
              z <- cbind(z,zz)
             }
          tframe(z) <- tf
-         if (!is.null(start.)) z <- tfwindow(z,start=start., warn=FALSE)
-         if (!is.null(end.))   z <- tfwindow(z,end=end., warn=FALSE)
-         tfOnePlot(z, ylab = ylab[i])
+         tfOnePlot(z, ylab = ylab[i],start=start, end=end)
          if(i == series[1]) title(main = Title)
         }
    invisible()
 }
 
-seriesNamesOutput.forecast <- function(obj)
-   {m <- seriesNamesOutput(obj$model)
-    d <- seriesNamesOutput(obj$data)
+seriesNamesOutput.forecast <- function(x)
+   {m <- seriesNamesOutput(x$model)
+    d <- seriesNamesOutput(x$data)
     if(!all(m == d))
        warning("data and model names do not correspond. Model names returned.")
     m
    }
 
-seriesNamesInput.forecast <- function(obj)
-   {m <- seriesNamesInput(obj$model)
-    d <- seriesNamesInput(obj$data)
+seriesNamesInput.forecast <- function(x)
+   {m <- seriesNamesInput(x$model)
+    d <- seriesNamesInput(x$data)
     if(!all(m == d))
        warning("data and model names do not correspond. Model names returned.")
     m
@@ -297,8 +295,8 @@ is.featherForecasts <- function(obj) inherits(obj, "featherForecasts")
 
 nseries.featherForecasts <- function(x) nseries(x$featherForecasts[[1]])
 
-seriesNamesOutput.featherForecasts <- function(obj) seriesNamesOutput(obj$data)
- seriesNamesInput.featherForecasts <- function(obj)  seriesNamesInput(obj$data)
+seriesNamesOutput.featherForecasts <- function(x) seriesNamesOutput(x$data)
+ seriesNamesInput.featherForecasts <- function(x)  seriesNamesInput(x$data)
 
 featherForecasts <- function(obj, ...) UseMethod("featherForecasts")
 
@@ -347,19 +345,19 @@ featherForecasts.TSmodel <- function(obj, data, horizon=36,
 
 forecasts.featherForecasts <- function(obj){obj$featherForecasts}
 
-tfplot.featherForecasts <- function(x, start.=NULL, end.=NULL, 
+tfplot.featherForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf), 
    series=seq(nseries(x)), 
    Title="Predictions (dotted) and actual data (solid)", 
    ylab=seriesNamesOutput(x),
    graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-{#The default starting point (start.) for plots is the start of data.
- #The default ending point (end.) for plots is the end of forecasts.
-   freq <- frequency(x$data)
+{#The default starting point for plots is the start of data.
+ #The default ending point for plots is the end of forecasts.
+   freq <- tffrequency(x$data)
    names <- seriesNamesOutput(x)
    if(is.null(names)) names <- paste("output", series)
-   if (is.null(start.)) start. <- start(x$data)
-   if (is.null(end.))   end.   <- addDate(end(outputData(x$data)),
-                                   max(x$horizon), frequency(x$data))
+   if (is.null(start)) start <- tfstart(outputData(x$data))
+   if (is.null(end))   end   <- addDate(tfend(outputData(x$data)),
+                            max(x$horizon), tffrequency(outputData(x$data)))
    if (!is.numeric(series)) series <- match(series, names)
    if(reset.screen) 
      {Ngraphs <- length(series)
@@ -374,12 +372,12 @@ tfplot.featherForecasts <- function(x, start.=NULL, end.=NULL,
          #   ltys <- rep(2,length(x$from.periods))
          #  }
          #else 
-           {zz <- tfwindow(outputData(x$data,series=i), start=start.,warn=FALSE)
+           {zz <- tfwindow(outputData(x$data,series=i), start=start,warn=FALSE)
             ltys <- c(1,rep(2,length(x$from.periods)))
            }
          for (t in 1:length(x$from.periods))
             zz <- tbind(zz, selectSeries(x$featherForecasts[[t]], i))
-         tfOnePlot(tfwindow(zz,start=start.,end=end., warn=FALSE), ylab=ylab[i], lty=ltys)
+         tfOnePlot(zz,start=start,end=end, ylab=ylab[i], lty=ltys)
          if(i == series[1]) title(main = Title)
         }
    invisible()
@@ -633,11 +631,11 @@ print.MonteCarloSimulations <- function(x, digits=options()$digits, ...)
  invisible(x)
 }
 
-seriesNamesOutput.MonteCarloSimulations <- function(obj)
-   {dimnames(obj$simulations)[[2]]}
+seriesNamesOutput.MonteCarloSimulations <- function(x)
+   {dimnames(x$simulations)[[2]]}
 
-seriesNamesInput.MonteCarloSimulations <- function(obj)
-  {seriesNamesInput(obj$simulation.args$data)}
+seriesNamesInput.MonteCarloSimulations <- function(x)
+  {seriesNamesInput(x$simulation.args$data)}
 
 testEqual.MonteCarloSimulations <- function(obj1, obj2, fuzz=1e-16)
  {if (length(obj1$result) != length(obj2$result)) r <- FALSE
@@ -685,15 +683,13 @@ print.summary.MonteCarloSimulations <- function(x, digits=options()$digits, ...)
  }
 
 
-
-tfplot.MonteCarloSimulations <- function(x, start.=NULL, end.=NULL,
+tfplot.MonteCarloSimulations <- function(x, 
+    tf=tframe(x$simulations), start=tfstart(tf), end=tfend(tf),
     series=seq((dim(x$simulations)[2])), 
     select.simulations=seq(dim(x$simulations)[3]),
     graphs.per.page=5, mar=par()$mar)
   {names <- seriesNames(x$simulations)
-   if (is.null(start.)) start. <- start(x$simulations)
-   if (is.null(end.))   end.   <- end(x$simulations)
-   tf.p <- tframe(x$simulations)
+   tf.p <- tframe(x$simulations) # actual may be different (but not in default)
    Ngraph <- min(length(series), graphs.per.page)
    old.par <-par(mfcol = c(Ngraph, 1), mar= mar, no.readonly=TRUE) #c(5.1,6.1,4.1,2.1))
    on.exit(par(old.par))
@@ -702,7 +698,7 @@ tfplot.MonteCarloSimulations <- function(x, start.=NULL, end.=NULL,
    for(i in series) 
         {zz <- (x$simulations)[,i,select.simulations]
          tframe(zz) <- tf.p
-         tfOnePlot(tfwindow(zz,start=start.,end=end., warn=FALSE), ylab=names[i]) #tsplot
+         tfOnePlot(zz,start=start,end=end, ylab=names[i]) #tsplot
          if(i == series[1])  title(main = "Monte Carlo Simulations")
         }
    invisible()
@@ -885,20 +881,30 @@ print.summary.EstEval <- function(x, digits=options()$digits, ...)
   invisible(x)
  }
 
-tfplot.EstEval <- function(x, start.=NULL, end.=NULL,
-        series = seq(length=nseriesOutput(x$truth)),
-	Title="Predictions (dotted) and actual data (solid)",
-        ylab = seriesNamesOutput(x$truth), 
-	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE){
-  old.par <- par(mfcol = c(min(nseries(x$truth), graphs.per.page), 1),
-                  no.readonly=TRUE)
+tfplot.EstEval <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
+        truth= if(is.TSdata(x$truth)) outputData(x$truth) else x$truth,
+        series = seq(length=nseries(truth)),
+	Title="Estimated (and true) results",
+        ylab = seriesNames(truth), remove.mean=FALSE,
+	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
+ {N<-length(x$result)
+  old.par <- par(mfcol = c(min(length(series), graphs.per.page), 1),
+           no.readonly=TRUE)
   on.exit(par(old.par))
-  N<-length(x$result)
-  tf <- tframe(x$truth)
-  r <- matrix(NA,periods(x$truth), N)
+  tf <- tframe(truth)
+  truth <- unclass(truth)
+  if (remove.mean) 
+    {truth <- sweep(truth,2, apply(truth,2,mean))
+     ylab <- paste(ylab, "(mean removed)")
+    }
+  r <- matrix(NA,periods(truth), N)
   for (j in series) {
   	for (i in 1:N)  r[,i] <- x$result[[i]][,j]
-  	tfOnePlot(tframed(tbind(x$truth[,j], r), tf), ylab= ylab[j])
+	if (remove.mean) r <- sweep(r,2, apply(r,2,mean))
+  	tfOnePlot(tframed(tbind(truth[,j], r), tf), ylab= ylab[j],
+	              lty=c(1,rep(2, N)), col=c("black",rep("red",N)),
+		      start=start,end=end)
+        if(j == series[1]) title(main = Title)
         }
   invisible()
  }
@@ -939,10 +945,6 @@ distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
       }
    invisible()
   }
-
-
-distribution.EstEval <- function(obj, ...)
- {distribution(coef(obj), ...)}
 
 
 
@@ -999,7 +1001,7 @@ print.summary.rootsEstEval <- function(x, digits=options()$digits, ...)
 
 tfplot.rootsEstEval <- function(x, ...)UseMethod("plot.rootsEstEval")
 
-plot.rootsEstEval <- function(x, complex.plane=TRUE, cum=TRUE, norm=FALSE,
+plot.rootsEstEval <- function(x, complex.plane=TRUE, cumulate=TRUE, norm=FALSE,
      bounds=TRUE, transform=NULL, invert=FALSE, Sort=TRUE, ...)
 {#  (... further arguments, currently disregarded)
    N<-length(x$result)
@@ -1026,7 +1028,7 @@ plot.rootsEstEval <- function(x, complex.plane=TRUE, cum=TRUE, norm=FALSE,
         {r <- t(apply(r,1,sort))
          true.lines <- sort(true.lines)
         }
-      if (cum) r <- apply(r,2,cumsum)/matrix(1:N,N,ncol(r))
+      if (cumulate) r <- apply(r,2,cumsum)/matrix(1:N,N,ncol(r))
       else     r <- r 
       if(is.complex(r))
          { r <- cbind(Re(r), Im(r))
@@ -1047,7 +1049,7 @@ distribution.rootsEstEval <- function(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
 {#  (... further arguments, currently disregarded)
  # if mod is true the modulus is used, otherwise real and imaginary are separated.
  # if invert is true the reciprical is used.
- # if Sort is true then sort is applied (before cum). This is of particular interest
+ # if Sort is true then sort is applied (before cumulate). This is of particular interest
  #   with estimation methods like black.box which may not return parameters
  #   of the same length or in the same order.
  # If select is not NULL then only the indicated roots are plotted. 
@@ -1110,7 +1112,7 @@ print.summary.coefEstEval <- function(x, digits=options()$digits, ...)
 #  (... further arguments, currently disregarded)
 
 
-tfplot.coefEstEval <- function(x, cum=TRUE, norm=FALSE, bounds=TRUE,
+tfplot.coefEstEval <- function(x, cumulate=TRUE, norm=FALSE, bounds=TRUE,
         invert=FALSE, Sort=FALSE, graphs.per.page = 5)
 {     N<-length(x$result)
       n <- 0
@@ -1141,7 +1143,7 @@ tfplot.coefEstEval <- function(x, cum=TRUE, norm=FALSE, bounds=TRUE,
 		Om <- Om/matrix((1:N)^.5 , N, ncol(Om))
         }
       }
-      if (cum) r<- apply(r,2,cumsum)/matrix(1:N,N,ncol(r))
+      if (cumulate) r<- apply(r,2,cumsum)/matrix(1:N,N,ncol(r))
       seriesNames(r) <- paste("parm", seq(ncol(r)))
 #      matplot(x=matrix(seq(nrow(r)),nrow(r),1), y=cbind(0,true.lines,r, Om), 
 #              type="l", lty=c(1,rep(3,dim(true.lines)[2]), rep(4,dim(r)[2]), 
@@ -1154,7 +1156,7 @@ tfplot.coefEstEval <- function(x, cum=TRUE, norm=FALSE, bounds=TRUE,
       invisible(r)
 }
 
-roots.coefEstEval <- function(obj, criterion.args=NULL)
+roots.coefEstEval <- function(obj, criterion.args=NULL, ...)
 {# extract roots criterion 
   model <- obj$model
   truth <-do.call("roots", append(list(model), criterion.args))
@@ -1179,7 +1181,7 @@ roots.coefEstEval <- function(obj, criterion.args=NULL)
 distribution.coefEstEval <- function(obj,  Sort=FALSE, bandwidth=0.2,
 	graphs.per.page=5, ...)
 {#  (... further arguments, currently disregarded)
- # if Sort is true then sort is applied (before cum). This is of particular interest
+ # if Sort is true then sort is applied (before ave). This is of particular interest
  #   with estimation methods like black.box which may not return parameters
  #   of the same length or in the same order.
       N<-length(obj$result)
@@ -1211,7 +1213,7 @@ distribution.coefEstEval <- function(obj,  Sort=FALSE, bandwidth=0.2,
       invisible()
 }
 
-TSmodel.coefEstEval <- function(obj)
+TSmodel.coefEstEval <- function(obj, ...)
 {# rebuild model from coef
   model <- obj$model
   truth <-TSmodel(model)
@@ -1310,7 +1312,7 @@ coef.TSmodelEstEval <- function(object, criterion.args=NULL, ...)
   invisible(classed(object, c("coefEstEval","EstEval")))
 }
 
-roots.TSmodelEstEval <- function(obj, criterion.args=list( randomize=TRUE))
+roots.TSmodelEstEval <- function(obj, criterion.args=list( randomize=TRUE), ...)
 {# extract roots criterion 
   truth <-do.call("roots", append(list(obj$truth), criterion.args))
   r <- NULL
@@ -1373,7 +1375,7 @@ coef.TSestModelEstEval <- function(object, criterion.args=NULL, ...)
   invisible(classed(object, c("coefEstEval","EstEval")))
 }
 
-roots.TSestModelEstEval <- function(obj, criterion.args=NULL)
+roots.TSestModelEstEval <- function(obj, criterion.args=NULL, ...)
 {# extract roots criterion 
   truth <-do.call("roots", append(list(obj$truth), criterion.args))
   r <- NULL
@@ -1491,7 +1493,7 @@ print.summary.estimatedModels <- function(x, digits=options()$digits, ...)
 
 
 
-roots.estimatedModels <- function(obj, digits=options()$digits, mod=FALSE)
+roots.estimatedModels <- function(obj, digits=options()$digits, mod=FALSE, ...)
  {cat("Estimated models:\n")
   if (!is.null(obj$trend.coef)) cat("trend coef: ", obj$trend.coef, "\n")
   if (!is.null(obj$multi.model))
@@ -1609,28 +1611,35 @@ horizonForecastsCompiled.ARMA <- function( obj, data, horizons=1:4,
   TREND <- obj$TREND
   if (is.null(obj$TREND)) TREND <- rep(0,p)
   is  <- max(m,p)
+
+  storage.mode(u)  <- "double"
+  storage.mode(outputData(data))  <- "double"
+  storage.mode(obj$A)  <- "double"
+  storage.mode(obj$B)  <- "double"
+  storage.mode(C)  <- "double"
+  storage.mode(TREND)  <- "double"
    .Fortran("rmaprj",
                   proj=proj,    
                   as.integer(discard.before), 
                   as.integer(horizons), 
                   as.integer(length(horizons)), 
-                  ey= as.double(array(0,dim(outputData(data)))), 
+                  ey= array(double(1),dim(outputData(data))), 
                   as.integer( m), 
                   as.integer( p) ,      
                   as.integer( dim(obj$A)[1]),  # 1+order of A  
                   as.integer( dim(obj$B)[1]),  # 1+order of B  
                   as.integer( dim(C)[1]),  # 1+order of C  
                   as.integer(TT),
-                  as.double(u),
-                  as.double(outputData(data)),         
-                  as.double(obj$A),  
-                  as.double(obj$B),   
-                  as.double(C),
-                  as.double(TREND),
+                  u,
+                  outputData(data),	     
+                  obj$A,  
+                  obj$B,   
+                  C,
+                  TREND,
                   as.integer(is),  # scratch array dim
-                  as.double(matrix(0,is,is)),  # scratch array
-                  as.double(matrix(0,is,is)),  # scratch array
-                  as.double(rep(0,is)),         # scratch array
+                  matrix(double(1),is,is),  # scratch array
+                  matrix(double(1),is,is),  # scratch array
+                  double(is),         # scratch array
                   DUP=.DSEDUP,
 		  PACKAGE="dse1"
 		  )$proj
@@ -1673,27 +1682,37 @@ horizonForecastsCompiled.SS <- function( obj, data, horizons=1:4,
      if(is.null(obj$P0)) P <- diag(1,n) # initial state tracking error 
      else  P <- obj$P0              # this is not used in innov. objs
 
+     storage.mode(u)  <- "double"
+     storage.mode(outputData(data))  <- "double"
+     storage.mode(obj$F)  <- "double"
+     storage.mode(G)  <- "double"
+     storage.mode(obj$H)  <- "double"
+     storage.mode(K)  <- "double"
+     storage.mode(Q)  <- "double"
+     storage.mode(R)  <- "double"
+     storage.mode(z)  <- "double"
+     storage.mode(P)  <- "double"
      .Fortran("kfprj",
                   proj= proj, 
                   as.integer(discard.before), 
                   as.integer(horizons), 
                   as.integer(length(horizons)), 
-                  ey= as.double(matrix(0,TT,p)), 
+                  ey= matrix(double(1),TT,p), 
                   as.integer(m), 
                   as.integer(n), 
                   as.integer(p), 
                   as.integer(TT),  
-                  as.double(u), 
-                  as.double(outputData(data)),  
-                  as.double(obj$F),   
-                  as.double(G),   
-                  as.double(obj$H),  
-                  as.double(K), 
-                  as.double(Q),      
-                  as.double(R),    
+                  u, 
+                  outputData(data),  
+                  obj$F,   
+                  G,	
+                  obj$H,  
+                  K, 
+                  Q,	   
+                  R,	 
                   as.integer(gain),
-                  as.double(z),
-                  as.double(P), 
+                  z,
+                  P, 
 		  DUP=.DSEDUP,
 		  PACKAGE="dse1"
 		  )$proj
@@ -1702,17 +1721,17 @@ horizonForecastsCompiled.SS <- function( obj, data, horizons=1:4,
 
 forecasts.horizonForecasts <- function(obj){obj$horizonForecasts}
 
-tfplot.horizonForecasts <- function(x, start.=NULL, end.=NULL,
+tfplot.horizonForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
    series=seq(length=nseriesOutput(x$data)), 
    Title="Predictions (dotted) and actual data (solid)", 
    ylab=seriesNamesOutput(x$data), 
    graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
 {#If series is not NULL then only indicated variables are plotted
- # if start. is null it is set to the beginning of the data.
- # if end. is null it is set to the end of the data.
+ # if start is null it is set to the beginning of the data.
+ # if end is null it is set to the end of the data.
    output <-outputData(x$data)
-   if (is.null(start.)) start. <- start(output)
-   if (is.null(end.)) end. <- end(output)
+   if (is.null(start)) start <- tfstart(output)
+   if (is.null(end)) end <- tfend(output)
    names <- seriesNames(output)
    if (!is.numeric(series)) series <- match(series, names)
    if(reset.screen) 
@@ -1726,7 +1745,7 @@ tfplot.horizonForecasts <- function(x, start.=NULL, end.=NULL,
      {#unclass below in because x$horizonForecasts is not tframed and tbind
       #   complains if the frequencies do not match
       zz<- tframed(tbind(unclass(output)[,i],t((x$horizonForecasts)[,,i])), tf)
-      tfOnePlot(tfwindow(zz,start=start.,end=end., warn=FALSE), ylab =ylab[i])
+      tfOnePlot(zz,start=start, end=end, ylab =ylab[i])
       if(i == series[1]) title(main = Title)
      }
    invisible()
@@ -1798,10 +1817,10 @@ horizonForecasts.forecastCov <- function(obj,horizons=NULL,
  invisible(proj)
 }
 
-tfplot.multiModelHorizonForecasts <- function(x, start.=NULL, end.=NULL,
-     series=NULL)
+tfplot.multiModelHorizonForecasts <- function(x, 
+        tf=NULL, start=tfstart(tf), end=tfend(tf), series=NULL)
  {for (i in seq(length(x)))
-    {tfplot(x[[i]], start.=start., end.=end., series=series)
+    {tfplot(x[[i]], start=start, end=end, series=series)
      cat("press return to continue>");key<-dsescan(what="");cat("\n")
     }
   invisible()
@@ -1812,10 +1831,10 @@ tfplot.multiModelHorizonForecasts <- function(x, start.=NULL, end.=NULL,
 # zzz<-forecastCov(zz$model,zz$data, discard.before=zz$discard.before, horizons=zz$horizons)
 
 
-TSmodel.forecastCov <- function(obj, select=1)
+TSmodel.forecastCov <- function(obj, select=1, ...)
   {if (is.null(obj$multi.model)) NULL else obj$multi.model[[select]]}
 
-TSdata.forecastCov <- function(obj) {obj$data}
+TSdata.forecastCov <- function(data, ...) {data$data}
 
 forecastCov <- function(obj, ..., data=NULL, horizons=1:12, discard.before=NULL,
        zero=FALSE, trend=FALSE, estimation.sample= NULL, compiled=.DSECOMPILED) UseMethod("forecastCov")
@@ -1861,7 +1880,7 @@ forecastCov.TSdata <- function(obj, ..., data=NULL,
                   sample.size=as.integer(rep(0, length(horizons))),
                   as.integer(p), 
                   predictT=as.integer(TT), 
-                  as.double(err), 
+                  err, 
 		  DUP=.DSEDUP,
 		  PACKAGE="dse1"
 		  ) [c("forecastCov","sample.size")]
@@ -2013,13 +2032,19 @@ forecastCovCompiled.ARMA <- function(model, data, horizons=1:12 ,
   if (is.null(model$TREND)) TREND <- rep(0,p)
   storage.mode(cov) <-"double"
   is  <- max(m,p)
+  storage.mode(u)  <- "double"
+  storage.mode(outputData(data))  <- "double"
+  storage.mode(model$A)  <- "double"
+  storage.mode(model$B)  <- "double"
+  storage.mode(C)  <- "double"
+  storage.mode(TREND)  <- "double"
   .Fortran("rmaepr",
                   forecastCov=cov,    
                   as.integer(discard.before), 
                   as.integer(horizons), 
                   as.integer(length(horizons)), 
                   sample.size=as.integer(rep(0, length(horizons))),
-                  pred= as.double(array(0,dim(outputData(data)))), 
+                  pred= array(double(1),dim(outputData(data))), 
                   as.integer( m), 
                   as.integer( p) ,      
                   as.integer( dim(model$A)[1]),  # 1+order of A  
@@ -2027,16 +2052,16 @@ forecastCovCompiled.ARMA <- function(model, data, horizons=1:12 ,
                   as.integer( dim(C)[1]),  # 1+order of C  
                   predictT=as.integer(TT),
                   as.integer(nrow(outputData(data))), 
-                  as.double(u),
-                  as.double(outputData(data)),         
-                  as.double(model$A),  
-                  as.double(model$B),   
-                  as.double(C),
-                  as.double(TREND),
+                  u,
+                  outputData(data),	     
+                  model$A,  
+                  model$B,   
+                  C,
+                  TREND,
                   as.integer(is),  # scratch array dim
-                  as.double(matrix(0,is,is)),  # scratch array
-                  as.double(matrix(0,is,is)),  # scratch array
-                  as.double(rep(0,is)),         # scratch array
+                  matrix(double(1),is,is),  # scratch array
+                  matrix(double(1),is,is),  # scratch array
+                  double(is),         # scratch array
                   DUP=.DSEDUP,
 		  PACKAGE="dse1"
 		  )[c("forecastCov","sample.size")]
@@ -2090,29 +2115,39 @@ forecastCovCompiled.SS <- function(model, data, horizons=1:12 ,
      else  P <- model$P0              # this is not used in innov. models
 
      storage.mode(cov) <-"double"
+     storage.mode(u) <-"double"
+     storage.mode(outputData(data)) <-"double"
+     storage.mode(model$F) <-"double"
+     storage.mode(G) <-"double"
+     storage.mode(model$H) <-"double"
+     storage.mode(K) <-"double"
+     storage.mode(Q) <-"double"
+     storage.mode(R) <-"double"
+     storage.mode(z) <-"double"
+     storage.mode(P) <-"double"
      .Fortran("kfepr",
                   forecastCov=cov,    
                   as.integer(discard.before), 
                   as.integer(horizons), 
                   as.integer(length(horizons)), 
                   sample.size=as.integer(rep(0, length(horizons))),
-                  pred= as.double(array(0,dim(outputData(data)))), 
+                  pred= array(double(1),dim(outputData(data))), 
                   as.integer(m), 
                   as.integer(n), 
                   as.integer(p), 
                   predictT=as.integer(TT), 
                   as.integer(nrow(outputData(data))),  
-                  as.double(u), 
-                  as.double(outputData(data)),  
-                  as.double(model$F),   
-                  as.double(G),   
-                  as.double(model$H),  
-                  as.double(K), 
-                  as.double(Q),      
-                  as.double(R),    
+                  u, 
+                  outputData(data),  
+                  model$F,   
+                  G,	
+                  model$H,  
+                  K, 
+                  Q,	   
+                  R,	 
                   as.integer(gain),
-                  as.double(z),
-                  as.double(P), 
+                  z,
+                  P, 
 		  DUP=.DSEDUP,
 		  PACKAGE="dse1"
 		  ) [c("forecastCov","sample.size")]
@@ -2702,7 +2737,8 @@ print.summary.forecastCovEstimatorsWRTtrue <- function(x,
 invisible(x)
 }
 
-roots.forecastCovEstimatorsWRTtrue <- function(obj, digits=options()$digits, mod=FALSE)
+roots.forecastCovEstimatorsWRTtrue <- function(obj, digits=options()$digits,
+            mod=FALSE, ...)
  {cat("Estimated models:\n")
   if (!is.null(obj$trend.coef)) cat("trend coef: ", obj$trend.coef, "\n")
   if (!is.null(obj$estimatedModels))

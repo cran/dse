@@ -6,14 +6,14 @@
 \description{See the generic function description.}
 \usage{
     \method{tfplot}{rootsEstEval}(x, ...)
-    \method{plot}{rootsEstEval}(x, complex.plane=TRUE, cum=TRUE, norm=FALSE,
+    \method{plot}{rootsEstEval}(x, complex.plane=TRUE, cumulate=TRUE, norm=FALSE,
        bounds=TRUE, transform=NULL, invert=FALSE, Sort=TRUE, ...)
 }
 \arguments{
     \item{x}{an object for which a tfplot is to be produced.}
     \item{complex.plane}{logical indicating if the plot should be on the complex
        plane.}
-    \item{cum}{logical indicating if the cumulative sum of roots should be
+    \item{cumulate}{logical indicating if the cumulative average of roots should be
     plotted}
     \item{invert}{logical indicating if the inverse of roots should be
     plotted}
@@ -29,12 +29,12 @@
 
 \details{
 If complex.plane is TRUE then all results are plotted on a complex plane and 
-   the arguements cum and Sort do not apply. If complex.plane is FALSE 
+   the arguements cumulate and Sort do not apply. If complex.plane is FALSE 
    then a sequential plot of the real and imaginary parts is produced.
- If cum is true the cummulative average is plotted.
+ If cumulate is true the cumulative average is plotted.
  If mod is true the modulus is used, otherwise real and imaginary are separated.
- if invert is true the reciprical is used (before cummulating).
- if Sort is true then sort is applied (before cum but after mod) by the Re part of the root.
+ if invert is true the reciprical is used (before cumulating).
+ if Sort is true then sort is applied (before cumulate but after mod) by the Re part of the root.
    Some grouping is usually necessary since roots are not in an obvious order
    but sorting by the real part of the roots could be improved upon.
 }

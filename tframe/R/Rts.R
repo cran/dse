@@ -18,6 +18,7 @@ selectSeries.ts <- function(x, series=seqN(nseries(x))) {
   names <- seriesNames(x)
   if (is.character(series)) series <- match(names,series, nomatch=0) > 0
   if(all(0==series) | is.null(series)) r <- NULL
+  else if (!is.matrix(x)) r <- x  # vector case
   else {
     r <- x[, series, drop = FALSE]
     seriesNames(r) <- names[series]
@@ -32,28 +33,26 @@ tbind.ts <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
   for (z in list(...)) {
     if (!is.null(z)) {
       nm <- c(nm, seriesNames(z))
-      if (!is.ts(z)) z <- ts(z,start=start(z),end=end(z),frequency=frequency(z))
+      if (!is.ts(z)) z <- ts(z,start=tfstart(z),end=tfend(z),frequency=tffrequency(z))
       x <- cbind(x, z)
       }
     }
   if (!is.matrix(x)) x <- ts(matrix(x, length(x),1),
-                      start=start(x), end=end(x), frequency=frequency(x))
+                      start=tfstart(x), end=tfend(x), frequency=tffrequency(x))
   if (!pad.start | !pad.end)
-     x <- trimNA(x, start. = !pad.start, end. = !pad.end)
+     x <- trimNA(x, startNAs= !pad.start, endNAs= !pad.end)
   seriesNames(x) <- nm
   x
  }
 
-tfwindow.ts <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
+tfwindow.ts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf), warn=TRUE)
   {# With the default warn=T warnings will be issued if no truncation takes
    #  place because start or end is outside the range of data.
-   if (is.null(start.) && !is.null(tf)) start. <- start(tf)
-   if (is.null(end.)   && !is.null(tf)) end.   <- end(tf)
    if (!warn) 
      {opts <- options(warn = -1)
       on.exit(options(opts))
      }
-   y <- window(x, start=start., end=end.)
+   y <- window(x, start=start, end=end)
    if (is.matrix(x) && !is.matrix(y) )
       y <- tframed(matrix(y, length(y), ncol(x)), tframe(y))
    seriesNames(y) <- seriesNames(x)
@@ -61,15 +60,14 @@ tfwindow.ts <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
   }
 
 
-# The .tstframe methods work on tframe the tframe of a ts object. 
-# The .tframe (next) methods should work for most <tstframe tframe> tframes.
+# The next methods should work for most tstframe  tframes.
 # Following are a couple that are slightly different.
 
-start.tstframe <- function(x, ...) c(floor(x[1]+getOption("ts.eps")),
+tfstart.tstframe <- function(x) c(floor(x[1]+getOption("ts.eps")),
     round(1 + ((x[1]+getOption("ts.eps"))%%1)*x[3]))
 #  (... further arguments, currently disregarded)
 
-end.tstframe   <- function(x, ...) c(floor(x[2]+getOption("ts.eps")),
+tfend.tstframe   <- function(x) c(floor(x[2]+getOption("ts.eps")),
     round(1 + ((x[2]+getOption("ts.eps"))%%1)*x[3]))
 #  (... further arguments, currently disregarded)
 

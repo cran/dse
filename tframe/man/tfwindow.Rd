@@ -7,16 +7,16 @@
 \title{Truncate a Time Series}
 \description{Truncate a time series object to a time window.}
 \usage{
-    tfwindow(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
-    \method{tfwindow}{default}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
-    \method{tfwindow}{ts}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
-    \method{tfwindow}{tframe}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
+    tfwindow(x, tf=NULL, start=tfstart(tf), end=tfend(tf), warn=TRUE)
+    \method{tfwindow}{default}(x, tf=NULL, start=tfstart(tf), end=tfend(tf), warn=TRUE)
+    \method{tfwindow}{ts}(x, tf=NULL, start=tfstart(tf), end=tfend(tf), warn=TRUE)
+    \method{tfwindow}{tframe}(x, tf=NULL, start=tfstart(tf), end=tfend(tf), warn=TRUE)
     }
 
 \arguments{
     \item{x}{A time series object.}
-    \item{start.}{A start date of a format compatible with the time series}
-    \item{end.}{An end date of a format compatible with the time series}
+    \item{start}{A start date of a format compatible with the time series}
+    \item{end}{An end date of a format compatible with the time series}
     \item{tf}{A tframe or tframed object}
     \item{warn}{A logical indicating if warning should be produced}
 }
@@ -24,7 +24,7 @@
 A time series object similar to x, but typically spanning a shorter time period.
 }
 \details{
-If \code{start.} or \code{end.} are omitted and \code{tf} is specified then the
+If \code{start} or \code{end} are omitted and \code{tf} is specified then the
 start or end is taken from the \code{tf} object.
 For ts class objects this function calls window but makes more effort to 
 preserve \code{seriesNames} if \code{x} has them. 

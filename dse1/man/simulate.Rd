@@ -9,10 +9,10 @@
 \usage{
     simulate(model, ...)
     \method{simulate}{ARMA}(model, y0=NULL, input=NULL, input0=NULL,
-        start. = NULL, freq = NULL, sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
+        start=NULL, freq=NULL, sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
         rng=NULL, noise.model=NULL, compiled=.DSECOMPILED, ...)
     \method{simulate}{SS}(model, input=NULL, 
-        start. = NULL, freq = NULL,sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
+        start=NULL, freq=NULL,sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
 	rng=NULL, compiled=.DSECOMPILED, ...)
     \method{simulate}{TSestModel}(model, input=inputData(model),
 			sd=NULL, SIGMA=NULL, ...)
@@ -21,8 +21,8 @@
       \item{model}{An object of class TSmodel or TSestModel.}
     \item{input}{Data for the exogenous variable if specified in the model.}
     \item{sampleT}{The length of the sample to simulate.}
-    \item{start.}{ start. date for resulting data.}
-    \item{freq}{ freq for resulting data.}
+    \item{start}{start date for resulting data.}
+    \item{freq}{freq for resulting data.}
     \item{y0, input0}{
 Lagged values prior to t=1 for y and u, in reverse order so y0[1,] and
 input0[1,]correspond to t=0. These arguments  are not implemented for state 
@@ -66,7 +66,7 @@ there are some additional elements:
 A state space or ARMA model as described in TSmodel is simulated with pseudo
 random noise (The default noise is a normally distributed processes. 
 An object of class TSdata is
-returned. This can be used as input to estimation algorithms. If start. and 
+returned. This can be used as input to estimation algorithms. If start and 
 freq are specified, or if input or \code{noise$w} (in that order)
 have time series properties, these are given to the output. 
 If \code{noise$w0} is a matrix (rather than a vector) for a state space model 

@@ -5,13 +5,13 @@
 \title{Trim NAs from Time Series}
 \description{Trim NAs from the start and end of a time series object.}
 \usage{
-    trimNA(x, start. =TRUE, end. =TRUE)
-    \method{trimNA}{default}(x, start. =TRUE, end. =TRUE)
+    trimNA(x, startNAs=TRUE, endNAs=TRUE)
+    \method{trimNA}{default}(x, startNAs=TRUE, endNAs=TRUE)
     }
 \arguments{
     \item{x}{A time series matrix or an object of class TSdata.}
-    \item{start.}{If start.=FALSE then beginning NAs are not trimmed.}
-    \item{end.}{If end.=FALSE   then ending NAs are not trimmed.}
+    \item{startNAs}{If FALSE then beginning NAs are not trimmed.}
+    \item{endNAs}{If FALSE   then ending NAs are not trimmed.}
 }
 \value{A time series object which is windowed to the subset of 
  data which is not NAs (usually the available data).}

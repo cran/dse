@@ -224,7 +224,7 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
 
   if (verbose) cat("  dse3 graphics test 3 ...")
   z <- horizonForecasts(mod1, data, horizons=c(6,12), discard.before=20)
-  tfplot(z, start.=c(1985,1))
+  tfplot(z, start=c(1985,1))
   if (verbose) cat("ok\n")
 
   if (verbose) cat("  dse3 graphics test 4 ...")

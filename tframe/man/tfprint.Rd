@@ -2,8 +2,7 @@
 \alias{tfprint}
 \alias{tfprint.default}
 \alias{tfprint.tframe}
-\alias{tframePrint}
-\alias{tframePrint.default}
+\alias{print.tframe}
 
 \title{Print Tframed Objects}
 \description{
@@ -11,17 +10,13 @@
 }
 \usage{
     tfprint(x, ...)
-    tframePrint(x, ...)
     \method{tfprint}{default}(x, ...)
     \method{tfprint}{tframe}(x, ...)
-    \method{tframePrint}{default}(x, digits=NULL, quote=TRUE, prefix="", ...)
+    \method{print}{tframe}(x, ...)
 }
 
 \arguments{
     \item{x}{a tframe or tframed object.}
-    \item{digits}{see the generic method.}
-    \item{quote}{see the generic method.}
-    \item{prefix}{see the generic method.}
     \item{...}{arguments to be passed to other methods.}
 }
 \value{tfprint methods return the object invisibly.}

@@ -42,7 +42,12 @@
 }
 
 \examples{
-    tframe(tfTruncate(ts(rnorm(100), start=c(1982,1), frequency=12), start=5))
+    z <- ts(rnorm(100), start=c(1982,1), frequency=12)
+    Dz <- tframed(diff(z), tfTruncate(tframe(z), start=2))
+    tframe(Dz)
+    IDz <- tframed(cumsum(c(0, Dz)), tfExpand(tframe(Dz), add.start=1))
+    tframe(IDz)
+    tframe(tfTruncate(z, start=5))
 }
 \keyword{programming}
 \keyword{utilities}

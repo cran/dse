@@ -140,12 +140,12 @@ dse2.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
   modSS <- l(toSS(mod1),data)
 
   z <- featherForecasts( modSS,  from.periods=c(230,250))
-  tfplot(z, start.=c(1980,1))
+  tfplot(z, start=c(1980,1))
   if (verbose) cat("ok\n")
 
   if (verbose) cat("  dse2 graphics test 2 ...")
   z <- forecast(modSS, percent=c(90,100,110))
-  tfplot(z, start.=c(1985,1))
+  tfplot(z, start=c(1985,1))
   if (verbose) cat("ok\n")
 
   if (synopsis) 

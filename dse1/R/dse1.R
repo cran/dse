@@ -5,7 +5,10 @@ DSEversion <- function()
           "juice", "curve", "CDNmoney", "dfa", "padi", "dseNN")
    z <- z[ z %in% library()$results[,1] ]
    r <- NULL
-   for (pac in z ) r <- c(r,package.description(pac, fields="Version"))
+   for (pac in z ) 
+     if (as.numeric(version$major)+0.1*as.numeric(version$minor) < 1.9 )
+           r <- c(r, package.description(pac, fields="Version"))
+     else  r <- c(r,  packageDescription(pac, fields="Version"))
    names(r) <- z
    r
   }
@@ -387,14 +390,15 @@ print.summary.ARMA <- function(x, digits=options()$digits, ...)
  
 
 
-tfplot.TSestModel <- function(x, ..., start.=NULL,end.=NULL, 
+tfplot.TSestModel <- function(x, ..., 
+  tf=NULL, start=tfstart(tf), end=tfend(tf), 
   select.inputs=NULL, select.outputs=NULL,
   Title=NULL, xlab=NULL, ylab=NULL, 
   graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
 {
 # plot one-step ahead estimates and actual data.
 # ... is a list of models of class TSestModel.
-# start. is the starting point (date) for plotting.
+# start is the starting point (date) for plotting.
   model <- x
   if (is.null(Title))
      Title <- "One step ahead predictions (dotted) and actual data (solid)"
@@ -419,9 +423,7 @@ tfplot.TSestModel <- function(x, ..., start.=NULL,end.=NULL,
        for (model in append(list(x),list(...)) )
            z<-tbind(z,inputData(model, series=i))
        tframe(z) <-tframe(inputData(model))
-       if (is.null(start.)) start.<-start(z)
-       if (is.null(end.))   end.  <-end(z)
-       tfOnePlot(tfwindow(z,start=start.,end=end., warn=FALSE),ylab=names[i]) # tsplot
+       tfOnePlot(z,start=start,end=end, ylab=names[i]) # tsplot
        if(i==1) title(main = Title)
     } }
   for (i in select.outputs ) 
@@ -432,9 +434,7 @@ tfplot.TSestModel <- function(x, ..., start.=NULL,end.=NULL,
 	    stop("Argument in ... to be plotted is not a TSestModel object.")
          z<-cbind(z,model$estimates$pred[,i,drop=FALSE])}
      tframe(z) <- tframe(outputData(model))
-     if (is.null(start.)) start.<-start(z)
-     if (is.null(end.))   end.  <-end(z)
-     tfOnePlot(tfwindow(z,start=start.,end=end., warn=FALSE),ylab=names[m+i]) # tsplot
+     tfOnePlot(z,start=start,end=end, ylab=names[m+i]) # tsplot
      if(i==1) title(main = Title)
     }
   invisible()
@@ -600,7 +600,7 @@ roots.TSestModel <- function(obj, ...){roots(TSmodel(obj), ...)}
 
 roots.SS <- function(obj, fuzz=0, randomize=FALSE, ...) 
 {#  (... further arguments, currently disregarded)
-    z <- La.eigen(obj$F, symmetric=FALSE, only.values=TRUE)$values
+    z <- eigen(obj$F, symmetric=FALSE, only.values=TRUE)$values
     if (randomize) if (sample(c(TRUE,FALSE),1)) z <- Conj(z)
       #this prevents + - ordering of complex roots (for Monte Carlo evaluations)
     classed(z,"roots")  # constructor (roots.SS)
@@ -1359,7 +1359,7 @@ Riccati <- function(A, B, fuzz=1e-10, iterative=FALSE)
    Atinv <-solve(t(A))    # symplectic matrix Vaughan (10)(12), R=0
    S   <- rbind(cbind(Atinv     , diag(0,n)),
                cbind(B %*% Atinv, A)) 
-   Q <- La.eigen(S, symmetric=FALSE, only.values=FALSE)
+   Q <- eigen(S, symmetric=FALSE, only.values=FALSE)
    Q <- Q$vectors[,rev(order(Mod(Q$values)))]   # This may have imaginary parts.
    P <- Re( Q[(n+1):(n+n),1:n] %*% solve(Q[1:n,1:n]) ) #This should not have any significant im parts.
   }
@@ -2157,7 +2157,7 @@ simulate.TSestModel <- function(model, input=inputData(model),
   }
 
 simulate.SS <- function(model, input=NULL,
-                 start. = NULL, freq = NULL,sampleT=100, 
+                 start=NULL, freq=NULL, sampleT=100, 
                  noise=NULL, sd=1, SIGMA=NULL, rng=NULL, 
                  compiled=.DSECOMPILED, ...)
 {#  (... further arguments, currently disregarded)
@@ -2223,11 +2223,11 @@ if (!is.SS(model)) stop("simulate.SS expecting an SS TSmodel.")
  
 
 set.ts <- TRUE             
-if (!is.null(start.))
-  {if (!is.null(freq))   tf <- list(start=start., frequency=freq)
+if (!is.null(start))
+  {if (!is.null(freq))   tf <- list(start=start, frequency=freq)
    else
-      {warning("start. is specified but not freq. Using freq=1.") 
-       tf <- list(start=start., frequency=1)
+      {warning("start is specified but not freq. Using freq=1.") 
+       tf <- list(start=start, frequency=1)
       }
   }  
 else if( (!is.null(input))   && is.tframed(input))   tf <- tframe(input)
@@ -2302,23 +2302,32 @@ else set.ts <-  FALSE
       {input <- matrix(0,sampleT,1)
        G <- matrix(0,n,1)
       }
-    storage.mode(y)     <- "double"
-    storage.mode(state) <- "double"
-    r<- .Fortran("simss",y=y, 
-                         state=state, 
+ #   storage.mode(y)     <- "double"
+ #   storage.mode(state) <- "double"
+ #   storage.mode(input) <- "double"
+ #   storage.mode(w) <- "double"
+ #   storage.mode(e) <- "double"
+ #   storage.mode(FF) <- "double"
+ #   storage.mode(G) <- "double"
+ #   storage.mode(H) <- "double"
+ #   storage.mode(K) <- "double"
+ #   storage.mode(Q) <- "double"
+ #   storage.mode(R) <- "double"
+    r<- .Fortran("simss",y=if(is.double(y)) y else as.double(y), 
+                         state=if(is.double(state)) state else as.double(state), 
                          as.integer(m),
                          as.integer(n),
                          as.integer(p), 
                          as.integer(sampleT),  
-                         as.double(input),
-                         as.double(w),
-                         as.double(e),
-                         as.double(FF),
-                         as.double(G),   
-                         as.double(H),
-                         as.double(K), 
-                         as.double(Q),      
-                         as.double(R),    
+                         if(is.double(input)) input else as.double(input),
+                         if(is.double(w)) w else as.double(w),
+                         if(is.double(e)) e else as.double(e),
+                         if(is.double(FF)) FF else as.double(FF),
+                         if(is.double(G)) G else as.double(G),   
+                         if(is.double(H)) H else as.double(H),
+                         if(is.double(K)) K else as.double(K), 
+                         if(is.double(Q)) Q else as.double(Q),	 
+                         if(is.double(R)) R else as.double(R),    
                          as.integer(is.innov.SS(model)), DUP=.DSEDUP,
 			 PACKAGE="dse1"
 			 )[c("y","state")]
@@ -2347,7 +2356,7 @@ else set.ts <-  FALSE
 }
 
 simulate.ARMA <- function(model, y0=NULL, input=NULL, input0=NULL,
-                start. = NULL, freq = NULL, sampleT=100,
+                start=NULL, freq=NULL, sampleT=100,
                 noise=NULL, sd=1, SIGMA=NULL,
                 rng=NULL, noise.model=NULL, 
                 compiled=.DSECOMPILED, ...)
@@ -2399,11 +2408,11 @@ if (m!=0) for (l in 1:dim(C)[1]) C[l,,] <- invA0 %*% C[l,,]
 if(!is.null(TREND)) TREND <- invA0 %*% TREND
 
 set.ts <- TRUE             
-if (!is.null(start.))
-  {if (!is.null(freq))   tf <- list(start=start., frequency=freq)
+if (!is.null(start))
+  {if (!is.null(freq))   tf <- list(start=start, frequency=freq)
    else
-      {warning("start. is specified but not freq. Using freq=1.") 
-       tf <- list(start=start., frequency=1)
+      {warning("start is specified but not freq. Using freq=1.") 
+       tf <- list(start=start, frequency=1)
       }
   }  
 else if( (!is.null(input))   && is.tframed(input))   tf <- tframe(input)
@@ -2412,7 +2421,7 @@ else set.ts <-  FALSE
 
 noise <- makeTSnoise(sampleT,p,b, noise=noise, rng=rng,
                         SIGMA=SIGMA, sd=sd, noise.model=noise.model,
-                        start=start., frequency=freq)
+                        start=start, frequency=freq)
 if (is.null(sampleT)) sampleT<-noise$sampleT
  
  if(is.null(y0)) y0<-matrix(0,a,p)
@@ -2426,10 +2435,18 @@ if (is.null(sampleT)) sampleT<-noise$sampleT
       }
     if (is.null(TREND)) TREND<- rep(0,p)
 #    yo<- list(y=y, y0,m,p, a, b, cc, sampleT,input,input0,w,w0,A,B, C,TREND)
-    storage.mode(y)     <- "double"
+#    storage.mode(y)     <- "double"
+#    storage.mode(y0)     <- "double"
+#    storage.mode(input0)     <- "double"
+#    storage.mode(noise$w)     <- "double"
+#    storage.mode(noise$w0)     <- "double"
+#    storage.mode(A)     <- "double"
+#    storage.mode(B)     <- "double"
+#    storage.mode(C)     <- "double"
+#    storage.mode(TREND)     <- "double"
 
-    y <-.Fortran("simrma",y=y, 
-                         as.double(y0),
+    y <-.Fortran("simrma",y=if(is.double(y)) y else as.double(y), 
+                         if(is.double(y0)) y0 else as.double(y0),
                          as.integer(m),
                          as.integer(p), 
                          as.integer(a), 
@@ -2437,13 +2454,14 @@ if (is.null(sampleT)) sampleT<-noise$sampleT
                          as.integer(cc), 
                          as.integer(sampleT),  
                          as.double(input[1:sampleT,]),
-                         as.double(input0),
-                         as.double(noise$w),
-                         as.double(noise$w0),
-                         as.double(A),
-                         as.double(B),   
-                         as.double(C),
-                         as.double(TREND), DUP=.DSEDUP,
+                         if(is.double(input0)) input0 else as.double(input0),
+                         if(is.double(noise$w)) noise$w else as.double(noise$w),
+                         if(is.double(noise$w0)) noise$w0 else as.double(noise$w0),
+                         if(is.double(A)) A else as.double(A),
+                         if(is.double(B)) B else as.double(B),   
+                         if(is.double(C)) C else as.double(C),
+                         if(is.double(TREND)) TREND else as.double(TREND), 
+			 DUP=.DSEDUP,
 			 PACKAGE="dse1"
 			 ) [["y"]]
 
@@ -2649,11 +2667,21 @@ if (compiled)
      }
    if (is.null(model$TREND)) TREND <- rep(0,p)
    is  <- max(m,p)
+
+#   storage.mode(error.weights)     <- "double"
+#   storage.mode(u)     <- "double"
+#   storage.mode(y)     <- "double"
+#   storage.mode(A)     <- "double"
+#   storage.mode(B)     <- "double"
+#   storage.mode(C)     <- "double"
+#   storage.mode(TREND)     <- "double"
+
    r  <- .Fortran("arma",
                          pred=matrix(1e20,predictT,p), # pred,     
                          as.integer(length(error.weights)),
                          weighted.sqerror=matrix(0,sampleT,p),
-                         error.weights= as.double(error.weights),
+                         error.weights= if(is.double(error.weights)) 
+			           error.weights else as.double(error.weights),
                          as.integer( m), 
                          as.integer( p) ,      
                          as.integer( dim(A)[1]),  # 1+order of A  
@@ -2662,17 +2690,17 @@ if (compiled)
                          sampleT=as.integer(sampleT),
                          predictT=as.integer(predictT),
                          as.integer(periodsOutput(dat)), 
-                         as.double(u), # as.double() works ok with compiled but
-                                    #messes up the dim(u) returned in the list
-                         as.double(y),         
-                         as.double(A),  
-                         as.double(B),   
-                         as.double(C),
-                         as.double(TREND),
+                         if(is.double(u)) u else as.double(u), # as.double() works ok with compiled but
+                          #messes up the dim(u) returned in the list
+                         if(is.double(y)) y else as.double(y),	     
+                         if(is.double(A)) A else as.double(A),  
+                         if(is.double(B)) B else as.double(B),   
+                         if(is.double(C)) C else as.double(C),
+                         if(is.double(TREND)) TREND else as.double(TREND),
                          as.integer(is),  # scratch array dim
-                         as.double(matrix(0,is,is)),  # scratch array
-                         as.double(matrix(0,is,is)),  # scratch array
-                         as.double(rep(0,is)),         # scratch array
+                         matrix(double(1),is,is),  # scratch array
+                         matrix(double(1),is,is),  # scratch array
+                         double(is),         # scratch array
                          DUP=.DSEDUP,
 			 PACKAGE="dse1"
 			 ) [c("pred", "weighted.sqerror")]
@@ -2869,43 +2897,58 @@ else
     K <-    matrix(0,n,p)      # this is used
     if(return.track) track <-array(0,c(predictT,n,n))
     else             track <-array(0,c(1,1,1))  #not used
-    storage.mode(track) <- "double"
    }
 if (return.state | return.debug.info) state <- matrix(0,predictT,n)
 else              state <- matrix(0,1,1)    #not used
-storage.mode(state) <- "double"
 if(is.null(model$z0)) z <-rep(0,n)   # initial state
 else  z <-model$z0
 if(is.null(model$P0)) P <- diag(1,n) # initial state tracking error 
 else  P <-model$P0               # this is not used in innov. models
 
 if (compiled)
-  {r <- .Fortran("kf",
-                  pred=matrix(0,predictT,p),    
+  {
+#   storage.mode(error.weights)     <- "double"
+#   storage.mode(state) <- "double"
+#   storage.mode(track) <- "double"
+#   storage.mode(u)     <- "double"
+#   storage.mode(outputData(data))     <- "double"
+#   storage.mode(FF)     <- "double"
+#   storage.mode(G)     <- "double"
+#   storage.mode(H)     <- "double"
+#   storage.mode(K)     <- "double"
+#   storage.mode(Q)     <- "double"
+#   storage.mode(R)     <- "double"
+#   storage.mode(z)     <- "double"
+#   storage.mode(P)     <- "double"
+
+   r <- .Fortran("kf",
+                  pred=matrix(double(1),predictT,p), #note, as.double messes dim of pred    
                   as.integer(length(error.weights)), 
                   weighted.sqerror=matrix(0,sampleT,p),
-                  error.weights=as.double(error.weights),   
+                  error.weights=if(is.double(error.weights))
+		                 error.weights else as.double(error.weights),   
                   as.integer(return.state),
-                  state=state,         
+                  state=if(is.double(state)) state else as.double(state),         
                   as.integer(return.track & !Innov),
-                  track=track,                  
+                  track=if(is.double(track)) track else as.double(track),                  
                   as.integer(m), 
                   as.integer(n), 
                   as.integer(p), 
                   sampleT=as.integer(sampleT), 
                   predictT=as.integer(predictT), 
                   as.integer(periodsOutput(data)),  
-                  as.double(u), 
-                  as.double(outputData(data)),  
-                  as.double(FF),   
-                  as.double(G),   
-                  as.double(H),  
-                  as.double(K), 
-                  as.double(Q),      
-                  as.double(R),    
+                  if(is.double(u)) u else as.double(u), 
+                  if(is.double(outputData(data)))
+		                outputData(data) else as.double(outputData(data)),  
+                  if(is.double(FF)) FF else as.double(FF),   
+                  if(is.double(G)) G else as.double(G),	
+                  if(is.double(H)) H else as.double(H),  
+                  if(is.double(K)) K else as.double(K), 
+                  if(is.double(Q)) Q else as.double(Q),	   
+                  if(is.double(R)) R else as.double(R),	 
                   as.integer(Innov),
-                  as.double(z),
-                  as.double(P), 
+                  if(is.double(z)) z else as.double(z),
+                  if(is.double(P)) P else as.double(P), 
 		  DUP=.DSEDUP,
 		  PACKAGE="dse1"
 		  ) [c("pred","state","track","weighted.sqerror")]
@@ -3053,24 +3096,33 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
  RR <- model$R %*% t(model$R) 
  n <- dim(model$F)[2]          
  if (compiled)
-   {r<-.Fortran("smooth", 
+   {storage.mode(filter$state)     <- "double"
+    storage.mode(filter$track)     <- "double"
+    storage.mode(u)     <- "double"
+    storage.mode(outputData(data))     <- "double"
+    storage.mode(model$F)     <- "double"
+    storage.mode(G)     <- "double"
+    storage.mode(model$H)     <- "double"
+    storage.mode(RR)     <- "double"
+
+   r<-.Fortran("smooth", 
                          state=filter$state,     # state, 
                          track=filter$track,     #trackerror
-                         as.double(u),           # input
-                         as.double(outputData(data)), # output
+                         u,	       # input
+                         outputData(data), # output
                          as.integer(n),                #n
                          as.integer(m),                #m
                          as.integer(dim(model$H)[1]),  #p 
                          sampleT =as.integer(sampleT), 
-                         as.double(model$F),   
-                         as.double(G),   
-                         as.double(model$H), 
-                         as.double(RR),
-                         as.double(matrix(0,n,n)),   # scratch array
-                         as.double(matrix(0,n,n)),   # scratch array
-                         as.double(matrix(0,n,n)),   # scratch array
-                         as.double(matrix(0,n,n)),   # scratch array
-                         as.double(rep(0,n)),         # scratch array
+                         model$F,   
+                         G,   
+                         model$H, 
+                         RR,
+                         matrix(double(1),n,n),   # scratch array
+                         matrix(double(1),n,n),   # scratch array
+                         matrix(double(1),n,n),   # scratch array
+                         matrix(double(1),n,n),   # scratch array
+                         double(n),         # scratch array
                          DUP=.DSEDUP,
 			 PACKAGE="dse1"
 			 ) [c("state","track")]
@@ -3104,8 +3156,8 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
      r <- list(state=sm, track=tr) 
     }  # end S version
  
-  state <- tframed(r$state, list(start=start(outputData(data)),
-              frequency= frequency(outputData(data))), 
+  state <- tframed(r$state, list(start=tfstart(outputData(data)),
+              frequency= tffrequency(outputData(data))), 
               names=dimnames(filter$state)[[2]]) 
   r <-(list(estimates=estimates, data=data, model=model, 
             filter=filter, smooth=list(state=state, track=r$track) ) )
@@ -3139,9 +3191,9 @@ estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
    missing.data <- any(is.na(outputData(data)))
    if (0 != m) { # ensure same time window
 	inputData(data) <- tfwindow(inputData(data),
-              start.=startOutput(data), end.=endOutput(data), warn=FALSE)
+              start=startOutput(data), end=endOutput(data), warn=FALSE)
 	outputData(data) <- tfwindow(outputData(data),
-              start.=startInput(data), end.=endInput(data), warn=FALSE)
+              start=startInput(data), end=endInput(data), warn=FALSE)
 	missing.data <- any(missing.data, is.na(inputData(data)))
    }
    N <- periodsOutput(data)
@@ -4102,7 +4154,7 @@ svd.criteria <- function(sv){
 
 #######################################################################
 
-tfwindow.TSdata <- function(x, start=NULL, end=NULL, tf=NULL, warn=TRUE)
+tfwindow.TSdata <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf), warn=TRUE)
 {# window a TSdata object
   if (0 != nseriesInput(x))  inputData(x) <- 
       tfwindow(inputData(x), start=start, end=end, tf=tf, warn=warn)
@@ -4130,18 +4182,18 @@ combine.TSdata <- function(e1,e2)
 }
 
 
-trimNA.TSdata <- function(x, start.=TRUE, end.=TRUE)
+trimNA.TSdata <- function(x, startNAs=TRUE, endNAs=TRUE)
 {# trim NAs from the ends of TSdata.
  # (Observations for all series are dropped if any one contains an NA.)
- # if start.=F then beginning NAs are not trimmed.
- # If end.=F   then ending NAs are not trimmed.
+ # if startNAs=F then beginning NAs are not trimmed.
+ # If endNAs=F   then ending NAs are not trimmed.
  # The same truncation is applied to both input and output
  p <- nseriesOutput(x)
  m <- nseriesInput(x)
  if (m==0)
    mat <- trimNA(outputData(x))
  else
-   mat <- trimNA(tbind(inputData(x),outputData(x)),start.=start.,end.=end.)
+   mat <- trimNA(tbind(inputData(x),outputData(x)),startNAs=startNAs,endNAs=endNAs)
  tf <- tframe(mat)
  if (m!=0)
    {sn <- seriesNamesInput(x)
@@ -4167,7 +4219,7 @@ ytoypc <- function(ser) {
   # Convert level data to year over year percent change.
   # note: percentChange can alter the name, so grab it first.
   nm <- paste("y to y %ch", seriesNames(ser))
-  ser <- percentChange(ser, lag=frequency(ser))
+  ser <- percentChange(ser, lag=tffrequency(ser))
   seriesNames(ser) <- nm
   ser
  }
@@ -4204,7 +4256,7 @@ percentChange.default <- function(obj, base=NULL, lag=1,
  #  (If e is TRUE then base should be log of the original data).
    cls <- dseclass(obj)
    # note next has to be applied to a shorter object in the end
-   if (is.tframed(obj)) tf <- list(end=end(obj), frequency=frequency(obj))
+   if (is.tframed(obj)) tf <- list(end=tfend(obj), frequency=tffrequency(obj))
    else tf <- NULL
    if (is.null(dim(obj)))
      {vec <- TRUE
@@ -4482,15 +4534,15 @@ seriesNamesInput.TSmodel <- function(x)
 # and check elsewhere too   (esp. for start, end and frequency)
 
 ############################################################################
-start.TSestModel <- function(x, ...)start(x$data)
+start.TSestModel <- function(x, ...)tfstart(x$data)
 startInput.TSestModel <- function(x)startInput(x$data)
 startOutput.TSestModel <- function(x)startOutput(x$data)
 
-end.TSestModel <- function(x, ...)end(x$data)
+end.TSestModel <- function(x, ...)tfend(x$data)
 endInput.TSestModel <- function(x)endInput(x$data)
 endOutput.TSestModel <- function(x)endOutput(x$data)
 
-frequency.TSestModel <- function(x, ...)frequency(x$data)
+frequency.TSestModel <- function(x, ...)tffrequency(x$data)
 frequencyInput.TSestModel <- function(x)frequencyInput(x$data)
 frequencyOutput.TSestModel <- function(x)frequencyOutput(x$data)
 
@@ -4558,30 +4610,69 @@ sourceInfo.TSestModel <- function(obj){sourceInfo(TSdata(obj))}
 
 is.TSdata <- function(obj) { inherits(obj, "TSdata")}
 
+#print.TSdata <- function(x, ...)
+#{  if(0 != (nseriesInput(x)))
+#     {cat("input data:\n")
+#      print(inputData(x),...)
+#      if(!is.null(x$input.transformations))
+#	   {cat("input.transformations:\n")
+#	    print(x$input.transformations, ...)
+#	   }
+#      if(!is.null(seriesNamesInput(x)))
+#	   {cat("input.names:\n")
+#	    print(seriesNamesInput(x), ...)
+#	   }
+#      cat("\n")
+#     }
+#  if(0 != (nseriesOutput(x)))
+#     {cat("output data:\n")
+#      print(outputData(x),...)
+#      if(!is.null(x$output.transformations))
+#	  {cat("output.transformations:\n")
+#	   print(x$output.transformations, ...)
+#	  }
+#      if(!is.null(seriesNamesOutput(x)))
+#	  {cat("output.names:\n")
+#	   print(seriesNamesOutput(x), ...)
+#	  }
+#     }
+#   cat("\n")
+#   if(!is.null(x$retrieval.date))
+#      cat("retrieval date: ", x$retrieval.date, "   ")
+#   if(!is.null(x$source)) 
+#     {cat("source:\n")
+#      print(x$source)
+#     }
+#  invisible(x)
+#}
+
 print.TSdata <- function(x, ...)
-{  if(0 != (nseriesInput(x)))
+ {print.tframed <- function(x, ...)
+     {nm <- seriesNames(x)
+      tm <- time(x) 
+      if (1 != tffrequency(x))
+         tm <- paste( floor(tm), "[", 1+ (tm %% 1) * tffrequency(x), "]", sep="")
+      dimnames(x) <- list(tm, nm) 
+      attr(x,"tframe") <- NULL
+      attr(x,"seriesNames") <- NULL
+      print(x,...)
+      invisible(x)
+     }
+  if(0 != (nseriesInput(x)))
      {cat("input data:\n")
-      print(inputData(x),...)
+      print.tframed(inputData(x), ...)
       if(!is.null(x$input.transformations))
           {cat("input.transformations:\n")
            print(x$input.transformations, ...)
-          }
-      if(!is.null(seriesNamesInput(x)))
-          {cat("input.names:\n")
-           print(seriesNamesInput(x), ...)
           }
       cat("\n")
      }
   if(0 != (nseriesOutput(x)))
      {cat("output data:\n")
-      print(outputData(x),...)
+      print.tframed(outputData(x),...)
       if(!is.null(x$output.transformations))
          {cat("output.transformations:\n")
           print(x$output.transformations, ...)
-         }
-      if(!is.null(seriesNamesOutput(x)))
-         {cat("output.names:\n")
-          print(seriesNamesOutput(x), ...)
          }
      }
    cat("\n")
@@ -4598,9 +4689,9 @@ summary.TSdata <- function(object, ...)
   {#  (... further arguments, currently disregarded)
    d <- outputData(object)
    if (!is.tframed(d)) d <- as.ts(d)
-   st <- start(d)
-   en <- end(d)
-   fr <- frequency(d)
+   st <- tfstart(d)
+   en <- tfend(d)
+   fr <- tffrequency(d)
    d <- cbind(d,inputData(object))
 
    classed(list(  # summary.TSdata constructor
@@ -4621,7 +4712,7 @@ summary.TSdata <- function(object, ...)
 print.summary.TSdata <- function(x, digits=options()$digits, ...)
 {#  (... further arguments, currently disregarded)
    if (!is.null(x$description)) cat(x$description,"\n")
-   cat("start.: ", x$start, " end.: ",  x$end," Frequency: ", x$freq,"\n")
+   cat("start: ", x$start, " end: ",  x$end," Frequency: ", x$freq,"\n")
    cat("sample length = ",x$sampleT,"\n")
    cat("number of outputs=",x$p, "   number of inputs=",x$m, "\n")
    cat("average :\n")
@@ -4638,7 +4729,8 @@ print.summary.TSdata <- function(x, digits=options()$digits, ...)
 }
 
 
-tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
+tfplot.TSdata <- function(x, ..., 
+        tf=NULL, start=tfstart(tf), end=tfend(tf),
         select.inputs  = seq(length=nseriesInput(x)),
         select.outputs = seq(length=nseriesOutput(x)),
         Title=NULL, xlab=NULL, ylab=NULL, 
@@ -4650,7 +4742,7 @@ tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
  # Note that using ... like this means it cannot be used to pass additional
  #   arguments to plot, so unfortunately all necessary plot arguments must be 
  #   explicit in the arguments to tfplot.TSdata
- # start. is the starting point (date)  and end. the ending point for
+ # start is the starting point (date)  and end the ending point for
  # plotting. If not specified the whole sample is plotted.
 # output graphics can be paused between pages by setting par(ask=T).
   x <- freeze(x)
@@ -4677,9 +4769,7 @@ tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
           z[, j] <- inputData(d, series = i)
          }
        tframe(z) <-tframe(inputData(x))
-       if (!is.null(start.)) z <- tfwindow(z,start=start.)
-       if (!is.null(end.))   z <- tfwindow(z,end=end.)
-       tfOnePlot(z,ylab=names[i]) 
+       tfOnePlot(z,ylab=names[i], start=start, end=end) 
        if(i==1) title(main = Title)
     } }
   for (i in select.outputs) 
@@ -4695,9 +4785,7 @@ tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
         z[,j]<-outputData(d, series=i) 
        }
      tframe(z) <-tframe(outputData(x))
-     if (!is.null(start.)) z <- tfwindow(z,start=start.)
-     if (!is.null(end.))   z <- tfwindow(z,end=end.)
-     tfOnePlot(z,ylab=names[nseriesInput(x) + i]) # tsplot
+     tfOnePlot(z,ylab=names[nseriesInput(x) + i],start=start, end=end) # tsplot
      if((0 == nseriesInput(x)) & (i==1)) title(main = Title)
     }
   invisible()
@@ -4765,12 +4853,12 @@ start.TSdata <- function(x, ...)
 
 startInput.TSdata <- function(x)
  {if (is.null(x$input))  return(NULL)
-  else return(start(x$input))
+  else return(tfstart(x$input))
  }
 
 startOutput.TSdata <- function(x)
  {if (is.null(x$output))  return(NULL)
-  else return(start(x$output))
+  else return(tfstart(x$output))
  }
 
 end.TSdata <- function(x, ...)
@@ -4783,12 +4871,12 @@ end.TSdata <- function(x, ...)
 
 endInput.TSdata <- function(x)
  {if (is.null(x$input))  return(NULL)
-  else return(end(x$input))
+  else return(tfend(x$input))
  }
 
 endOutput.TSdata <- function(x)
  {if (is.null(x$output))  return(NULL)
-  else return(end(x$output))
+  else return(tfend(x$output))
  }
 
 frequency.TSdata <- function(x, ...)
@@ -4801,12 +4889,12 @@ frequency.TSdata <- function(x, ...)
 
 frequencyInput.TSdata <- function(x)
  {if (is.null(x$input))  return(NULL)
-  else return(frequency(x$input))
+  else return(tffrequency(x$input))
  }
 
 frequencyOutput.TSdata <- function(x)
  {if (is.null(x$output))  return(NULL)
-  else return(frequency(x$output))
+  else return(tffrequency(x$output))
  }
 
 
@@ -4815,14 +4903,16 @@ periods.TSdata <- function(x, ...) UseMethod("periodsOutput")
 periodsOutput.TSdata <- function(x)  dim(outputData(x))[1]
 periodsInput.TSdata <- function(x)  dim(inputData(x))[1]
 
-tbind.TSdata <- function(d1, d2)
- {if( ! (is.TSdata(d1) & is.TSdata(d2)))
+tbind.TSdata <- function(x, d2, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
+ {if( ! (is.TSdata(x) & is.TSdata(d2)))
      stop("tbind requires arguments to be of a similar type (ie. TSdata).")
-  if ((0 != nseriesInput(d1)) || (0 != nseriesInput(d2)) )
-    inputData(d1) <- tbind(inputData(d1),inputData(d2))
-  if ((0 != nseriesOutput(d1)) || (0 != nseriesOutput(d2)) )
-    outputData(d1) <- tbind(outputData(d1),outputData(d2))
-  d1
+  if ((0 != nseriesInput(x)) || (0 != nseriesInput(d2)) )
+    inputData(x) <- tbind(inputData(x),inputData(d2),
+                 ..., pad.start=pad.start, pad.end=pad.end, warn=warn)
+  if ((0 != nseriesOutput(x)) || (0 != nseriesOutput(d2)) )
+    outputData(x) <- tbind(outputData(x),outputData(d2),
+                 ..., pad.start=pad.start, pad.end=pad.end, warn=warn)
+  x
  }
 
 
@@ -4887,12 +4977,12 @@ as.TSdata <- function(d)
  x
 }
 
-tframed.TSdata <- function(x, tf=NULL, input.names=NULL, output.names=NULL)  
+tframed.TSdata <- function(x, tf=NULL, names=NULL)  
 {# switch to tframe representation
  if(0 != (nseriesOutput(x)))
-       outputData(x) <-tframed(outputData(x), tf=tf, names=output.names)
+       outputData(x) <-tframed(outputData(x), tf=tf, names=names$output)
  if (0 != (nseriesInput(x)))
-        inputData(x) <-tframed(inputData(x),  tf=tf, names= input.names)
+        inputData(x) <-tframed(inputData(x),  tf=tf, names=names$input)
  x
 }  
 

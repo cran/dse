@@ -2,7 +2,6 @@
 \alias{distribution}
 \alias{distribution.default}
 \alias{distribution.TSdata}
-\alias{distribution.EstEval}
 \alias{distribution.coefEstEval}
 \alias{distribution.rootsEstEval}
 \title{Plot distribution of estimates}
@@ -13,7 +12,6 @@
              select.inputs = seq(length= nseriesInput(obj)),
              select.outputs= seq(length=nseriesOutput(obj)), ...)
      \method{distribution}{default}(obj, bandwidth=0.2, series=NULL, ...)
-     \method{distribution}{EstEval}(obj, ...)
      \method{distribution}{coefEstEval}(obj,  Sort=FALSE, bandwidth=0.2,
 	graphs.per.page=5, ...)
      \method{distribution}{rootsEstEval}(obj, mod=TRUE, invert=FALSE, Sort=FALSE,

@@ -13,7 +13,7 @@
   model.eg1.ls # or print(model.eg1.ls)
   
   tfplot(model.eg1.ls)
-  tfplot(model.eg1.ls, start.=c(1990,1))
+  tfplot(model.eg1.ls, start=c(1990,1))
 
   checkResiduals(model.eg1.ls, plot.=F, pac=T)
 

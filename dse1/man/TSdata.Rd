@@ -42,6 +42,11 @@
     not make use of inputData(data) or outputData(data) which may 
     do something special for certain classes.
 }
+\examples{
+   rain  <- matrix(rnorm(86*67), 86,17)
+   radar <- matrix(rnorm(86*5),  86,5)
+   mydata <- TSdata(input=radar, output=rain)
+}
 \seealso{
 \code{\link{TSdata.object}},
 \code{\link[tframe]{freeze}},
