@@ -27,10 +27,11 @@ variables for the forecast periods.}
 }
 \value{
 The result is an object of class forecast which is a list with 
-elements $model, $horizon, $conditioning.inputs, $percent, $pred and $forecast.
-$forecast is a list with TSdata objects as elements, one for each element
+elements \code{model}, \code{horizon}, \code{conditioning.inputs}, 
+\code{percent}, \code{pred} and \code{forecast}.
+The element \code{forecast} is a list with TSdata objects as elements, one for each element
 in the list conditioning.inputs.
-$pred contains the one-step ahead forecasts for the preiods when output data
+The element \code{pred} contains the one-step ahead forecasts for the preiods when output data
 is available. 
 There is a plot method for this class.
 }

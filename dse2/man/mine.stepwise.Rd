@@ -32,7 +32,7 @@
 	v.indicator  indicating which series
 	lag.indicator indicating the lag
 	s.input.indicator and s.output.indicator are logic matrices
-	length(stepwise$rss) by m and p respectively indicating if
+	\code{length(stepwise$rss)} by m and p respectively indicating if
 	a series is included for each element of rss.
 }
 

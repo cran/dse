@@ -27,14 +27,10 @@ Algorithm used to minimize the difference.}
 A matrix which converts one model to the other.
 }
 \details{
-
 This is set up as a minimization problem with the objective 
 to reduce the squared difference between parameters.
 }
-\section{ WARNING } 
-
-This program does not work very well.
-}
+\note{WARNING: This program does not work very well.}
 \seealso{
 	\code{\link{gmap}}
 }

@@ -21,15 +21,16 @@ be made. For models with an input, input data must be provided up to predictT.
 Output data is necessary only to sampleT. If NULL predictT is set to sampleT.}
 \item{return.state}
 {
-If T the element $filter$state containing E[z(t)|y(t-1), u(t)] is returned as
+If T the element \code{filter$state} containing E[z(t)|y(t-1), u(t)] is 
+returned as
 part of the result. This can be a fairly large matrix. }
 \item{return.track}
-{If T the element $filter$track containing the expectation of the tracking 
+{If T the element \code{filter$track} containing the expectation of the tracking 
  error given y(t-1) and u(t) is returned as part of the result. This can be an 
 very large array. }
 \item{result}
 {If result is not specified an object of class TSestModel is 
-returned. Otherwise, the specified element of TSestModel$estimates
+returned. Otherwise, the specified element of \code{TSestModel$estimates}
 is returned.}
 \item{compiled}
 {If T the compiled version of the code is used. Otherwise the S version is used.}

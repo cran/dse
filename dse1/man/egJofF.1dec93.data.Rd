@@ -21,7 +21,7 @@
 	The input series is 90 day interest rates (R90) and the
 	ten output variables are CPI, GDP, M1, long run interest rates (RL), 
 	the Toronto stock exchange 300 index (TSE300), employment, 
-	the Canada/US exchange rate (PFX), a commodity price index in US$, 
+	the Canada/US exchange rate (PFX), a commodity price index in US dollars, 
 	US industrial production, and US CPI.
 
 	R90, RL and TSE are differenced. All other variables are in terms of 

@@ -30,7 +30,7 @@ sample to use for estimation. If it is NULL the whole sample is used.}
 }
 \value{
 A list with the forecast covariance for supplied models on the given
-sample. This is in the element $forecast.cov of the result. Other
+sample. This is in the element \code{forecast.cov} of the result. Other
 elements contain information in the arguments. 
 }
 \details{

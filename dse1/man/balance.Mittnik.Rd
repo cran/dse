@@ -20,9 +20,24 @@ printed and the program prompts for n.}
 }
 \value{A state space model balance a la Mittnik in a TSestModel object.}
 \details{See references.}
-\section{REFERENCES} {
+\references{
 	P.D.Gilbert (1993) State Space and ARMA models: An overview of
-	estimation and reduction. (Other reference cited therein)
+	estimation and reduction. (Other reference cited therein.)
+
+	Gilbert, P.D. (1995) "Combining VAR Estimation and State Space 
+	Model Reduction for Simple Good Predictions" J. of Forecasting: 
+	Special Issue on VAR Modelling. 14:229-250.
+
+	S.Mittnik (1989), Multivariate Time Series Analysis With State 
+	Space Models, Computers Math Appl. Vol 17, No 8/9, pp1189-1201.
+   
+	S.Mittnik (1990), Macroeconomic Forecasting Experience With 
+	Balance State Space Models,  
+	International Journal Of Forecasting, Vol 6, pp337-348.
+  
+	S.Mittnik (1990), Forecasting With Balanced State Space 
+	Representations of Multivariate Distributed Lag Models. 
+	J. of Forecasting, Vol.9, 207-218.  
 }
 \seealso{
 	\code{\link{est.VARX.ls}},

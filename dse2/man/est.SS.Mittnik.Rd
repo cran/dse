@@ -14,7 +14,7 @@
 }
 \value{A state space model in an object of class TSestModel.}
 \details{See References}
-\section{ REFERENCES} {
+\references{
 	P.D.Gilbert (1993) State Space and ARMA models: An overview of
 	estimation and reduction. (Other reference cited therein.)
 }

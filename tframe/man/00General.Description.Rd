@@ -1,5 +1,5 @@
-\name{00General_Description}
-\alias{00General_Description}
+\name{00General.Description}
+\alias{00General.Description}
 \title{Tframe}
 
 \center{Generic Methods for Handling Time}
@@ -23,19 +23,20 @@ provided by those classes is the main method which is needed. However, after
 calculations are done the time attributes of the resulting objects are
 often lost and the programmer must re-assign time attributes to the resulting
 object if those are to be retained. This has typically been done with something
-like tsp(), but these function relies on a particular time representation and
+like tsp(), but these functions rely on a particular time representation and
 would not always make sense for another representation. In order to address this,
 the tframe methods attempt to further separate the time representation from 
 the data to allow statements like
 
-tframe(x) <- tframe(y)
+\code{tframe(x) <- tframe(y)}
 
 to make the time frame of x the same as that of y, without the need to
 worry about what time representation is used in y (e.g. ts, rts, cts,
 its, ...). In this assignment x and y need not be too similar (one
 might be a univariate series while the other is a matrix or an array or
 list of spatial or panel time series data), as long as they are similar
-in the time dimension. For the case where tsp(x) <- tsp(y) would make sense,
+in the time dimension. For the case where \code{tsp(x) <- tsp(y)} would 
+make sense,
 that is effectively what the above tframe assignment will do, and for 
 existing code, most of the conversion to these more robust methods is
 accomplished simply by changing "tsp" to "tframe" and nrow() for a time 
@@ -66,7 +67,7 @@ to prevent confusion using inherit().
 The R version includes an implementaion for the ts time series class with
 tframe's specific class is tstframe.
 
-When implementing a new class, suppose it is called zzz, the most 
+When implementing a new time series class, suppose it is called zzz, the most 
 important methods which need to be
 supported are tframe.zzz(), start.tframe.zzz(), end.tframe.zzz(), and 
 periods.tframe.zzz().
@@ -91,7 +92,7 @@ the data, but the current convention of using the first dimension for
 matrix data and the length for vector data, makes it unnecessary to
 specify.
 
-Operations which should be possible on tframe'd data:
+Operations which should be possible on tframed data:
 
   In the time dimension
   
@@ -102,7 +103,7 @@ Operations which should be possible on tframe'd data:
      -tbind  (like cbind) with shift to align the the tframe 
                  (and NA pad.start, pad.end, pad=T/F) 
 		 
-     - []   without losing the tframe. This is done with select.series().
+     - [  ]   without losing the tframe. This is done with select.series().
 
 
 The attribute "series.names" is also supported as a way to indicate the names

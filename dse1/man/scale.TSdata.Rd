@@ -20,7 +20,7 @@
 	A list with two matrices or vectors, named input and output,
 	giving the multiplication factor for inputs and outputs.
 	Vectors are treated as diagonal matrices.
-	scale$input can be NULL if no transformation is to be applied (or 
+	\code{scale$input} can be NULL if no transformation is to be applied (or 
 	the data or model has no input.)}
 }
 

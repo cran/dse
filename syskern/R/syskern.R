@@ -199,6 +199,11 @@ if(is.R())
         }
       x
      }
+ 
+    # in S these only work in Unix, but the R versions work more generally.
+    present.working.directory <- function(){getwd()} #present directory
+    file.copy <- function(from, to) {file.create(to); file.append(to,from)}#copy file
+
  }
 
 
@@ -210,8 +215,8 @@ if(is.R())
 ###########################################################
 
 if(is.unix())
-  {sleep <- function(n) {system.call(paste("sleep ", n))} # pause for n seconds
-   present.working.directory <- function(){system.call("pwd")} #present directory
+  {# this version of sleep can cause some problems with the R gui
+   sleep <- function(n) {system.call(paste("sleep ", n))} # pause for n seconds
    whoami <- function(){system.call("whoami")} # return user id (for mail)
    local.host.netname <- function() {system.call("uname -n")}
 
@@ -225,7 +230,6 @@ if(is.unix())
       invisible()
      }
 
-   file.copy <- function(from, to)system.call(paste("cp ", from, to)) #copy file
 
    file.date.info <- function(file.name)
      {# This could be a lot better. It will fail for files older than a year.
@@ -243,12 +247,14 @@ if(is.unix())
 
 if(is.MSwindows())
   {system.call  <- function(cmd) 
-         {stop("system calls must be modified for this operating system.")}
+         {stop("system calls must be implemented for this operating system.")}
    sleep <- system.call 
-   present.working.directory <- system.call
    whoami <- system.call
-   file.copy <- system.call
    file.date.info <- system.call
+   if (is.S()) 
+     {present.working.directory <- system.call
+      file.copy <- system.call
+     }
   }
 
 
@@ -275,9 +281,9 @@ if(is.unix())
          list(y=  eval(d[1]),
               m=eval(d[2]),
               d= eval(d[3]),
-              h= eval(d[4]),
-              m= eval(d[5]),
-              s= eval(d[6]),
+              H= eval(d[4]),
+              M= eval(d[5]),
+              S= eval(d[6]),
               tz=system.call("date '+%Z'"))
         }
      }
@@ -290,11 +296,14 @@ if(is.unix())
          list(y=  eval(d[1]),
               m=eval(d[2]),
               d= eval(d[3]),
-              h= eval(d[4]),
-              m= eval(d[5]),
-              s= eval(d[6]),
+              H= eval(d[4]),
+              M= eval(d[5]),
+              S= eval(d[6]),
               tz=system.call("date '+%Z'"))
         }
+      # in S these only work in Unix, but the R versions work more generally.
+      present.working.directory <- function(){system.call("pwd")} #present directory
+      file.copy <- function(from, to)system.call(paste("cp ", from, to)) #copy file
      }
   }
 

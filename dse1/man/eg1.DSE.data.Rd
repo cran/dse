@@ -64,7 +64,7 @@
 \references{
 	Gilbert, P.D. 1993. "State Space and ARMA Models: An Overview of the 
 	Equivalence." Working Paper 93-4, Bank of Canada. Also available at 
-	\url{<www.bank-banque-canada.ca/pgilbert>}.
+	\url{www.bank-banque-canada.ca/pgilbert}.
 
 }
 

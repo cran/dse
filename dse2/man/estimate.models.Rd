@@ -20,10 +20,10 @@ method indicated. Its value should be NULL if no args are needed.}
 estimation. If it is NULL the whole sample is used.}
 \item{ trend}
 {If trend is T then a linear trend is calculated and returned as
-the element $trend.coef.}
+the element \code{trend.coef}.}
 }
 \value{
-$multi.model in the result is a list of the same length as 
+Element \code{multi.model} in the result is a list of the same length as 
 estimation.methods with resulting models as elements.
 }
 \details{

@@ -1,38 +1,9 @@
-#   2000/04/27 16:53:00 
-  
+ 
 ############################################################################
 
 #    functions for data analysis      <<<<<<<<<<<<<
 
 ############################################################################
-##############################################################################
-
-#  section containing documentation "stubs" (specific methods 
-#  for generic functions) so that R CMD build does not complain.
-
-##############################################################################
-
-
-
-
-
-
-
-
-
-
- 
-
-                    
-
-
-##############################################################################
-
-#  end of section containing documentation "stubs" (specific methods 
-#  for generic functions) so that R CMD build does not complain.
-
-##############################################################################
-
 
 
 phase.plots <- function(data, max.lag=1,diff=F){
@@ -115,6 +86,7 @@ est.max.like <- function(emodel, algorithm="nlm",
  # done then $dfpMin.results should be set to NULL.
  # algorithm in {"nlm", "dfpMin", "nlmin", "nlsimplex"}
 
+stop("The current version of est.max.like is superficially broken.")
  if(!is.TSestModel(emodel)) TS.error.exit()
  est  <- emodel$estimates
  Shape <- emodel$model

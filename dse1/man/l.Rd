@@ -26,7 +26,7 @@ is taken to be sampleT.}
 \item{result}
 {
 If result is not specified an object of class TSestModel is 
-returned. Otherwise, the specified element of TSestModel$estimates
+returned. Otherwise, the specified element of the estimates
 is returned.}
 }
 \value{See result above.}

@@ -15,12 +15,12 @@
 \title{Forecast covariance for different models}
 \description{Calculate the forecast covariance for different models.}
 \usage{
-	forecast.cov(obj, data=NULL, discard.before=NULL,
+	forecast.cov(obj, ..., data=NULL, discard.before=NULL,
 	   horizons=1:12, zero=F, trend=F, estimation.sample= periods(data))
 	is.forecast.cov(obj)
 }
 \arguments{
-\item{obj}{A TSmodel, TSestModel or a list of TSmodels or TSestModels}
+\item{obj}{TSdata or one or more TSmodels or TSestModels}
 \item{data}{An object of class TSdata.}
 \item{discard.before}
 {Period before which forecasts should be discarded when calculating covariance.}
@@ -31,13 +31,18 @@
 }
 \value{
 	A list with the forecast covariance for supplied models on the given
-	sample. This is in the element $forecast.cov of the result. Other
+	sample. This is in the element \code{forecast.cov} of the result. Other
 	elements contain information in the arguments.
 }
 \details{
-	Calculate the forecast cov of ... models with data.
-	This is just multiple applications of  forecast.cov.single.TSmodel
-	discard.before is an integer indicating the number of points in the
+Calculate the forecast cov of obj relative to data. If obj is TSdata
+then the output data is used as the forecast. For other classes of obj
+TSmodel(obj) is used with data to produce a forecast. TSmodel() is also
+applied to each element of ... to extract a model. All models should
+work with data. If obj is a TSestModel and data is NULL then TSdata(obj)
+is used as the data.
+This is just multiple applications of forecast.cov.single.TSmodel
+discard.before is an integer indicating the number of points in the
 beginning of forecasts to discard before calculating covariances.
 If it is the default, NULL, then the default (minimum.startup.lag) will
 be used for each model and the default (1) will be used for trend and zero.

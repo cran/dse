@@ -15,7 +15,7 @@
 
 \value{A state space model in an object of class TSestModel.}
 \details{This function uses the functions est.VARX.ls and to.SS.}
-\section{ REFERENCES} {
+\references{
 	P.D.Gilbert (1993) State Space and ARMA models: An overview of
 	estimation and reduction.
 }

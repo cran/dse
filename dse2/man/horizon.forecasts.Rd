@@ -29,7 +29,7 @@ produced.}
 The result is a list of class horizon.forecasts with elements model (a 
 TSmodel), data, horizons, discard.before, and horizon.forecasts.
 horizon.forecasts is an array with three dimension: 
-c(length(horizons), dim(model$data)).
+\code{c(length(horizons), dim(model$data))}.
 Projections are not calculated before discard.before or after
 the end of output.data(data).
 Each horizon is aligned so that horizon.forecasts[h,t,] contains the forecast

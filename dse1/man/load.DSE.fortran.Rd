@@ -2,7 +2,7 @@
 \alias{load.DSE.fortran}
 \alias{dse.win.for.tab}
 \title{Load compiled routines for time series models}
-\description{Load compiled routines for time series models.}
+\description{Load compiled routines for time series models (Splus only).}
 \usage{
 	load.DSE.fortran(from=NULL, large=F)}
 \arguments{
@@ -18,7 +18,8 @@
 \details{
 	The default assumes the compiled object code is in a subdirectory
 	named DSE.HOME/lib where DSE.HOME is a global variable set 
-	in .First.lib or when DSE is installed.
+	in .First.lib or when DSE is installed. 
+	This function is not needed in R.
 }
 \sideffects{compiled routines are loaded.}
 \examples{if(is.S()) load.DSE.fortran()}

@@ -12,7 +12,7 @@ Calculate a weighted sum squared prediction errors for a parameterization.
 
 \item{model}
 {An object of class TSmodel which gives the structure of the model to which
-para is applied. model$parms should be the same length as para.}
+para is applied. \code{model$parms} should be the same length as para.}
 \item{data}
 {
 An object of class TSdata which gives the data with which the model is

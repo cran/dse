@@ -27,7 +27,7 @@ the information which is to be retained.}
 {A list of any arguments to be passed to the criterion function.}
 }
 \value{
-A list with $result of length replications, each element containing the
+A list with element \code{result} of length replications, each element containing the
 results of criterion(estimation(simulate(model))). Other elements of
 the list contain information from the supplied arguments.
 }

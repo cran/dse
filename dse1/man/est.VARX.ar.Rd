@@ -26,7 +26,7 @@
 \value{A TSestModel object containing a TSmodel object which is aVAR model.}
 
 \details{
-This function uses the Splus function ar. The ar 
+This function uses the function ar. The ar 
 method does not support trend estimation (as in est.VARX.ls).
 If aic=T the number of lags is determined by an AIC statistic (see ar). 
 If an exogenous (input) 
@@ -42,7 +42,7 @@ Note: ar uses a Yule-Walker approach (uses autocorrelations) so effectively the
   difference and re.add.means must be T to get back to a model for the 
   original data.
 }
-\section{ REFERENCES} {
+\references{
 	P.D.Gilbert (1993) State Space and ARMA models: An overview of
 	estimation and reduction.
 }

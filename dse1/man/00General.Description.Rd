@@ -1,5 +1,5 @@
-\name{00General_Description}
-\alias{00General_Description}
+\name{00General.Description}
+\alias{00General.Description}
 \title{DSE}
 \center{Dynamic Systems Estimation - Multivariate Time Series Package}
 \usage{
@@ -11,7 +11,7 @@
 \description{
 This is a library of functions for time series modeling.  The library 
 works with the S (Splus) and R languages. A "Brief User's Guide" is available 
-at <http://www.bank-banque-canada.ca/pgilbert>  
+at \url{www.bank-banque-canada.ca/pgilbert}  
 This help and other information is also available at that web location.
 
 The library implements an object oriented approach to time series
@@ -25,7 +25,7 @@ Troll models as an example of another class of model. (Troll models are run by c
 separate software, Troll from Intex Inc, as if they were an integral part 
 of the library. Models and data are passed back and forth to Troll and the
 results can be analyzed with already existing functions in the
-library.)
+library. Note: the Troll interface is broken in the current version.)
 
 The library includes methods for simulating, estimating, and converting 
 among different
@@ -61,13 +61,14 @@ allows me to make the software
 available with minimum effort. This software is not a commercial
 product. It is the by-product of an ongoing research effort.
 Constructive suggestions and comments are welcomed. I can be reached at
-<pgilbert@bank-banque-canada.ca> or by phone at (613) 782-7346.
+\email{pgilbert@bank-banque-canada.ca} or by phone at (613) 782-7346.
 
 There is also a mailing list available which I hope will let users help 
 one another, as I cannot always be available. Please subscibe if you use
 the library extensively, especially if you can help other users.
-To subscribe send mail to <boc_list@bank-banque-canada.ca>
-with the body line \code{subscribe boc_dse Your Name}
+To subscribe send mail to 
+\email{boc\_list@bank-banque-canada.ca}
+with the body line \code{subscribe boc\_dse Your Name}
 }
 
 \section{MainDataObjects}{

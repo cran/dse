@@ -1,16 +1,17 @@
 \name{freeze}
 \alias{freeze}
 \alias{freeze.default}
-\alias{freeze.FAMEdata}
 \title{Get fixed data snapshot}
 \description{Generic method. See specific methods for details.}
 \details{
 This function extracts data from 
 a database (for example using the TS PADI programs are available 
-at <www.bank-banque-canada.ca/pgilbert> ). This method is generic.
+at \url{www.bank-banque-canada.ca/pgilbert}). This method is generic.
+The function logically belongs with the tfpadi functions in the dsepadi package
+but the generic and default are included here since they are required in many
+functions whereas the database interface has much more limited use.
 Typically the argument data is a tfPADIdata or TSPADIdata object identifying 
-the source of 
-the data. See help for tfPADIdata and TSPADIdata. 
+the source of the data. See help for tfPADIdata and TSPADIdata. 
 The default method usually just
 returns its argument, so freeze has no effect. This way freeze
 can be used to write functions which will take a snapshot from the database
@@ -23,12 +24,13 @@ might be more convenient elsewhere.
 }
 
 \seealso{ 
-	\code{\link{tfPADIdata}}
-	\code{\link{tfputpadi}}
+	\code{\link[dsepadi]{tfPADIdata}}
+	\code{\link[dsepadi]{tfputpadi}}
 	\code{\link[dse2]{freeze.tfPADIdata}}
 	\code{\link[dse2]{freeze.TSPADIdata}}
 	\code{\link[dse2]{TSPADIdata}}
 }
 \keyword{tframe}
 \keyword{time series data}
+
 

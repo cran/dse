@@ -15,13 +15,14 @@ then smoother runs the Kalman filter (l.SS) first.}
 {If T the compiled version of the code is used. Otherwise the S version is used.}
 }
 \value{
-An object of class TSestModel with an additional element $smooth. $smooth
-is a list of $state, the smoothed state, and $track, the smoothed tracking 
-error. The result will also contain the element $filter with $state and 
-$track (which may or may not have been in the original arguement). 
+An object of class TSestModel with an additional element \code{smooth}. 
+\code{smooth} is a list of \code{state}, the smoothed state, and 
+\code{track}, the smoothed tracking 
+error. The result will also contain the element \code{filter} with \code{state}
+and \code{track} (which may or may not have been in the original arguement). 
 }
 \details{
-Smoother takes the filtered state $estimates$state and produces a smoothed 
+Smoother takes the filtered state \code{estimates$state} and produces a smoothed 
 estimate of the state (sometimes called a two sided filter).
 }
 \seealso{

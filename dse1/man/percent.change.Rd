@@ -30,7 +30,7 @@ For an object of class TSdata the percent change calculation is done
 with the output data and the result is an object of class TSdata (or a list of
 objects of class TSdata).
 For an object of class TSestModel the percent change calculation is done
-with $estimates$pred and the result is an object of class TSdata (or a 
+with \code{estimates$pred} and the result is an object of class TSdata (or a 
 list of objects of class TSdata).
 }
 \details{

@@ -31,7 +31,7 @@ This may be necessary to accommodate memory constraints on the system.
 (see below.)}
 }
 \value{
-The returned result contains a list ($forecast.cov) of the forecast
+The returned result contains a list (\code{forecast.cov}) of the forecast
 covariance on the essential data for the various models and data
 subsets. It can be plotted with the generic function tfplot. Additional
 information in the result comes from the function arguments.

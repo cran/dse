@@ -1197,9 +1197,16 @@ est.VARX.ls <- function(data, subtract.means=F, re.add.means=T, standardize=F,
    if (is.null(max.lag)) max.lag <- 6
    data <- freeze(data)
    names <- series.names(data)
-   missing.data <- any(is.na(data$output),is.na(data$output))
+   missing.data <- any(is.na(input.data(data)),is.na(output.data(data)))
    m <-  input.dimension(data)
    p <- output.dimension(data)
+   if (0 != m)
+     {# ensure same time window
+      input.data(data) <- tfwindow(input.data(data),
+              start.=output.start(data), end.=output.end(data), warn=F)
+      output.data(data) <- tfwindow(output.data(data),
+              start.=input.start(data), end.=input.end(data), warn=F)
+     }
    N <- output.periods(data)
    if (standardize)
      {svd.cov <- svd(var(output.data(data)))
@@ -1613,6 +1620,7 @@ check.residuals.TSdata <- function (data, ac=T, pac=T, select=NULL, drop=NULL, p
   p <- dim(resid)[2]
   resid0 <-resid - t(array(apply(resid,2,mean),rev(dim(resid)))) # mean 0
   cusum <- apply(resid0,2,cumsum)/ t(array(diag(var(resid0)),rev(dim(resid0))))
+  if (is.R()) if (!require("ts", warn.conflicts = F)) stop("package ts is required.")
   if(plot. && exists.graphics.device()) 
     {graphs.per.page <- min(p, graphs.per.page)
      old.par <-par(mfcol = c(3, graphs.per.page), mar = c(5.1, 4.1,3.1, 0.1) ) #c(5,4.1,5,0.1) c(2.1, 4.1,3.1, 0.1)
@@ -1648,8 +1656,7 @@ check.residuals.TSdata <- function (data, ac=T, pac=T, select=NULL, drop=NULL, p
        }
     }
   else 
-    {if (is.R()) if (!require("ts", warn.conflicts = F)) stop("package ts is required.")
-     if (ac)  acr  <-acf(resid, plot=F)$acf
+    {if (ac)  acr  <-acf(resid, plot=F)$acf
      if (pac) pacr <-acf(resid, plot=F, type= "partial")$acf 
     }
   if (ac & verbose)

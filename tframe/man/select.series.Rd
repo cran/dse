@@ -4,8 +4,7 @@
 
 \title{Extract a Subset of Series}
 \description{Extract a subset of series from a tframed object.}
-\usage{
-	select.series(x, series=seq(ncol(x)))}
+\usage{select.series(x, series=seq(ncol(x)))}
 
 \arguments {
 	\item{x}{A tframed object.}
@@ -20,7 +19,7 @@
 }
 \seealso{
 	\code{\link{series.names}}
-	\code{\link{tfPADIdata}}
+	\code{\link[dsepadi]{tfPADIdata}}
 }
 \examples{
 	z <- select.series(matrix(rnorm(1000), 100,10), series=c(2, 5, 6))

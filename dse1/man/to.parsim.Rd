@@ -15,7 +15,7 @@
 It does not work very well.}
 }
 \value{A TSmodel.}
-{WARNING: This function does not work.}
+\note{WARNING: This function does not work.}
 \seealso{
 \code{\link{to.SS.Oform}}
 \code{\link{to.SS.innov}}

@@ -1366,9 +1366,6 @@ forecast.cov <- function(obj, ...)
    UseMethod("forecast.cov")
   }
 
-forecast.cov.TSestModel <- function( obj, data=NULL, ...)
- {forecast.cov(TSmodel(obj), data=if(is.null(data)) TSdata(obj) else data, ...)}
-
 forecast.cov.TSdata <- function( pred, data=NULL, horizons=1:12, discard.before=1, compiled=.DSECOMPILED)
 {# Use pred$output as the predictions of data and calculate forecast.cov
  # This is mainly useful for a fixed prediction like zero or trend.
@@ -1421,6 +1418,15 @@ TSmodel.forecast.cov <- function(obj, select=1)
   {if (is.null(obj$multi.model)) NULL else obj$multi.model[[select]]}
 
 TSdata.forecast.cov <- function(obj) {obj$data}
+
+forecast.cov.TSestModel <- function(obj, data=NULL, ..., discard.before=NULL,
+       horizons=1:12, zero=F, trend=F, estimation.sample= NULL,
+       compiled=.DSECOMPILED)
+ {forecast.cov(TSmodel(obj), ..., data=if(is.null(data)) TSdata(obj) else data,
+	discard.before=discard.before,
+	horizons=horizons, zero=zero, trend=trend,
+	estimation.sample= if(is.null(estimation.sample)) periods(data) else estimation.sample,
+	compiled=compiled)}
 
 forecast.cov.TSmodel <- function(obj, ..., data=NULL, discard.before=NULL,
        horizons=1:12, zero=F, trend=F, estimation.sample= periods(data),

@@ -98,6 +98,7 @@ percent.change.default <- function(mat, base=NULL, lag=1, cumulate=F, e=F)
  #  (prior to differencing). It is prefixed to the m prior to 
  #  cumulating. It should be a vector of length dim(m)[2]. 
  #  (If e is T then base should be log of the original data).
+   cls <- tfclass(mat)
    if (is.tframed(mat)) tf <- list(end=end(mat), frequency=frequency(mat))
    else tf <- NULL
    if (is.null(dim(mat)))
@@ -113,8 +114,8 @@ percent.change.default <- function(mat, base=NULL, lag=1, cumulate=F, e=F)
    pchange <-100*(mm[(lag+1):N,,drop=F] - 
                     mm[1:(N-lag),,drop=F])/mm[1:(N-lag),,drop=F]
    if (vec) pchange <- pchange[,1]
-   if (!is.null(tf)) pchange <- tframed(pchange, tf)
- pchange
+   tfclass(pchange) <- cls
+   if (!is.null(tf)) tframed(pchange, tf) else pchange
 }
 
 percent.change.TSestModel <- function(model, base=NULL, lag=1, cumulate=F, e=F)

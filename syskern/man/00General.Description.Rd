@@ -1,5 +1,5 @@
-\name{00General_Description}
-\alias{00General_Description}
+\name{00General.Description}
+\alias{00General.Description}
 \title{Syskern}
 \center{OS and S/R independent programming kernel}
 \usage{
@@ -10,15 +10,19 @@ This library has code which contains operating system and S/R specific
 functions. They are intended to be used as a kernel to help 
 protect other code from these problems. In many cases the functionality is 
 supplied by other functions in S or R, and in some cases the 
-function names have been used in R. The purpose of this package is to provide a 
+function names have been used in R. Indeed, as of R 1.2.1 many of the functions
+may no longer be necessary in R and the libraries many function is to provide
+similar functionality in S. The purpose of this package is to provide a 
 common interface so that other code can be written to work in S, R, and on 
 different operating systems.
 
-MSwindows versions are not done. If
-anyone can contribute these please contact <pgilbert@bank-banque-canada.ca>.
+MSwindows versions are not done, but as noted above, R provides many of the
+functions for all operating systems. If anyone can contribute to the S version
+then these please contact \email{pgilbert@bank-banque-canada.ca}.
 
 S/R differences are handled by functions global.assign, system.info, 
-exists.graphics.device, synchronize, and list.add for [["new.element"]]<-.
+exists.graphics.device, synchronize, and list.add 
+for \code{[["new.element"]]<-}.
       
 The library also implements an approach to random number generation 
 which allows the same random experiments to be replicated in S and R.
@@ -31,11 +35,12 @@ RNGs can  still be used and are probably preferred for both speed and
 theoretical reasons. The present version of this works only for uniform 
 and normal distributions.
 
-OS differences are handled by functions system.call, sleep, 
-present.working.directory, whoami, file.copy, 
-file.date.info, date.parsed, mail, local.host.netname, 
+OS differences are handled by functions \code{system.call}, \code{sleep}, 
+\code{present.working.directory}, \code{whoami}, \code{file.copy}, 
+\code{file.date.info}, \code{date.parsed}, \code{mail} and 
+\code{local.host.netname}. 
 
-Also a number of is.XXX functions are defined to identify systems.
+Also a number of \code{is.XXX} functions are defined to identify systems.
 
  The variable  .SPAWN is also set to be used to identify if Splus "For" loops
     should be used. (It is sometimes better not to use these even in Splus.)
@@ -71,10 +76,10 @@ Also a number of is.XXX functions are defined to identify systems.
 }
 
 \examples{
-  is.R()
-  is.unix()
-  set.RNG(kind="Wichmann-Hill", seed=c(979,1479,1542), normal.kind="Box-Muller")
-  rnorm(10)
+is.R()
+is.unix()
+set.RNG(kind="Wichmann-Hill", seed=c(979,1479,1542), normal.kind="Box-Muller")
+rnorm(10)
 }
 \keyword{programming}
 \keyword{interface}

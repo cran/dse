@@ -1,8 +1,0 @@
-Version: R2000.6-1
-License: Free. See the LICENCE file for details.
-Author: 'Paul Gilbert <pgilbert@bank-banque-canada.ca>'.
-URL: http://www.bank-banque-canada.ca/pgilbert
-Package: monitor
-Title: Dynamic Systems Estimation - monitoring extensions
-Description: Multivariate Time Series - monitoring extensions
-Depends: dse1 dse2

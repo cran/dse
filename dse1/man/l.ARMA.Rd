@@ -1,14 +1,13 @@
 \name{l.ARMA}
 \alias{l.ARMA}
-\title{Evaluate a ARMA TSmodel}
-\description{Evaluate a ARMA TSmodel.}
+\title{Evaluate an ARMA TSmodel}
+\description{Evaluate an ARMA TSmodel.}
 \usage{
 l.ARMA(model, data, sampleT=NULL, predictT=NULL,result=NULL, compiled=.DSECOMPILED, warn=T)
 }
 \arguments{
 \item{model}{An 'ARMA' 'TSmodel' object.}
 \item{data}{A TSdata object.}
-
 \item{sampleT} {An integer indicating the number of periods of data to use.}
 \item{predictT}{An integer to what period forecasts should be extrapolated.}
 \item{result}
@@ -24,9 +23,9 @@ A FALSE value is mainly for testing purposes.}
 
 \details{
 This function is called by the function l() when the argument to l is an ARMA
-model. Using l() is usually preferable to calling ARMA directly.
-ARMA calls a compiled program unless compiled=F. The compiled version is much 
-faster than the S version. 
+model. Using l() is usually preferable to calling l.ARMA directly.
+l.ARMA calls a compiled program unless compiled=F. The compiled version is much 
+faster. 
 }
 \seealso{
 \code{\link{l}},

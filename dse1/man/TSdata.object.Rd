@@ -5,25 +5,22 @@
 Class "TSdata" of time series data objects for use with TSmodels.
 }
 
-\section{Generation} {
-This class of objects is returned by the function TSdata or can be
-built according to the description below.
-Functions in this library which use data pass it through the function
-TSdata (which may not do much other than check that the data has class
-TSdata).
+\section{Generation}{
+This class of objects is returned by specific methods of the 
+function TSdata or can be built according to the description below.
 }
 
-\section{Methods} {
+\section{Methods}{
 The \code{TSdata} class of objects has methods for the generic
 functions \code{print, plot, periods, start, end, ..., test.equal, series.names,
 input.series.names, output.series.names}
 Also, the function \code{is.TSdata} is supported.
 }
 
-\section{Inheritance} {
+\section{Inheritance}{
 Other data classes inherit from the class \code{TSdata}.}
 
-\section{Structure} {
+\section{Structure}{
 Objects are a list with class the most general class "TSdata". The
 native form for this library has elements \code{input} and
 \code{output}. Any other elements are ignored. \code{input} and
@@ -41,7 +38,7 @@ up an object of class c("TSPADIdata", TSdata").
 \code{\link{TSdata}}
 \code{\link{TSmodel}}
 \code{\link{TSestModel.object}}
-\code{\link[dse2]{TSPADIdata}}
+\code{\link[dsepadi]{TSPADIdata}}
 }
 \keyword{DSE}
 \keyword{ts}

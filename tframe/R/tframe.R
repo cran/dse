@@ -27,6 +27,26 @@ classed <- function(x, cls) {tfclass(x) <- cls; x}
 
 ###########################################################################
 
+# freeze and its default method really belong with tfpadi (dsepadi) but the
+#  generic and default are needed more generally than the database interface,
+#  so they are included here.
+
+###########################################################################
+
+freeze <- function (data, ...) {
+#This function allows for the possiblity of data structures which invoke a
+#    call to a database.  It is called by functions which actually use data
+# eg:    data <- freeze(data)
+# in order to take a snapshot from the database and bring it into a 
+# structure which can be used for calculations.
+    UseMethod("freeze")
+} 
+ 
+freeze.default <- function(data)  
+  {if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
+
+###########################################################################
+
 #  Misc. internal utilities
 
 # Use this with "for (i in seq(length=m) )" as m==0 returns NULL and for does no loops
@@ -52,7 +72,6 @@ seqN <- function(N) {if (0==length(N)) NULL else if (N<=0) NULL else seq(N)}
 # start, end, frequency, time and window
 # are already generic functions in S with a default 
 # method which works for vectors and matrices and data with a tsp attribute.
-
 
 # The functions diff and tsmatrix are not (yet) generic function is S. The
 # existing functions are assigned as defaults and generic ones are defined.
@@ -157,7 +176,14 @@ settf <- function(value, x) {UseMethod("settf") }
 settf.default <- function(value, x)
 {if (!is.consistent.tframe(value, x))
     stop("time frame value in tframe assignment is not consistent with data.")
- tsp(x) <- value
+ # using tsp is a bit dangerous in R as it sets class "ts" which can clobber
+ # other classes. The "pure" idea of tframe is that time frame inheritance
+ # follows from the classes of the tframe attribute and classes of the
+ # object itself are separate. Instead of setting tsp(x) one would
+ #    attr(x, "tframe") <- value
+ # This would require start, end, etc to check is.tframed and then dispatch, and
+ #  that has not been implemented.
+ tsp(x) <- value   
  x
 }
 
@@ -722,7 +748,7 @@ select.series <- function(x, ...)  UseMethod("select.series")
 
 select.series.default <- function(x, series=seq(ncol(x))) {
   names <- series.names(x)
-  if (is.character(series)) series <- match(names,series, nomatch=0)
+  if (is.character(series)) series <- match(names,series, nomatch=0) > 0
   if(all(0==series) | is.null(series)) r <- NULL
   else {
     r <- classed(tframed(x[, series, drop = F], tframe(x)), class(x))# reconstructor

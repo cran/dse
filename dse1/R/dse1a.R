@@ -515,7 +515,7 @@ tfplot.TSestModel <- function(..., start.=NULL,end.=NULL,Title=NULL,
   for (i in select.outputs ) 
     {z <-c(output.data(model, series=i),
            rep(NA,dim(model$estimates$pred)[1]-periods(model$data)))
-     for (model in list(...)) z<-cbind(z,model$estimates$pred[,i])
+     for (model in list(...)) z<-cbind(z,model$estimates$pred[,i,drop=F])
      tframe(z) <- tframe(output.data(model))
      if (is.null(start.)) start.<-start(z)
      if (is.null(end.))   end.  <-end(z)

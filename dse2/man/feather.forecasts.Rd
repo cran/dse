@@ -20,9 +20,9 @@
 \item{ ...}{For a TSmodel additional arguments are passed to l()}
 }
 \value{
-The result is a list of class feather.forecasts with elements $model (a 
-TSestModel), $data, $from.periods, $feather.forecasts.
-$feather.forecasts is a list with length(from.periods) elements, each of which
+The result is a list of class feather.forecasts with elements \code{model} (a 
+TSestModel), \code{data}, \code{from.periods}, \code{feather.forecasts}.
+The element \code{feather.forecasts} is a list with length(from.periods) elements, each of which
 is a tframed matrix.
 There is a plot method for this class.
 }

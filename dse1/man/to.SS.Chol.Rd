@@ -18,7 +18,7 @@ This function may not be working properly.
 \item{Om}{
 A matrix to be used as the measurement noise covariance. If Om is
 not supplied and model is of class TSestModel then 
-model$estimates$cov is used. Otherwise, Om is set to the identity matrix.
+\code{model$estimates$cov} is used. Otherwise, Om is set to the identity matrix.
 }
 \value{
 An object of class 'SS' 'TSmodel' containing a state space model which is

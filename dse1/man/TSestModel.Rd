@@ -16,8 +16,8 @@ This class of objects contains a time series model (TSmodel),
 data (TSdata), and information obtained by evaluating the model 
 with the data in an element called \code{estimates} containing:
  
-\item{$ike}
-  {The negative log likelihood function value ( a vector of the total, 
+\item{like}
+  {The negative log likelihood function value (a vector of the total, 
    constant, the det part, and the cov part)}
 \item{cov}{The estimated residual covariance.}
 \item{pred}

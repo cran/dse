@@ -34,8 +34,12 @@ reduction procedures is printed.}
 A model is estimated and then a reduction procedure applied. The
 default estimation procedure is least squares estimation of
 a VAR model with lagged values weighted. This procedure is discussed in
-P.Gilbert 'Combining VAR Estimation and State Space Model Reduction for
-Simple Good Predictions' forethcoming in J. of Forecasting (1995?).
+Gilbert (1995).
+}
+\references{
+	Gilbert, P.D. (1995) "Combining VAR Estimation and State Space 
+	Model Reduction for Simple Good Predictions" J. of Forecasting: 
+	Special Issue on VAR Modelling. 14:229-250.
 }
 \seealso{
 \code{\link{est.black.box1}},

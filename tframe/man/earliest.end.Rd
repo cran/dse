@@ -56,7 +56,7 @@
 	the series which starts latest and latest.start.index returns the 
 	corresponding index (row position in the matrix). The index functions
 	should be considered lower level access to the data structure and should
-	not typically be used as much as the functions which return dates. 
+	typically be avoided. 
 }
 \seealso{
 	\code{\link{tframe}}

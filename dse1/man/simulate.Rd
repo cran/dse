@@ -29,7 +29,7 @@ If supplied it should be a list as described below under returned value.}
 The covariance of the noise process. If this is specified then sd is ignored.
 A vector or scalar is treated as a diagonal matrix. For an object of class
 TSestModel, if neither SIGMA nor sd are specified, then SIGMA is set to 
-the estimated covariance (model$estimates$cov).}
+the estimated covariance (\code{model$estimates$cov}).}
 \item{sd}{The standard deviation of the noise. This can be a vector.}
 \item{noise.model}{ 
 A TSmodel to be used for generating noise (not yet supported by SS methods).}
@@ -47,24 +47,25 @@ The value returned is an object of class TSdata which can be supplied as an
 argument to estimation routines. (See TSdata). In addition to the usual
 elements (see the description of a TSdata object)  
 there are some additional elements:
-   $model- the generating model, 
-   $rng - the initial RNG and seed,
-   $version - the version of S used (random number generators may vary)
-   $SIGMA as specified
-   $sd    as specified
-   $noise - a list of $e, $w and $w0 - the noise processes. $w0 is w for t=0 in
+   model- the generating model, 
+   rng - the initial RNG and seed,
+   version - the version of S used (random number generators may vary)
+   SIGMA as specified
+   sd    as specified
+   noise - a list of e, w and w0 - the noise processes. w0 is w for t=0 in
       the state space model and prior lags in ARMA models. For VAR models B has
       no lags so w0 has no effect.
-   $state - the state variable for state space models.
+   state - the state variable for state space models.
 }
 \details{
 
 A state space or ARMA model as described in TSmodel is simulated with pseudo
 random noise (The default noise is a normally distributed processes. 
 An object of class TSdata is
-returned. This can be used as input to estimation algorithms. If start. and freq are specified, or if input or noise$w (in that order)
+returned. This can be used as input to estimation algorithms. If start. and 
+freq are specified, or if input or \code{noise$w} (in that order)
 have time series properties, these are given to the output. 
-If $w0 is supplied as a matrix (rather than a vector) for a state space model 
+If \code{noise$w0} is a matrix (rather than a vector) for a state space model 
 simulation (as it is for ARMA simulations) then it is set to a
 vector of zeros. This provides compatability with VAR models (ARMA
 models with no lags in B). In general ARMA and SS simulations will

@@ -30,16 +30,16 @@ beginning of forecasts to discard for calculating covariances.}
 }
 \value{
 The returned results has element
-  $forecast.cov.true  $forecast.cov.zero $forecast.cov.trend containing 
+  \code{forecast.cov.true, forecast.cov.zero, forecast.cov.trend} containing 
      covariances averaged over estimation replications and simulation
      replications (forecasts will not change but simulated data will).
-   $forecast.cov a list of the same length as estimation.methods with each
+   \code{forecast.cov} a list of the same length as estimation.methods with each
      element containing covariances averaged over estimation replications 
      and simulation replications.
-   $estimated.models a list of length est.replications, with each elements as
-     returned by estimate.models, thus each element has $multi.model as a
+   \code{estimated.models} a list of length est.replications, with each elements as
+     returned by estimate.models, thus each element has \code{multi.model} as a
      subelement containing models for different estimation techniques.  
-     So, eg.   $estimated.models[[2]]$multi.model[[1]]  in the result will
+     So, eg. \code{estimated.models[[2]]$multi.model[[1]]}  in the result will
      be the model from the first estimation technique in the second replication.
 }
 \details{

@@ -23,10 +23,7 @@ An object of class TSmodel.}
 
 An object of class 'ARMA' 'TSmodel' containing an ARMA model.
 }
-\section{ REFERENCES} 
-
-See for example Aoki(1989)
-}
+\references{See for example Aoki(1989)}
 \seealso{
 
 \code{\link{to.SS}}

@@ -18,7 +18,7 @@
  
 }
 \seealso{
-	\code{\link{minimize}}
+	\code{\link{est.max.like}}
 }
 
 \keyword{DSE}
