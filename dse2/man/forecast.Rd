@@ -13,17 +13,17 @@
 	is.forecast.cov(x)
 }
 \arguments{
-\item{ model}{An object of class TSmodel.}
-\item{ data}{An object of class TSdata.}
-\item{ conditioning.inputs}
-{A time series matrix or list of time series matrices to use as input variables.}
-\item{ conditioning.inputs.forecasts}
-{A time series matrix or list of time series matrices to append to input
+	\item{model}{An object of class TSmodel.}
+	\item{data}{An object of class TSdata.}
+	\item{conditioning.inputs}{
+	A time series matrix or list of time series matrices to use as input variables.}
+	\item{conditioning.inputs.forecasts}{
+	A time series matrix or list of time series matrices to append to input
 variables for the forecast periods.}
-\item{ horizon }
-{The number of periods to forecast.}
-\item{ percent}
-{A vector indication percentages of the last input to use for forecast periods.}
+	\item{horizon }{The number of periods to forecast.}
+	\item{percent}{
+	A vector indication percentages of the last input to use for 
+	forecast periods.}
 }
 \value{
 The result is an object of class forecast which is a list with 

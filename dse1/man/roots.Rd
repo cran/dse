@@ -9,17 +9,14 @@
 \usage{
 	roots(model, fuzz=0, randomize=F, warn=T, by.poly=F)}
 \arguments{
-\item{ model}{An object of class TSmodel.}
-\item{ fuzz}
-{
+	\item{model}{An object of class TSmodel.}
+	\item{fuzz}{
 If non-zero then roots within fuzz distance are considered equal.}
-\item{ randomize}
-{
+	\item{randomize}{
 Randomly arrange complex pairs of roots so the one with the positive imaginary
 part is not always first (so random experiments are not biased).}
-\item{ warn}{If F then warnings about unit roots added for TREND are not printed.}
-\item{ by.poly}
-{
+	\item{warn}{If F then warnings about unit roots added for TREND are not printed.}
+	\item{by.poly}{
 If T then roots are calculated by expanding the determinant of the A
 polynomial.  Otherwise, they are calculated by converting to a state
 space representation and calculating the eigenvalues of F. This second

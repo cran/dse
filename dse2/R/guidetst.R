@@ -797,7 +797,7 @@ manuf.model  <- bft(trim.na(manuf.data), verbose=F, max.lag=5)
    sink(file= "zzz.some.name")  #all output goes to file
    ls()
    sink()    # output returns to normal
-   unlink("zzz.some.name")
+   syskern.rm("zzz.some.name")
 
    new.data <- freeze(manuf.data.ids)  # retrieve new (updated) data set
 
@@ -827,7 +827,7 @@ manuf.model  <- bft(trim.na(manuf.data), verbose=F, max.lag=5)
 
    putpadi(forecasts(z)[[1]],dbname="zzz.nameofdatabase.db", 
         series=output.series.names(z))
-   unlink("zzz.nameofdatabase.db")
+   syskern.rm("zzz.nameofdatabase.db")
 
   ok <- T
   if (!ok) {if (is.na(max.error)) max.error <- error

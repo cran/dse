@@ -9,18 +9,16 @@ tfplot(..., start.=start(TSdata(model)),end.=end(TSdata(model)),
     select.inputs=NULL, select.outputs=NULL, graphs.per.page=5)
 }
 \arguments{
-\item{model}{Objects of class TSestModel or TSdata.}
-\item{start.}{The start of the plot.}
-\item{end.}{The end of the plot.}
-\item{select.inputs}
-{
+	\item{model}{Objects of class TSestModel or TSdata.}
+	\item{start.}{The start of the plot.}
+	\item{end.}{The end of the plot.}
+	\item{select.inputs}{
 Selected inputs to plot. The default plots all. If plotting is to be
 suppressed then this argument should be given the value 0.}
-\item{ select.outputs}
-{
+	\item{select.outputs}{
 Selected outputs to plot. The default plots all. If plotting is to be
 suppressed then this argument should be given the value 0.}
-\item{ graphs.per.page}{Sets the number of graphs to plot per page.}
+	\item{graphs.per.page}{Sets the number of graphs to plot per page.}
 }
 \value{No returned value.}
 \details{

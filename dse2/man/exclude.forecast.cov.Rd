@@ -6,8 +6,8 @@
 	exclude.forecast.cov(obj, exclude.series=NULL)
 }
 \arguments{
-\item{ obj}{An object as returned by mine.strip.}
-\item{ exclude.series}{An indication of series to which should be excluded.}
+	\item{obj}{An object as returned by mine.strip.}
+	\item{exclude.series}{An indication of series to which should be excluded.}
 }
 \value{
 The returned result is a forecast.cov object like obj, but filtered to

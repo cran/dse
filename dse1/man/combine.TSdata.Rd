@@ -5,7 +5,7 @@
 \usage{
 	combine(e1, e2)}
 \arguments{
-\item{ e1, e2}{TSdata objects.}
+	\item{e1, e2}{TSdata objects.}
 }
 \value{
 An object of class TSdata which includes series from both e1 and e2.

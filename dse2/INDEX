@@ -1,12 +1,14 @@
+TSdata.forecast.cov      TS Extractor Specific Methods
 best.TSestModel          Select Best Model
 combine.forecast.cov     Combine 2 Forecast Cov Objects
+distribution             Plot distribution of estimates
 distribution.monte.carlo.simulations
                          Generate distribution plots of Monte Carlo
                          simulations
-distribution             Plot distribution of estimates
 dse2.function.tests      Function Tests for part of DSE Bundle
 dse3.function.tests      Function Tests for Part of DSE Bundle
 dse4.function.tests      Test Functions of Part of DSE Package
+est.SS.Mittnik           Estimate a State Space Model
 est.black.box            Estimate a TSmodel
 est.black.box1           Estimate a TSmodel
 est.black.box2           Estimate a TSmodel
@@ -14,7 +16,6 @@ est.black.box3           Estimate a TSmodel
 est.black.box4           Estimate a TSmodel
 est.max.like             Maximum Likelihood Estimation
 est.min.sqerror          Estimate Min Squared Error
-est.SS.Mittnik           Estimate a State Space Model
 est.wt.variables         Weighted Estimation
 estimate.models          Estimate Models
 estimators.horizon.forecasts
@@ -23,14 +24,14 @@ eval.estimation          Evaluate an estimation method
 exclude.forecast.cov     Filter Object to Remove Forecasts
 extract.forecast.cov     Extract Forecast Covariance
 feather.forecasts        Multiple Horizon-Step Ahead Forecasts
+forecast                 Forecast Multiple Steps Ahead
+forecast.cov             Forecast covariance for different models
 forecast.cov.estimators.wrt.data
                          Calculate Forecast Cov of Estimators WRT Data
 forecast.cov.estimators.wrt.true
                          Compare Forecasts Cov Relative to True Model
                          Output
-forecast.cov             Forecast covariance for different models
 forecast.cov.wrt.true    Compare Forecasts to True Model Output
-forecast                 Forecast Multiple Steps Ahead
 forecasts                Extract Forecasts
 gen.mine.data            Generate Data
 generate.model.SS        Randomly generate a state space model
@@ -61,9 +62,8 @@ summary.estimated.models
                          Summary Specific Methods
 test.equal.estimated.models
                          Specific Methods for Testing Equality
+tfplot.TSdata            Specific Methods for tfplot
 tfplot.forecast.cov      Plots of Forecast Variance
 tfplot.monte.carlo.simulations
                          Generate plots of Monte Carlo simulations
-tfplot.TSdata            Specific Methods for tfplot
 total.forecast.cov       Sum covariance of forecasts across all series
-TSdata.forecast.cov      TS Extractor Specific Methods

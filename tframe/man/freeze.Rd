@@ -27,7 +27,7 @@ might be more convenient elsewhere.
 	\code{\link[dsepadi]{tfPADIdata}}
 	\code{\link[dsepadi]{tfputpadi}}
 	\code{\link[dse2]{freeze.tfPADIdata}}
-	\code{\link[dse2]{freeze.TSPADIdata}}
+	\code{\link[dsepadi]{freeze.TSPADIdata}}
 	\code{\link[dse2]{TSPADIdata}}
 }
 \keyword{tframe}

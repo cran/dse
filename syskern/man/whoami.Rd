@@ -1,6 +1,5 @@
 \name{whoami}
 \alias{whoami}
-\alias{present.working.directory}
 \alias{local.host.netname}
 \alias{OStype}
 \alias{OSversion}
@@ -10,7 +9,7 @@
 
 \usage{
 	whoami()
-	present.working.directory()
+	getwd()
 	local.host.netname()
 	OStype()
 	OSversion()

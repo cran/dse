@@ -26,13 +26,13 @@ sometimes written
       A(L)y(t) =  B(L)w(t) + C(L)u(t)
 
 where
-\item{A}{(axpxp) is the auto-regressive polynomial array.}
-\item{B}{(bxpxp) is the moving-average polynomial array.}
-\item{C}{
+	\item{A}{(axpxp) is the auto-regressive polynomial array.}
+	\item{B}{(bxpxp) is the moving-average polynomial array.}
+	\item{C}{
 	(cxpxm) is the  input polynomial array. C should be NULL if 
 	there is no input}
-\item{y}{is the p dimensional output data.}
-\item{u}{is the m dimensional control (input) data.}
+	\item{y}{is the p dimensional output data.}
+	\item{u}{is the m dimensional control (input) data.}
 
 }
 

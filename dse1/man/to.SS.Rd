@@ -19,9 +19,8 @@ Convert a model to state space form.
 \usage{
 	to.SS(model, n=NULL)}
 \arguments{
-\item{ model}{An object of class TSmodel.}
-\item{ n}
-{If n is specified then it is used as the state dimension when the 
+	\item{model}{An object of class TSmodel.}
+	\item{n}{If n is specified then it is used as the state dimension when the 
 markov parameter conversion technique is required.}
 }
 \value{

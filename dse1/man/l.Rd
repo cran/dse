@@ -8,23 +8,20 @@
 \usage{
 	l(model, data, sampleT=NULL, predictT=NULL,result=NULL)}
 \arguments{
-\item{model}{A TSmodel object.}
-\item{data}{A TSdata object.}
-\item{sampleT}
-{
+	\item{model}{A TSmodel object.}
+	\item{data}{A TSdata object.}
+	\item{sampleT}{
 The length of data which should be used for estimation of one step ahead
 predictions. Output data
 must be at least as long as sampleT. If sampleT is not supplied it
 is taken to be periods(data).}
-\item{predictT}
-{
+	\item{predictT}{
 The length of data which should be used for simulation (i.e. - multi-step 
 prediction) beyond sampleT. Input data
 must be at least as long as predictT. predictT must be at least as
 large as sampleT. If predictT is not supplied it
 is taken to be sampleT.}
-\item{result}
-{
+	\item{result}{
 If result is not specified an object of class TSestModel is 
 returned. Otherwise, the specified element of the estimates
 is returned.}

@@ -10,17 +10,17 @@
 	is.estimated.models(obj)
 }
 \arguments{
-\item{ data}{An object of class TSdata.}
-\item{estimation.methods}
-{A named list with the names indicating the estimation method and the
-value associated with the name is a list of arguments for each the
-method indicated. Its value should be NULL if no args are needed.}
-\item{ estimation.sample}
-{An integer indicating the number of points in the sample to use for
-estimation. If it is NULL the whole sample is used.}
-\item{ trend}
-{If trend is T then a linear trend is calculated and returned as
-the element \code{trend.coef}.}
+	\item{data}{An object of class TSdata.}
+	\item{estimation.methods}{
+	A named list with the names indicating the estimation method and the
+	value associated with the name is a list of arguments for each the
+	method indicated. Its value should be NULL if no args are needed.}
+	\item{estimation.sample}{
+	An integer indicating the number of points in the sample to use for
+	estimation. If it is NULL the whole sample is used.}
+	\item{trend}{
+	If trend is T then a linear trend is calculated and returned as
+	the element \code{trend.coef}.}
 }
 \value{
 Element \code{multi.model} in the result is a list of the same length as 

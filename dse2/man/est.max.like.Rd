@@ -4,11 +4,11 @@
 \description{Maximum likelihood estimation.}
 \usage{est.max.like(model,  max.iter=20, ftol=1e-5, algorithm='nlm')}
 \arguments{
-\item{model}
-{An object of class TSestModel, or a previously returned result from max.like.}
-\item{ max.iter}{The maximum number of iterations.}
-\item{ ftol}{The function tolerance for indicating convergence.}
-\item{ algorithm}{The algorithm ('nlmin' or 'dfpMin') to use for maximization.}
+	\item{model}{
+	An object of class TSestModel, or a previously returned result from max.like.}
+	\item{max.iter}{The maximum number of iterations.}
+	\item{ftol}{The function tolerance for indicating convergence.}
+	\item{algorithm}{The algorithm ('nlmin' or 'dfpMin') to use for maximization.}
 }
 \value{
 The value returned is an object of class TSestModel with  additional

@@ -6,6 +6,7 @@
 \alias{list.add<-}
 \alias{date.parsed}
 \alias{synchronize}
+\alias{syskern.rm}
 
 \title{Utilities to handle small S/R differences}
 \description{Utilities to handle small S/R differences.}
@@ -14,10 +15,11 @@
 	global.assign()
 	exists.graphics.device()
 	open.graphics.device()
-	global.assign()
 	dev.ask()
 	date.parsed()
 	synchronize()
+	syskern.rm()  # unlink with default recursive=T
+	Sys.getenv()
 }
 
 \arguments{misc.}

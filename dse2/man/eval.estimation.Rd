@@ -13,18 +13,18 @@
 	is.estimation.evaluation(obj)
 }
 \arguments{
-\item{model}{A TSmodel.} 
-\item{replications}{The number of simulations.}
-\item{rng}{The RNG and starting seed.}
-\item{quiet}{If T then no information is printed during estimation.}
-\item{simulation.args}{A list of any arguments to pass to simulate.}
-\item{estimation}{A character string indicating the estimation routine to use.}
-\item{estimation.args}{A list of any arguments to pass to the estimation routine.}
-\item{criterion}
-{A function to apply to the results of estimation to extract 
-the information which is to be retained.}
-\item{criterion.args}
-{A list of any arguments to be passed to the criterion function.}
+	\item{model}{A TSmodel.} 
+	\item{replications}{The number of simulations.}
+	\item{rng}{The RNG and starting seed.}
+	\item{quiet}{If T then no information is printed during estimation.}
+	\item{simulation.args}{A list of any arguments to pass to simulate.}
+	\item{estimation}{A character string indicating the estimation routine to use.}
+	\item{estimation.args}{A list of any arguments to pass to the estimation routine.}
+	\item{criterion}{
+	A function to apply to the results of estimation to extract 
+	the information which is to be retained.}
+	\item{criterion.args}{
+	A list of any arguments to be passed to the criterion function.}
 }
 \value{
 A list with element \code{result} of length replications, each element containing the
@@ -43,7 +43,10 @@ is not always the case, for example with est.black.box methods).
 If criterion = 'roots' then criterion.args= list(verbose=F) is advised.
 }
 \seealso{
+\code{\link{simulate}}
+\code{\link{monte.carlo.simulations}}
 \code{\link{distribution}}
+\code{\link{forecast.cov.wrt.true}}
 }
 \examples{
 	if(is.R()) data("eg1.DSE.data.diff", package="dse1")

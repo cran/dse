@@ -17,13 +17,13 @@
 	is.horizon.forecasts(obj)
 }
 \arguments{
-\item{ model}{An object of class TSmodel.}
-\item{ data}{An object of class TSdata} 
-\item{ horizons}
-{A vector of integers indicating the horizon at which forecasts should be 
-produced.}
-\item{ discard.before}{Period before which forecasts are not calculated.}
-\item{ compiled}{If T compiled code is called.}
+	\item{model}{An object of class TSmodel.}
+	\item{data}{An object of class TSdata} 
+	\item{horizons}{
+	A vector of integers indicating the horizon at which forecasts should be 
+	produced.}
+	\item{discard.before}{Period before which forecasts are not calculated.}
+	\item{compiled}{If T compiled code is called.}
 }
 \value{
 The result is a list of class horizon.forecasts with elements model (a 

@@ -5,10 +5,9 @@
 \usage{
 	plot.roots(v, fuzz=0)}
 \arguments{
-\item{ v}
-{An object of class TSmodel or a vector of complex (or real) 
+	\item{v}{An object of class TSmodel or a vector of complex (or real) 
 values as returned by the function roots.}
-\item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
+	\item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
 }
 \sideffects{The roots and a unit circle are plotted on the complex plane.}
 \value{

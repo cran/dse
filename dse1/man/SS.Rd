@@ -54,34 +54,34 @@ or the innovations model:
        z(t) = Fz(t-1) + Gu(t) + Kw(t-1)
        y(t) = Hz(t)  + w(t)
 
-\item{F}{(nxn) is the state transition matrix F.}
-\item{H}{(pxn)is the output matrix H.}
-\item{Q}{
+	\item{F}{(nxn) is the state transition matrix F.}
+	\item{H}{(pxn)is the output matrix H.}
+	\item{Q}{
 	(nxn) is the input matrix of the system noise and the noise is 
 	assumed to be white. Some authors (eg. Harvey) modify this 
 	as rt*qt*rt' where rt is the matrix for the system noise and qt is 
 	the noise cov, but that is redundant.
 }
-\item{R}{
+	\item{R}{
 	(pxp) is the input matrix of the output (measurement) noise, which 
 	is assumed white. (probably need R if p>n )
 	}
-\item{G}{(nxp)is the control (input) matrix.}
-\item{K}{(nxp)is the Kalman gain.}
-\item{y}{is the p dimensional output data.}
-\item{u}{is the m dimensional exogenous (input) data.}
-\item{z}{
+	\item{G}{(nxp)is the control (input) matrix.}
+	\item{K}{(nxp)is the Kalman gain.}
+	\item{y}{is the p dimensional output data.}
+	\item{u}{is the m dimensional exogenous (input) data.}
+	\item{z}{
 	is the n dimensional (estimated) state at time t,  E[z(t)|y(t-1), u(t)]
 	denoted E[z(t)|t-1]. An initial value for z can be specified as z0 and 
 	an initial one step ahead state tracking error (for non-innovations 
 	models) as P0.
 }
-\item{z0}{An initial value for z can be specified as z0.}
-\item{P0}{
+	\item{z0}{An initial value for z can be specified as z0.}
+	\item{P0}{
 	An initial one step ahead state tracking error (for non-innovations 
 	models) can be specified as P0.
 }  
-\item{K, Q, R}{
+	\item{K, Q, R}{
 	For sub-class innov the Kalman gain K is specified but not Q and R.
 	For sub-class non-innov Q and R are specified but not the Kalman gain K.
 }

@@ -7,17 +7,17 @@
            reduction='reduction.Mittnik', criterion='taic', verbose=T)
 }
 \arguments{
-\item{ data}{Data in an object of class TSdata.}
-\item{ estimation}{Initial estimation method to be used.}
-\item{ reduction}{Reduction method to be used.}
-\item{ criterion}
-{Criterion to be used for model selection. This can be: 
+	\item{data}{Data in an object of class TSdata.}
+	\item{estimation}{Initial estimation method to be used.}
+	\item{reduction}{Reduction method to be used.}
+	\item{criterion}{
+	Criterion to be used for model selection. This can be: 
 port, like, aic, bic, gvc, rice,f pe, taic, tbic, tgvc, trice 
 or tfpe for the  Portmanteau test, likelihood, Akaike Information Criterion, 
 Bayes  Information Criterion, Generalized Cross Validation, Rice Criterion, 
 or Final Prediction Error. The preceeding 't' indicates that the theoretical 
 parameter space dimension should be used. }
-\item{ verbose}{Indicates if information should be printed during estimation.}
+	\item{verbose}{Indicates if information should be printed during estimation.}
 }
 \value{A state space model in an object of class TSestModel.}
 \sideffects{

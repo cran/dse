@@ -10,9 +10,8 @@ Calculate and plot roots of a model.
 }
 \arguments{
 
-\item{ model}{An object of class TSmodel.}
-
-\item{ fuzz}{If non-zero then roots within fuzz distance are considered equal.}
+	\item{model}{An object of class TSmodel.}
+	\item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
 }
 \sideffects{
 

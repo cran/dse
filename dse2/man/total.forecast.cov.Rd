@@ -6,9 +6,9 @@
 	total.forecast.cov(obj, select=NULL)
 }
 \arguments{
-\item{ obj}{An object  as returned by forecast.cov.}
-\item{ select}
-{Series to be select for summation. With the default all series are selected.}
+	\item{obj}{An object  as returned by forecast.cov.}
+	\item{select}{
+	Series to be select for summation. With the default all series are selected.}
 }
 \value{
 An object similar to that returned by forecast.cov, with the covariance

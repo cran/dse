@@ -12,7 +12,7 @@
 	reachability(model)
 }
 \arguments{
-\item{ model}{An object containing TSmodel.}}
+	\item{model}{An object containing TSmodel.}}
 \value{The singular values of the reachability matrix.}
 \details{
 

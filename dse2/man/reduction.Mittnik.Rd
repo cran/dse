@@ -10,9 +10,9 @@ Balance and reduce the state dimension of a state space model a la Mittnik.
 	reduction.Mittnik(model, data=NULL, criterion=NULL, verbose=T,warn=T)
 }
 \arguments{
-\item{model}{An object of class TSmodel or TSestModel.}
-\item{data}
-{If the supplied model is of class TSestModel and data is not supplied
+	\item{model}{An object of class TSmodel or TSestModel.}
+	\item{data}{
+	If the supplied model is of class TSestModel and data is not supplied
 then it is taken from the model. If the model is of class TSmodel
 then data must be supplied.}
 }

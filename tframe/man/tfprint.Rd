@@ -2,6 +2,7 @@
 \alias{tfprint}
 \alias{tfplot}
 \alias{tfplot.default}
+\alias{tfOnePlot}
 \alias{tfprint.default}
 \alias{tfprint.tframe}
 \alias{tfprint.tframe.default}
@@ -27,6 +28,10 @@
 	from the tframe library. Thus tfprint and tfplot provide another
 	way to program functions which use methods consistent with the tframe
 	library logic.
+	
+	Note that the start and end arguments to tfplot are "start." and "end.".
+	In some situations truncation works and these can be abreviated, but
+	often it does not work and the error message is opague.
 }
 \sideffects{An object is printed or plotted.}
 \seealso{
@@ -37,6 +42,7 @@
 }
 \examples{
 	tfplot(ts(rnorm(100), start=c(1982,1), frequency=12))
+	tfplot(ts(rnorm(100), start=c(1982,1), frequency=12), start.=c(1985,6))
 }
 \keyword{tframe}
 \keyword{ts}

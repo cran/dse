@@ -5,7 +5,7 @@
 \usage{
 	to.SS.innov(model)}
 \arguments{
-\item{ model}{An object of class TSmodel.}
+	\item{model}{An object of class TSmodel.}
 }
 \value{
 An object of class 'SS' 'TSmodel' containing an 

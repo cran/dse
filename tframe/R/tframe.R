@@ -33,7 +33,7 @@ classed <- function(x, cls) {tfclass(x) <- cls; x}
 
 ###########################################################################
 
-freeze <- function (data, ...) {
+freeze <- function(data, ...){
 #This function allows for the possiblity of data structures which invoke a
 #    call to a database.  It is called by functions which actually use data
 # eg:    data <- freeze(data)
@@ -94,9 +94,35 @@ periods.tsp <- periods.default
 
 tfplot <- function(obj, ...)  UseMethod("tfplot")
 
-tfplot.default <- function(obj, xlab=NULL, ylab=NULL,
-                           start.=NULL, end.=NULL, ...)
- {if (!is.tframed(obj)) UseMethod("tfplot")
+
+tfplot.default <- function(..., xlab=NULL, ylab=NULL,graphs.per.page=5,
+                         start.=NULL, end.=NULL,
+			 series=seq(nseries(list(...)[[1]])) )
+ {obj <- list(...)
+  d <- obj[[1]]
+  if (!is.tframed(d)) UseMethod("plot")
+  else
+    {Ngraphs <- min(length(series), graphs.per.page)
+     old.par <- par(mfcol = c(Ngraphs, 1))  # tfplot.TSdata also sets mar
+     on.exit(par(old.par))
+     for (i in series)
+       {z <- matrix(NA, periods(d), length(obj))
+        j <- 0
+        for (d in obj)
+    	  {if (!is.matrix(d)) d <- tframed(as.matrix(d), tframe(d))
+	   if(mode(i)=="character") i <- match(i, series.names(d))
+	   j <- j + 1
+	   z[,j] <- select.series(d, series=i)
+	  }
+	 tfOnePlot(tframed(z, tframe(d)),
+	           xlab=xlab, ylab=ylab, start.=start., end.=end.)
+	}
+    }
+  invisible()
+ }
+ 
+tfOnePlot <- function(obj, xlab=NULL, ylab=NULL, start.=NULL, end.=NULL, ...)
+ {if (!is.tframed(obj)) UseMethod("plot")
   else
     {if (!is.null(start.)) obj <- tfwindow(obj, start. = start.)
      if (!is.null(end.))   obj <- tfwindow(obj, end.   = end.)
@@ -124,13 +150,15 @@ tfprint.default <- function(x,...)
 
 tfwindow <- function(x, ...)  UseMethod("tfwindow")
 
-tfwindow.default <- function(x, start.=NULL, end.=NULL, warn=T)
+tfwindow.default <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=T)
   {# this provides a convenient way to support warn and correct for bugs
    # in some versions of window().
    # if (is.null(start.)) start. <- start(x)
    # if (is.null(end.))   end.   <- end(x)
    # With the default warn=T warnings will be issued if no truncation takes
    #  place because start or end is outside the range of data.
+   if (is.null(start.) && !is.null(tf)) start. <- start(tf)
+   if (is.null(end.)   && !is.null(tf)) end.   <- end(tf)
    if (!warn) 
      {opts <- options(warn = -1)
       on.exit(options(opts))
@@ -148,7 +176,7 @@ tfwindow.default <- function(x, start.=NULL, end.=NULL, warn=T)
 
 ################################################
 is.tframe <- function(tf) inherits(tf, "tframe")
-is.tframed <- function (x) inherits(tframe(x), "tframe")
+is.tframed <- function(x) inherits(tframe(x), "tframe")
 
 tframe <- function(x) {UseMethod("tframe") } #extract the tframe
 
@@ -188,9 +216,9 @@ settf.default <- function(value, x)
 }
 
 
-tframed  <- function (x, ...) {UseMethod("tframed") }
+tframed <- function(x, ...) {UseMethod("tframed") }
 
-tframed.default  <- function (x, tf=NULL, names = NULL) 
+tframed.default <- function(x, tf=NULL, names = NULL) 
 {# return x as a tframed object with tframe tf
  # If ts is not a tframe but a list then ts() is attempted. This is not
  #     really the way tframed is suppose to be used, but makes backward 
@@ -366,11 +394,11 @@ latest.end.index.tframe.default <- function(x, ...)
 
 ###############################################
 
-#"tframe.tframe<-.ts"  <- function(x, value) {tsp(x) <- value; x}
+#"tframe.tframe<-.ts" <- function(x, value) {tsp(x) <- value; x}
 
 tframe.ts <- function(x){classed(tsp(x), c("tstframe", "tframe"))} # constructor
 
-"tframe<-.ts"      <- function(x, value) {tsp(x) <- value; x}
+"tframe<-.ts" <- function(x, value) {tsp(x) <- value; x}
 
 #settf.default works for .ts
 
@@ -433,10 +461,10 @@ settf.tftframe <- function(value, x)
 
 
 start.tf <- function(x) {start(tframe(x))}
-end.tf   <- function(x) {end(tframe(x))}
+end.tf <- function(x) {end(tframe(x))}
 periods.tf <- function(x) {periods(tframe(x))}
 frequency.tf <- function(x) {frequency(tframe(x))}
-time.tf  <- function(x) {time(tframe(x))}
+time.tf <- function(x) {time(tframe(x))}
 
 start.tframe.tftframe <- function(tf)
    {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
@@ -479,7 +507,7 @@ tfwindow.tf <- function  (x, start=NULL, end=NULL, warn=T, eps=.Options$ts.eps)
 
 
 
-"tframe<-.rts"     <- function(x, value) {rts(x) <- value; x}
+"tframe<-.rts" <- function(x, value) {rts(x) <- value; x}
 "tframe.tframe<-.rts" <- function(value, x)
 {if (!is.consistent.tframe(value, x))
     stop("time frame value in tframe assignment is not consistent with data.")
@@ -516,7 +544,7 @@ periods.tframe.stamped <- function(x)length(tframe(x))
 test.equal <- function(obj1, obj2, ...) UseMethod("test.equal")
 
  
-test.equal.default <- function (obj1, obj2, fuzz=1e-16) 
+test.equal.default <- function(obj1, obj2, fuzz=1e-16) 
   {if      (is.null(obj1)) is.null(obj2)
    else if (is.array(obj1)) test.equal.array(obj1, obj2, fuzz=fuzz)
    else if (is.numeric(obj1)) test.equal.numeric(obj1, obj2, fuzz=fuzz)
@@ -524,7 +552,7 @@ test.equal.default <- function (obj1, obj2, fuzz=1e-16)
    else is.logical(all.equal(obj1, obj2, tolerance=fuzz))
   }
 
-test.equal.array <- function (obj1, obj2, fuzz=1e-16) 
+test.equal.array <- function(obj1, obj2, fuzz=1e-16) 
   {if(!is.array(obj2))                     r <-F
    else if (any(dim(obj1) != dim(obj2)))   r <- F
    else if ("character" == mode(obj1))     r <- all(obj1 == obj2)
@@ -537,7 +565,7 @@ test.equal.array <- function (obj1, obj2, fuzz=1e-16)
 
 test.equal.matrix <- test.equal.array
 
-test.equal.numeric <- function (obj1, obj2, fuzz=1e-16) 
+test.equal.numeric <- function(obj1, obj2, fuzz=1e-16) 
   {r <- all(is.infinite(obj1) == is.infinite(obj2))
    if (r) 
           {nna <- !is.na(c(obj1))
@@ -547,7 +575,7 @@ test.equal.numeric <- function (obj1, obj2, fuzz=1e-16)
    r
   }
 
-test.equal.list <- function (obj1, obj2, fuzz=1e-16) 
+test.equal.list <- function(obj1, obj2, fuzz=1e-16) 
   {r <- length(obj1) == length(obj2)
    if (r) for (i in seq(length(obj1)))
         {if(r) r <- test.equal(obj1[[i]], obj2[[i]], fuzz=fuzz) }
@@ -724,8 +752,8 @@ trim.na.default <- function(x, start.=T, end.=T)
 
 
 
-nseries <- function (x) {UseMethod("nseries")} 
-nseries.default <- function(x)  {ncol(x)} 
+nseries <- function(x) {UseMethod("nseries")} 
+nseries.default <- function(x)  {if (is.matrix(x)) ncol(x) else 1} 
 
    
 

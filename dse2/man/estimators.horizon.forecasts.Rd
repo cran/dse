@@ -8,12 +8,12 @@
                        estimation.methods=NULL)
 }
 \arguments{
-\item{ data}{A TSdata object.}
-\item{estimation.methods}
-{A list of estimation methods to use. (See estimate.models.)}
-\item{estimation.sample}{The portion  of the sample to use for estimation.}
-\item{horizons}{The horizons for which forecasts are to be produced.}
-\item{quiet}{If true no estimation information is printed.}
+	\item{data}{A TSdata object.}
+	\item{estimation.methods}{
+	A list of estimation methods to use. (See estimate.models.)}
+	\item{estimation.sample}{The portion  of the sample to use for estimation.}
+	\item{horizons}{The horizons for which forecasts are to be produced.}
+	\item{quiet}{If true no estimation information is printed.}
 }
 \value{A list of forecasts at different horizons as returned by horizon.forecasts.
 }

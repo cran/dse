@@ -9,10 +9,10 @@
 	to.parsim(model, minf = nlmin, small=1e-5, equiv=F,max.iter=100,max.fcal=200)
 }
 \arguments{
-\item{ model}{An object of class TSmodel.}
-\item{ arg}
-{This function attempts to convert a model to a more parsimonious representation.
-It does not work very well.}
+	\item{model}{An object of class TSmodel.}
+	\item{arg}{
+	This function attempts to convert a model to a more parsimonious representation.
+	It does not work very well.}
 }
 \value{A TSmodel.}
 \note{WARNING: This function does not work.}

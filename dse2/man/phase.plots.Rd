@@ -6,9 +6,9 @@
 	phase.plots(data, max.lag=5,diff=F)
 }
 \arguments{
-\item{ data}{A matrix, time series matrix, or an object of class TSdata.}
-\item{ max.lag}{The maximum number of shifts to plot}
-\item{diff}{If T the data is plotted against the difference with lagged values.}
+	\item{data}{A matrix, time series matrix, or an object of class TSdata.}
+	\item{max.lag}{The maximum number of shifts to plot}
+	\item{diff}{If T the data is plotted against the difference with lagged values.}
 }
 \value{None}
 \sideffects{

@@ -15,8 +15,8 @@
 \usage{
 	scale(obj, scale)}
 \arguments{
-\item{obj}{TSdata, TSmodel or an object containing these.}
-\item{scale}{
+	\item{obj}{TSdata, TSmodel or an object containing these.}
+	\item{scale}{
 	A list with two matrices or vectors, named input and output,
 	giving the multiplication factor for inputs and outputs.
 	Vectors are treated as diagonal matrices.

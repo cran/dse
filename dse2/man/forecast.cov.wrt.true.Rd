@@ -13,19 +13,20 @@
 	is.forecast.cov.wrt.data(obj)
 }
 \arguments{
-\item{models}{A list of objects of class TSmodel.}
-\item{true.model}{An object of class TSmodel or TSestModel.}
-\item{discard.before}
-{An integer indicating the number of points in the
-beginning of forecasts to discard for calculating covariances.}
-\item{zero}{If T then forecast.cov is also calculated for a forecast of zero.}
-\item{trend}{If T then forecast.cov is also calculated for a forecast of a linear trend.}
-\item{simulation.args}{A list of any arguments which should be passed to simulate
-in order to simulate the true model.}
-\item{horizons}{Horizons for which forecast covariance should be calculated.}
-\item{rng}{If specified then it is used to set RNG.}
-\item{Spawn}{f T then Splus For loops are used.}
-\item{quiet}{If T then some messages are not printed.}
+	\item{models}{A list of objects of class TSmodel.}
+	\item{true.model}{An object of class TSmodel or TSestModel.}
+	\item{discard.before}{
+	An integer indicating the number of points in the
+	beginning of forecasts to discard for calculating covariances.}
+	\item{zero}{If T then forecast.cov is also calculated for a forecast of zero.}
+	\item{trend}{If T then forecast.cov is also calculated for a forecast of a linear trend.}
+	\item{simulation.args}{
+	A list of any arguments which should be passed to simulate
+	in order to simulate the true model.}
+	\item{horizons}{Horizons for which forecast covariance should be calculated.}
+	\item{rng}{If specified then it is used to set RNG.}
+	\item{Spawn}{If T then Splus For loops are used.}
+	\item{quiet}{If T then some messages are not printed.}
 }
 \value{
 A list with the forecast covariance for supplied models on samples
@@ -44,7 +45,12 @@ is for true.model to be a TSestModel. Otherwise, input data should be passed
 in simulation.args
 }
 \seealso{
-\code{\link{forecast.cov.estimators.wrt.data}}}
+\code{\link{forecast.cov.estimators.wrt.data}}
+\code{\link{simulate}}
+\code{\link{eval.estimation}}
+\code{\link{distribution}}
+\code{\link{monte.carlo.simulations}}
+}
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 true.model <- est.VARX.ls(eg1.DSE.data.diff) # A starting model TSestModel

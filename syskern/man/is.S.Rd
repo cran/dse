@@ -3,6 +3,7 @@
 \alias{is.R}
 \alias{is.R.pre0.60}
 \alias{is.R.pre0.63.2}
+\alias{is.R.pre1.2}
 \alias{is.Splus}
 \alias{is.Svanilla}
 \alias{is.Splus.pre3.3}

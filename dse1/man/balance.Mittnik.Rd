@@ -9,8 +9,7 @@
 	balance.Mittnik(model, n=NULL)}
 \arguments{
 	\item{model}{An TSmodel object.}
-	\item{n}
-{
+	\item{n}{
 n is intended primarily for producing a state space model from the markov
 parameters of an ARMA model, but if it is supplied with an SS model the
 result will be a model with state dimension n based on the n largest

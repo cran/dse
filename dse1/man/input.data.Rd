@@ -27,9 +27,9 @@
 	output.data(data) <- y
 }
 \arguments{
-\item{data}{Object of class TSdata.}
-\item{x}{A time series matrix.}
-\item{y}{A time series matrix.}
+	\item{data}{Object of class TSdata.}
+	\item{x}{A time series matrix.}
+	\item{y}{A time series matrix.}
 }
 \value{
 The first usages returns the input or output series.

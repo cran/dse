@@ -18,7 +18,7 @@
 	output.dimension(x)
 }
 \arguments{
-\item{data}{Object of class TSdata, TSmodel or TSestModel.}
+	\item{data}{Object of class TSdata, TSmodel or TSestModel.}
 }
 \value{
 	An integer indicating the number of series.

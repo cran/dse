@@ -14,13 +14,9 @@ by the Cayley Hamilton theorem.
 	to.ARMA(model)
 }
 \arguments{
-\item{ model}
-{
-An object of class TSmodel.}
-
+	\item{model}{An object of class TSmodel.}
 }
 \value{
-
 An object of class 'ARMA' 'TSmodel' containing an ARMA model.
 }
 \references{See for example Aoki(1989)}

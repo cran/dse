@@ -20,14 +20,14 @@
 	is.forecast.cov(obj)
 }
 \arguments{
-\item{obj}{TSdata or one or more TSmodels or TSestModels}
-\item{data}{An object of class TSdata.}
-\item{discard.before}
-{Period before which forecasts should be discarded when calculating covariance.}
-\item{horizons}{Horizons for which forecast covariance should be calculated.}
-\item{zero}{If T the covariance is calculated for a forecast of zero.}
-\item{trend}{If T the covariance is calculated for a forecast of trend.}
-\item{estimation.sample}{Portion of the sample to use for calculating the trend.}
+	\item{obj}{TSdata or one or more TSmodels or TSestModels}
+	\item{data}{An object of class TSdata.}
+	\item{discard.before}{
+	Period before which forecasts should be discarded when calculating covariance.}
+	\item{horizons}{Horizons for which forecast covariance should be calculated.}
+	\item{zero}{If T the covariance is calculated for a forecast of zero.}
+	\item{trend}{If T the covariance is calculated for a forecast of trend.}
+	\item{estimation.sample}{Portion of the sample to use for calculating the trend.}
 }
 \value{
 	A list with the forecast covariance for supplied models on the given

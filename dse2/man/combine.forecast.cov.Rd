@@ -9,8 +9,8 @@
 	combine(obj1, obj2)
 }
 \arguments{
-\item{ obj1, obj2}
-{Objects as returned by functions which calculate forecast covariances.}
+	\item{obj1, obj2}{
+	Objects as returned by functions which calculate forecast covariances.}
 }
 \value{
 An object as returned by functions which calculate forecast covariances.
