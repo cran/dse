@@ -8,7 +8,7 @@
 \alias{forecastCov.compiled.SS}
 \alias{forecastCov.compiled.innov}
 \alias{forecastCov.compiled.non.innov}
-\alias{forecastCov.reductions.wrt.true}
+\alias{forecastCov.reductionsWRTtrue}
 \alias{forecastCov.single.TSmodel}
 \alias{is.forecastCov}
 

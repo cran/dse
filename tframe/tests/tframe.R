@@ -56,27 +56,34 @@ tframe.function.tests <- function( verbose=T, synopsis=T)
 
   if (verbose) cat("tframe test 8 ... ")
   z <- data[10:90,]
-  tframe(z) <- tftruncate.tframe(tframe(data), start=10, end=90)
+  tframe(z) <- tfTruncate(tframe(data), start=10, end=90)
   ok <- is.tframed(z)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("tframe test 9 ... ")
-  z <- tftruncate(data, start=10, end=90)
+  z <- tfTruncate(data, start=10, end=90)
   ok <- is.tframed(z)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("tframe test 10... ")
   data <- tframed(matrix(rnorm(300),100,3), list(start=c(1961,1), frequency=12))
-  z <- tfwindow(data, start=c(1963,2))
-  zz <-data
+  z   <- tfwindow(data, start=c(1963,2))
+  zz  <- data
   zz  <- tfwindow(zz, start=c(1963,2))
   zzz <- tfwindow(data, start=c(1963,2))
   tframe(zzz) <- tframe(z)
-  zzz <- tframed(zzz, tframe(zzz))
-  ok <- is.tframed(z) & is.tframed(zz) &  all(z==zz) & all(z==zzz)
-  all.ok <- all.ok & ok 
+  zzz  <- tframed(zzz, tframe(zzz))
+  zzzz <- tframed(matrix(rnorm(300),100,3), tframe(data))
+
+  all.ok <- all.ok &  is.tframed(data)
+  all.ok <- all.ok &  is.tframed(z)
+  all.ok <- all.ok &  is.tframed(zz)
+  all.ok <- all.ok &  is.tframed(zzz)
+  all.ok <- all.ok &  is.tframed(zzzz)
+  all.ok <- all.ok &  all(z==zz)
+  all.ok <- all.ok &  all(z==zzz)
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("tframe test 11... ")
@@ -93,10 +100,10 @@ tframe.function.tests <- function( verbose=T, synopsis=T)
   if (verbose) cat("tframe test 13... ")
   data <- tframed(matrix(rnorm(300),100,3), list(start=c(1961,1), frequency=12))
   z <- tfwindow(data, start=c(1963,2), end=c(1969,1))
-  ok <-      all(start(data)== earliest.start(data, z))
-  ok <- ok & all(    end(z) == earliest.end  (data, z))
-  ok <- ok & all(start(z)   == latest.start  (data, z))
-  ok <- ok & all( end(data) == latest.end   (data, z))
+  ok <-      all(start(data)== earliestStart(data, z))
+  ok <- ok & all(    end(z) == earliestEnd  (data, z))
+  ok <- ok & all(start(z)   == latestStart  (data, z))
+  ok <- ok & all( end(data) == latestEnd   (data, z))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
@@ -111,7 +118,9 @@ tframe.function.tests <- function( verbose=T, synopsis=T)
   if(dev.cur() == 1) postscript(file="tframeGraphicsTest.ps")
 
 # plot(data)
- tfplot(data)
+  tfplot(data)
+  seriesNames(data) <- c("newname 1", "newname 2", "newname 3")
+  tfplot(data)
 
   if (synopsis) 
     {if (verbose) cat("All tframe tests completed")

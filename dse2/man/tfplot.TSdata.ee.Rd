@@ -17,14 +17,14 @@
     \method{tfplot}{featherForecasts}(x, start.=NULL, end.=NULL, 
       series=NULL, graphs.per.page=5, reset.screen=T, mar=par()$mar)
     \method{tfplot}{forecast}(x, start.=NULL, end.=NULL,
-        series = seq(length=output.dimension(x$data)),
-        names = output.series.names(x$data), mar=par()$mar)
+        series = seq(length=nseriesOutput(x$data)),
+        names = seriesNamesOutput(x$data), mar=par()$mar)
     \method{tfplot}{forecastCov.estimatorsWRTdata}(x, 
         series=1:dim(x$forecastCov[[1]])[2], 
         select.cov=1:length(x$forecastCov),
         select.zero=T, select.trend=T, lty=NULL, mar=par()$mar,  ...)
     \method{tfplot}{horizonForecasts}(x, start.=NULL, end.=NULL,
-         series=NULL, names=output.series.names(x$data), mar=par()$mar)
+         series=NULL, names=seriesNamesOutput(x$data), mar=par()$mar)
     \method{tfplot}{multi.model.horizonForecasts}(x, start.=NULL, end.=NULL,
          series=NULL)
 }

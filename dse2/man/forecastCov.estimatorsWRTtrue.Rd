@@ -50,10 +50,10 @@ The returned results has element
 Calculate the forecasts cov of models estimated from simulations of 
   true.model with estimation methods indicated by estimation.methods (see 
        estimate.models). 
-This function makes multiple calls to forecastCov.wrt.true.
+This function makes multiple calls to forecastCovWRTtrue.
 }
 \seealso{
-\code{\link{forecastCov.wrt.true}}
+\code{\link{forecastCovWRTtrue}}
 \code{\link{forecastCov.estimatorsWRTdata}}
 }
 \examples{

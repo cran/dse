@@ -1,7 +1,6 @@
 \name{check.tframeConsistent}
 \alias{check.tframeConsistent}
 \alias{check.tframeConsistent.default}
-\alias{check.tframeConsistent.stamped}
 
 \title{Check for a Consistent tframe}
 \description{
@@ -9,7 +8,6 @@
 \usage{
     check.tframeConsistent(tf, x)
     \method{check.tframeConsistent}{default}(tf, x)
-    \method{check.tframeConsistent}{stamped}(tf, x)
     }
 
 \arguments{
@@ -22,6 +20,7 @@
 }
 \seealso{
     \code{\link{is.tframe}}
+    \code{\link{periods}}
 }
 
 \examples{

@@ -5,8 +5,8 @@
 \description{
     This function is defunct. Consider using tbind.}
 \usage{
-    tsmatrix(x, ...)
-    \method{tsmatrix}{default}(x, ...)
+%    tsmatrix(x, ...)
+%    \method{tsmatrix}{default}(x, ...)
 }
 \arguments{
     \item{x}{a matrix.}
@@ -19,9 +19,6 @@
 \seealso{
     \code{\link{tbind}}
 }
-\keyword{programming}
-\keyword{utilities}
-\keyword{ts}
-\keyword{chron}
+\keyword{internal}
 
 

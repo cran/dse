@@ -20,15 +20,15 @@
 \title{TSdata Series}
 \description{Extract or set input or output series in a TSdata object.}
 \usage{
-    input.data(x, series=seqN(input.dimension(x)))
-    \method{input.data}{default}(x, series=seqN(input.dimension(x)))
-    \method{input.data}{TSdata}(x,  series=seqN(input.dimension(x)))
-    \method{input.data}{TSestModel}(x, series=seqN(input.dimension(x)))
+    input.data(x, series=seqN(nseriesInput(x)))
+    \method{input.data}{default}(x, series=seqN(nseriesInput(x)))
+    \method{input.data}{TSdata}(x,  series=seqN(nseriesInput(x)))
+    \method{input.data}{TSestModel}(x, series=seqN(nseriesInput(x)))
 
-    output.data(x, series=seqN(output.dimension(x)))
-    \method{output.data}{default}(x, series=seqN(output.dimension(x)))
-    \method{output.data}{TSdata}(x,  series=seqN(output.dimension(x)))
-    \method{output.data}{TSestModel}(x, series=seqN(output.dimension(x)))
+    output.data(x, series=seqN(nseriesOutput(x)))
+    \method{output.data}{default}(x, series=seqN(nseriesOutput(x)))
+    \method{output.data}{TSdata}(x,  series=seqN(nseriesOutput(x)))
+    \method{output.data}{TSestModel}(x, series=seqN(nseriesOutput(x)))
 
     input.data(data)  <- x
     output.data(data) <- y

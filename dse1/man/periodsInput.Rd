@@ -1,11 +1,11 @@
-\name{input.periods}
-\alias{input.periods}
-\alias{input.periods.TSdata}
-\alias{input.periods.TSestModel}
+\name{periodsInput}
+\alias{periodsInput}
+\alias{periodsInput.TSdata}
+\alias{periodsInput.TSestModel}
 
-\alias{output.periods}
-\alias{output.periods.TSdata}
-\alias{output.periods.TSestModel}
+\alias{periodsOutput}
+\alias{periodsOutput.TSdata}
+\alias{periodsOutput.TSestModel}
 
 \alias{input.start}
 \alias{input.start.TSdata}
@@ -34,13 +34,13 @@
 \title{TSdata Periods}
 \description{Apply a method to the input or output data.}
 \usage{
-    input.periods(x)
-    \method{input.periods}{TSdata}(x)
-    \method{input.periods}{TSestModel}(x)
+    periodsInput(x)
+    \method{periodsInput}{TSdata}(x)
+    \method{periodsInput}{TSestModel}(x)
 
-    output.periods(x)
-    \method{output.periods}{TSdata}(x)
-    \method{output.periods}{TSestModel}(x)
+    periodsOutput(x)
+    \method{periodsOutput}{TSdata}(x)
+    \method{periodsOutput}{TSestModel}(x)
 
     input.start(x)
     \method{input.start}{TSdata}(x)
@@ -73,7 +73,7 @@
 \value{Depends.}
 \details{
     Apply a method to the input or output data so, for example,
-    input.periods(x) in theory does periods(input.data(x)), which 
+    periodsInput(x) in theory does periods(input.data(x)), which 
     returns the number of periods in input data. The actual implementation
     may not do periods(input.data(x)). For example, with TSPADIdata 
     input.data(x) requires a database retrieval which may be fairly slow,
@@ -82,7 +82,7 @@
 
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    output.periods(eg1.DSE.data.diff)
+    periodsOutput(eg1.DSE.data.diff)
 }
 %\keyword{DSE}
 \keyword{ts}

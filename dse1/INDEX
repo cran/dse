@@ -1,7 +1,8 @@
-See 00Intro or 00Intro.dse1 for a general description of this package,
-A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
-See also the related packages syskern tframe dse1 dse2 in the dse bundle
-   and packages dsepadi curve juice monitor   in the dseplus bundle.
+See 00Intro.* in each package for a short general description.
+A Users' Guide is available in dse1/doc/guide.pdf
+  and also at 'http://www.bank-banque-canada.ca/pgilbert'
+See also the bundle dseplus with related
+ packages dsepadi monitor juice curve .
 00Intro.dse1             DSE
 ARMA                     ARMA Model Constructor
 DSE.utilities            DSE Utilities
@@ -33,7 +34,6 @@ est.SS.from.VARX         Estimate a state space TSmodel using VAR
                          estimation
 est.VARX.ar              Estimate a VAR TSmodel
 est.VARX.ls              Estimate a VAR TSmodel
-example                  TS Examples
 findg                    Find Equivalence Transformation
 fix.constants            Fix TSmodel Coefficients (Parameters) to
                          Constants
@@ -45,17 +45,16 @@ information.tests        Tabulates selection criteria
 information.tests.calculations
                          Calculate selection criteria
 input.data               TSdata Series
-input.dimension          Number of Series in in Input or Output
-input.periods            TSdata Periods
-input.series.names       TSdata Series Names
 l.ARMA                   Evaluate an ARMA TSmodel
 l                        Evaluate a TSmodel
 l.SS                     Evaluate a state space TSmodel
 load.DSE.fortran         Load compiled routines for time series models
 markov.parms             Markov Parameters
+nseriesInput             Number of Series in in Input or Output
 observability            Calculate Model Observability Matrix
 percent.change           Calculate percent change
 periods.TSdata           Specific Methods for tframed Data
+periodsInput             TSdata Periods
 plot.roots               Plot Model Roots
 print.TSdata             Print Specific Methods
 print.TSestModel         Display TSmodel Arrays
@@ -63,7 +62,8 @@ reachability             Calculate Model Reachability Matrix
 residual.stats           Calculate Residuals Statistics and Likelihood
 roots                    Calculate Model Roots
 scale.TSdata             Scale Methods for TS objects
-series.names.TSdata      Series Names Specific Methods
+seriesNames.TSdata       Series Names Specific Methods
+seriesNamesInput         TSdata Series Names
 set.arrays               Set TSmodel Array Information
 set.parameters           Set TSmodel Parameter Information
 simulate                 Simulate a TSmodel

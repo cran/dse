@@ -2,25 +2,23 @@
 \alias{syskern.rm}
 \alias{file.date.info}
 \alias{date.parsed}
-\alias{synchronize}
 
 \title{Utilities to handle small S/R differences}
 \description{Utilities to handle small S/R differences.}
 
 \usage{
     date.parsed()
-    synchronize()
     syskern.rm(file)
     file.date.info(file)
-    Sys.getenv()
 }
 
-\arguments{misc.}
+\arguments{
+    \item{file}{a character string indicating a file name.}
+}
 \value{misc.}
 \details{
     Utilities to handle small S/R differences. 
     \code{syskern.rm} does unlink with default recursive=T.
-    \code{synchronize} does nothing in R.
 }
 \seealso{
     \code{\link{set.RNG}}

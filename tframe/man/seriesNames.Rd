@@ -1,16 +1,16 @@
-\name{series.names}
-\alias{series.names}
-\alias{series.names.default}
-\alias{series.names<-}
-\alias{series.names<-.default}
+\name{seriesNames}
+\alias{seriesNames}
+\alias{seriesNames.default}
+\alias{seriesNames<-}
+\alias{seriesNames<-.default}
 
 \title{Names of Series in a time series object}
 \description{Extract or set names of series in a time series object.}
 \usage{
-    series.names(x)
-    \method{series.names}{default}(x)
+    seriesNames(x)
+    \method{seriesNames}{default}(x)
 
-    series.names(data) <- names 
+    seriesNames(data) <- names 
 }
 \arguments{
     \item{x}{a time series object.}
@@ -23,14 +23,14 @@ the series names of data.
 }
 \seealso{
     \code{\link{tframed}},
-    \code{\link[dse1]{input.series.names}},
-    \code{\link[dse1]{output.series.names}}
+    \code{\link[dse1]{seriesNamesInput}},
+    \code{\link[dse1]{seriesNamesOutput}}
 }
 
 \examples{
     z <- matrix(rnorm(100), 50,2)
-    series.names(z) <- c("a", "b")
-    series.names(z)
+    seriesNames(z) <- c("a", "b")
+    seriesNames(z)
 }
 \keyword{programming}
 \keyword{utilities}

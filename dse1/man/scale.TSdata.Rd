@@ -54,12 +54,12 @@
     # This is a simple example. Usually scale would have something 
     # to do with the magnitude of the data.
     z <- scale(eg1.DSE.data.diff, 
-        list(input=rep(2, input.dimension(eg1.DSE.data.diff)), 
-            output=rep(2,output.dimension(eg1.DSE.data.diff))))
+        list(input=rep(2, nseriesInput(eg1.DSE.data.diff)), 
+            output=rep(2,nseriesOutput(eg1.DSE.data.diff))))
     model <- est.VARX.ls(eg1.DSE.data.diff)
     model <- scale(model, 
-        list(input=rep(2, input.dimension(eg1.DSE.data.diff)), 
-        output=rep(2,output.dimension(eg1.DSE.data.diff))))
+        list(input=rep(2, nseriesInput(eg1.DSE.data.diff)), 
+        output=rep(2,nseriesOutput(eg1.DSE.data.diff))))
 }
 %\keyword{DSE}
 \keyword{ts}

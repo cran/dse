@@ -11,9 +11,12 @@
 
 
 dse3.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.large=1e-8, graphics=T)
-{ max.error <- NA
-  if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+{max.error <- NA
+ if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
+ if (is.S()) 
+   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
+    }
 
 
 # The seed is not important for most of these tests, but AIC eliminates all
@@ -135,14 +138,14 @@ dse3.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.la
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 14... ")
-  zz <- forecastCov.wrt.true(list(mod1,mod2),mod1, 
+  zz <- forecastCovWRTtrue(list(mod1,mod2),mod1, 
                pred.replications=2, Spawn=F, quiet=T, trend=NULL, zero=T)
   ok <- is.forecastCov(zz)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 15... ")
-  ok <- test.equal(zz, forecastCov.wrt.true(list(mod1,mod2),mod1, 
+  ok <- test.equal(zz, forecastCovWRTtrue(list(mod1,mod2),mod1, 
           pred.replications=2, Spawn=.SPAWN, quiet=T, trend=NULL, zero=T,
           rng=get.RNG(zz)))
   all.ok <- all.ok & ok 
@@ -187,8 +190,11 @@ dse3.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.la
 
 
 dse3.graphics.tests <- function(verbose=T, synopsis=T)
-{ if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+{if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
+ if (is.S()) 
+   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
+    }
 
   if (synopsis & !verbose) cat("dse3 graphics tests ...")
   if (verbose) cat("  dse3 graphics test 1 ...")
@@ -248,7 +254,7 @@ dse3.graphics.tests <- function(verbose=T, synopsis=T)
   if (verbose) cat("ok\n")
 
   if (verbose) cat("  dse3 graphics test 7 ...")
-  zz <- forecastCov.wrt.true(list(mod1,mod2),mod1, rng=test.rng,
+  zz <- forecastCovWRTtrue(list(mod1,mod2),mod1, rng=test.rng,
                pred.replications=2, Spawn=.SPAWN, trend=NULL, zero=T, quiet=T)
   tfplot(zz, select.cov=c(1))
   if (verbose) cat("ok\n")

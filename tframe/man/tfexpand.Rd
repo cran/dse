@@ -1,34 +1,26 @@
-\name{tfexpand}
-\alias{tfexpand}
-\alias{tfexpand.default}
-\alias{tfexpand.tframe}
-\alias{tframeExpand}
-\alias{tframeExpand.default}
-\alias{tframeExpand.tstframe}
-\alias{tftruncate}
-\alias{tftruncate.default}
-\alias{tftruncate.tframe}
-\alias{tframeTruncate}
-\alias{tframeTruncate.default}
-\alias{tframeTruncate.tstframe}
+\name{tfExpand}
+\alias{tfExpand}
+\alias{tfExpand.default}
+\alias{tfExpand.tframe}
+\alias{tfExpand.tstframe}
+\alias{tfTruncate}
+\alias{tfTruncate.default}
+\alias{tfTruncate.tframe}
+\alias{tfTruncate.tstframe}
 
 \title{Expand a Tframe or Tframed Object.}
 \description{Expand a tframe or tframed object.}
 
 \usage{
-    tfexpand(x, add.start = 0, add.end = 0)
-    \method{tfexpand}{default}(x, add.start = 0, add.end = 0)
-    \method{tfexpand}{tframe}(x, add.start = 0, add.end = 0)
-    tframeExpand(x, add.start=0, add.end=0)
-    \method{tframeExpand}{default}(x, add.start=0, add.end=0)
-    \method{tframeExpand}{tstframe}(x, add.start=0, add.end=0)
+    tfExpand(x, add.start = 0, add.end = 0)
+    \method{tfExpand}{default}(x, add.start = 0, add.end = 0)
+    \method{tfExpand}{tframe}(x, add.start = 0, add.end = 0)
+    \method{tfExpand}{tstframe}(x, add.start=0, add.end=0)
 
-    tftruncate(x, start=NULL, end=NULL)
-    \method{tftruncate}{default}(x, start=NULL, end=NULL)
-    \method{tftruncate}{tframe}(x, start=NULL, end=NULL)
-    tframeTruncate(x, start=NULL, end=NULL)
-    \method{tframeTruncate}{default}(x, start=NULL, end=NULL)
-    \method{tframeTruncate}{tstframe}(x, start=NULL, end=NULL)
+    tfTruncate(x, start=NULL, end=NULL)
+    \method{tfTruncate}{default}(x, start=NULL, end=NULL)
+    \method{tfTruncate}{tframe}(x, start=NULL, end=NULL)
+    \method{tfTruncate}{tstframe}(x, start=NULL, end=NULL)
 }
 \arguments{
     \item{x}{A tframe or tframed object.}
@@ -42,8 +34,10 @@
  }
 \value{A tframe or tframed object.}
 \details{
-    These functions are like tfwindow but use position indicators (rather 
-    than dates) and work with the tframe or tframed data. They are low level
+    These methods are like tfwindow but use position indicators (rather 
+    than dates) and work with a tframe or tframed data. Applied to a tframe
+    they return an adjusted tframe. Applied to a tframed object
+    they return an adjusted object with its adjusted tframe.They are low level
     utilities for other functions.
 }
 \seealso{
@@ -52,7 +46,7 @@
 }
 
 \examples{
-    tframe(tftruncate(ts(rnorm(100), start=c(1982,1), frequency=12), start=5))
+    tframe(tfTruncate(ts(rnorm(100), start=c(1982,1), frequency=12), start=5))
 }
 \keyword{programming}
 \keyword{utilities}

@@ -4,8 +4,8 @@
 \title{Lag}
 \description{lag a tframed object.}
 \usage{
-    lag(x, ...)
-    \method{lag}{default}(x, ...)
+%    lag(x, ...)
+%    \method{lag}{default}(x, ...)
 }
 \arguments{
     \item{x}{a tframed object.}
@@ -18,9 +18,6 @@
     \code{\link{lag}}
     \code{\link{lag.default}}
 }
-\keyword{programming}
-\keyword{utilities}
-\keyword{ts}
-\keyword{chron}
+\keyword{internal}
 
 

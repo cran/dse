@@ -12,8 +12,11 @@
 dse4.function.tests <- function(verbose=T, synopsis=T, 
 		fuzz.small=1e-14, fuzz.large=1e-7, graphics=T)
 {max.error <- 0
-  if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+ if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
+ if (is.S()) 
+   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
+    }
 
  if (synopsis & !verbose) cat("All dse4 tests ...") 
  if (verbose) cat("dse4 test 1 ... ")
@@ -51,7 +54,7 @@ else
 	# previously ??input=input.data(extract(all.data, outputs=1, inputs=1:2)))
   ymodel <- est.VARX.ls(z, max.lag=3)$model 
   z <- ymodel$C
-  ymodel$C <- array(0, c(dim(z)[1:2], output.dimension(umodel))) 
+  ymodel$C <- array(0, c(dim(z)[1:2], nseriesOutput(umodel))) 
   ymodel$C[1:(dim(z)[1]), 1:(dim(z)[2]), 1:(dim(z)[3])] <- z 
   sim.data <- gen.mine.data(umodel, ymodel,
     rng= list(kind="default",seed=c(21,46,16,12, 51, 2, 31, 8, 42, 60, 7, 3)) )

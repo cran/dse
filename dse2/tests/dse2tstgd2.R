@@ -39,12 +39,24 @@ all.ok <- T
 	   #list(kind="Wichmann-Hill", normal.kind="user-supplied", seed=c(979, 1479, 1542))}
            # R's Box-Muller was declared not reproducible. 
 	   
-  from <- paste(DSE.HOME, "/data/eg1.dat", sep="")
-  eg1.DSE.data <-example.get.eg.raw.data(from) #retrieves data from file
 
- 
+eg1.DSE.data <- t(matrix(scan(paste(DSE.HOME, "/data/eg1.dat", sep="")),
+                         5, 364))[, 2:5] 
+
+eg1.DSE.data <- TSdata(input = eg1.DSE.data[,1,drop = F], 
+                      output = eg1.DSE.data[, 2:4, drop = F])
+		      
+eg1.DSE.data <-tframed(eg1.DSE.data, list(start=c(1961,3), frequency=12))
+
+seriesNamesInput(eg1.DSE.data) <- "R90"
+seriesNamesOutput(eg1.DSE.data) <- c("M1","GDPl2", "CPI")
+
+
 if (is.R()) data("egJofF.1dec93.data", package="dse1")
-if (is.S()) source(paste(DSE.HOME, "/data/egJofF.1dec93.data.R", sep=""))
+if (is.S()) 
+   {source(paste(DSE.HOME, "/data/egJofF.1dec93.data.R", sep=""))
+    class(egJofF.1dec93.data$output) <- class(egJofF.1dec93.data$input) <- NULL
+    }
 
 if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
@@ -161,7 +173,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
               output=ts(rbind(output.data(eg4.DSE.data),matrix(.3,5,4)), 
                        start=start(eg4.DSE.data),
                        frequency=frequency(eg4.DSE.data)))
-  series.names(new.data) <- series.names(eg4.DSE.data)
+  seriesNames(new.data) <- seriesNames(eg4.DSE.data)
   z  <- l(TSmodel(eg4.DSE.model), trim.na(new.data)) 
 #  z <- l(TSmodel(eg4.DSE.model), trim.na(freeze(eg4.DSE.data.names)))
   error <- max(abs(556.55870662521476788 -z$estimates$like[1]))
@@ -355,7 +367,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 15... \n")
-  pc.rd <- forecastCov.reductions.wrt.true(mod3,
+  pc.rd <- forecastCov.reductionsWRTtrue(mod3,
  	rng=test.rng4,
  	estimation.methods=list(est.VARX.ls=list(max.lag=3)),
  	est.replications=2, pred.replications=10, quiet=T)
@@ -427,11 +439,5 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   if (!all.ok) stop("Some tests FAILED")
 
-
-#   example.verify.data(eg1.DSE.data.diff) 
-#  you have to look at the output for the following to be useful
-#   example.BOC.93.4.paper.tests(eg1.DSE.data.diff, eg1.DSE.data) 
-#  example.VAR.SVD(example.truncate.data(eg1.DSE.data.diff), eg1.DSE.data.diff, 
-#      eg1.DSE.data) 
 
 

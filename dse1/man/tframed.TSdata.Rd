@@ -1,5 +1,6 @@
 \name{tframed.TSdata}
 \alias{tframed.TSdata}
+\alias{tframe<-.TSdata}
 \alias{tfwindow.TSdata}
 \alias{tbind.TSdata}
 \alias{trim.na.TSdata}
@@ -10,6 +11,7 @@
 \description{See the generic function description.}
 \usage{
     \method{tframed}{TSdata}(x, tf=NULL, input.names=NULL, output.names=NULL)
+%    \method{tframe<-}{TSdata}(x, value)
     \method{tfwindow}{TSdata}(x, start=NULL, end=NULL, tf=NULL, warn=T)
     \method{tbind}{TSdata}(d1, d2)
     \method{trim.na}{TSdata}(x, start.=T, end.=T)

@@ -4,7 +4,9 @@
 
 \center{Generic Methods for Handling Time}
 
-\description{
+\description{Programs for implementing an object oriented approach to
+    handling different time representations.}
+\section{Introduction}{
 The \emph{tframe} library facilitates an object oriented approach
 to handling different time representations in S/R. It provides generic methods
 by which code can be developed without too much dependence on the
@@ -67,17 +69,18 @@ to prevent confusion using inherit().
 The R version includes an implementaion for the ts time series class with
 tframe's specific class is tstframe.
 
-When implementing a new time series class, suppose it is called zzz, the most 
-important methods which need to be
-supported are tframe.zzz(), tframeStart.zzz(), tframeEnd.zzz(), and 
-tframePeriods.zzz().
-While tframeFrequency.zzz() should not in theory be necessary, it makes 
+When implementing a new time series, suppose it is called zzz, then the tframe
+attibute of an object using this time frame should have class c("zzz", "tframe").
+(Note zzz should be different from the class of the object itself.)
+The most important methods which need to be
+supported are tframe.zzz(), start.zzz(), end.zzz(), and periods.zzz().
+While frequency.zzz() should not in theory be necessary, it makes 
 porting code much easier. Other methods which should be supported are
-tframeTime.zzz(), check.tframeConsistent.zzz(), tframeTruncate.zzz(), 
-tframeExpand.zzz(), 
-tframeEarliestStartIndex.zzz(),
-tframeEarliestEndIndex.zzz(), tframeLatestStartIndex.zzz(), and
-tframeLatestEndIndex.zzz().
+time.zzz(), check.tframeConsistent.zzz(), tfTruncate.zzz(), 
+tfExpand.zzz(), 
+earliestStartIndex.zzz(),
+earliestEndIndex.zzz(), latestStartIndex.zzz(), and
+latestEndIndex.zzz().
 
 The method tfwindow is used in this library and is typically just the same as
 window, but the new name has been used because of historical changes and bugs
@@ -106,7 +109,7 @@ Operations which should be possible on tframed data:
      - [  ]   without losing the tframe. This is done with select.series().
 
 
-The attribute "series.names" is also supported as a way to indicate the names
+The attribute "seriesNames" is also supported as a way to indicate the names
 of series in an object. This overlaps with the use of "names" and 
 "dimnames[[2]]" used previously for series names in S, but seems necessary in
 order to have a more complete generic decompostion of the time dimension from

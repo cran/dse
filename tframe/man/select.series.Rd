@@ -1,12 +1,14 @@
 \name{select.series}
 \alias{select.series}
 \alias{select.series.default}
+\alias{select.series.ts}
 
 \title{Extract a Subset of Series}
 \description{Extract a subset of series from a tframed object.}
 \usage{
     select.series(x, series = seqN(nseries(x)))
     \method{select.series}{default}(x, series = seqN(nseries(x)))
+    \method{select.series}{ts}(x, series = seqN(nseries(x)))
     }
 
 \arguments{
@@ -21,7 +23,7 @@
     are not matrices (e.g. tfPADIdata).
 }
 \seealso{
-    \code{\link{series.names}}
+    \code{\link{seriesNames}}
     \code{\link[dsepadi]{tfPADIdata}}
 }
 \examples{
