@@ -8,11 +8,11 @@
 \title{Forecast Multiple Steps Ahead}
 \description{Calculate forecasts multiple steps ahead.}
 \usage{
-    is.forecastCov(obj)
+    is.forecast(obj)
     forecast(obj, ...)
     \method{forecast}{TSmodel}(obj, data,  horizon=36,
        conditioning.inputs=NULL, 
-       conditioning.inputs.forecasts=NULL, percent=NULL)
+       conditioning.inputs.forecasts=NULL, percent=NULL, ...)
     \method{forecast}{TSestModel}(obj, ...)
     \method{forecast}{TSdata}(obj, model, ...)
 }

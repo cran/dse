@@ -12,8 +12,8 @@ This function may not be working properly.
 }
 \usage{
     to.SSChol(model, ...)
-    \method{to.SSChol}{TSmodel}(model, Om=diag(1,nseriesOutput(model)))
-    \method{to.SSChol}{TSestModel}(model, Om=NULL)
+    \method{to.SSChol}{TSmodel}(model, Om=diag(1,nseriesOutput(model)), ...)
+    \method{to.SSChol}{TSestModel}(model, Om=NULL, ...)
 }
 \arguments{
     \item{model}{An object of class TSmodel.}

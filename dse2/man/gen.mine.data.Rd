@@ -4,10 +4,12 @@
 \alias{build.input.models}
 
 \title{Generate Data}
-\description{Generate data for Monte Carlo experimants}
+\description{Generate data for Monte Carlo experiments}
 \usage{
     gen.mine.data(umodel, ymodel, uinput=NULL, sampleT=100, 
-    unoise=NULL, usd=1,ynoise=NULL, ysd=1, rng=NULL))
+      unoise=NULL, usd=1,ynoise=NULL, ysd=1, rng=NULL)
+    build.input.models(all.data, max.lag=NULL)
+    build.diagonal.model(multi.models)
 }
 \arguments{
     \item{umodel}{Model for input data.}
@@ -18,6 +20,10 @@
     \item{ynoise}{Output noise.}
     \item{ysd}{Standard deviation of output noise.}
     \item{rng}{RNG setting.}
+    \item{multi.models}{}
+    \item{all.data}{}
+    \item{max.lag}{}
+    \item{uinput}{}
 }
 \value{A TSdata object.}
 \details{
@@ -34,10 +40,10 @@
     If unoise or ynoise are specified they should be as expected by simulate
     for the specified umodel and ymodel.
     
-    This function uses build.input.models which makes a list of univariate 
-    models, one for each series in input.data(data) and 
-    build.diagonal.model which builds one diagonal model from a list 
-    of models returned  by build.input.models. It uses the AR part only.
+    \code{gen.mine.data} uses \code{build.input.models} which makes a list of univariate 
+    models, one for each series in \code{input.data(data)} and 
+    \code{build.diagonal.model} which builds one diagonal model from a list 
+    of models returned  by \code{build.input.models}. It uses the AR part only.
 }
 
 \seealso{

@@ -3,9 +3,6 @@
 \alias{horizonForecasts.TSdata}
 \alias{horizonForecasts.TSmodel}
 \alias{horizonForecasts.TSestModel}
-\alias{horizonForecasts.compiled}
-\alias{horizonForecasts.compiled.ARMA}
-\alias{horizonForecasts.compiled.SS}
 \alias{horizonForecasts.forecastCov}
 \alias{is.horizonForecasts}
 
@@ -15,9 +12,11 @@
     is.horizonForecasts(obj)
     horizonForecasts(obj, ...)
     \method{horizonForecasts}{TSmodel}(obj, data, horizons=1:4,
-	 discard.before=minimum.startup.lag(obj), compiled=.DSECOMPILED)
+	 discard.before=minimum.startup.lag(obj), compiled=.DSECOMPILED, ...)
     \method{horizonForecasts}{TSestModel}(obj, data=NULL, ...)
     \method{horizonForecasts}{TSdata}(obj, model, ...)
+    \method{horizonForecasts}{forecastCov}(obj,horizons=NULL, 
+         discard.before=NULL, ...)
 }
 \arguments{
     \item{obj}{an object of class TSmodel, TSdata, or TSestModel.}
@@ -28,7 +27,7 @@
     produced.}
     \item{discard.before}{period before which forecasts are not calculated.}
     \item{compiled}{if TRUE compiled code is called.}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
 The result is a list of class horizonForecasts with elements model (a 

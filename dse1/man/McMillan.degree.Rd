@@ -11,8 +11,8 @@ Calculate the McMillan degree of an ARMA TSmodel.
 }
 \usage{
     McMillan.degree(model,  ...)
-    \method{McMillan.degree}{ARMA}(model, fuzz=fuzz, verbose=TRUE, warn=TRUE)
-    \method{McMillan.degree}{SS}(model, fuzz=1e-4)
+    \method{McMillan.degree}{ARMA}(model, fuzz=1e-4, verbose=TRUE, warn=TRUE, ...)
+    \method{McMillan.degree}{SS}(model, fuzz=1e-4, ...)
     \method{McMillan.degree}{TSestModel}(model,  ...)
 }
 \arguments{

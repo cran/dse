@@ -1,12 +1,8 @@
  require("dse1")
  Sys.info()
  version.dse()
- if      (is.R()) data("eg1.DSE.data.diff", package="dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
-
+ data("eg1.DSE.data.diff", package="dse1") 
+ 
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
  
 fuzz.small <- 1e-14
@@ -46,8 +42,8 @@ cat("dse1 test 8b ...\n")
    cat("max. error ", max(error), "\n")
 
    if (any(is.na(error)) || any(is.nan(error)) || fuzz.small < error || !ok) 
-     {print.test.value(output.data(z), digits=18)
-      print.test.value(output.data(zzz), digits=18)
+     {printTestValue(output.data(z), digits=18)
+      printTestValue(output.data(zzz), digits=18)
       all.ok <- FALSE  
      }
 
@@ -68,8 +64,8 @@ cat("dse1 test 8c ...\n")
                    summary(zz)$estimates, fuzz=fuzz.small)
 
   if ( !ok) 
-     {print.test.value(c(summary(z)$estimates),  digits=18)
-      print.test.value(c(summary(zz)$estimates), digits=18)
+     {printTestValue(c(summary(z)$estimates),  digits=18)
+      printTestValue(c(summary(zz)$estimates), digits=18)
       all.ok <- FALSE  
      }
 

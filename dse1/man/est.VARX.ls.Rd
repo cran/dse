@@ -1,7 +1,5 @@
 \name{est.VARX.ls}
 \alias{est.VARX.ls}
-\alias{est.VARX}
-\alias{est.VARX.ls.old}
 
 \title{Estimate a VAR TSmodel}
 \description{Estimate a VAR TSmodel with (optionally) an exogenous input and 

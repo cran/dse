@@ -9,7 +9,8 @@
 
 # The tests requiring padi and dsepadi are in dsepadi/tests.
 
-require("dse2")
+if(!require("dse2"))  stop("this test requires dse2.")
+if(!require("setRNG"))stop("this test requires setRNG.")
  Sys.info()
  version.dse()
 
@@ -22,7 +23,7 @@ all.ok <- TRUE
 
   cat("Guide part 2 test 1 ... \n")
 
-  if (is.S())
+  if (!is.R())
     {test.rng1 <- list(kind="default", normal.kind="default", 
                        seed=c(13,44,1,25,56,0,6,33,22,13,13,0) )
      test.rng2 <- list(kind="default", normal.kind="default", 
@@ -31,7 +32,7 @@ all.ok <- TRUE
                         seed=c(29,55,47,18,33,1,15,15,34,46,13,2) )
      test.rng3 <- list(kind="default", normal.kind="default", 
                         seed=c( 53,41,26,39,10,1,19,25,56,32,28,3) )
-    } else if (is.R()) 
+    } else 
     {test.rng1 <- test.rng2 <- test.rng3 <- test.rng4 <- 
            list(kind="Wichmann-Hill", normal.kind="Kinderman-Ramage",
 	        seed=c(979, 1479, 1542))} # defaults changed in R 1.0.0
@@ -40,23 +41,21 @@ all.ok <- TRUE
            # R's Box-Muller was declared not reproducible. 
 	   
 
-eg1.DSE.data <- t(matrix(scan(paste(DSE.HOME, "/data/eg1.dat", sep="")),
-                         5, 364))[, 2:5] 
+#eg1.DSE.data <- t(matrix(scan(paste(DSE.HOME, "/data/eg1.dat", sep="")),
+#                         5, 364))[, 2:5] 
+#eg1.DSE.data <- TSdata(input = eg1.DSE.data[,1,drop = FALSE], 
+#                      output = eg1.DSE.data[, 2:4, drop = FALSE])
 
-eg1.DSE.data <- TSdata(input = eg1.DSE.data[,1,drop = FALSE], 
-                      output = eg1.DSE.data[, 2:4, drop = FALSE])
-		      
+# above worked, but needs DSE.HOME which is depreciated. use
+data("eg1.DSE.data", package="dse1")
+	      
 eg1.DSE.data <-tframed(eg1.DSE.data, list(start=c(1961,3), frequency=12))
 
 seriesNamesInput(eg1.DSE.data) <- "R90"
 seriesNamesOutput(eg1.DSE.data) <- c("M1","GDPl2", "CPI")
 
 
-if (is.R()) data("egJofF.1dec93.data", package="dse1")
-if (is.S()) 
-   {source(paste(DSE.HOME, "/data/egJofF.1dec93.data.R", sep=""))
-    class(egJofF.1dec93.data$output) <- class(egJofF.1dec93.data$input) <- NULL
-    }
+data("egJofF.1dec93.data", package="dse1")
 
 if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
@@ -85,15 +84,13 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
  
   z <- check.residuals(model.eg1.ls, plot.=FALSE, pac=TRUE)
   check.value <- (
-    if (is.S())      
-              c(4.67445135116577148, 3274.42578125,      -2371.9997808950302)
-  else if (is.R()) 
-              c(4.674448837156188,   3274.422653488969,  -2371.999780895034) )
+  if (!is.R())c(4.67445135116577148, 3274.42578125,      -2371.9997808950302)
+  else        c(4.674448837156188,   3274.422653488969,  -2371.999780895034) )
 # using my old acf instead of bats version gives
 #             c(4.6744488371561879,      0.0,       -2371.999780895033837)
 
   tst <- c(sum(z$acf),sum(z$pacf),sum(z$cusum))
-  print.test.value(c(tst), digits=18)
+  printTestValue(c(tst), digits=18)
   error <- max(abs(check.value   -   tst ))
 
   ok <-  fuzz.large > error 
@@ -107,13 +104,13 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   model.eg1.ar <- est.VARX.ar(trim.na(eg1.DSE.data), warn=FALSE) 
   model.eg1.ss <- est.SS.from.VARX(trim.na(eg1.DSE.data), warn=FALSE) 
 # model.eg1.mle <- est.max.like(trim.na(eg1.DSE.data),model.eg1.ar) # this may be slow
-  if (is.S()) check.value <- c(6738.642280883833, 6921.352391513382) 
-  if (is.R()) check.value <- c(6738.562190977154, 6921.352391513382)#ts ar
+  check.value <- if (!is.R()) c(6738.642280883833, 6921.352391513382) else
+                              c(6738.562190977154, 6921.352391513382)#ts ar
   #elseif(is.R()) check.value <- c(6735.139112062216, 6921.352391513382)bats ar
 # using my old ar:=ls gives      c(6921.352391513380, 6921.352391513380)#ar:=ls
 
   tst <- c(model.eg1.ar$estimates$like[1], model.eg1.ss$estimates$like[1])  
-  print.test.value(c(tst), digits=18)
+  printTestValue(c(tst), digits=18)
   error <- max(abs(check.value - tst))
 
   ok <- 10*fuzz.large > error 
@@ -135,7 +132,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   model.eg4.bb <- est.black.box(trim.na(eg4.DSE.data), max.lag=3, verbose=FALSE) 
 
   tst <- model.eg4.bb$estimates$like[1]
-  print.test.value(c(tst), digits=18)
+  printTestValue(c(tst), digits=18)
   error <- abs(614.70500313590287078 - tst )
 
   ok <-  fuzz.large > error 
@@ -150,9 +147,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 # else if (is.R()) check.value <- 230978.2532793634  bats ar
 # using my old ar=ls gives        233856.9237566061   #using ls for ar
 # a small change in the accounting for degenerate subspaces in dse.2000.4 gives
-  if (is.S())      check.value <- 225328.464267979754 else
-       if (is.R()) check.value <- 225327.03009431256
-  if (print.values) print.test.value(sum(z[!is.na(z)]) )  
+  check.value <- if (!is.R()) 225328.464267979754 else
+                              225327.03009431256
+  if (print.values) printTestValue(sum(z[!is.na(z)]) )  
   error <- abs(check.value - sum(z[!is.na(z)]) )
   ok <-  1000*fuzz.large > error #fuzz.large works in Solaris but not Linux
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -292,8 +289,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 #   tfplot(coef(e.ar.mod1))
 
 
-  if (is.S()) check.value <- -0.29855874505752699744
-  if (is.R()) check.value <- -0.3699580622977686
+  check.value <- if (!is.R()) -0.29855874505752699744 else
+                              -0.3699580622977686
   error <- abs( check.value - sum(coef(e.ls.mod1$result[[100]])))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -318,8 +315,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
      distribution(coef(e.ls.mod2), bandwidth=.2)
     
 
-  if (is.S()) check.value <- -1.0021490287427212706
-  if (is.R()) check.value <- -1.0028944627996934
+  check.value <- if (!is.R()) -1.0021490287427212706 else
+                              -1.0028944627996934
   error <- abs(check.value - sum(coef(e.ls.mod2$result[[100]])))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -337,8 +334,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
      distribution(roots(e.ls.mod2), bandwidth=.1) 
   
 
-  if (is.S()) check.value <- 0.36159459310761993267
-  if (is.R()) check.value <- 0.2119677206564640
+  check.value <- if (!is.R()) 0.36159459310761993267 else
+                              0.2119677206564640
 # error <- Mod(0.36159459310761993267+0i - sum(e.ls.mod1.roots$result[[100]]))
   error <- Mod(check.value   - sum(e.ls.mod1.roots$result[[100]]))
   ok <- fuzz.small > error
@@ -348,17 +345,16 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 14... \n")
-  pc <- forecastCov.estimatorsWRTtrue(mod3,
+  pc <- forecastCovEstimatorsWRTtrue(mod3,
  	rng=test.rng3,
  	estimation.methods=list(est.VARX.ls=list(max.lag=6)),
  	est.replications=2, pred.replications=10, quiet=TRUE)
   # the fuzz.small has to be relaxed here to accomodate differences in rnorm
   #   between Splus3.1 and Splus3.2  (the numbers are from Splus3.2)
 
-  if (is.S())  check.value <-
-      c(60.927013860328429473, 62.32729288591478678, 63.17808145947956433) 
-  if (is.R()) check.value <-
-      c( 54.164759056117504, 53.519297277839669, 59.341526159411558)
+  check.value <- if (!is.R()) 
+      c(60.927013860328429473, 62.32729288591478678, 63.17808145947956433) else 
+      c(54.164759056117504,    53.519297277839669,   59.341526159411558)
   error <- max(abs(check.value -c(sum(pc$forecastCov[[1]]), 
                       sum(pc$forecastCov.zero), sum(pc$forecastCov.trend) )))
   ok <- fuzz.large > error
@@ -368,15 +364,14 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 15... \n")
-  pc.rd <- forecastCov.reductionsWRTtrue(mod3,
+  pc.rd <- forecastCovReductionsWRTtrue(mod3,
  	rng=test.rng4,
  	estimation.methods=list(est.VARX.ls=list(max.lag=3)),
  	est.replications=2, pred.replications=10, quiet=TRUE)
 
-  if (is.S()) check.value <-
-         c(58.75543799264762157,60.451513998215133938, 64.089618782185240775) 
-  if (is.R()) check.value <- 
-         c( 51.237201863944890, 53.519297277839669, 59.341526159411558)
+  check.value <- if (!is.R()) 
+     c(58.75543799264762157,60.451513998215133938, 64.089618782185240775) else
+     c(51.237201863944890,  53.519297277839669,    59.341526159411558)
   error <- max(abs(check.value - c(sum(pc.rd$forecastCov[[1]]),
                   sum(pc.rd$forecastCov.zero), sum(pc.rd$forecastCov.trend))))
   ok <- fuzz.large > error
@@ -386,7 +381,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 16... \n")
-  z <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
+  z <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
  		est.VARX.ar=list(warn=FALSE), 
@@ -394,7 +389,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
  	trend=TRUE, zero=TRUE)
   tfplot(z)
   opts <- options(warn=-1)
-  zz <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
+  zz <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
  		est.black.box4=list(max.lag=3, verbose=FALSE, warn=FALSE),
@@ -406,13 +401,10 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   options(opts)
   zf<- zf$horizonForecasts[3,30,]
   tfplot(z)
-  if (is.S())      check.value <- 
+  check.value <- if (!is.R()) 
      c(6120.97621905043979, 175568.040899036743, 24.568074094041549,
        1e-10*c(158049871127.845642, 3330592793.50789356, 
-              1242727188.69001055, 1606263575.00784183))
-
-  if (is.R()) 
-    {check.value <-
+              1242727188.69001055, 1606263575.00784183)) else
      c(6120.97621905044,  175568.0408990367,  24.56807409404155, 
        1e-10*c(158034797997.4372,  3330592793.507894,
               1242727188.690011,  1606263575.007842))
@@ -420,9 +412,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 #    c(6120.9762190509673, 175568.04089903546, 24.568074093999403,
 #       1e-10*c(3330592793.507894, 3330592793.507894,
 #              1242727188.690011, 1606263575.0078418)) # using ls for ar
-    }
+   
 
-  if (print.values) print.test.value(c(zf,  # 1e-5*
+  if (print.values) printTestValue(c(zf,  # 1e-5*
                      c(sum( z$forecastCov[[1]]), sum( z$forecastCov[[2]]),
                        sum(zz$forecastCov[[1]]), sum(zz$forecastCov[[2]]))) )  
   error <- max(abs(check.value -

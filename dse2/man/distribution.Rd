@@ -11,13 +11,13 @@
     distribution(obj, ...)
      \method{distribution}{TSdata}(obj, bandwidth=0.2, 
              select.inputs = seq(length= nseriesInput(obj)),
-             select.outputs= seq(length=nseriesOutput(obj)))
-     \method{distribution}{default}(obj, bandwidth=0.2, series=NULL)
+             select.outputs= seq(length=nseriesOutput(obj)), ...)
+     \method{distribution}{default}(obj, bandwidth=0.2, series=NULL, ...)
      \method{distribution}{EstEval}(obj, ...)
      \method{distribution}{coef.ee}(obj,  Sort=FALSE, bandwidth=0.2,
-	graphs.per.page=5)
+	graphs.per.page=5, ...)
      \method{distribution}{roots.ee}(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
-        bandwidth=0.2, select=NULL)
+        bandwidth=0.2, select=NULL, ...)
 }
 \arguments{
     \item{obj}{an object as returned by EstEval.} 
@@ -30,7 +30,7 @@
     \item{series}{series to be plotted. (passed to select.series)}
     \item{select.inputs}{series to be plotted. (passed to select.series)}
     \item{select.outputs}{series to be plotted. (passed to select.series)}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
     \item{invert}{logical indicating if the inverse of roots should be plotted}
     \item{mod}{logical indicating if the modulus of roots should be plotted}
     \item{select}{integer vector indicating roots to be plotted. If select 

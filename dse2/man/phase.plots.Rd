@@ -3,7 +3,7 @@
 \title{Calculate Phase Plots}
 \description{Calculate phase plots}
 \usage{
-    phase.plots(data, max.lag=5,diff=FALSE)
+    phase.plots(data, max.lag=1,diff=FALSE)
 }
 \arguments{
     \item{data}{A matrix, time series matrix, or an object of class TSdata.}

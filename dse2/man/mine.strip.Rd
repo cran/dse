@@ -70,7 +70,7 @@ Essential.data indicates the subset of output variables to included in all
   level expression is complete.
   The class of an intermediate result is mine.strip.intermediate.result and
   the class of the final result is
-         c('forecastCov.estimatorsWRTdata.subsets', 'forecastCov')
+         c('forecastCovEstimatorsWRTdata.subsets', 'forecastCov')
   If the final result is used in a call to mine.strip then it is just 
   returned, so extra calls do not cause errors and are very quick.
   This is useful when you are too lazy to calculate the exact number of steps.

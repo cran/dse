@@ -16,7 +16,7 @@ indicated for exclusion.
 }
 \details{
 Exclude results which depend on the indicated series from a 
-(forecastCov.estimatorsWRTdata.subsets forecastCov) object.
+(forecastCovEstimatorsWRTdata.subsets forecastCov) object.
 }
 \seealso{
 \code{\link{min.forecastCov}},
@@ -30,4 +30,5 @@ z <-  exclude.forecastCov(z, exclude.series=3)
 }
 %\keyword{DSE}
 \keyword{ts}
+
 

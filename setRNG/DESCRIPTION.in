@@ -1,0 +1,4 @@
+Package: setRNG
+Title: Set (normal) random number generator and seed
+Description: Set reproducible random number generator in R and S.
+Depends:   R (>= 1.6.2)

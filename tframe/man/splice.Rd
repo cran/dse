@@ -9,12 +9,13 @@ not have to correspond.
 }
 \usage{
     splice(mat1,mat2, ...)
-    \method{splice}{default}(mat1,mat2)
+    \method{splice}{default}(mat1,mat2, ...)
     }
 \arguments{
     \item{mat1}{A time series object.}
     \item{mat2}{A time series object.}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments to be passed to other methods (not used by the default
+       method).}
 }
 \value{A time series object}
 \details{

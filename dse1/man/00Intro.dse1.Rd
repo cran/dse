@@ -37,11 +37,12 @@ There are also functions for forecasting and for
 evaluating the performance of forecasting models as well as 
 functions for evaluating model estimation techniques.
 
-DSE requires libraries tframe and syskern. The first provides a kernel of 
+DSE requires libraries tframe and setRNG. The first provides a kernel of 
 functions for 
 programming time series methods relatively independently of the representation 
-of time. The second provides some utilities to handle S/R differences 
-and OS differences. For programmers, these libraries may of interest 
+of time. The second provides some utilities for setting and resetting the random
+number generator and normal transformations, and for generating the same random
+numbers in S and R differences. For programmers, these libraries may of interest 
 by themselves. Tframe is intended to make it easier to write code which can use any new/better 
 time representations when they appear. It also provides plotting, time 
 windowing, and some other utility functions which are specifically intended 

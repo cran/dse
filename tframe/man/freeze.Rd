@@ -6,7 +6,7 @@
 
 \usage{
     freeze(data, ...)
-    \method{freeze}{default}(data)
+    \method{freeze}{default}(data, ...)
 }
 
 \arguments{

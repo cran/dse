@@ -3,9 +3,10 @@
 \title{Convert to State Space Innovations Model}
 \description{Convert to a state space innovations representation.}
 \usage{
-    to.SS.innov(model)}
+    to.SS.innov(model, ...)}
 \arguments{
-    \item{model}{An object of class TSmodel.}
+    \item{model}{an object of class TSmodel.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
 An object of class 'SS' 'TSmodel' containing an 

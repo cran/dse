@@ -10,10 +10,10 @@
     simulate(model, ...)
     \method{simulate}{ARMA}(model, y0=NULL, input=NULL, input0=NULL,
         start. = NULL, freq = NULL, sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
-        rng=NULL, noise.model=NULL, compiled=.DSECOMPILED)
+        rng=NULL, noise.model=NULL, compiled=.DSECOMPILED, ...)
     \method{simulate}{SS}(model, input=NULL, 
         start. = NULL, freq = NULL,sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
-	rng=NULL, compiled=.DSECOMPILED)
+	rng=NULL, compiled=.DSECOMPILED, ...)
     \method{simulate}{TSestModel}(model, input=input.data(model),
 			sd=NULL, SIGMA=NULL, ...)
 }
@@ -43,7 +43,7 @@ regenerate a simulation.}
     \item{compiled}{
     Specifies the compiled version of the code should be used (instead of
     the S code version).}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 
 \value{

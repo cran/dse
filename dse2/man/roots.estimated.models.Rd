@@ -1,6 +1,6 @@
 \name{roots.estimated.models}
 \alias{roots.estimated.models}
-\alias{roots.forecastCov.estimatorsWRTtrue}
+\alias{roots.forecastCovEstimatorsWRTtrue}
 \alias{roots.coef.ee}
 \alias{roots.roots.ee}
 \alias{roots.TSestModel.ee}
@@ -9,12 +9,13 @@
 \title{Roots Specific Methods}
 \description{See the generic function description.}
 \usage{
-    \method{roots}{estimated.models}(obj, digits = 4, mod =FALSE)
-    \method{roots}{forecastCov.estimatorsWRTtrue}(obj, digits, mod)
-    \method{roots}{coef.ee}(obj, criterion.args)
+    \method{roots}{estimated.models}(obj, digits=options()$digits, mod =FALSE)
+    \method{roots}{forecastCovEstimatorsWRTtrue}(obj, digits=options()$digits,
+       mod=FALSE)
+    \method{roots}{coef.ee}(obj, criterion.args=NULL)
     \method{roots}{roots.ee}(obj, ...)
-    \method{roots}{TSestModel.ee}(obj, criterion.args)
-    \method{roots}{TSmodel.ee}(obj, criterion.args)
+    \method{roots}{TSestModel.ee}(obj, criterion.args=NULL)
+    \method{roots}{TSmodel.ee}(obj, criterion.args=list(randomize = TRUE))
 }
 \arguments{
     \item{obj}{an object from which roots are to be extracted or calculated and

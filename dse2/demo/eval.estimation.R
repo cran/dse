@@ -43,25 +43,21 @@
     distribution(roots(e.ls.mod2), bandwidth=.1) 
   
 
-  pc <- forecastCov.estimatorsWRTtrue(mod3,
+  pc <- forecastCovEstimatorsWRTtrue(mod3,
  	estimation.methods=list(est.VARX.ls=list(max.lag=6)),
  	est.replications=2, pred.replications=10, quiet=T)
 
   tfplot(pc)
  
-  pc.rd <- forecastCov.reductionsWRTtrue(mod3,
+  pc.rd <- forecastCovReductionsWRTtrue(mod3,
  	estimation.methods=list(est.VARX.ls=list(max.lag=3)),
  	est.replications=2, pred.replications=10, quiet=T)
 
   tfplot(pc.rd)
 
-  if (is.R()) data("eg1.DSE.data", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.R", sep=""))
-    class(eg1.DSE.data$output) <- class(eg1.DSE.data$input) <- NULL
-    }
+  data("eg1.DSE.data", package = "dse1") 
 
-  z <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
+  z <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
  		est.VARX.ar=list(warn=F), 
@@ -69,7 +65,7 @@
  	trend=T, zero=T)
   tfplot(z)
 
-  zz <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
+  zz <-out.of.sample.forecastCovEstimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
  		est.black.box4=list(max.lag=3, verbose=F, warn=F),

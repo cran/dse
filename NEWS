@@ -1,0 +1,31 @@
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.2-1
+
+Changes (Possibly) Affecting Users
+
+    o	several program names have been revised so as to avoid confusion 
+	with methods for generics with similar names. For this reason, the
+	new Users' Guide should be used, despite its problems.
+
+    o	the Users' guide is (being) broken down into pieces for each 
+    	package and re-written using Sweave (with .Stex files in inst/doc).
+	The Users' Guide (dse-guide.pdf) is still placed in dse1/inst/doc
+	as the bundle structure does not have a place for documentation.
+
+    o	the old package syskern has been divided into setRNG which is included
+	with dse and a new package syskern which is moved to dseplus.
+
+    o	most routines have been convert to use La.svd and La.eigen in place 
+    	of svd and eigen (and test values were revised slightly in some cases).
+
+    o	DSE.HOME has been removed and .path.package is used in its place.
+
+    o	version.dse now gives the version of each package.
+
+Changes Affecting Development
+
+    o	testing in Makefiles has been revised so code (Rcode+tests) is the 
+	only inter-package dependency. Examples, demos, and guides do not 
+	affect other packages.
+
+    o	reliance on bundle structure is largely removed, and Makefiles 
+	have been re-organized to reflect this.

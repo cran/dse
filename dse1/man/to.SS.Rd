@@ -18,16 +18,16 @@ Convert a model to state space form.
 \usage{
     to.SS(model, ...)
     \method{to.SS}{ARMA}(model, ...)
-    \method{to.SS}{SS}(model)
+    \method{to.SS}{SS}(model, ...)
     \method{to.SS}{TSestModel}(model, ...)
     
     to.SSaugment(model, ...)
-    \method{to.SSaugment}{ARMA}(model, fuzz=1e-14)
+    \method{to.SSaugment}{ARMA}(model, fuzz=1e-14, ...)
     \method{to.SSaugment}{TSestModel}(model, ...)
     
     to.SSnested(model, ...)
-    \method{to.SSnested}{ARMA}(model, n=NULL, Aoki=FALSE)
-    \method{to.SSnested}{SS}(model, n=NULL, Aoki=FALSE)
+    \method{to.SSnested}{ARMA}(model, n=NULL, Aoki=FALSE, ...)
+    \method{to.SSnested}{SS}(model, n=NULL, Aoki=FALSE, ...)
     \method{to.SSnested}{TSestModel}(model, ...)
     
     }

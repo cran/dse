@@ -1,8 +1,10 @@
+This package is part of the dse bundle.
 See 00Intro.* in each package for a short general description.
-A Users' Guide is available in dse1/doc/guide.pdf
-  and also at 'http://www.bank-banque-canada.ca/pgilbert'
-See also the bundle dseplus with related
- packages dsepadi monitor juice curve .
+The Users' Guide is divided into sections for each package.
+These are installed in the doc/ directory for each package.
+A version of the guide with all sections combined may also
+be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
+See also the bundle dseplus with related packages.
 00Intro.dse1            DSE
 ARMA                    ARMA Model Constructor
 DSE.utilities           DSE Utilities
@@ -19,6 +21,7 @@ TSmodel                 Time Series Models
 acf.M                   Calculate Auto-Covariance
 add.plot.roots          Add Model Roots to a plot
 balance.Mittnik         Balance a state space model
+best.TSestModel         Select Best Model
 check.balance           Check Balance of a TSmodel
 check.balanceMittnik    Check Balance of a TSmodel
 check.consistent.dimensions
@@ -30,16 +33,23 @@ combine.TSdata          Combine series from two TSdata objects.
 diff.log                Calculate the difference of log data
 eg1.DSE.data            Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data      Eleven Time Series used in Gilbert (1995)
+est.SS.Mittnik          Estimate a State Space Model
 est.SS.from.VARX        Estimate a state space TSmodel using VAR
                         estimation
 est.VARX.ar             Estimate a VAR TSmodel
 est.VARX.ls             Estimate a VAR TSmodel
+est.black.box           Estimate a TSmodel
+est.black.box1          Estimate a TSmodel
+est.black.box2          Estimate a TSmodel
+est.black.box3          Estimate a TSmodel
+est.black.box4          Estimate a TSmodel
+est.max.like            Maximum Likelihood Estimation
+est.wt.variables        Weighted Estimation
 findg                   Find Equivalence Transformation
 fix.constants           Fix TSmodel Coefficients (Parameters) to
                         Constants
 fixF                    Set SS Model F Matrix to Constants
 gmap                    Basis Transformation of a Model.
-help.start.DSE          Start DSE Help in S
 information.tests       Tabulates selection criteria
 information.tests.calculations
                         Calculate selection criteria
@@ -47,7 +57,6 @@ input.data              TSdata Series
 l.ARMA                  Evaluate an ARMA TSmodel
 l                       Evaluate a TSmodel
 l.SS                    Evaluate a state space TSmodel
-load.DSE.fortran        Load compiled routines for time series models
 markov.parms            Markov Parameters
 nseriesInput            Number of Series in in Input or Output
 observability           Calculate Model Observability Matrix
@@ -58,6 +67,9 @@ plot.roots              Plot Model Roots
 print.TSdata            Print Specific Methods
 print.TSestModel        Display TSmodel Arrays
 reachability            Calculate Model Reachability Matrix
+reduced.models.Mittnik
+                        Reduced Models via Mittnik SVD balancing
+reduction.Mittnik       Balance and Reduce a Model
 residual.stats          Calculate Residuals Statistics and Likelihood
 roots                   Calculate Model Roots
 scale.TSdata            Scale Methods for TS objects

@@ -11,7 +11,9 @@
     seriesNames(x)
     \method{seriesNames}{default}(x)
 
-    seriesNames(data) <- names 
+    seriesNames(x) <- value 
+%    \method{seriesNames<-}{default}(x) <- value
+%    \method{seriesNames<-}{ts}(x) <- value
 }
 \arguments{
     \item{x}{a time series object.}

@@ -18,7 +18,7 @@
 }
 
 \examples{
-    nseries(tsmatrix(rnorm(100,20,5)))
+    nseries(tbind(rnorm(100,20,5)))
 }
 \keyword{programming}
 \keyword{utilities}

@@ -3,25 +3,21 @@
 \alias{earliestEndIndex}
 \alias{earliestEndIndex.default}
 \alias{earliestEndIndex.tframe}
-\alias{earliestEndIndex.tstframe}
 
 \alias{earliestStart}
 \alias{earliestStartIndex}
 \alias{earliestStartIndex.default}
 \alias{earliestStartIndex.tframe}
-\alias{earliestStartIndex.tstframe}
 
 \alias{latestEnd}
 \alias{latestEndIndex}
 \alias{latestEndIndex.default}
 \alias{latestEndIndex.tframe}
-\alias{latestEndIndex.tstframe}
 
 \alias{latestStart}
 \alias{latestStartIndex}
 \alias{latestStartIndex.default}
 \alias{latestStartIndex.tframe}
-\alias{latestStartIndex.tstframe}
 
 \title{Start and End for Objects with Multiple Time Series}
 \description{Return start or end date (or index of the object) from multiple
@@ -33,25 +29,21 @@
     earliestEndIndex(x, ...)
     \method{earliestEndIndex}{default}(x, ...)
     \method{earliestEndIndex}{tframe}(x, ...)
-    \method{earliestEndIndex}{tstframe}(x, ...)
 
     earliestStart(x, ...)
     earliestStartIndex(x, ...)
     \method{earliestStartIndex}{default}(x, ...)
     \method{earliestStartIndex}{tframe}(x, ...)
-    \method{earliestStartIndex}{tstframe}(x, ...)
 
     latestEnd(x, ...)
     latestEndIndex(x, ...)
     \method{latestEndIndex}{default}(x, ...)
     \method{latestEndIndex}{tframe}(x, ...)
-    \method{latestEndIndex}{tstframe}(x, ...)
 
     latestStart(x, ...)
     latestStartIndex(x, ...)
     \method{latestStartIndex}{default}(x, ...)
     \method{latestStartIndex}{tframe}(x, ...)
-    \method{latestStartIndex}{tstframe}(x, ...)
 
 }
 

@@ -2,6 +2,7 @@
 \alias{tfwindow}
 \alias{tfwindow.default}
 \alias{tfwindow.ts}
+\alias{tfwindow.tframe}
 
 \title{Truncate a Time Series}
 \description{Truncate a time series object to a time window.}
@@ -9,6 +10,7 @@
     tfwindow(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
     \method{tfwindow}{default}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
     \method{tfwindow}{ts}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
+    \method{tfwindow}{tframe}(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
     }
 
 \arguments{
@@ -33,6 +35,9 @@ the window. Since window produces a warning in this situation, the optional
 argument is frequently useful when tfwindow is used by other code.
 In Splus \code{tfwindow} also corrects for some bugs in older versions 
 of code{window}.
+
+The method for windowing a tframe is a utility to be used by other programs and
+would not typically be called by a user.
 }
 \examples{
   z <- ts(matrix(rnorm(24),24,1), start=c(1980,1), frequency=4)

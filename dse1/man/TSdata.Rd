@@ -12,8 +12,8 @@
     containing data for use by TSmodels.
 }
 \usage{
-    TSdata(data, ...)
-    \method{TSdata}{default}(data, input=NULL, output=NULL, ...)
+    TSdata(data=NULL, ...)
+    \method{TSdata}{default}(data=NULL, input=NULL, output=NULL, ...)
     \method{TSdata}{TSdata}(data, ...)
     \method{TSdata}{TSestModel}(data, ...)
     is.TSdata(obj)
@@ -52,4 +52,5 @@
 }
 %\keyword{DSE}
 \keyword{ts}
+
 

@@ -1,4 +1,7 @@
-  require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
+if(!require("mva"))   stop("this test requires mva.")
+if(!require("ts"))    stop("this test requires ts.")
+if(!require("dse2"))  stop("this test requires dse2.")
+if(!require("setRNG"))stop("this test requires setRNG.")
  #x11()
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
@@ -39,43 +42,27 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
   max.error <- NA
   if (synopsis & !verbose) cat("All Brief User Guide example part 1 tests ...")
 
-
   if (verbose) cat("Guide part 1 test 0 ... ")
-    {if (is.R())
-       {data(eg1.DSE.data.diff, package="dse1")
-        data(eg1.DSE.data, package="dse1")
-        data(egJofF.1dec93.data, package="dse1")
-       } 
-     if (is.S())
-       {if(!exists("eg1.DSE.data.diff")) warning("eg1.DSE.data.diff does not exist")
-        if(!exists("eg1.DSE.data"))      warning("eg1.DSE.data does not exist")
-       } 
-    }
+
+#  from <- paste(DSE.HOME, "/data/eg1.dat", sep="")
+#  eg1.DSE.data <- t(matrix(dsescan(from), 5,364))[,2:5]
+#  eg1.DSE.data <- TSdata(input=tframed(eg1.DSE.data[,1  ,drop=FALSE],
+#                                         list(start=c(1961,3), frequency=12)),
+#              output=tframed(eg1.DSE.data[,2:4,drop=FALSE], 
+#                                         list(start=c(1961,3), frequency=12)))
+# above worked, but needs DSE.HOME which is depreciated. use
+       data(eg1.DSE.data.diff, package="dse1")
+       data(eg1.DSE.data, package="dse1")
+       data(egJofF.1dec93.data, package="dse1")
+        
+   
   if (verbose) { cat("ok\n") }
      
   if (verbose) cat("Guide part 1 test 1 ... ")
-  # previously search() was used to determine "from", but DSE.HOME is better
-  #  if(1==pmatch("MS Windows",version$os, nomatch=0))
-  #     from <- (search()[grep("b*/DSE/_Data", search())])[1]
-  #  else
-  #     from <- (search()[grep("b*/DSE/.Data", search())])[1]
-  # if DSE is not in the search path then data file is assumed to be in 
-  #  the present working directory
-  #  if(5 < nchar(from)) from<-substring(from, first=1, last = nchar(from) -5)
-  #  from <- paste(from,"eg1.dat", sep="")
 
-  from <- paste(DSE.HOME, "/data/eg1.dat", sep="")
-  data <- t(matrix(dsescan(from), 5,364))[,2:5]
-  #  data <- list(
-  #     input=tframed(data[,1  ,drop=FALSE],  list(start=c(1961,3), frequency=12)),
-  #     output=tframed(data[,2:4,drop=FALSE], list(start=c(1961,3), frequency=12)))
-  data <- TSdata(input=tframed(data[,1  ,drop=FALSE],
-                                         list(start=c(1961,3), frequency=12)),
-              output=tframed(data[,2:4,drop=FALSE], 
-                                         list(start=c(1961,3), frequency=12)))
-  seriesNamesInput(data)   <-  "u1"
-  seriesNamesOutput(data) <-  c("y1","y2","y3")
-  error <- abs(126943980.50000011921 - sum(output.data(data)))
+  seriesNamesInput(eg1.DSE.data)   <-  "u1"
+  seriesNamesOutput(eg1.DSE.data) <-  c("y1","y2","y3")
+  error <- abs(126943980.50000011921 - sum(output.data(eg1.DSE.data)))
   ok <- 100*fuzz.large > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -83,8 +70,8 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
   if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
 
   if (verbose) cat("Guide part 1 test 2 ... ")
-  model1 <- est.VARX.ls(data, warn=FALSE)
-  model2 <- est.SS.Mittnik(data, n=14)
+  model1 <- est.VARX.ls(eg1.DSE.data, warn=FALSE)
+  model2 <- est.SS.Mittnik(eg1.DSE.data, n=14)
 #  summary(model1)
 #  summary(model2)
 #  print(model1)
@@ -93,12 +80,23 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
 #  stability(model2)
    if (graphics) tfplot(model1)
 
-  error <- max(Mod(c(15.430979953081722655   - sum(TSmodel(model1)$A),
-                         -1.1078692933906153506  - sum(TSmodel(model2)$F),
-                         2.4561249653768193468   - sum(roots(model2)) )))
-#                        2.4561249653768193468+0i- sum(roots(model2)) )))
+# In the next test
+# with svd    sum(TSmodel(model2)$F)= -1.1078692933906153506 and 
+# with La.svd sum(TSmodel(model2)$F)=  3.9469252417636165
+# which seems fairly large, but the matrix is 14x14 and 
+# the roots are almost identical
+
+#  error <- max(Mod(c(15.430979953081722655   - sum(TSmodel(model1)$A),
+#                         -1.1078692933906153506  - sum(TSmodel(model2)$F),
+#                         2.4561249653768193468   - sum(roots(model2)) )))
+
+  test.value <- c(sum(TSmodel(model1)$A), sum(TSmodel(model2)$F),
+                         sum(roots(model2)) )
+  error <- max(Mod(c(15.430979953081722655, 3.9469252417636165,
+                         2.4561249653768193468) - test.value))
   ok <- fuzz.large > error
-  if (!ok) {if (is.na(max.error)) max.error <- error
+  if (!ok) {print(test.value, digits=16)
+            if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
   ok <-  ok & is.TSestModel(model1) & is.TSestModel(model2)
   all.ok <- all.ok & ok 
@@ -121,7 +119,7 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
      {tfplot(data.arma.sim)
       tfplot(arma)
      }
-  ok <- is.TSdata(data) & is.TSestModel(arma) 
+  ok <- is.TSdata(eg1.DSE.data) & is.TSestModel(arma) 
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 

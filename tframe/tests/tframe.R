@@ -92,7 +92,8 @@ tframe.function.tests <- function( verbose=TRUE, synopsis=TRUE)
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("tframe test 12... ")
-  z <- tsmatrix(1:10, 11:20)
+#  z <- tsmatrix(1:10, 11:20)
+  z <- tbind(1:10, 11:20)
   ok <-  all(start(z) ==1) & all( z== matrix(1:20, 10,2)) 
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }

@@ -26,11 +26,16 @@
     \item{method}{Passed to function ar.}
     \item{warn}{If TRUE certain warning message are suppressed.}
 }
-\value{A TSestModel object containing a TSmodel object which is aVAR model.}
+\value{A TSestModel object containing an ARMA TSmodel object. The model has no
+MA portion so it is a VAR model.}
 
 \details{
-This function uses the function ar. The ar 
+This function estimates a VAR model with exogenous variable using ar().
+Residuals,etc, are calculated by evaluating the estimated model with ARMA.
+The procedure ar is used by combine exogeneous variables and endogenous variable
+and estimating as if all variables were endogenous. The est.VARX.ar 
 method does not support trend estimation (as in est.VARX.ls).
+
 If aic=TRUE the number of lags is determined by an AIC statistic (see ar). 
 If an exogenous (input) 
 variable is supplied the input and output are combined (i.e.- both
@@ -40,10 +45,16 @@ polynomial and discarding inappropriate blocks.
 Residuals,etc, are calculated by evaluating the estimated model as a 
 TSmodel/ARMA with the data (ie. residuals are not the residuals from the
 regression).
+
 Note: ar uses a Yule-Walker approach (uses autocorrelations) so effectively the 
   model is for data with means removed. Thus subtract.means does not make much
   difference and re.add.means must be TRUE to get back to a model for the 
   original data.
+
+The conventon for AR(0)  and sign are changed to ARMA format.
+Data should be of class TSdata.
+The exog. variable is shifted so contemporaneous effects enter.
+the model for the exog. variable (as estimated by ar() is  discarded.
 }
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of

@@ -3,12 +3,13 @@
 \title{Plot Model Roots}
 \description{Calculate and plot roots of a model.}
 \usage{
-    plot.roots(x, pch='*', fuzz=0)}
+    plot.roots(x, pch='*', fuzz=0, ...)}
 \arguments{
     \item{x}{An object of class TSmodel or a vector of complex (or real) 
 values as returned by the function roots.}
     \item{pch}{character to be used for the plot (passed to plot.default).}
     \item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
+    \item{...}{(further arguments, currently disregarded).}
 }
 \sideffects{The roots and a unit circle are plotted on the complex plane.}
 \value{

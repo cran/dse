@@ -7,7 +7,7 @@
 \alias{dseclass<-}
 \alias{est.VARX.mean.correction}
 \alias{fake.TSestModel.missing.data}
-\alias{print.test.value}
+\alias{printTestValue}
 \alias{dsescan}
 \alias{read.int}
 \alias{svd.criteria}
@@ -16,6 +16,16 @@
 \description{
     These functions are used by other functions in DSE and are not
     typically called directly by the user.}
+\usage{
+   est.VARX.mean.correction(X, y, bbar, fuzz=sqrt(.Machine$double.eps), warn=TRUE)
+   fake.TSestModel.missing.data(model,data, residual, max.lag)   
+   printTestValue(x, digits=16)
+   read.int(prmt)
+   svd.criteria(sv)
+   criteria.table.heading()
+   criteria.table.legend()
+   criteria.table.nheading()
+   DSE.ar(data, ...)
+}
 %\keyword{DSE}
 \keyword{internal}
-

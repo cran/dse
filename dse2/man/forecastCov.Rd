@@ -3,28 +3,24 @@
 \alias{forecastCov.TSdata}
 \alias{forecastCov.TSmodel}
 \alias{forecastCov.TSestModel}
-\alias{forecastCov.compiled}
-\alias{forecastCov.compiled.ARMA}
-\alias{forecastCov.compiled.SS}
-\alias{forecastCov.compiled.innov}
-\alias{forecastCov.compiled.non.innov}
-\alias{forecastCov.reductionsWRTtrue}
-\alias{forecastCov.single.TSmodel}
 \alias{is.forecastCov}
 
 \title{Forecast covariance for different models}
 \description{Calculate the forecast covariance for different models.}
 \usage{
     is.forecastCov(obj)
-    forecastCov(obj, ...)
-    \method{forecastCov}{TSmodel}(obj, ..., data=NULL, discard.before=NULL,
-       horizons=1:12, zero=FALSE, trend=FALSE, estimation.sample= periods(data),
-       compiled=.DSECOMPILED)
-    \method{forecastCov}{TSestModel}(obj, data=NULL, ..., discard.before=NULL,
-       horizons=1:12, zero=FALSE, trend=FALSE, estimation.sample= NULL,
-       compiled=.DSECOMPILED)
-    \method{forecastCov}{TSdata}(obj, data=NULL, horizons=1:12, discard.before=1,
-   compiled=.DSECOMPILED)
+    forecastCov(obj, ..., data=NULL, horizons=1:12, discard.before=NULL,
+       zero=FALSE, trend=FALSE, estimation.sample= NULL, compiled=.DSECOMPILED)
+    \method{forecastCov}{TSmodel}(obj, ..., data=NULL,
+       horizons=1:12, discard.before=NULL, 
+       zero=FALSE, trend=FALSE, estimation.sample= periods(data), compiled=.DSECOMPILED)
+    \method{forecastCov}{TSestModel}(obj, ..., data=TSdata(obj), 
+       horizons=1:12, discard.before=NULL, zero=FALSE, trend=FALSE, 
+       estimation.sample= periods(TSdata(obj)), compiled=.DSECOMPILED)
+    \method{forecastCov}{TSdata}(obj, ..., data=NULL,
+       horizons=1:12, discard.before=1,
+       zero=FALSE, trend=FALSE, estimation.sample= NULL,
+        compiled=.DSECOMPILED)
 }
 \arguments{
     \item{obj}{TSdata or one or more TSmodels or TSestModels}
@@ -51,7 +47,7 @@ TSmodel(obj) is used with data to produce a forecast. TSmodel() is also
 applied to each element of ... to extract a model. All models should
 work with data. If obj is a TSestModel and data is NULL then TSdata(obj)
 is used as the data.
-This is just multiple applications of forecastCov.single.TSmodel
+This is multiple applications of forecastCovSingle.TSmodel
 discard.before is an integer indicating the number of points in the
 beginning of forecasts to discard before calculating covariances.
 If it is the default, NULL, then the default (minimum.startup.lag) will

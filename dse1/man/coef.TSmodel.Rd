@@ -10,13 +10,14 @@
     Set or extract coefficients (parameter values) of model objects.
 }
 \usage{
-    \method{coef}{TSmodel}(object)
-    \method{coef}{TSestModel}(object)
+    \method{coef}{TSmodel}(object, ...)
+    \method{coef}{TSestModel}(object, ...)
     coef(object) <- value
     \method{coef<-}{default}(object) <- value
     }
 \arguments{
     \item{object}{An object of class TSmodel or TSestModel.}
+    \item{...}{(further arguments, currently disregarded).}
     }
 \value{A vector of parameter values.}
 \examples{

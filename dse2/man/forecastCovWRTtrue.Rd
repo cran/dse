@@ -7,9 +7,10 @@
     Generate forecasts and compare them against the output of a true model.}
 \usage{
     forecastCovWRTtrue(models, true.model, 
-        pred.replications=1, simulation.args=NULL, quiet=FALSE, 
-        rng=NULL, Spawn=.SPAWN, compiled=.DSECOMPILED,
-        horizons=1:12, discard.before=10, trend=NULL, zero=NULL)
+        pred.replications=1, simulation.args=NULL, quiet=FALSE, rng=NULL, 
+	compiled=.DSECOMPILED,
+        horizons=1:12, discard.before=10, trend=NULL, zero=NULL, 
+	Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
     is.forecastCovWRTdata(obj)
 }
 \arguments{
@@ -50,7 +51,7 @@ is for true.model to be a TSestModel. Otherwise, input data should be passed
 in simulation.args
 }
 \seealso{
-\code{\link{forecastCov.estimatorsWRTdata}}
+\code{\link{forecastCovEstimatorsWRTdata}}
 \code{\link{simulate}}
 \code{\link{EstEval}}
 \code{\link{distribution}}

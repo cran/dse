@@ -12,8 +12,8 @@ by the Cayley Hamilton theorem.
 }
 \usage{
     to.ARMA(model, ...)
-    \method{to.ARMA}{ARMA}(model)
-    \method{to.ARMA}{SS}(model, fuzz=1e-10)
+    \method{to.ARMA}{ARMA}(model, ...)
+    \method{to.ARMA}{SS}(model, fuzz=1e-10, ...)
     \method{to.ARMA}{TSestModel}(model, ...)
 }
 \arguments{

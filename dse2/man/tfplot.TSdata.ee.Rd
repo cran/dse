@@ -24,7 +24,10 @@
         ylab = seriesNamesOutput(x$data), 
 	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
     \method{tfplot}{horizonForecasts}(x, start.=NULL, end.=NULL,
-         series=NULL, ylab=seriesNamesOutput(x$data), mar=par()$mar)
+         series=seq(length=nseriesOutput(x$data)),
+	 Title="Predictions (dotted) and actual data (solid)", 
+	 ylab=seriesNamesOutput(x$data), 
+	 graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
     \method{tfplot}{multi.model.horizonForecasts}(x, start.=NULL, end.=NULL,
          series=NULL)
 }

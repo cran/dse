@@ -12,8 +12,8 @@
 \usage{
     acf.M(obj, ...)
     \method{acf.M}{TSdata}(obj, lag=round(6*log(periods(obj))), 
-        type ="covariance", sub.mean=TRUE)
-    \method{acf.M}{TSmodel}(obj, lag=NULL, type ="covariance", Psi=NULL)
+        type ="covariance", sub.mean=TRUE, ...)
+    \method{acf.M}{TSmodel}(obj, lag=NULL, type ="covariance", Psi=NULL, ...)
     \method{acf.M}{TSestModel}(obj, ...)
 }
 \arguments{
@@ -29,7 +29,7 @@
     \item{Psi}{
         A matrix of innovation covariance. Only valid if object 
         is of class TSmodel.}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 
 \value{

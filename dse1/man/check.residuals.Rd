@@ -10,7 +10,7 @@ matrix or TSdata or residuals of a TSestModel}
 \usage{
     check.residuals(obj, ...)
     \method{check.residuals}{default}(obj, ac=TRUE, pac=TRUE, select=seq(nseries(obj)), 
-                   drop=NULL, plot.=TRUE, graphs.per.page=5, verbose=FALSE)
+                   drop=NULL, plot.=TRUE, graphs.per.page=5, verbose=FALSE, ...)
     \method{check.residuals}{TSdata}(obj, ...)
     \method{check.residuals}{TSestModel}(obj, ...)
 }
@@ -31,7 +31,7 @@ matrix or TSdata or residuals of a TSestModel}
     \item{verbose}{
         If TRUE then the auto-correlations and partial auto-correlations 
         are printed if they are calculated.}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
     A list with residual diagnostic information: residuals, mean, cov, 

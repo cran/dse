@@ -1,27 +1,17 @@
 
 require("dse1")
 
- if (is.R()) data("eg1.DSE.data", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.R", sep=""))
-    class(eg1.DSE.data$output) <- class(eg1.DSE.data$input) <- NULL
-    }
+ data("eg1.DSE.data", package = "dse1")
+ data("eg1.DSE.data.diff", package = "dse1") 
 
- if (is.R()) data("eg1.DSE.data.diff", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
+ cat("Retrieve data from file eg1.dat and build a TSdata object.\n")
 
-  cat("Retrieve data from file eg1.dat and build a TSdata object.\n")
+#eg1.dat <- t(matrix(scan("eg1.dat", sep="")),5, 364))[, 2:5] 
+#eg1.dat <- TSdata(input  = eg1.dat[,1,drop = F], 
+#                  output = eg1.dat[, 2:4, drop = F])
+#eg1.dat <-tframed(eg1.dat, list(start=c(1961,3), frequency=12))
 
-eg1.dat <- t(matrix(scan(paste(DSE.HOME, "/data/eg1.dat", sep="")),
-                         5, 364))[, 2:5] 
-
-eg1.dat <- TSdata(input  = eg1.dat[,1,drop = F], 
-                  output = eg1.dat[, 2:4, drop = F])
-		      
-eg1.dat <-tframed(eg1.dat, list(start=c(1961,3), frequency=12))
+eg1.dat <-tframed(eg1.DSE.data, list(start=c(1961,3), frequency=12))
 
 seriesNamesInput(eg1.dat) <- "R90"
 seriesNamesOutput(eg1.dat) <- c("M1","GDPl2", "CPI")

@@ -10,17 +10,18 @@
 \usage{
     tfplot(x, ...)
 
-    \method{tfplot}{default}(x, ..., start.=NULL, end.=NULL, series=seq(nseries(x)), 
-       Title=NULL, xlab=NULL, ylab=seriesNames(x), graphs.per.page=5, 
-       mar=par()$mar, reset.screen=TRUE)
+    \method{tfplot}{default}(x, ..., start.=NULL, end.=NULL, tf=NULL,
+       series=seq(nseries(x)), Title=NULL, xlab=NULL, ylab=seriesNames(x), 
+       graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
     tfOnePlot(x, xlab=NULL, ylab=NULL, ...)
 }
 
 \arguments{
     \item{x}{a tframe or tframed object to plot.}
-    \item{...}{any additional tframe or tframed objects for the same plot.}
+    \item{...}{any additional tframed objects for the same plot.}
     \item{start.}{start of plot. (passed to tfwindow)}
     \item{end.}{end of plot. (passed to tfwindow)}
+    \item{tf}{a tframe or tframed object}
     \item{series}{series to be plotted. (passed to select.series)}
     \item{Title}{string to use for plot title.}
     \item{xlab}{string to use for x label (passed to plot).}
@@ -33,15 +34,18 @@
 }
 \value{None.}
 \details{
-    In many cases these are the same as plot methods. 
-    However, tfplot tries to provide an alternate generic
-    mechanism that is consistent with the tframe view of the data.
-    This may not always be the preferred print and plot method. 
-    Also, new classes of time series may define
-    there own plot methods in ways which use a different logic
-    from the tframe library. Thus tfplot provides a
-    way to program functions which use methods consistent with the tframe
-    library logic.
+    In many cases these are the same as plot methods, however, tfplot puts
+    different series in the object \code{x} in different plot panels, whereas
+    \code{plot} usually puts them in the same panel. For this reason,
+    \code{tfplot} tends to work better when the scale of the different series
+    are very different. If additional objects are supplied, then they should
+    each have the same number of series as \code{x} and all corresponding series
+    will be plotted in the same panel.
+    
+    \code{tfplot} provides an alternate generic
+    mechanism for plotting time series data.
+    New classes of time series may define
+    there own \code{tfplot} (and \code{plot}) methods.
     
     Note that the start and end arguments to tfplot are "start." and "end.".
     In some situations truncation works and these can be abreviated, but

@@ -1,4 +1,4 @@
 Package: dse1
 Title: Dynamic Systems Estimation (time series package)
 Description: Multivariate Time Series -  kernel plus ARMA and State Space models.
-Depends: R (>= 1.3.1), ts,  syskern (>= 2001.11-1), tframe (>= 2001.11-1)
+Depends: R (>= 1.6.2), ts, tframe (>= 2003.2-1), setRNG (>= 2003.2-1)
