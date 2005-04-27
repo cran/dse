@@ -923,13 +923,13 @@ tfplot.EstEval <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
   tf <- tframe(truth)
   truth <- unclass(truth)
   if (remove.mean) 
-    {truth <- sweep(truth,2, apply(truth,2,mean))
+    {truth <- sweep(truth,2, colMeans(truth))
      ylab <- paste(ylab, "(mean removed)")
     }
   r <- matrix(NA,periods(truth), N)
   for (j in series) {
   	for (i in 1:N)  r[,i] <- x$result[[i]][,j]
-	if (remove.mean) r <- sweep(r,2, apply(r,2,mean))
+	if (remove.mean) r <- sweep(r,2, colMeans(r))
   	tfOnePlot(tframed(tbind(truth[,j], r), tf), ylab= ylab[j],
 	              lty=c(1,rep(2, N)), col=c("black",rep("red",N)),
 		      start=start,end=end)
@@ -996,7 +996,7 @@ summary.rootsEstEval <- function(object, verbose=TRUE, ...)
   for (i in 1:N) p <- max(p, length((object$result)[[i]]))
   r <- matrix(NA, N, p)
   for (i in 1:N) r[i,1:length((object$result)[[i]])] <- (object$result)[[i]]
-  m <- apply(r,2,sum)/N
+  m <- colSums(r)/N
   cov <- r- t(matrix(object$truth, p, N))
   cov <- (t(Conj(cov)) %*% cov)/(N-1)
   ecov <- r- t(matrix(m, p, N))
@@ -1156,7 +1156,7 @@ tfplot.coefEstEval <- function(x, cumulate=TRUE, norm=FALSE, bounds=TRUE,
 	if (ni != n) plottrue <- FALSE
 	}
       if (invert) r <- 1/r
-      if(norm)    r <- matrix((apply(r^2,1,sum))^.5, N,1)
+      if(norm)    r <- matrix((rowSums(r^2))^.5, N,1)
       r[is.infinite(r)] <- 0
       if (Sort) r <- t(apply(r,1,sort))
       if (n != length(x$truth)) plottrue <- FALSE
@@ -1168,7 +1168,8 @@ tfplot.coefEstEval <- function(x, cumulate=TRUE, norm=FALSE, bounds=TRUE,
 	true.lines <-t(matrix(true.lines, length(true.lines),N))
 	if (bounds) {
 		z  <- r-true.lines
-		Om <- t(z) %*% z/(nrow(z)-1)
+		#Om <- t(z) %*% z/(nrow(z)-1)
+		Om <- crossprod(z, z)/(nrow(z)-1)
 		Om <- diag(Om)^.5
 		Om <- t(matrix(Om, length(Om), N))
 		Om <- Om/matrix((1:N)^.5 , N, ncol(Om))
@@ -2301,19 +2302,19 @@ totalForecastCov <- function(obj, select=NULL)
  for (j in 1:length(obj$forecastCov) )
    {z <- apply((obj$forecastCov)[[j]],1,diag)
     # $ causes problems
-    obj$forecastCov[[j]] <- array(apply(z[select,],2,sum), N)
+    obj$forecastCov[[j]] <- array(colSums(z[select,]), N)
    }
  if(!is.null(obj$forecastCov.true))
    {z <- apply(obj$forecastCov.true,1,diag)
-    obj$forecastCov.true <- array(apply(z[select,],2,sum), N)
+    obj$forecastCov.true <- array(colSums(z[select,]), N)
    }
  if(!is.null(obj$forecastCov.zero))
    {z <- apply(obj$forecastCov.zero,1,diag)
-    obj$forecastCov.zero <- array(apply(z[select,],2,sum), N)
+    obj$forecastCov.zero <- array(colSums(z[select,]), N)
    }
  if(!is.null(obj$forecastCov.trend)) 
    {z <- apply(obj$forecastCov.trend,1,diag)
-    obj$forecastCov.trend <- array(apply(z[select,],2,sum), N)
+    obj$forecastCov.trend <- array(colSums(z[select,]), N)
    }
  invisible(obj)
 }
@@ -3076,10 +3077,10 @@ mineStepwise <- function(data, essential.data=1,
      }
    if (subtract.means)
     {if(m!=0)
-       {input.means<-apply(inputData(data),2, mean)
+       {input.means<-colMeans(inputData(data))
         inputData(data)<-inputData(data)-t(matrix( input.means, m,N))
        }
-     output.means <- apply(outputData(data),2, mean)
+     output.means <- colMeans(outputData(data))
      outputData(data)  <- outputData(data) - t(matrix(output.means, p,N))
     }
  # The matrix Past is blocks of data:

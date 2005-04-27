@@ -11,10 +11,13 @@
     tfplot(x, ...)
 
     \method{tfplot}{default}(x, ..., tf=tfspan(x, ...), start=tfstart(tf), end=tfend(tf),
-       series=seq(nseries(x)), Title=NULL, xlab=NULL, ylab=seriesNames(x), 
-       graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    tfOnePlot(x, xlab=NULL, ylab=NULL, 
-              tf=tframe(x), start=tfstart(tf), end=tfend(tf),...)
+       series=seq(nseries(x)), Title=NULL, 
+        lty = 1:5, lwd = 1, pch = NULL, col = 1:6, cex = NULL,
+       xlab=NULL, ylab=seriesNames(x), xlim = NULL, ylim = NULL, 
+       graphs.per.page=5, par=NULL, mar=par()$mar, reset.screen=TRUE)
+    tfOnePlot(x, tf=tframe(x), start=tfstart(tf), end=tfend(tf),
+        lty=1:5, lwd=1, pch=NULL, col=1:6, cex=NULL,
+        xlab=NULL, ylab=NULL, xlim=NULL, ylim=NULL, ...)
 }
 
 \arguments{
@@ -26,11 +29,19 @@
     end.}
     \item{series}{series to be plotted. (passed to selectSeries)}
     \item{Title}{string to use for plot title.}
+    \item{lty}{passed to matplot. See also par.)}
+    \item{lwd}{passed to matplot. See also par.)}
+    \item{pch}{passed to matplot. See also par.)}
+    \item{col}{passed to matplot. See also par.)}
+    \item{cex}{passed to matplot. See also par.)}
     \item{xlab}{string to use for x label (passed to plot).}
     \item{ylab}{string to use for y label (passed to plot).}
+    \item{xlim}{passed to matplot. See also par.)}
+    \item{ylim}{passed to matplot. See also par.)}
     \item{graphs.per.page}{integer indicating number of graphs to place on a
        page.}
-    \item{mar}{margins passed to plot. See par.)}
+    \item{par}{a list of arguments passed to par() before plotting.)}
+    \item{mar}{margins passed to plot (deprecated, use par).)}
     \item{reset.screen}{logical indicating if the plot window should be cleared
        before starting. If this is not TRUE then mar values will have no effect.}
 }
@@ -60,6 +71,8 @@
     \code{\link{tframed}}
     \code{\link{print}}
     \code{\link{plot}}
+    \code{\link{matplot}}
+    \code{\link{par}}
 }
 \examples{
     tfplot(ts(rnorm(100), start=c(1982,1), frequency=12))

@@ -102,8 +102,8 @@ tfdiff.tframe <- function (x,lag=1, differences=1)
                   end=if(d <  0) periods(x)-d else NULL)
  }
 
-#  tfplot and tfprint below provide generic methods for ploting and printing
-#  tf time series objects. Plot methods will probably to some processing
+#  tfplot and tfprint below provide generic methods for plotting and printing
+#  tf time series objects. Plot methods will probably do some processing
 #  and eventually call tfplot.default.
 
 tfplot <- function(x, ...)  UseMethod("tfplot")
@@ -116,19 +116,25 @@ tfspan <- function(x, ...)
    tframe(tfspan)
   }
 
+
 tfplot.default <- function(x, ..., tf=tfspan(x , ...), start=tfstart(tf), end=tfend(tf),
-       series=seq(nseries(x)), Title=NULL, xlab=NULL, ylab=seriesNames(x), 
-       graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
+       series=seq(nseries(x)), Title=NULL,
+       lty = 1:5, lwd = 1, pch = NULL, col = 1:6, cex = NULL,
+       xlab=NULL, ylab=seriesNames(x), xlim = NULL, ylim = NULL,
+       graphs.per.page=5, par=NULL, mar=par()$mar, reset.screen=TRUE)
  {#  ... before other args means abbreviations do not work, but otherwise
   # positional matching seems to kick in and an object to be plotted gets used
   #  for start.
   if (!is.tframed(x)) UseMethod("plot")
   else
-    {names <- seriesNames(x)
+    {old.par <- par(par)
+     on.exit(par(old.par)) 
+     names <- seriesNames(x)
      Ngraphs <- min(length(series), graphs.per.page)
-     if(reset.screen) {
-        old.par <- par(mfcol = c(Ngraphs, 1), mar=mar, no.readonly=TRUE)  
-        on.exit(par(old.par)) }
+     if(reset.screen)  {
+        if ( (! is.null(par)) && (! is.null(par$mar))) mar <- par$mar
+        par(mfcol = c(Ngraphs, 1), mar=mar, no.readonly=TRUE)
+	}  
 #     tf <- tframe(tfwindow(x, start=start, end=end))
 # would be nice if this could expand tf (tfwindow only truncates - need a
 # replacement that expands too.)
@@ -137,15 +143,18 @@ tfplot.default <- function(x, ..., tf=tfspan(x , ...), start=tfstart(tf), end=tf
 	z <-  selectSeries(x, series=i)
         for (d in list(...))
     	   z <- tbind(z, selectSeries(d, series=i)) 
-	tfOnePlot(z, xlab=xlab, ylab=ylab[i], tf=tf, start=start, end=end)
+	tfOnePlot(z, tf=tf, start=start, end=end,
+	          lty=lty, lwd=lwd, pch=pch, col=col, cex=cex,
+		  xlab=xlab, ylab=ylab[i], xlim=xlim, ylim=ylim)
         if(!is.null(Title) && (i==1)) title(main = Title)
 	}
     }
   invisible()
  }
 
-tfOnePlot <- function(x, xlab=NULL, ylab=NULL,
-                      tf=tframe(x), start=tfstart(tf), end=tfend(tf), ...)
+tfOnePlot <- function(x, tf=tframe(x), start=tfstart(tf), end=tfend(tf), 
+        lty=1:5, lwd=1, pch=NULL, col=1:6, cex=NULL,
+        xlab=NULL, ylab=NULL, xlim=NULL, ylim=NULL, ...)
  {if (!is.tframed(x)) UseMethod("plot")
   else
     {if (!is.null(start)) x <- tfwindow(x, start=start, warn=FALSE)
@@ -153,7 +162,8 @@ tfOnePlot <- function(x, xlab=NULL, ylab=NULL,
      tline <- time(x)
      if(is.null(xlab)) xlab <- ""
      if(is.null(ylab)) ylab <- paste(seriesNames(x), collapse="  ")
-     matplot(tline, x, type="l", xlab=xlab, ylab=ylab, ...)
+     matplot(tline, x, type="l", lty=lty, lwd=lwd, pch=pch, col=col, cex=cex,
+             xlab=xlab, ylab=ylab, xlim=xlim, ylim=ylim, ...)
     }
   invisible()
  }

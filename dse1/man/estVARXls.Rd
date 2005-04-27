@@ -58,6 +58,7 @@ respect to initial conditions.
     \code{\link[dse2]{estSSMittnik}}
     \code{\link[dse2]{bft}}
     \code{\link{estVARXar}}
+    \code{\link{estMaxLik}}
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")

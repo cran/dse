@@ -1,4 +1,29 @@
 
+                CHANGES IN DSE AND DSEPLUS VERSION 2005.4?-1
+ 
+Changes (Possibly) Affecting Users
+
+    o package guides have been renamed from "pac-guide.pdf" to "pac.pdf"
+      (e.g. dse1-guide.pdf is now dse1.pdf) so they can be displayed with e.g.
+      print(vignette("dse1")) and the vignette code loaded in an editor with
+      e.g. edit(vignette("dse1")). The combined guide is still dse-guide.pdf.
+
+    o more arguments have been added to tfplot to pass to par() and matplot. 
+      These give better control over plot line colours and styles.      
+
+    o a bug constructing a TSdata format with univariate ts is fixed.        
+
+    o a bug in TREND for ARMA models was fixed.
+
+    o acfM was removed. This was a utility for some code that was previously
+      removed. (Use acf to calculate autocorrelations.)
+
+Changes Affecting Development
+
+    o more testing of TSdata constructors and methods has been added.          
+
+    o             
+
                 CHANGES IN DSE AND DSEPLUS VERSION 2005.1-1
  
 Changes (Possibly) Affecting Users
