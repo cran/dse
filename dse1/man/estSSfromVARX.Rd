@@ -31,6 +31,7 @@
     \code{\link[dse2]{estSSMittnik}}
     \code{\link[dse2]{bft}}
     \code{\link{estVARXls}}
+    \code{\link{estMaxLik}}
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")

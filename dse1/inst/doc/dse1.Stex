@@ -5,6 +5,7 @@
 \SweaveOpts{eval=TRUE,echo=TRUE,results=hide,fig=FALSE}
 \begin{Scode}{echo=FALSE,results=hide}
  options(continue="  ")
+ options(width=65)
 \end{Scode}
 
 \section{dse1 Guide}
@@ -15,6 +16,12 @@ The functions in this package are made available with
 library("dse1")
 \end{Scode}
 
+As of R-2.1.0 the code from the vignette that generates this guide can 
+be loaded into an editor with \emph{edit(vignette("dse1"))}.
+This uses the default editor, which can be changed using \emph{options()}.
+Also, it should be possible to view the pdf version of the guide for this 
+package with \emph{print(vignette("dse1"))} and the guide for the dse
+bundle with \emph{print(vignette("dse-guide"))}.
 
 Several data sets are included with DSE and will be used
 in examples in this guide. The names of the data sets 
@@ -52,16 +59,15 @@ enumerates the rows and is discarded.
 
 % this requires an indication of where the file is, previously DSE.HOME
 \begin{Scode}{eval=FALSE}
-  fileName <- system.file("otherdata", "eg1.dat", package="dse1")
-  eg1.DSE.data <- t(matrix(scan(fileName),5, 364))[, 2:5]
-
+fileName <- system.file("otherdata", "eg1.dat", package="dse1")
+eg1.DSE.data <- t(matrix(scan(fileName),5, 364))[, 2:5]
 \end{Scode}
 
 
 This matrix can be used to form a \emph{TSdata} object by
 
 \begin{Scode}{eval=FALSE}
-  eg1.DSE.data <- TSdata(input= eg1.DSE.data[,1,drop = F],
+eg1.DSE.data <- TSdata(input= eg1.DSE.data[,1,drop = F],
                       output= eg1.DSE.data[, 2:4, drop = F])
 \end{Scode}
 
@@ -93,7 +99,6 @@ Names can be given to the series with
 
 \begin{Scode}
 seriesNamesInput(eg1.DSE.data) <- "R90"
-
 seriesNamesOutput(eg1.DSE.data) <- c("M1","GDPl2", "CPI") 
 \end{Scode}
 
@@ -117,7 +122,6 @@ Once data is available a model can be estimated:
 
 \begin{Scode}
 model1 <- estVARXls(eg1.DSE.data)
-
 model2 <- estSSMittnik(eg1.DSE.data, n=4) 
 # or model2 <- estSSMittnik(eg1.DSE.data) prompts for state dimension
 \end{Scode}
@@ -137,17 +141,11 @@ Information about the estimated models can be displayed, for example:
 
 \begin{Scode}
 summary(model1)
-
 summary(model2)
-
 model1
-
 model2
-
 stability(model1)
-
 stability(model2)
-
 informationTests(model1, model2)
 \end{Scode}
 
@@ -156,15 +154,10 @@ To display plots use:
 
 \begin{Scode}
 tfplot(model1)
-
 # plot(model1) this does not always work 
-
 tfplot(model2)
-
 tfplot(eg1.DSE.data)
-
 checkResiduals(model1)
-
 checkResiduals(model2) 
 \end{Scode}
 
@@ -173,7 +166,7 @@ The first \emph{tfplot} command produces this graphic
 
 
 \begin{Scode}{fig=TRUE, echo=FALSE}
-   tfplot(model1)
+tfplot(model1)
 \end{Scode}
 
 Note that initial conditions have been set to zero, but the effect
@@ -189,7 +182,7 @@ Specifying ARMA and SS models is described below, but first their
 definition is outlined. The linear time-invariant ARMA representation is
 
 \begin{equation}
-  A(L)y_{t}=B(L)e_{t}+C(L)u_{t}
+A(L)y_{t}=B(L)e_{t}+C(L)u_{t}
 \end{equation}
 
 where \emph{$y_{t}$} is a p dimensional vector of observed output variables,
@@ -234,11 +227,10 @@ with two series, a second order AR polynomial, a first order MA polynomial
 and no exogenous variable:
 
 \begin{Scode}
-AR<- array(c(1, .5, .3, 0, .2, .1, 0, .2, .05, 1, .5, .3) ,c(3,2,2)) 
+AR <- array(c(1, .5, .3, 0, .2, .1, 0, .2, .05, 1, .5, .3), c(3,2,2)) 
 MA <- array(c(1, .2, 0, .1, 0, 0, 1, .3), c(2,2,2)) 
 arma <- ARMA(A=AR, B=MA, C=NULL) 
 rm(AR, MA) # these can be removed from the environment as 
-
            #they are no longer needed 
 arma 
 stability(arma) 
@@ -273,23 +265,14 @@ Here is an example of a state space model:
 \begin{Scode}
 f <- array(c(.5, .3, .2, .4), c(2,2)) # beware: do not use capital
                                       # F=FALSE as a variable name
-
 h <- array(c(1, 0, 0, 1), c(2,2))
-
 k <- array(c(.5, .3, .2, .4), c(2,2))
-
 ss <- SS(F=f, H=h, K=k) # F is a function argument not a variable name
-
 print(ss)
-
 stability(ss)
-
 data.ss.sim <- simulate(ss)
-
 ss <- l(ss, data.ss.sim)
-
 summary(ss)
-
 tfplot(ss) 
 \end{Scode}
 
@@ -308,19 +291,12 @@ using the models defined in the previous example:
 
 \begin{Scode}
 ss.from.arma <- l(toSS(arma), data.arma.sim)
-
 arma.from.ss <- l(toARMA(ss), data.ss.sim)
-
 summary(ss.from.arma)
-
 summary(arma)
-
 summary(arma.from.ss)
-
 summary(ss)
-
 stability(arma)
-
 stability(ss.from.arma) 
 \end{Scode}
 
@@ -412,9 +388,8 @@ other examples.
 It is also possible to select a subsample of the data:
 
 \begin{Scode}
-subsample.data <- tfwindow(eg1.DSE.data, 
-
-                    start=c(1972,1), end=c(1992,12), warn=FALSE) 
+subsample.data <- tfwindow(eg1.DSE.data, start=c(1972,1), 
+   end=c(1992,12), warn=FALSE) 
 \end{Scode}
 
 
@@ -431,11 +406,8 @@ Various functions can be applied to the estimation result
 
 \begin{Scode}
 summary(model.eg1.ls)
-
 print(model.eg1.ls)
-
 tfplot(model.eg1.ls)
-
 checkResiduals(model.eg1.ls) 
 \end{Scode}
 
@@ -444,15 +416,9 @@ Other estimation techniques are available
 
 \begin{Scode}
 model.eg1.ar <- estVARXar(trimNA(eg1.DSE.data))
-
 model.eg1.ss <- estSSfromVARX(trimNA(eg1.DSE.data))
-
 model.eg1.bft <- bft(trimNA(eg1.DSE.data))
-
-model.eg1.mle <- estMaxLik(estVARXls(trimNA(eg1.DSE.data),
-
-                      max.lag=1)) # see note below 
-
+model.eg1.mle <- estMaxLik(estVARXls(trimNA(eg1.DSE.data), max.lag=1)) # see note below 
 \end{Scode}
 
 \emph{tfplot} can put multiple similar objects on a plot.
@@ -500,10 +466,7 @@ will be used. This subset is extracted by
 
 \begin{Scode}
 eg4.DSE.data<- egJofF.1dec93.data
-
-outputData(eg4.DSE.data) <- outputData(eg4.DSE.data,
-
-       series=c(1,2,6,7)) 
+outputData(eg4.DSE.data) <- outputData(eg4.DSE.data, series=c(1,2,6,7)) 
 \end{Scode}
 
 

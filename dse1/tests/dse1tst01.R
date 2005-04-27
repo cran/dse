@@ -68,6 +68,11 @@ test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Mul
   VARmodelB <- setTSmodelParameters(VARmodelB)
   VARmodelB <- l(VARmodelB,VARmodel$data, warn=FALSE)
 
+  z <- residuals(VARmodelB)
+  z <- acf(VARmodelB)
+  x11()
+  acf(VARmodelB)
+
    good <- VARmodel$estimates$pred
    tst  <- VARmodelB$estimates$pred
    error <- max(abs(good-tst))

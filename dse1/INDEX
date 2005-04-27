@@ -6,7 +6,6 @@ A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
 See also the bundle dseplus with related packages.
 00Intro.dse1            DSE
-acfM                    Calculate Auto-Covariance
 addPlotRoots            Add Model Roots to a plot
 ARMA                    ARMA Model Constructor
 balanceMittnik          Balance a state space model

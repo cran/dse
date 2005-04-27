@@ -1,11 +1,21 @@
 useDynLib(dse1)
 
-import("stats")
+##import("stats")
 import("tframe")
 ##import("setRNG")
 
 export("DSEversion")
 export(".DSEflags")
+
+importFrom("stats","residuals")
+##export("residuals")
+##exportMethods("residuals")
+S3method("residuals", "TSestModel")
+
+export("acf")
+S3method("acf", "default")
+S3method("acf", "TSdata")
+S3method("acf", "TSestModel")
 
 S3method("print", "TSestModel")
 S3method("print", "SS")
@@ -131,11 +141,6 @@ export("toARMA")
 S3method("toARMA", "ARMA")
 S3method("toARMA", "SS")
 S3method("toARMA", "TSestModel")
-
-export("acfM")
-S3method("acfM", "TSdata")
-S3method("acfM", "TSmodel")
-S3method("acfM", "TSestModel")
 
 export("Riccati")
 export("markovParms")

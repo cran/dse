@@ -70,6 +70,7 @@ the model for the exog. variable (as estimated by ar() is  discarded.
     \code{\link[dse2]{estSSMittnik}}
     \code{\link[dse2]{bft}}
     \code{\link{estVARXls}}
+    \code{\link{estMaxLik}}
     \code{\link[ts]{ar}}
     \code{\link{DSE.ar}}
 }

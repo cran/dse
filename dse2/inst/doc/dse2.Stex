@@ -19,6 +19,14 @@ In R, the functions in this package are made available with
 library("dse2")
 \end{Scode}
 
+As of R-2.1.0 the code from the vignette that generates this guide can 
+be loaded into an editor with \emph{edit(vignette("dse2"))}.
+This uses the default editor, which can be changed using \emph{options()}.
+Also, it should be possible to view the pdf version of the guide for this 
+package with \emph{print(vignette("dse2"))} and the guide for the dse
+bundle with \emph{print(vignette("dse-guide"))}.
+
+
 The next code lines are here to initialize results from examples 
 in dse1 that are used in dse2 examples.
 

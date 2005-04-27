@@ -40,70 +40,6 @@ DSEversion <- function()
    r
   }
 
-##############################################################################
-
-# There is a short section containing installation dependent strings
-# following below .
-
-# Actually, "installation dependent strings" only applies to old versions
-#   used in Splus, I just have not clean up.
-
-##############################################################################
-
-
-##############################################################################
-
-#  begin of section containing installation dependent strings.
-
-##############################################################################
-# in very old Guide eg1.DSE.data       was called  eg1.DSE.data.diff.all.raw
-# previously        eg1.DSE.data.diff  was called  eg1.DSE.data.diff.all
-
-
-# This old .First.lib was used in Splus and R until switching to namespaces
-#.First.lib <- function(library, section)
-#  {# a previous version tried to load several functions into frame 0 to 
-#   # prevent problems even if the library is not attached with first=T, 
-#   # however, this version take the less drastic step of issuing a warning
-#   # if the library is not close to the beginning of the search list.
-#   
-#   if (is.R())
-#     {if (.DSEflags()$COMPILED) library.dynam("dse1") #, local=FALSE)
-#      ok <-  require("setRNG", warn.conflicts=TRUE)
-#      ok <- ok & require("tframe",  warn.conflicts=TRUE)
-#      if(!ok) warning("This package requires the setRNG and tframe packages.")
-#     } else if (!is.R())
-#     {# assuming is.S()
-#      DSE.HOME <- paste(library, "/", section, sep="")
-#      from <- paste(DSE.HOME,"/lib", sep="")
-#      large <- FALSE
-#      if (pmatch(DSE.HOME,search()) >2)
-#	  warning("The DSE library may not work properly if it is not near the beginning of the search list. Use library(..., first=T)")
-#     if ( .DSEflags()$COMPILED && (0 != nchar(from)) &&
-#     "/" != substring(from, first=nchar(from))) from <- paste(from,"/", sep="")
-#    {# assuming is.S()
-#     if("windows" == Platform()$OS.type)
-#	   {# The following variable is used in Windows dll.load
-#	   dse.win.for.tab <- c("simss" ,"smooth" ,"kfp" ,"kfprj" ,"kfepr" ,
-#		"kf" ,"simarma"
-#	      ,"armap" ,"armaprj" ,"armaepr" ,"arma" ,"dataepr","inverse"
-#	       ,"gend","cstat_f","efcurve_f","rlcurve_f","wep")
-#	    r <- dll.load(paste(from,"dsefor.dll", sep=""),dse.win.for.tab)
-#	    if (1!=r) warning("dll load was NOT successful.")
-#	   }
-#     else 
-#	 {if (large) r <- dyn.load(paste(from,"dsefor.large.o", sep=""))
-#	  else       r <- dyn.load(paste(from,"dsefor.o", sep=""))
-#    }   }
-#     }
-#
-#   invisible(ok)
-#  }
-
-
-##############################################################################
-
-#  end of section containing installation dependent strings.
 
 ##############################################################################
 
@@ -126,7 +62,7 @@ if (is.R())
 
 # The code was divided roughly into 
 #   the groups listed below, but the organization has changed a little bit.
-#   The actual grouping can be seen by grep ing on the string '<<<<<<' eg:
+#   The code grouping can be seen by grep ing on the string '<<<<<<' eg:
 #    grep "<<<<<<" dse1.R
 
 #    Functions which work on a model (i.e. if a model with data is allowed as
@@ -159,6 +95,20 @@ if (is.R())
 #    arrays and ensures that the parameter vector is consistent.
 
 #############################################################################
+#############################################################################
+#resid <- lst$estimates$pred-outputData(lst$data)
+#residual <- object$estimates$pred[,,drop=FALSE] - outputData(object)[,,drop=FALSE]
+residuals.TSestModel <- function(object, ...) object$estimates$pred-outputData(object)
+
+# I don't think this exists really works for namespaces
+ if (!exists("acf.default", mode="function")){
+   acf.default  <- stats::acf
+   acf <- function(x, ...)UseMethod("acf")
+   }
+ 
+ acf.TSdata <- function(x, ...)acf(outputData(x))
+ acf.TSestModel <- function(x, ...) acf(x$estimates$pred - outputData(x), ...)
+
 #############################################################################
 
 #functions which work on models   <<<<<<<<<<
@@ -293,10 +243,11 @@ print.ARMA <- function(x, digits=options()$digits, latex=FALSE, L=TRUE, fuzz=1e-
  
 summary.TSestModel <- function(object, ...)
   {#  (... further arguments, currently disregarded)
-   residual <- object$estimates$pred[,,drop=FALSE] - outputData(object)[,,drop=FALSE]
+   residual <- residuals(object)
    sampleT <- nrow(residual)
    p <- ncol(residual)	
-   Om <- t(residual) %*% residual/sampleT
+   #Om <- t(residual) %*% residual/sampleT
+   Om <- crossprod(residual) /sampleT
    rmse <- matrix( diag(Om)^.5 ,1,p)
    dimnames(rmse) <- list(c("RMSE"), seriesNamesOutput(object))
 
@@ -764,7 +715,8 @@ checkBalance.SS <- function(model){
     HFn <- HFn %*% FF
     O <- rbind(O,HFn)
     }
-  O <- t(O) %*% O # observability gramian
+  #O <- t(O) %*% O 
+  O <- crossprod(O) # observability gramian
   C <-    cbind(model$G,model$K)
   FnG <- C
   for (n in 1:dim(FF)[1])  {
@@ -800,7 +752,8 @@ checkBalanceMittnik.SS <- function(model){
     HFn <- HFn %*% FF
     O <- rbind(O,HFn)
     }
-  O <- t(O) %*% O # observability gramian
+  #O <- t(O) %*% O 
+  O <- crossprod(O)# observability gramian
   C <-    cbind(model$G,model$K)
   FnG <- C
   for (n in 1:dim(FF)[1])  {
@@ -1210,133 +1163,6 @@ toARMA.SS <- function(model, fuzz=1e-10, ...){
 #           (i.e.- calculated from model not data)  
 
 ############################################################
-
-acfM <- function(obj, ...) 
-# calculate a matrix with partitions [M0|...|Mi|...|Ml] giving the cov,
-#  including the exogenous series and return as first block row of Hankel.
-UseMethod("acfM")
-
-acfM.TSdata <- function(obj, lag=round(6*log(periods(obj))), 
-           type ="covariance", sub.mean=TRUE, ...)
-{#  (... further arguments, currently disregarded)
- #Estimate auto covariances from data and return as first block row of Hankel.
- # i.e. a matrix with partitions [M0|...|Mi|...|Ml] giving the cov calculated from 
- #  the data, including the exogenous series and return as first block row of Hankel.
- #  Each Mi is a p by (m+p) matrix, (m is the dimension of the exogeneous 
- #  series and p is the dimension of endogeneous series)
- #  ie.  Mi = [ cov{y(t),y(t-i)} | cov{y(t),u(t-i)} ] 
- #  N.B. - The part of the first block corresponding to y(t)y(t) may need to be discarded
- #     for Aoki's technique.  This will reverse the order of y and u!!!!
- # if type == "correlation" the result is scaled to give autocorrelations.
-  data <- freeze(obj)
-  p <- ncol(outputData(data))
-  m <- nseriesInput(data)
-  if (is.null(m)) m <-0
-  d <- cbind(outputData(data),inputData(data))
-  sampleT <-periods(data)
-  if (sub.mean) d <- d- t(matrix(apply(d,2,mean),dim(d)[2],sampleT))
-#  if (type == "correlation") d <- d %*% diag(1/diag(t(d)%*%d/sampleT)^.5)
-#  z <-acf(as.ts(d), type = type, plot=FALSE)$acf
-  z <- array(NA, c(lag,p,dim(d)[2]))
-  for (i in 1:lag) 
-    {z[i,,] <- (t(d[i:sampleT,1:p]) %*% d[1:(sampleT+1-i),]) / (sampleT+1-i)
-    }
-  M <- NULL
-  for (i in 1:dim(z)[1])  M <- cbind(M, z[i,1:p,])
-  if (type == "correlation")
-    {ro <- matrix(1/diag(M)^.5,p,p)         # this will mess up if m != 0
-     if (m!=0) cat("input variables not yet handled correctly!")
-     M  <- array(ro*t(ro),dim(M)) * M
-    }
-  M
-}
-
-acfM.TSestModel <- function(obj, ...) acfM(TSmodel(obj), ...)
-
-acfM.TSmodel <- function(obj, lag=NULL, type ="covariance", Psi=NULL, ...)
-{#  (... further arguments, currently disregarded)
- # Construct a matrix with partitions [M0|...|Mi] giving the theoretical cov calculated from 
- #  the model, including the exogenous parameters and return as first block row of Hankel.
- #  Each Mi is a p by (m+p) matrix, (m is the dimension of the exogeneous 
- #  series and p is the dimension of endogeneous series)
- #  ie.  Mi = [ cov{y(t),y(t-i)} | cov{y(t),u(t-i)} ] 
- #  The innovations cov Psi could depend on the model provided but does not yet.
- #  If specified it is used. If not specified it is set to I.
- #  N.B. - The part of the first block corresponding to Gamma0= E{y(t)y(t)'} 
- #    The first block of the result (Gamma0) may need to be discarded for Vaccaro's and
- #     for Aoki's technique.  This will reverse the order of y and u!!!!
- # if type == "correlation" the result is scaled to give autocorrelations.
- 
-if (!is.SS(model)) model <- toSS(obj) else model <- obj
-if(is.null(Psi)) Psi <- diag(1,dim(model$H)[1])
-if(is.null(lag)) lag <- 3*dim(model$F)[1]
-cat (" Warning: Cov generation has not been tested(and doesn't work).\n")
-if ( is.ARMA(model))
-  #  M ={ Mi }={ Ci-1|Bi| -Ai}, i=2,...,k. k=max(a,b,cc). Assumes I=A[1,,]=B[1,,]
-  {A <- model$A
-   B <- model$B
-   C <- model$C
-   a <- dim(A)[1] - 1      # order of polynomial arrays
-   if (is.na(a)) a <- 0
-   b <- dim(B)[1] - 1
-   if (is.na(b)) b <- 0
-   cc <- dim(C)[1] - 1 
-   if (is.na(cc)) cc <- 0
-   m <- dim(C)[3]          # Dim of exogenous Variables.
-   if (is.null(m))  m <- 0                         
-   #make three parameters A,B and C have convenient order by adding 0's.    
-   k <- 1 + max(a,cc,b)  
-   if (a != 0) 
-    {AA <- array(0,c(k,dim(A)[2:3]))
-     AA[1:(a+1),,] <- A
-    }
-   if (b != 0)
-    {BB <- array(0,c(k,dim(B)[2:3]))
-     BB[1:(b+1),,] <- B
-    }
-   if (m != 0)
-    {CC <- array(0,c(k,dim(C)[2:3]))  
-     CC[1:(cc+1),,] <- C
-    }
-   M <- NULL
-cat (" Warning: Cov generation does not yet work for ARMA models.\n")
-   for(i in 2:k)  
-       {if (m != 0) M <- cbind(M,CC[(i-1),,]) 
-        if (b != 0) M <- cbind(M, BB[i,,])      # constant term ignored (=I)
-        if (a != 0) M <- cbind(M,-AA[i,,])      # constant term ignored (=I)
-       }
-   if(!is.null(model$TREND))
-      cat(" Warning: Theoretical cov generation does not account for trends.")
-  }   
-if ( is.SS(model))
-   {FF<-model$F
-    G <-model$G
-    H <-model$H
-    if (is.innov.SS(model)) K <-model$K
-    else          K <- model$Q %*% solve(model$R)
-    P  <- Riccati(FF,K %*% Psi %*%t(K))  # V&V (6)
-    M <- H %*% P %*% t(H) + Psi  # Gamma0      V&V (7)
-    Om <-  K %*% Psi + FF %*% P %*% t(H) # V&V (7)
-    FnKG <- FF %*% P %*% t(H) + K %*% Psi    # V&V (5) 
-    if (!is.null(G)) 
-      {FnKG <- cbind(FnKG, G)       # + G is NOT correct
-       M <- cbind(M,G)
-      }
-    i<-0    # M should have at least 2 blocks or Hankel shift does not work.
-    while(i<=lag)
-       {FnKG <- FF %*% FnKG
-        M <- cbind(M,H %*% FnKG)    
-        i <-i+1   
-       }
-  }    
-if (type == "correlation")
-    {p  <- dim(H)[1]
-     if (!is.null(G)) cat("input variables not yet handled correctly!")
-     ro <- matrix(1/diag(M)^.5,p,p)                  # this will mess up if m != 0
-     M  <- array(ro*t(ro),dim(M)) * M
-    }
-list(M=M, Om=Om,P=P)       
-}
 
 
 
@@ -2494,7 +2320,8 @@ residualStats <- function(pred, data, sampleT=nrow(pred), warn=TRUE){
         else if (is.null(data)) pred[1:sampleT,,drop=FALSE]
         else               pred[1:sampleT,,drop=FALSE] - data[1:sampleT,,drop=FALSE]
    p <- ncol(e)
-   Om <-t(e) %*% e /sampleT
+   #Om <-t(e) %*% e /sampleT
+   Om <-crossprod(e)/sampleT
    if (any(is.na(Om))) {like1 <- like2 <- 1e100}  
    else if (any(Om >1e100)) {like1 <- like2 <- 1e100}  
    else
@@ -2561,12 +2388,14 @@ y <- outputData(dat)
 A<-    model$A
 B <-   model$B
 C <-   model$C
-TREND <- model$TREND
 m <- dim(C)[3]
 if (is.null(m)) m <-0
 p <- dim(A)[2]
 a <-dim(A)[1]
 b <-dim(B)[1]
+
+TREND <- model$TREND
+if (p == length(TREND)) TREND <- t(matrix(TREND, p, sampleT))
 
 if (m == 0) 
    {if(!is.null(u)) 
@@ -3101,10 +2930,10 @@ estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
      }
    if (subtract.means)
     {if(m!=0)
-       {input.means<-apply(inputData(data),2, mean)
+       {input.means<-colMeans(inputData(data))
         inputData(data)<-inputData(data)-t(matrix( input.means, m,N))
        }
-     output.means <- apply(outputData(data),2, mean)
+     output.means <- colMeans(outputData(data))
      outputData(data)  <- outputData(data) - t(matrix(output.means, p,N))
     }
       # shift input to give feedthrough in one period
@@ -3189,18 +3018,23 @@ fake.TSestModel.missing.data <- function(model,data, residual, max.lag)
 estVARXmean.correction <- function(X, y, bbar,
                      fuzz=sqrt(.Machine$double.eps), warn=TRUE)
 {# correction for model estimated with means subtracted
- Xbar <- t(array(apply(X, 2, mean), rev(dim(X))))
- ybar <- t(array(apply(y, 2, mean), rev(dim(y))))
+ Xbar <- t(array(colMeans(X), rev(dim(X))))
+ ybar <- t(array(colMeans(y), rev(dim(y))))
  v <- La.svd(t(X)%*%X) # this is more robust than solve()
  if (warn && any(abs(v$d[1]*fuzz) > abs(v$d) ) ) 
    warning("The covariance matrix is nearly singular. Check for linearly related data.")
 # if(1 == length(v$d))OmInv <- v$v %*% (1/v$d) %*% t(v$u)
 # else OmInv <- v$v %*% diag(1/v$d) %*% t(v$u)	
 #  following is equivalent
- OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
+# OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
+ OmInv <-  crossprod(v$vt, sweep(t(v$u),1,1/v$d, "*")) 
+
+# t(-OmInv %*% ( 
+#        (2*t(Xbar)%*%X - t(Xbar)%*%Xbar) %*% t(bbar) 
+#         - t(Xbar)%*%y - t(X)%*%ybar + t(Xbar)%*%ybar ))
  t(-OmInv %*% ( 
-        (2*t(Xbar)%*%X - t(Xbar)%*%Xbar) %*% t(bbar) 
-         - t(Xbar)%*%y - t(X)%*%ybar + t(Xbar)%*%ybar ))
+        (2*crossprod(Xbar, X) - crossprod(Xbar)) %*% t(bbar) 
+         - crossprod(Xbar, y) - crossprod(X,ybar) + crossprod(Xbar, ybar)))
 }
 
 
@@ -3217,10 +3051,10 @@ estVARXar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
       scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
       data <- scale(data, scale=list(output=scalefac))
      }
-   if(m!=0) input.means<-apply(inputData(data),2, mean)
-   output.means <- apply(outputData(data),2, mean)
+   if(m!=0) input.means <- colMeans(inputData(data))
+   output.means <- colMeans(outputData(data))
    if (subtract.means)
-    {if(m!=0) inputData(data)<-inputData(data)-t(matrix( input.means, m,N))
+    {if(m!=0) inputData(data) <- inputData(data)-t(matrix( input.means, m,N))
      outputData(data)  <- outputData(data) - t(matrix(output.means, p,N))
     }
    if (m==0)  zdata <- outputData(data)  # no exog. variable
@@ -3446,8 +3280,8 @@ estSSMittnik <- function(data, max.lag=6, n=NULL,
   p <- ncol(outputData(data))
   N <- nrow(outputData(data))
   if (subtract.means)
-    {if(m!=0)inputData(data)<-inputData(data)-t(matrix(apply(inputData(data),2, mean), m,N))
-     outputData(data)<- outputData(data) - t(matrix(apply(outputData(data),2, mean), p,N))
+    {if(m!=0)inputData(data)<-inputData(data)-t(matrix(colMeans(inputData(data)), m,N))
+     outputData(data)<- outputData(data) - t(matrix(colMeans(outputData(data)), p,N))
     }
   if (normalize)
     {svd.cov <- La.svd(var(outputData(data)))
@@ -3860,7 +3694,7 @@ checkResiduals.default <- function(obj, ac=TRUE, pac=TRUE,
  #  of bad initial conditions (eg. drop=seq(10) ) or outliers.
   resid <- selectSeries(obj, series=select)
   if (!is.null(drop))  resid <- resid[-drop,, drop=FALSE]
-  mn<-apply(resid,2,mean)
+  mn<-colMeans(resid)
   acr <-NULL
   pacr<-NULL
   cov <- var(resid)
@@ -3870,7 +3704,7 @@ checkResiduals.default <- function(obj, ac=TRUE, pac=TRUE,
     }
   p <- nseries(resid)
   resid0 <- sweep(resid, 2, mn, FUN="-")
-#  resid0 <- resid - t(array(apply(resid,2,mean),rev(dim(resid)))) # mean 0
+#  resid0 <- resid - t(array(colMeans(resid),rev(dim(resid)))) # mean 0
   cusum <- apply(resid0,2,cumsum)/ t(array(diag(var(resid0)),rev(dim(resid0))))
   if (is.R()) if (!require("stats", warn.conflicts = FALSE)) stop("package ts is required.")
   # before R 1.9.0 required ts not stats
@@ -3939,8 +3773,8 @@ checkResiduals.default <- function(obj, ac=TRUE, pac=TRUE,
 #  cat("residual normality tests:\n")
 #  cat("hetros. tests:\n")
 
-  skewness <- apply(sweep(resid,2,mn)^3,2,mean) / diag(cov)^(3/2)
-  kurtosis <- apply(sweep(resid,2,mn)^4,2,mean) / diag(cov)^2
+  skewness <- colMeans(sweep(resid,2,mn)^3) / diag(cov)^(3/2)
+  kurtosis <- colMeans(sweep(resid,2,mn)^4) / diag(cov)^2
   invisible(list(residuals=resid, mean=mn, cov=cov, acf=acr, pacf=pacr, 
                  cusum=cusum, skewness=skewness, kurtosis=kurtosis))
 }
@@ -3972,7 +3806,7 @@ informationTests <- function(..., sample.start=1,sample.end=NULL,
 
 informationTestsCalculations <- function(lst,
       sample.start=1,sample.end=NULL, warn=TRUE){
-   resid <- lst$estimates$pred-outputData(lst$data)
+   resid <- residuals(lst)
     # the following line is just to work around a bug with old style time series
    if (ncol(outputData(lst$data))==1) dim(resid) <- dim(outputData(lst$data))
    if (is.null(sample.end)) sample.end <- nrow(resid)
@@ -4151,7 +3985,7 @@ percentChange.TSdata <- function(obj, base=NULL, lag=1,
 
 standardize <- function(ser){
 	if (!is.matrix(ser)) stop("series should be a matrix.")
-	means <- apply(ser, 2, mean)
+	means <- colMeans(ser)
 	new <- ser - t(matrix(means, ncol(ser), nrow(ser)))
 	svd.cov <- La.svd(var(new))
         scalefac <- svd.cov$u %*% diag(1/svd.cov$d^0.5, ncol = length(svd.cov$d))
@@ -4454,7 +4288,7 @@ seriesNames.TSestModel <- function(x)
 ############################################################################
 
 #    methods for TSdata  <<<<<<<<<<
-#      note there are some methods in dse1c too
+#   (there are methods in other packages too)
 
 ############################################################################
 
@@ -4516,7 +4350,7 @@ summary.TSdata <- function(object, ...)
       sampleT= nrow(outputData(object)),
       p=nseriesOutput(object),
       m=nseriesInput(object),
-      ave=apply(d,2,mean),
+      ave=colMeans(d),
       max=apply(d,2,max),
       min=apply(d,2,min),
       retrieval.date=object$retrieval.date, 
@@ -4750,14 +4584,34 @@ testEqual.TSdata <- function(obj1, obj2, fuzz=1e-16)
 TSdata <- function (data=NULL, ...) UseMethod("TSdata") 
  
 
+#TSdata.default <- function(data=NULL, input=NULL, output=NULL, ...)  
+#{if (is.null(data) && (!is.null(input) | !is.null(output) ))
+#    {if(!is.null(input) && is.vector(input)) input <- 
+#	   tframed(matrix(input, length(input),1), tf=tframe(input),
+#	           names=seriesNames(input))
+#     if(!is.null(output) && is.vector(output)) output <- 
+#	   tframed(matrix(output, length(output),1), tf=tframe(output),
+#	           names=seriesNames(output))
+#     data <- classed(list(input=input, output=output), "TSdata") # constructor
+#  }else 
+#     data <- classed(data, "TSdata")   # constructor keeps other list elements
+#  
+# if(!is.list(data)) stop("TSdata.default could not construct a TSdata format.")	    
+# if   ( 0 == nseriesInput(data)   &    0 == nseriesOutput(data) 
+#    |  (0 != nseriesOutput(data) && !is.matrix(outputData(data)))
+#    |  (0 !=  nseriesInput(data) && !is.matrix( inputData(data))) )
+#      stop("TSdata.default could not construct a TSdata format.")
+# data
+#}
+
 TSdata.default <- function(data=NULL, input=NULL, output=NULL, ...)  
-{if (is.null(data) && (!is.null(input) | !is.null(output) ))
-    {if(!is.null(input) && is.vector(input)) input <- 
-	   tframed(matrix(input, length(input),1), tf=tframe(input),
-	           names=seriesNames(input))
-     if(!is.null(output) && is.vector(output)) output <- 
-	   tframed(matrix(output, length(output),1), tf=tframe(output),
-	           names=seriesNames(output))
+{if (is.null(data) & is.null(input)  & is.null(output) )
+      stop("TSdata.default needs data, input, or output specified.")
+ if (is.null(data))
+    {if(!is.null(input)) input <- 
+	   tframed(as.matrix(input), tf=tframe(input), names=seriesNames(input))
+     if(!is.null(output)) output <- 
+	   tframed(as.matrix(output), tf=tframe(output),names=seriesNames(output))
      data <- classed(list(input=input, output=output), "TSdata") # constructor
   }else 
      data <- classed(data, "TSdata")   # constructor keeps other list elements
