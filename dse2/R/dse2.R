@@ -1674,6 +1674,7 @@ horizonForecastsCompiled.ARMA <- function( obj, data, horizons=1:4,
                   matrix(double(1),is,is),  # scratch array
                   matrix(double(1),is,is),  # scratch array
                   double(is),         # scratch array
+                  integer(is*is),         # scratch array IPIV
                   DUP=.DSEflags()$DUP,
 		  PACKAGE="dse1"
 		  )$proj
@@ -1748,16 +1749,17 @@ horizonForecastsCompiled.SS <- function( obj, data, horizons=1:4,
                   as.integer(gain),
                   z,
                   P, 
-	    as.integer(IS),           # scratch arrays for KF, IS
-	    matrix(double(1),IS,IS),  #A
-	    matrix(double(1),IS,IS),  # AA
-	    matrix(double(1),IS,IS),  # PP
-	    matrix(double(1),n,n),  # QQ
-	    matrix(double(1),p,p),  # RR 
-	    rep(double(1),IS),  # Z
-	    rep(double(1),IS), # ZZ
-	    rep(double(1),IS), # WW		   
-		  DUP=.DSEflags()$DUP,
+	          as.integer(IS),           # scratch arrays for KF, IS
+	          matrix(double(1),IS,IS),  #A
+	          matrix(double(1),IS,IS),  # AA
+	          matrix(double(1),IS,IS),  # PP
+	          matrix(double(1),n,n),  # QQ
+	          matrix(double(1),p,p),  # RR 
+	          rep(double(1),IS),  # Z
+	          rep(double(1),IS), # ZZ
+	          rep(double(1),IS), # WW		   
+                  integer(IS*IS),         # scratch array IPIV
+ 		  DUP=.DSEflags()$DUP,
 		  PACKAGE="dse1"
 		  )$proj
 }
@@ -2103,6 +2105,7 @@ forecastCovCompiled.ARMA <- function(model, data, horizons=1:12 ,
                   matrix(double(1),is,is),  # scratch array
                   matrix(double(1),is,is),  # scratch array
                   double(is),         # scratch array
+                  integer(is*is),         # scratch array IPIV
                   DUP=.DSEflags()$DUP,
 		  PACKAGE="dse1"
 		  )[c("forecastCov","sample.size")]
@@ -2190,16 +2193,17 @@ forecastCovCompiled.SS <- function(model, data, horizons=1:12 ,
                   as.integer(gain),
                   z,
                   P, 
-	    as.integer(IS),           # scratch arrays for KF, IS
-	    matrix(double(1),IS,IS),  #A
-	    matrix(double(1),IS,IS),  # AA
-	    matrix(double(1),IS,IS),  # PP
-	    matrix(double(1),n,n),  # QQ
-	    matrix(double(1),p,p),  # RR 
-	    rep(double(1),IS),  # Z
-	    rep(double(1),IS), # ZZ
-	    rep(double(1),IS), # WW		   
-		  DUP=.DSEflags()$DUP,
+	          as.integer(IS),           # scratch arrays for KF, IS
+	          matrix(double(1),IS,IS),  #A
+	          matrix(double(1),IS,IS),  # AA
+	          matrix(double(1),IS,IS),  # PP
+	          matrix(double(1),n,n),  # QQ
+	          matrix(double(1),p,p),  # RR 
+	          rep(double(1),IS),  # Z
+	          rep(double(1),IS), # ZZ
+	          rep(double(1),IS), # WW		   
+                  integer(IS*IS),         # scratch array IPIV
+ 		  DUP=.DSEflags()$DUP,
 		  PACKAGE="dse1"
 		  ) [c("forecastCov","sample.size")]
 }

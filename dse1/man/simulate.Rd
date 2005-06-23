@@ -100,9 +100,7 @@ in \code{w}.
 If \code{noise$w0} is a matrix (rather than a vector) for a state space model 
 simulation (as it is for ARMA simulations) then it is set to a
 vector of zeros. This provides compatability with VAR models (ARMA
-models with no lags in B). In general ARMA and SS simulations will
-not produce exactly the same results because it is impossible to
-determine necessary transformation of initial conditions and w0.
+models with no lags in B).
 
 Input must be specified for ARMA models with \code{model$C} not NULL and
 state space models with \code{model$G} not NULL..

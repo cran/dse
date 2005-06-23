@@ -1517,18 +1517,24 @@ checkConsistentDimensions.TSestModel <- function(obj1, obj2=NULL)
    }
 
 checkConsistentDimensions.SS <- function(obj1, obj2=NULL) # (model, data)
- {m <-dim(obj1$G)[2]
-  n <-dim(obj1$F)[1]
-  p <-dim(obj1$H)[1]
-  if (n!= dim(obj1$F)[2]) stop("Model F matrix must be square.")
-  if (n!= dim(obj1$H)[2])
+ {m <- ncol(obj1$G)
+  n <- nrow(obj1$F)
+  p <- nrow(obj1$H)
+  if (n!= ncol(obj1$F)) stop("Model F matrix must be square.")
+  if (n!= ncol(obj1$H))
       stop("Model H matrix have second dimension consistent with matrix F.")
-  if (!is.null(obj1$G)) if(n!= dim(obj1$G)[1])
+  if (!is.null(obj1$G)) if(n!= nrow(obj1$G))
       stop("Model G matrix have first dimension consistent with matrix F.")
-  if (!is.null(obj1$K)) if(n!= dim(obj1$K)[1])
+  if (!is.null(obj1$K)) if(n!= nrow(obj1$K))
       stop("Model K matrix have first dimension consistent with matrix F.")
-  if (!is.null(obj1$K)) if(p!= dim(obj1$K)[2])
+  if (!is.null(obj1$K)) if(p!= ncol(obj1$K))
       stop("Model K matrix have second dimension consistent with matrix H.")
+  if (!is.null(obj1$Q)) if(n!= nrow(obj1$Q))
+      stop("Model Q matrix must have first dimension consistent with matrix F.")
+  if (!is.null(obj1$R)) if(p!= nrow(obj1$R))
+      stop("Model R matrix must have first dimension consistent with matrix H.")
+  if (!is.null(obj1$R)) if(p!= ncol(obj1$R))
+      stop("Model R matrix must be square.")
 
   if (!is.null(obj2))
    {if(dim(obj1$H)[1] != nseriesOutput(obj2))
@@ -2395,7 +2401,7 @@ a <-dim(A)[1]
 b <-dim(B)[1]
 
 TREND <- model$TREND
-if (p == length(TREND)) TREND <- t(matrix(TREND, p, sampleT))
+if (p == length(TREND)) TREND <- t(matrix(TREND, p, predictT))
 
 if (m == 0) 
    {if(!is.null(u)) 
@@ -2443,6 +2449,7 @@ if (compiled)
                          matrix(double(1),is,is),  # scratch array
                          matrix(double(1),is,is),  # scratch array
                          double(is),         # scratch array
+                         integer(is*is),         # scratch array IPIV
                          DUP=.DSEflags()$DUP,
 			 PACKAGE="dse1"
 			 ) [c("pred", "weighted.sqerror")]
@@ -2607,8 +2614,8 @@ else
     if(return.track) track <-array(0,c(predictT,n,n))
     else             track <-array(0,c(1,1,1))  #not used
    }
-if (return.state | return.debug.info) state <- matrix(0,predictT,n)
-else              state <- matrix(0,1,1)    #not used
+if (return.state | return.debug.info) state <- matrix(double(1),predictT,n)
+else              state <- matrix(double(1),1,1)    #not used
 if(is.null(model$z0)) z <-rep(0,n)   # initial state
 else  z <-model$z0
 if(is.null(model$P0)) P <- diag(1,n) # initial state tracking error 
@@ -2637,7 +2644,7 @@ IS <- max(n,p)
                   error.weights=if(is.double(error.weights))
 		                 error.weights else as.double(error.weights),   
                   as.integer(return.state),
-                  state=if(is.double(state)) state else as.double(state),         
+                  state=state,         
                   as.integer(return.track & !Innov),
                   track=if(is.double(track)) track else as.double(track),                  
                   as.integer(m), 
@@ -2658,15 +2665,16 @@ IS <- max(n,p)
                   as.integer(Innov),
                   if(is.double(z)) z else as.double(z),
                   if(is.double(P)) P else as.double(P),
-	    as.integer(IS),           # scratch arrays for KF, IS
-	    matrix(double(1),IS,IS),  #A
-	    matrix(double(1),IS,IS),  # AA
-	    matrix(double(1),IS,IS),  # PP
-	    matrix(double(1),n,n),  # QQ
-	    matrix(double(1),p,p),  # RR 
-	    rep(double(1),IS),  # Z
-	    rep(double(1),IS), # ZZ
-	    rep(double(1),IS), # WW		   
+	          as.integer(IS),           # scratch arrays for KF, IS
+	          matrix(double(1),IS,IS),  #A
+	          matrix(double(1),IS,IS),  # AA
+	          matrix(double(1),IS,IS),  # PP
+	          matrix(double(1),n,n),  # QQ
+	          matrix(double(1),p,p),  # RR 
+	          rep(double(1),IS),  # Z
+	          rep(double(1),IS), # ZZ
+	          rep(double(1),IS), # WW		   
+                  integer(IS*IS),         # scratch array IPIV
 		  DUP=.DSEflags()$DUP,
 		  PACKAGE="dse1"
 		  ) [c("pred","state","track","weighted.sqerror")]
@@ -2698,9 +2706,9 @@ else                  #  S version
           # note P(t|t) = P-P%*%t(H)%*%solve(H%*%t(H)+RR)%*%P
          } 
          
-       z<- c(FF%*%z) + c(K%*%vt)  # E[z(t)| t-1 ]
-       if (m !=0) z<- z + c(G%*%u[Time,])
-       if (return.state | return.debug.info) state[Time,]<- z
+       z <- c(FF%*%z) + c(K%*%vt)  # E[z(t)| t-1 ]
+       if (m !=0) z <- z + c(G%*%u[Time,])
+       if (return.state | return.debug.info) state[Time,] <- z
        pred[Time,] <- Ey  <-  c(H %*% z)       # predicted output     
        vt<-  y[Time,] - Ey                     # prediction error 
 
@@ -2709,12 +2717,12 @@ else                  #  S version
        if (any(0!=error.weights))          
         {wt.err[Time,] <- error.weights[1]*vt^2  # weighted sq prediction error
          if (length(error.weights)>1)
-          {zh <-z
+          {zh <- z
            for (h in 2:length(error.weights))
             if ( (Time+h-1) <= sampleT)
               {zh <-  c(FF%*%zh)
-               if (h==2) zh <- zh + c(K%*%vt) # vt is 0 for h>2
-               if (m !=0) zh<- zh + c(G%*%u[Time+h-1,])
+               if (h==2)  zh <- zh + c(K%*%vt) # vt is 0 for h>2
+               if (m !=0) zh <- zh + c(G%*%u[Time+h-1,])
                wt.err[Time,] <- wt.err[Time,] + 
                           error.weights[h]*(y[Time+h-1,] -  c(H %*% zh))^2
    }   }  }   }
@@ -2773,12 +2781,15 @@ else
 
 
 
-smoother <- function(model, data, compiled=.DSEflags()$COMPILED) UseMethod("smoother")
+#smoother <- function(model, data, compiled=.DSEflags()$COMPILED) UseMethod("smoother")
+smoother <- function(model, data, compiled=FALSE) UseMethod("smoother")
 
-smoother.TSestModel <- function(model, data=TSdata(model),
-      compiled=.DSEflags()$COMPILED) smoother(TSmodel(model), data,compiled=compiled)
+#smoother.TSestModel <- function(model, data=TSdata(model), compiled=.DSEflags()$COMPILED)
+smoother.TSestModel <- function(model, data=TSdata(model), compiled=FALSE)
+       smoother(TSmodel(model), data,compiled=compiled)
 
-smoother.default <- function(model, data, compiled=.DSEflags()$COMPILED){
+#smoother.default <- function(model, data, compiled=.DSEflags()$COMPILED){
+smoother.default <- function(model, data, compiled=FALSE){
  # See help("smoother") and help("SS") for details of the model:
  filter <- NULL
  estimates <- NULL
@@ -2796,48 +2807,58 @@ smoother.default <- function(model, data, compiled=.DSEflags()$COMPILED){
  if (is.null(model$G))
   {m<-0
    G<-matrix(0,dim(model$F)[2],1)   # can't call compiled with 0 length arrays
-   u <- matrix(0,nrow(filter$state),1)
+   u <- matrix(double(1),nrow(filter$state),1)
   }
-else
+ else
   {m <- dim(model$G)[2]
    G <-model$G
    u <- inputData(data)
+   if (! is.double(u)) u <- array(as.double(u), dim(u))                  
   } 
-sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
+ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
  QQ <- model$Q %*% t(model$Q)           
  RR <- model$R %*% t(model$R) 
  n <- dim(model$F)[2]          
+ p <- dim(model$H)[1]
  if (compiled)
-   {storage.mode(filter$state)     <- "double"
-    storage.mode(filter$track)     <- "double"
-    storage.mode(u)     <- "double"
-    storage.mode(outputData(data))     <- "double"
-    storage.mode(model$F)     <- "double"
-    storage.mode(G)     <- "double"
-    storage.mode(model$H)     <- "double"
-    storage.mode(RR)     <- "double"
+   {#storage.mode(filter$state)     <- "double"
+    #storage.mode(filter$track)     <- "double"
+    #storage.mode(u)     <- "double"
+    #storage.mode(outputData(data))     <- "double"
+    #storage.mode(model$F)     <- "double"
+    #storage.mode(G)     <- "double"
+    #storage.mode(model$H)     <- "double"
+    #storage.mode(RR)     <- "double"
+    
+    #note, as.double messes dim needed in result, but need attributes removed
+    IS <- max(n,p)
 
-   r<-.Fortran("smooth", 
-                         state=filter$state,     # state, 
-                         track=filter$track,     #trackerror
+    r <- .Fortran("smooth", 
+                         state=array(as.double(filter$state), dim(filter$state)),      
+                         track=array(as.double(filter$track), dim(filter$track)),     
                          u,	       # input
-                         outputData(data), # output
-                         as.integer(n),                #n
-                         as.integer(m),                #m
-                         as.integer(dim(model$H)[1]),  #p 
+                         if(is.double(outputData(data))) outputData(data) else 
+			        as.double(outputData(data)),
+			 as.integer(n),
+                         as.integer(m),
+                         as.integer(p),  
                          sampleT =as.integer(sampleT), 
-                         model$F,   
-                         G,   
-                         model$H, 
-                         RR,
-                         matrix(double(1),n,n),   # scratch array
-                         matrix(double(1),n,n),   # scratch array
-                         matrix(double(1),n,n),   # scratch array
-                         matrix(double(1),n,n),   # scratch array
-                         double(n),         # scratch array
+                         as.double(model$F),   
+                         as.double(G),	
+                         as.double(model$H),  
+                         as.double(RR),	 
+                         as.integer(IS),           # scratch array dim IS
+			 matrix(double(1),IS,IS),   # scratch array A
+                         matrix(double(1),IS,IS),   # scratch array D
+                         matrix(double(1),IS,IS),   # scratch array L
+                         matrix(double(1),IS,IS),   # scratch array PT1
+                         double(IS),         # scratch array ZT
+                         integer(IS*IS),         # scratch array IPIV
+                         #chk1=array(double(1), c(sampleT, IS,IS)),     
+                         #chk2=array(double(1), c(sampleT, IS,IS)),     
                          DUP=.DSEflags()$DUP,
 			 PACKAGE="dse1"
-			 ) [c("state","track")]
+			 )[c("state","track")]
    }
  else   # S version
    {FF<-  model$F
@@ -2845,17 +2866,19 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
     #   filter$state is the one step ahead state estimate E{z(t)| y(t-1), u(t)}
     #   zt below is the filter state estimate E{z(t)| y(t), u(t+1)}
     #   filter$track is tracking error P(t|t-1)
+    # A5-A7 just use the filter information , which was calculated 1:sampleT.
+    # A8-A10 calculate smooth state and track, which is done in reverse sampleT:1 
     sm <- array(NA,dim(filter$state))  # smoother state estimate
-    sm[sampleT,] <-filter$state[sampleT,]
+    sm[sampleT,] <- filter$state[sampleT,]
     tr <- array(NA,dim(filter$track))  # smoother tracking error
-    tr[sampleT,,] <-filter$track[sampleT,,]
+    tr[sampleT,,] <- filter$track[sampleT,,]
     for (Time in (sampleT-1):1) 
       {K <- filter$track[Time,,] %*% t(H) %*% 
               solve(H %*% filter$track[Time,,] %*% t(H) + RR) #(A5)
        zt <- filter$state[Time,] + K %*% 
        		(outputData(data)[Time,] - H %*% filter$state[Time,]) #(A6)
-       if (m!=0) zt <- zt - G %*% u[Time+1,]
-       P <- filter$track[Time,,] - K %*% H %*% filter$track[Time,,]  #P(t|t)  (A7)
+       #if (m!=0) zt <- zt + G %*% u[Time,] 
+       P <- filter$track[Time,,] - K %*% H %*% filter$track[Time,,] #P(t|t) (A7)
        P <- (P+t(P))/2 #force symmetry to avoid rounding problems
        J <- P %*% t(FF) %*% solve(filter$track[Time+1,,])             #(A8) 
        if (m==0)                                          
@@ -2871,8 +2894,8 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
   state <- tframed(r$state, list(start=tfstart(outputData(data)),
               frequency= tffrequency(outputData(data))), 
               names=dimnames(filter$state)[[2]]) 
-  r <-(list(estimates=estimates, data=data, model=model, 
-            filter=filter, smooth=list(state=state, track=r$track) ) )
+  r <- list(estimates=estimates, data=data, model=model, 
+            filter=filter, smooth=list(state=state, track=r$track), r=r) 
    classed(r, "TSestModel") # constructor (smoother)
 } # end of smoother
   
