@@ -5,10 +5,13 @@
 \title{Evaluate a smoother with a TSmodel}
 \description{Evaluate a state space model.}
 \usage{
-    smoother(model, data, compiled=.DSEflags()$COMPILED)
-    \method{smoother}{default}(model, data, compiled=.DSEflags()$COMPILED)
-    \method{smoother}{TSestModel}(model, data=TSdata(model),
-      compiled=.DSEflags()$COMPILED)
+    %%smoother(model, data, compiled=.DSEflags()$COMPILED)
+    %%\method{smoother}{default}(model, data, compiled=.DSEflags()$COMPILED)
+    %%\method{smoother}{TSestModel}(model, data=TSdata(model),
+    %%  compiled=.DSEflags()$COMPILED)
+    smoother(model, data, compiled=FALSE)
+    \method{smoother}{default}(model, data, compiled=FALSE)
+    \method{smoother}{TSestModel}(model, data=TSdata(model), compiled=FALSE)
 }
 \arguments{
     \item{model}{
@@ -54,7 +57,7 @@ See \link{SS} for details of the model:
 \code{\link{TSestModel.object}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 #smoother requires an non-innovations form model
 model <- TSmodel(toSSChol(estVARXls(eg1.DSE.data.diff))) 
 smoothed.model <- smoother(model, eg1.DSE.data.diff, compiled=FALSE)

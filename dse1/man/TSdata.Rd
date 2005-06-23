@@ -43,7 +43,7 @@
     do something special for certain classes.
 }
 \examples{
-   rain  <- matrix(rnorm(86*67), 86,17)
+   rain  <- matrix(rnorm(86*17), 86,17)
    radar <- matrix(rnorm(86*5),  86,5)
    mydata <- TSdata(input=radar, output=rain)
 }

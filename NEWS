@@ -1,5 +1,35 @@
 
-                CHANGES IN DSE AND DSEPLUS VERSION 2005.4?-1
+Known Bugs
+
+    o Handling of initial conditions for the state space smoother still 
+      needs work.
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2005.6-1
+
+Changes (Possibly) Affecting Users
+
+    o the matrix inversion routine was switched to use Lapack routines
+      distributed with R. These work better in some circumstances 
+
+    o fixed a bug in fortran code for the state space smoother (SMOOTH) when
+      the output dimension exceeded the state dimension. The matrix
+      inversion was also switched (see above) which gives improved results. 
+      
+    o fixed a bug in the state space smoother when the model has input data u_t.
+
+    o a bug in TREND for ARMA models was fixed again.(Some details where missed 
+      in fix in the previous release.
+
+    o several minor documention errors were fixed.
+
+Changes Affecting Development
+
+    o added additional tests of the smoother.
+
+    o added test to check that setting TREND works.
+
+
+                CHANGES IN DSE AND DSEPLUS VERSION 2005.4-1
  
 Changes (Possibly) Affecting Users
 
@@ -22,7 +52,6 @@ Changes Affecting Development
 
     o more testing of TSdata constructors and methods has been added.          
 
-    o             
 
                 CHANGES IN DSE AND DSEPLUS VERSION 2005.1-1
  

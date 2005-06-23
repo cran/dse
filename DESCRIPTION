@@ -1,5 +1,5 @@
 Bundle: dse
-Version: 2005.4-1
+Version: 2005.6-1
 Contains: tframe dse1 dse2
 BundleDescription: Multivariate Time Series Library
   For each package there is a section of the Users' Guide
@@ -16,4 +16,4 @@ License: Free. See the LICENCE file for details.
 Author: Paul Gilbert <pgilbert@bank-banque-canada.ca>
 Maintainer: Paul Gilbert <pgilbert@bank-banque-canada.ca>
 URL: http://www.bank-banque-canada.ca/pgilbert
-Packaged: Wed Apr 27 09:34:03 2005; paul
+Packaged: Thu Jun 23 22:29:05 2005; paul

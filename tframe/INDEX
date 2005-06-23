@@ -4,7 +4,8 @@ The Users' Guide is divided into sections for each package.
 These are installed in the doc/ directory for each package.
 A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
-See also the bundle dseplus with related packages.
+See also related packages in the bundle dseplus in the devel packages 
+area of CRAN.
 00Intro.tframe          Tframe
 addDate                 Add Periods to a Date
 checktframeConsistent   Check for a Consistent tframe
