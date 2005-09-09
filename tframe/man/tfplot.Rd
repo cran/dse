@@ -63,6 +63,11 @@
     The start and end arguments to tfplot 
     determine the start and end of the plot. The argument tf is an alternate way
     to specify the start and end. It is ignored if start and end are specified.
+
+    If \code{xlim} and \code{ylim} are not NULL they should be a vector of two
+    elements giving the max and min, which are applied to all graphs, or a list
+    of length equal to the number of series to be plotted with each list element
+    being the two element vector for the corresponding plot limits. 
 }
 \sideffects{An object is plotted.}
 \seealso{

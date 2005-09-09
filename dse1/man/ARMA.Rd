@@ -5,8 +5,9 @@
 \title{ARMA Model Constructor}
 \description{Constructs an ARMA TSmodel object as used by the DSE package.}
 \usage{
-    ARMA(A=NULL, B=NULL, C=NULL, TREND=NULL, description=NULL,
-          names=NULL, input.names=NULL, output.names=NULL)
+    ARMA(A=NULL, B=NULL, C=NULL, TREND=NULL, 
+          constants=NULL,
+          description=NULL, names=NULL, input.names=NULL, output.names=NULL)
     is.ARMA(obj)
 }
 \arguments{
@@ -15,6 +16,8 @@
     \item{C}{The  input polynomial, an cxpxm array. C should be NULL if 
     there is no input}
     \item{TREND}{A matrix, p-vector, or NULL.}
+    \item{constants}{NULL or a list of logical arrays with the same names as 
+          arrays above, indicating which elements should be considered constants.}
     \item{description}{An arbitrary string.}
     \item{names}{A list with elements input and output, each a vector of 
        strings. Arguments input.names and output.names should not be used if
@@ -49,7 +52,14 @@ trend of the undifferenced model. The more general case is when \code{TREND} is
 a time series matrix of the same dimension as \code{y}. In this case it is added
 to \code{y}. This allows for a very general deterministic component, which may
 or may not be a traditional trend.
-}
+
+By default, elements in parameter arrays are treated as constants if they
+are exactly 1.0 or 0.0, and as parameters otherwise. A value of 1.001 would
+be treated as a parameter, and this is the easiest way to initialize an
+element which is not to be treated as a constant of value 1.0. Any array
+elements can be fixed to constants by specifying the list \code{constants}.
+Arrays which are not specified in the list will be treated in the default 
+way. An alternative for fixing constants is the function code{fixConstants}}
 
 \seealso{
     \code{\link{TSmodel}}

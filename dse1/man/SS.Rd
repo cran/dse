@@ -7,8 +7,9 @@
 \title{State Space Models}
 \description{Construct a }
 \usage{
-    SS(F.=NULL, G=NULL, H=NULL, K=NULL, Q=NULL, R=NULL, z0=NULL, P0=NULL,
-             description=NULL, names=NULL, input.names=NULL, output.names=NULL)
+    SS(F.=NULL, G=NULL, H=NULL, K=NULL, Q=NULL, R=NULL, z0=NULL, P0=NULL, rootP0=NULL,
+          constants=NULL,
+          description=NULL, names=NULL, input.names=NULL, output.names=NULL)
     is.SS(obj)
     is.innov.SS(obj)
     is.nonInnov.SS(obj)
@@ -22,8 +23,12 @@
     \item{K}{(nxp) matrix specifying the Kalman gain.}
     \item{z0}{vector indicating estimate of the state at time 0.
        Set to zero if not supplied.}
+    \item{rootP0}{matrix indicating a square root of the initial tracking 
+       error (e.g. chol(P0)).}
     \item{P0}{matrix indicating initial tracking error P(t=1|t=0).
-       Set to I if not supplied.}
+       Set to I if rootP0 or P0 are not supplied.}
+    \item{constants}{NULL or a list of logical matrices with the same names as 
+          matices above, indicating which elements should be considered constants.}
     \item{description}{String. An arbitrary description.}
     \item{names}{A list with elements input and output, each a vector of 
        strings. Arguments input.names and output.names should not be used if
@@ -68,9 +73,12 @@ Matrices are as specified above in the arguments, and
     \item{z0}{An initial value for z can be specified as z0.}
     \item{P0}{An initial one step ahead state tracking error (for 
     non-innovations models) can be specified as P0.}  
+    \item{rootP0}{Alternatively, a square root of P0 can be specified. This can
+    be an upper triangular matrix so that only the required number of parameters
+    are used.}  
     \item{K, Q, R}{
-    For sub-class innov the Kalman gain K is specified but not Q and R.
-    For sub-class non-innov Q and R are specified but not the Kalman gain K.}
+    For sub-class \code{innov} the Kalman gain K is specified but not Q and R.
+    For sub-class \code{non-innov} Q and R are specified but not the Kalman gain K.}
     \item{e and w}{are typically assumed to be white noise in the 
     non-innovations form, in which case
     the covariance of the system noise is QQ' and the covariance of 
@@ -89,8 +97,9 @@ Matrices are as specified above in the arguments, and
     are exactly 1.0 or 0.0, and as parameters otherwise. A value of 1.001 would
     be treated as a parameter, and this is the easiest way to initialize an
     element which is not to be treated as a constant of value 1.0. Any matrix
-    elements can be fixed to constants of any value using fixConstants.  
-    }
+    elements can be fixed to constants by specifying the list \code{constants}.
+    Matrices which are not specified in the list will be treated in the default 
+    way. An alternative for fixing constants is the function code{fixConstants}}
 }
 
 \reference{B. D. O.Anderson & J. B.Moore \emph{Optimal Filtering} p.39,44.}

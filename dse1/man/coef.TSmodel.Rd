@@ -1,6 +1,7 @@
 \name{coef.TSmodel}
 \alias{coef.TSmodel}
 \alias{coef.TSestModel}
+\alias{coef.TSrestrictedModel}
 
 \alias{coef<-}
 \alias{coef<-.default}
@@ -12,6 +13,7 @@
 \usage{
     \method{coef}{TSmodel}(object, ...)
     \method{coef}{TSestModel}(object, ...)
+    \method{coef}{TSrestrictedModel}(object, ...)
     coef(object) <- value
     \method{coef}{default}(object) <- value
     }

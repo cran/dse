@@ -40,6 +40,14 @@ yet been implemented.
   structure by adjusting the
   parameter values. A \code{TSmodel} can also have constant values in 
   some array elements, and these are not changed.
+  
+  With the number of parameter typically used in multivariate time series 
+  models, the default maximum number of iterations may not be enough. Be sure to
+  check for convergence (a warning is printed at the end, or use \code{summary}
+  on the result). The maximum iterations is passed to the estimation algorithm 
+  with \code{algorithm.args}, but the elements of that list will depend on the 
+  specified optimization \code{algorithm} (so see the help for the alogrithm). 
+  The example below is for the default \code{optim} algorithm.
 }
 \warning{
   Maximum likelihood estimation of multivariate time series models tends to be
@@ -63,6 +71,9 @@ yet been implemented.
   summary(est.model)
   est.model
   tfplot(est.model)
+  est.model <-  estMaxLik(true.model,  simulate(true.model),
+    algorithm.args=list(method="BFGS", upper=Inf, lower=-Inf, hessian=TRUE,
+                        control=list(maxit=10000)))
 }
 \concept{DSE}
 \keyword{ts}

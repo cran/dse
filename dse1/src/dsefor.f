@@ -16,14 +16,16 @@ C  or indirect, arising from the use of the software.
 
 C -------------------------------------------------------------------
 
-C  A C code version of this code is also distribute. It has been generated
-C   using the following (extracted from the f2c readme).
+C  A C code version of this code has also been distribute, but is not current.
+C  It was generated using the following (extracted from the f2c readme).
 C NOTE:	You may exercise f2c by sending netlib@netlib.bell-labs.com
 C 	a message whose first line is "execute f2c" and whose remaining
 C 	lines are the Fortran 77 source that you wish to have converted.
 C 	Return mail brings you the resulting C, with f2c's error
 C 	messages between #ifdef uNdEfInEd and #endif at the end.
 
+C Comments below for compiling are fairly old. As of 2005 the code has been
+C   compiled for a few years using standard package build procedure in R.
 
 C Compile with: f77 -c -o dsefor.Sun4.o dsefor.f
 C           or
@@ -204,30 +206,41 @@ C    backwards recursion, so:
 C                                          D=H*P(t|t-1)*H' + RR
       DO 2 I=1,N
          DO 2 J=1,P
-            A(I,J)=0.0D0
+            A(J,I)=0.0D0
             DO 2 K=1,N
-  2            A(I,J)=A(I,J)+TRKERR(IT,I,K)*H(J,K)
-C                     A now has  P(t|t-1)*H'                   
+  2            A(J,I)=A(J,I)+TRKERR(IT,I,K)*H(J,K)
+C                     A now has  ( P(t|t-1)*H' )'                 
       DO 3 I=1,P
          DO 3 J=1,P
             D(I,J)=RR(I,J)
             DO 3 K=1,N
-  3            D(I,J)=D(I,J)+H(I,K)*A(K,J)
+  3            D(I,J)=D(I,J)+H(I,K)*A(J,K)
 C                     D now has  H*P(t|t-1)*H' + RR                
 
-C     invert in place. 
-      CALL DGETRF( P, P, D, IS, IPIV, INFO )
-C  For inverse call DGETRI, for solve call DGETRS.
-      CALL DGETRI( P, D, IS, IPIV, L, IS*IS, INFO )
-C      CALL DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
-
 C                        Kalman gain    K=P(t|t-1)*H'*inv(D)   (A5)
+C  For inverse call DGETRI, for solve call DGETRS.
+CC    Invert method ( invert in place )
+C      CALL DGETRF( P, P, D, IS, IPIV, INFO )
+C      CALL DGETRI( P, D, IS, IPIV, L, IS*IS, INFO )
+C
+C      DO 4 I=1,N
+C         DO 4 J=1,P
+C            L(I,J)=0.0D0
+C            DO 4 K=1,P
+C  4            L(I,J)=L(I,J)+A(K,I)*D(K,J)
+
+C     Solve  method (solve in place. Result is in non-inverted array.)
+      CALL DGETRF( P, P, D, IS, IPIV, INFO )
+C       A has been transposed to use here 
+      CALL DGETRS( 'T', P, N, D, IS, IPIV, A, IS, INFO )
+
       DO 4 I=1,N
          DO 4 J=1,P
-            L(I,J)=0.0D0
-            DO 4 K=1,P
-  4            L(I,J)=L(I,J)+A(I,K)*D(K,J)
+  4            L(I,J)=A(J,I)
+
+
 C                       L now contains the Kalman gain K
+
 C      IF (IT.EQ.NSMPL-1) THEN
 C         CALL DBPRDB('K in L ',7,L,IS*IS)
 C      ENDIF
@@ -271,23 +284,32 @@ C                                   J = P(t|t)*F'*inv(P(t+1|t))  (A8)
         DO 51 J=1,N
  51        L(I,J)=PT1(I,J)
 
-C     invert in place. 
-      CALL DGETRF( N, N, L, IS, IPIV, INFO )
 C  For inverse call DGETRI, for solve call DGETRS.
-      CALL DGETRI( N, L, IS, IPIV, D, IS*IS, INFO )
-C      CALL DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
+CC    Invert method ( invert in place )
+C      CALL DGETRF( N, N, L, IS, IPIV, INFO )
+C      CALL DGETRI( N, L, IS, IPIV, D, IS*IS, INFO )
+C
+CC  transpose D to be consistent with solve method
+C      DO 52 I=1,N
+C        DO 52 J=1,N
+C            D(J,I)=0.0D0
+C            DO 52 K=1,N
+C 52            D(J,I)=D(J,I) + F(K,I)*L(K,J)
 
+C     Solve  method (solve in place. Result is in non-inverted array.)
+      CALL DGETRF( N, N, L, IS, IPIV, INFO )
       DO 52 I=1,N
         DO 52 J=1,N
-            D(I,J)=0.0D0
-            DO 52 K=1,N
- 52            D(I,J)=D(I,J) + F(K,I)*L(K,J)
-C                       D  now contains F'*inv(P(t+1|t)) 
+ 52        D(I,J)=F(I,J)
+      CALL DGETRS( 'T', N, N, L, IS, IPIV, D, IS, INFO )
+
+
+C                       D  now contains ( F'*inv(P(t+1|t)) )'
       DO 53 I=1,N
         DO 53 J=1,N
          L(I,J)=0.0D0
             DO 53 K=1,N
- 53            L(I,J)=L(I,J) + A(I,K)*D(K,J)
+ 53            L(I,J)=L(I,J) + A(I,K)*D(J,K)
 C                         L now contains J and A still contains P(t|t).
 
 C            smoothed state sm[t] = ZT + J*(sm[t+1] - F*ZT - G*u(t+1))  (A9)
@@ -468,20 +490,25 @@ C    Start Time loop
 C
       DO 1000 IT=NSTART,NSMPL
       IF (GAIN .NE. 1) THEN  
-C
-C                                      
+                                   
 C   Kalman gain  FK = F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
+C   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 C
+C   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ P(t|t-1)*H' ~~~~~~
       DO 5 I=1,N
          DO 5 J=1,P
             AA(I,J)=0.0D0
             DO 5 K=1,N
   5            AA(I,J)=AA(I,J)+PP(I,K)*H(J,K)
+
+C    ~~~~~~~~~~~~~~~~~~F*P(t|t-1)*H'~~~~~~~~~~~~~~~~~~~~~~~~~~~
       DO 6 I=1,N
          DO 6 J=1,P
             FK(I,J)=0.0D0
             DO 6 K=1,N
   6           FK(I,J)=FK(I,J)+F(I,K)*AA(K,J)
+
+C     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~H*P(t|t-1)*H' + RR'~~~
       DO 7 I=1,P
          DO 7 J=1,P
             A(I,J)=RR(I,J)
@@ -492,25 +519,40 @@ C     force symetry.
       DO 9 I=1,P
          DO 9 J=1,P
   9         AA(I,J)=(A(I,J)+A(J,I))/2.0D0
-C
-C     INVERS inverts in place and RETURNS THE DETERMINANT. 
-C      CALL  INVERS(AA,P,IS,DETOM)
-C     DETOM SHOULD BE POSITIVE
-C
-C     invert in place. 
-      CALL DGETRF( P, P, AA, IS, IPIV, INFO )
-C  For inverse call DGETRI, for solve call DGETRS.
-      CALL DGETRI( P, AA, IS, IPIV, A, IS*IS, INFO )
-C      CALL DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
 
-      DO 14 I=1,N
-         DO 14 J=1,P
-            A(I,J)=0.0D0
-            DO 14 K=1,P
-  14           A(I,J)=A(I,J)+FK(I,K)*AA(K,J)
+C     ~~~~~~~~~~~~~FK =F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
+C  For inverse call DGETRI, for solve call DGETRS.
+C     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ inv( H*P(t|t-1)*H' + RR')
+CC    Invert method ( invert in place )
+C      CALL DGETRF( P, P, AA, IS, IPIV, INFO )
+C      CALL DGETRI( P, AA, IS, IPIV, A, IS*IS, INFO )
+C
+C     ~~~~~~~~~~~~~~~~~F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
+C      DO 14 I=1,N
+C         DO 14 J=1,P
+C            A(I,J)=0.0D0
+C            DO 14 K=1,P
+C  14           A(I,J)=A(I,J)+FK(I,K)*AA(K,J)
+C
+C      DO 15 I=1,N
+C         DO 15 J=1,P
+C  15           FK(I,J)=A(I,J)
+
+C     Solve  method (solve in place. Result is in non-inverted array.)
+C     ~~~~~~~~~~~~~~~~~F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
+      CALL DGETRF( P, P, AA, IS, IPIV, INFO )
+C       need KF transpose 
+      DO 14 I=1,P
+         DO 14 J=1,N
+  14           A(I,J)=FK(J,I)
+      CALL DGETRS( 'T',  P, N, AA, IS, IPIV, A, IS, INFO )
+
       DO 15 I=1,N
          DO 15 J=1,P
-  15           FK(I,J)=A(I,J)
+  15           FK(I,J)=A(J,I)
+
+C   Now FK has the Kalman gain
+
 C      IF (IT.EQ.1) THEN
 C         CALL DBPRDB('K ',2,FK,N*P)
 C      ENDIF

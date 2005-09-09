@@ -71,7 +71,10 @@ likelihood and \code{result=3} returns the one step ahead predictions.
 If \code{z0} is supplied in the model object it is used as the estimate 
 of the state at time 0. If not supplied it is set to zero.
 
-If \code{P0} is supplied  in the model object it is used as the initial 
+If \code{rootP0} is supplied  in the model object then t(rootP0) %*% rootP0 is
+used as P0. 
+If \code{P0} is supplied or calculated from rootP0 in the model object, it is 
+used as the initial 
 tracking error P(t=1|t=0). If not supplied it is set to the identity matrix.
 
 Additional objects in the result are

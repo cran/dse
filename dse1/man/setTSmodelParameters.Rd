@@ -3,6 +3,7 @@
 \alias{setTSmodelParameters.default}
 \alias{setTSmodelParameters.ARMA}
 \alias{setTSmodelParameters.SS}
+\alias{setTSmodelParameters.TSrestrictedModel}
 
 \title{Set TSmodel Parameter Information}
 \description{
@@ -10,10 +11,12 @@
     This function is used internally and is not normally called by a user. 
 }
 \usage{
-    setTSmodelParameters(model, constants=NULL)
-    \method{setTSmodelParameters}{default}(model, constants=NULL)
-    \method{setTSmodelParameters}{ARMA}(model, constants=NULL)
-    \method{setTSmodelParameters}{SS}(model, constants=NULL)
+    setTSmodelParameters(model, constants=model$constants)
+    \method{setTSmodelParameters}{default}(model, constants=TSmodel(model)$constants)
+    \method{setTSmodelParameters}{ARMA}(model, constants=model$constants)
+    \method{setTSmodelParameters}{SS}(model, constants=model$constants)
+    \method{setTSmodelParameters}{TSrestrictedModel}(model,
+         constants=TSmodel(model$TSmodel)$constants)  
 }
 \arguments{
     \item{model}{An object of class TSmodel.}

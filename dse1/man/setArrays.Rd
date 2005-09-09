@@ -3,6 +3,7 @@
 \alias{setArrays.ARMA}
 \alias{setArrays.SS}
 \alias{setArrays.TSestModel}
+\alias{setArrays.TSrestrictedModel}
 
 \title{Set TSmodel Array Information}
 \description{
@@ -14,6 +15,7 @@
     \method{setArrays}{ARMA}(model, coefficients=NULL)
     \method{setArrays}{SS}(model, coefficients=NULL)
     \method{setArrays}{TSestModel}(model, coefficients=NULL)
+    \method{setArrays}{TSrestrictedModel}(model, coefficients=coef(model))
     }
 \arguments{
     \item{model}{An object of class TSmodel.}

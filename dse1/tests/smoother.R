@@ -1,5 +1,3 @@
-# This should test comparison of fortran and S version, but the fortran 
-#  matrix inversio is not working well, so the tests are disabled.
 
 require("dse1")
 Sys.info()
@@ -27,21 +25,6 @@ simdata0 <- simulate(model0, rng=test.rng)
 z  <- smoother(model0, simdata0, compiled=TRUE)
 zz <- smoother(model0, simdata0, compiled=FALSE)
 
-#zcomp <- z
-#debug(dse1:::smoother.default)
-#zcomp$r$chk1[99,1:18,1:3] - K  good
-#zcomp$r$chk1[99,1:18,1] - zt good
-#max(abs(zcomp$r$chk2[99,1:18,1:18] - P)) good
-#max(abs(zcomp$r$chk1[99,1:18,1:18] - P)) good
-#max(abs(zcomp$r$ftrack[Time+1,,] - filter$track[Time+1,,])) good
-#max(abs(zcomp$r[[11]] - FF))  good
-#max(abs(zcomp$r$chk1[Time,,] - filter$track[Time+1,,]))  good
-#max(abs(zcomp$r$chk2[Time,,] - solve(filter$track[Time+1,,]))) very bad
-#max(abs(diag(1,18) - filter$track[Time+1,,] %*% solve(filter$track[Time+1,,]))) good
-#max(abs(diag(1,18) - zcomp$r$chk1[Time,,] %*% zcomp$r$chk2[Time,,])) not good
-#zcomp$r$chk2[99,1:18,1:18] - t(FF) %*% solve(filter$track[Time+1,,]) bad
-#zcomp$r$chk2[99,1:18,1:18] - J bad
-
 #tfplot(simdata0$state, state(z, smooth=TRUE), state(zz, smooth=TRUE), graphs.per.page=3)
 
 
@@ -59,40 +42,37 @@ if ( fuzz < error)
      }
 
 tfplot(state(zz), simdata$state, graphs.per.page=3)
-#tfplot(state(z, smooth=TRUE) - state(zz, smooth=TRUE), graphs.per.page=3)
-tfplot(state(z, smooth=TRUE),  state(zz, smooth=TRUE), graphs.per.page=3)
+#tfplot(state(z, smoother=TRUE) - state(zz, smoother=TRUE), graphs.per.page=3)
+tfplot(state(z, smoother=TRUE),  state(zz, smoother=TRUE), graphs.per.page=3)
 
 # plot smoother agains true state
-#tfplot(state(z, smooth=TRUE), simdata$state, graphs.per.page=3)
+#tfplot(state(z, smoother=TRUE), simdata$state, graphs.per.page=3)
 
 # plot smoother agains true state
-#tfplot(state(zz, smooth=TRUE), simdata$state, graphs.per.page=3)
+#tfplot(state(zz, smoother=TRUE), simdata$state, graphs.per.page=3)
 
-#tfplot(state(z, smooth=TRUE), simdata$state, graphs.per.page=3)
-#tfplot(simdata$state, state(z, smooth=TRUE), state(zz, smooth=TRUE), graphs.per.page=3)
+#tfplot(state(z, smoother=TRUE), simdata$state, graphs.per.page=3)
+#tfplot(simdata$state, state(z, smoother=TRUE), state(zz, smoother=TRUE), graphs.per.page=3)
 
-#tfplot(simdata$state, state(zz, filter=TRUE), state(zz, smooth=TRUE), graphs.per.page=3)
+#tfplot(simdata$state, state(zz, filter=TRUE), state(zz, smoother=TRUE), graphs.per.page=3)
 
-# compare fortran and S versions  DISABLED
-error <- max(abs((state(z, smooth=TRUE) - state(zz, smooth=TRUE))))
+# compare fortran and S versions
+error <- max(abs((state(z, smoother=TRUE) - state(zz, smoother=TRUE))))
 if ( fuzz < error) 
      {print(error, digits=18)
-# this fails
-#      all.ok <- FALSE  
+      all.ok <- FALSE  
+     }
+
+error <- max(abs(z$smooth$track - zz$smooth$track))
+if ( fuzz < error) 
+     {print(error, digits=18)
+      all.ok <- FALSE  
      }
 
 error <- max(abs(z$filter$track - zz$filter$track))
 if ( fuzz < error) 
      {print(error, digits=18)
       all.ok <- FALSE  
-     }
-
-# compare fortran and S versions  DISABLED
-error <- max(abs(z$smooth$track - zz$smooth$track))
-if ( fuzz < error) 
-     {print(error, digits=18)
-# this fails
-#      all.ok <- FALSE  
      }
 
 
@@ -143,7 +123,7 @@ if ( fuzz < error)
       all.ok <- FALSE  
      }
 
-error <- max(abs((state(z, smooth=TRUE) - state(zz, smooth=TRUE))))
+error <- max(abs((state(z, smoother=TRUE) - state(zz, smoother=TRUE))))
 if ( fuzz < error) 
      {print(error, digits=18)
       all.ok <- FALSE  
@@ -157,9 +137,90 @@ if ( fuzz < error)
      }
 
 
-tfplot(simdata2$state, state(zz, smooth=TRUE), state(zz, filter=TRUE))
-tfplot(simdata2$state, state(z, smooth=TRUE),  state(z, filter=TRUE))
-tfplot(simdata2$state, state(z, smooth=TRUE),  state(zz, smooth=TRUE))
+tfplot(simdata2$state, state(zz, smoother=TRUE), state(zz, filter=TRUE))
+tfplot(simdata2$state, state(z,  smoother=TRUE), state(z,  filter=TRUE))
+tfplot(simdata2$state, state(z,  smoother=TRUE), state(zz, smoother=TRUE))
+
+######################################
+
+# test "big k" (which is numerically sensitive).
+
+######################################
+
+#  Starting P0  ("big k") symmetric with off diagonal element smaller than diag.
+P0 <- matrix(1e6,4,4) 
+diag(P0 )<- 1e7
+
+mod4 <-  SS(F=t(matrix(c(
+    		  0.8, 0.04,  0.2, 0,
+    		  0.2,  0.5,    0, -0.3,
+    		    1,    0,    0, -0.2,
+    		    0,	  1,    0,  0   ), c(4,4))),
+	       H=cbind(Hloadings, matrix(0,6,2)),	
+	       Q=diag(c(1, 1, 0, 0),4),  
+	       R=diag(1,6),
+	       z0=c(10, 20, 30,40),
+	       P0=P0
+	       )
+
+z  <- simulate(SS(F=t(matrix(c(
+    		  0.8, 0.04,  0.2, 0,
+    		  0.2,  0.5,    0, -0.3,
+    		    1,    0,    0, -0.2,
+    		    0,	  1,    0,  0   ), c(4,4))),
+	       H=cbind(Hloadings, matrix(0,6,2)),	
+	       Q=diag(c(1, 1, 0, 0),4),  
+	       R=diag(1,6),
+	       z0=c(10, 20, 30,40),
+	       P0=diag(c(10, 10, 10, 10)) ),
+               rng=test.rng)  
+
+state.sim  <- z$state  # for comparison below
+y.sim  <- outputData(z) # simulated indicators
+
+
+error <- max(abs(l(mod4, TSdata(output=y.sim), return.state=TRUE)$filter$state -
+                 l(mod4, TSdata(output=y.sim), return.state=TRUE,
+	                                           compile=FALSE)$filter$state))
+if ( fuzz < error) 
+     {print(error, digits=18)
+      all.ok <- FALSE  
+     }
+
+
+zz  <- smoother(l(mod4, TSdata(output=y.sim)))   
+zzz <- smoother(l(mod4, TSdata(output=y.sim)), compiled=FALSE)
+
+tfplot(state.sim,  state(zz))
+tfplot(state.sim,  state(zzz))
+tfplot(state.sim,  state(zz,  smoother=TRUE))
+tfplot(state.sim,  state(zzz, smoother=TRUE))
+
+error <- max(abs(state(zz, filter=TRUE) - state(zzz, filter=TRUE)))
+if ( fuzz < error) 
+     {print(error, digits=18)
+      all.ok <- FALSE  
+     }
+
+error <- max(abs(state(zz, smoother=TRUE) - state(zzz, smoother=TRUE)))
+if ( fuzz < error) 
+     {print(error, digits=18)
+      all.ok <- FALSE  
+     }
+
+error <- max(abs(zz$filter$track - zzz$filter$track))
+if ( fuzz < error) 
+     {print(error, digits=18)
+      all.ok <- FALSE  
+     }
+
+error <- max(abs(zz$smooth$track - zzz$smooth$track))
+if ( fuzz < error) 
+     {print(error, digits=18)
+      all.ok <- FALSE  
+     }
+
+
 
 if (! all.ok) stop("some tests FAILED")
 

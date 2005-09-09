@@ -1,17 +1,20 @@
 \name{smoother}
 \alias{smoother}
-\alias{smoother.default}
 \alias{smoother.TSestModel}
+\alias{smoother.TSmodel}
+\alias{smoother.nonInnov}
+\alias{smoother.TSrestrictedModel}
+
 \title{Evaluate a smoother with a TSmodel}
 \description{Evaluate a state space model.}
 \usage{
-    %%smoother(model, data, compiled=.DSEflags()$COMPILED)
-    %%\method{smoother}{default}(model, data, compiled=.DSEflags()$COMPILED)
-    %%\method{smoother}{TSestModel}(model, data=TSdata(model),
-    %%  compiled=.DSEflags()$COMPILED)
-    smoother(model, data, compiled=FALSE)
-    \method{smoother}{default}(model, data, compiled=FALSE)
-    \method{smoother}{TSestModel}(model, data=TSdata(model), compiled=FALSE)
+    smoother(model, data, compiled=.DSEflags()$COMPILED)
+    \method{smoother}{nonInnov}(model, data, compiled=.DSEflags()$COMPILED)
+    \method{smoother}{TSmodel}(model, data, compiled=.DSEflags()$COMPILED)
+    \method{smoother}{TSestModel}(model, data=TSdata(model),
+      compiled=.DSEflags()$COMPILED)
+    \method{smoother}{TSrestrictedModel}(model, data,
+      compiled=.DSEflags()$COMPILED)
 }
 \arguments{
     \item{model}{
@@ -31,12 +34,13 @@ error. The result will also contain the element \code{filter} with \code{state}
 and \code{track} (which may or may not have been in the original arguement). 
 }
 \details{
-Smoother takes the filtered state \code{estimates$state} and produces a smoothed 
-estimate of the state (sometimes called a two sided filter).
+Calculate fixed interval smoother state values for a model.
+Smoother first runs the filter and usess the filtered state to calculate 
+a smoothed  estimate of the state (sometimes called a two sided filter).
+The smoother requires an non-innovations for model. The method for a TSmodel
+simply gives an error message if the model does not inherit class
+code{nonInnov}.
 
-Fixed interval smoother for a model as returned by l.SS.
-ref. appendix of Shumway and Stoffer,1982, J.of Time Series, 253-264,
-       Jazwinski 1970, or Anderson and Moore.
 Note: this does not allow the same option as l.SS for calculating over a
    sub-sample. Smoothing is done over the length of the available filter
    data (which will be calculated to the length of the data if not
@@ -48,6 +52,10 @@ See \link{SS} for details of the model:
        y(t) = Hz(t)  + Rw(t)
 
 }
+\reference{B. D. O.Anderson & J. B.Moore \emph{Optimal Filtering}}
+\reference{appendix of Shumway and Stoffer, 1982, \emph{J.of Time Series}, 253-264}
+\reference{Jazwinski 1970}
+
 \seealso{
 \code{\link{state}},
 \code{\link{l}},

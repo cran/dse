@@ -1,9 +1,11 @@
-
 # The following should not be needed, but seems necessary for R CMD check
 #   to work with the bundle  
-#.DSEflags()$COMPILED <-  TRUE
-#.DSEflags()$DUP <- TRUE
- 
+
+ .onLoad  <- function(library, section) {
+   require("dse1")
+   invisible(TRUE)
+   }
+
 ############################################################################
 
 #    functions for data analysis      <<<<<<<<<<<<<
