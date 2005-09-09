@@ -5,6 +5,9 @@
 
 .onLoad  <- function(library, section) {
    .DSEflags(list(COMPILED=TRUE, DUP=TRUE))
+   # next require is necessary for bundle check to run examples,  
+   # but does not seem to be necessary when packages are not bundled
+   require("tframe")
    invisible(TRUE)
    }
 
@@ -163,7 +166,9 @@ print.SS <- function(x, digits=options()$digits, latex=FALSE, ...)
        }
      else if (is.innov.SS(x))  printM("K", x$K, digits, latex)
      if(!is.null(x$z0)) printM("initial state", x$z0, digits, latex)
-     if(!is.null(x$P0))
+     if(!is.null(x$rootP0))
+        printM("square root of initial state tracking error", x$rootP0, digits, latex)
+     else if(!is.null(x$P0))
         printM("initial state tracking error", x$P0, digits, latex)
      invisible(x)
     }
@@ -297,10 +302,11 @@ summary.SS <- function(object, ...)
          n=n,
          P=n * (m+2*p),  #assumes full rank noise
          P.actual = length(coef(object)),
-         P.IC = sum(object$location %in% c("z", "P")),
+         P.IC = sum(object$location %in% c("z", "P", "r P")),
 	 constants=length(object$const),
          ICs=(!is.null(object$z0)),
-         init.track=(!is.null(object$P0)) ), "summary.SS")
+         init.track=(!is.null(object$P0)) | (!is.null(object$rootP0))
+	 ), "summary.SS")
   }
 
 print.summary.SS <- function(x, digits=options()$digits, ...)
@@ -363,13 +369,11 @@ print.summary.ARMA <- function(x, digits=options()$digits, ...)
      invisible(x)
     }
  
-
-
 tfplot.TSestModel <- function(x, ..., 
-  tf=NULL, start=tfstart(tf), end=tfend(tf), 
-  select.inputs=NULL, select.outputs=NULL,
-  Title=NULL, xlab=NULL, ylab=NULL, 
-  graphs.per.page=5, mar=par()$mar, reset.screen=TRUE) {
+    tf=NULL, start=tfstart(tf), end=tfend(tf), 
+    select.inputs=NULL, select.outputs=NULL,
+    Title=NULL, xlab=NULL, ylab=NULL, 
+    graphs.per.page=5, mar=par()$mar, reset.screen=TRUE) {
 
   # plot one-step ahead estimates and actual data.
   # ... is a list of models of class TSestModel.
@@ -496,6 +500,11 @@ testEqual.SS <- function(obj1,obj2, fuzz=0)
        {if (r) r <-length(obj1$P0) == length(obj2$P0)
         if (r) r <-all(fuzz >= abs(obj1$P0   -     obj2$P0))
        }
+     if (r) if(is.null(obj1$rootP0)) r <- is.null(obj2$rootP0)
+     else
+       {if (r) r <-length(obj1$rootP0) == length(obj2$rootP0)
+        if (r) r <-all(fuzz >= abs(obj1$rootP0   -     obj2$rootP0))
+       }
   r
 }
 
@@ -530,18 +539,18 @@ McMillanDegree.SS <- function(model, fuzz=1e-4, ...)
    invisible()
  }
 
-stability <- function(obj, fuzz=1e-4, digits=8, verbose=TRUE) UseMethod("stability")
+stability <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE) UseMethod("stability")
 
-stability.TSestModel <- function(obj, fuzz=1e-4, digits=8, verbose=TRUE)
-   {stability(TSmodel(obj), fuzz=fuzz, digits=digits, verbose=verbose)}
+stability.TSestModel <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE)
+   {stability(TSmodel(obj), fuzz=fuzz, eps=eps, digits=digits, verbose=verbose)}
 
-stability.TSmodel <- function(obj, fuzz=1e-4, digits=8, verbose=TRUE)
+stability.TSmodel <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE)
   {stability(roots(obj, fuzz=fuzz, randomize=FALSE),
-             fuzz=fuzz, digits=digits, verbose=verbose)}
+             fuzz=fuzz, eps=eps, digits=digits, verbose=verbose)}
 
-stability.roots <- function(obj, fuzz=1e-4, digits=8, verbose=TRUE) 
+stability.roots <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE) 
    {#obj <- roots(model, fuzz=fuzz, randomize=FALSE)
-    s <- if (all(Mod(obj) < 1.0)) TRUE else  FALSE
+    s <- if (all(Mod(obj) < (1.0 - eps))) TRUE else  FALSE
     if (verbose)
       {cat("Eigenvalues of F and moduli are:\n")
        print(cbind(obj,Mod(obj)),digits=digits)
@@ -551,9 +560,9 @@ stability.roots <- function(obj, fuzz=1e-4, digits=8, verbose=TRUE)
     s
    }
 
-stability.ARMA <- function(obj, fuzz=1e-4, digits=8, verbose=TRUE) 
+stability.ARMA <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE) 
    {z <- roots(obj, fuzz=fuzz, randomize=FALSE)
-    if (all(Mod(z) < 1.0)) s <- TRUE
+    if (all(Mod(z) < (1.0 - eps))) s <- TRUE
     else                   s <- FALSE
     if (verbose)
       {cat("Distinct roots of det(A(L)) and moduli are:\n")
@@ -1597,15 +1606,17 @@ TSmodel.TSestModel <- function(obj, ...)
 
 
 
-ARMA <- function(A=NULL, B=NULL, C=NULL, TREND=NULL, description=NULL,
-          names=NULL, input.names=NULL, output.names=NULL) 
+ARMA <- function(A=NULL, B=NULL, C=NULL, TREND=NULL, 
+          constants=NULL,
+	  description=NULL, names=NULL, input.names=NULL, output.names=NULL) 
   {if  (is.null(A)) stop("specified structure is not correct for ARMA model.")
    # and fix some simple potential problems
    if(is.null(dim(A)))   A <- array(A, c(length(A),1,1))
    if(is.null(B)) stop("B array must be specified for ARMA class models.")
    if(is.null(dim(B)))   B <- array(B, c(length(B),1,1))
    if(2==length(dim(B))) B <- array(B, c(1, dim(B)))
-   model <- list(A=A, B=B, C=C, TREND=TREND, description=description)
+   model <- list(A=A, B=B, C=C, TREND=TREND, 
+                 constants=constants, description=description)
    dseclass(model) <- c("ARMA","TSmodel") # constructor
    if(!is.null(names)) seriesNames(model) <- names
    else
@@ -1618,9 +1629,10 @@ ARMA <- function(A=NULL, B=NULL, C=NULL, TREND=NULL, description=NULL,
 
 
 
-SS <- function(F.=NULL, G=NULL, H=NULL, K=NULL, Q=NULL, R=NULL, z0=NULL, P0=NULL,
-             description=NULL,
-	     names=NULL, input.names=NULL, output.names=NULL)   
+SS <- function(F.=NULL, G=NULL, H=NULL, K=NULL, Q=NULL, R=NULL,
+          z0=NULL, P0=NULL, rootP0=NULL,
+          constants=NULL,
+          description=NULL, names=NULL, input.names=NULL, output.names=NULL)   
   {if (is.null(F.) | is.null(H))
        stop("specified stucture is not correct for SS model.")
    # and fix some simple potential problems
@@ -1631,8 +1643,8 @@ SS <- function(F.=NULL, G=NULL, H=NULL, K=NULL, Q=NULL, R=NULL, z0=NULL, P0=NULL
       if(!is.null(K) && !is.matrix(K))   K  <- matrix(K,1,length(K))
       if(!is.null(Q) && !is.matrix(Q))   Q  <- matrix(Q,1,length(Q))
      }
-   model <- list(F=F., G=G, H=H, K=K, Q=Q, R=R, z0=z0, P0=P0,
-                 description=description)
+   model <- list(F=F., G=G, H=H, K=K, Q=Q, R=R, z0=z0, P0=P0, rootP0=rootP0,
+                 constants=constants, description=description)
    if (!is.null(model$K)) dseclass(model) <- c("innov","SS","TSmodel" ) else
    if (!is.null(model$Q)) dseclass(model) <- c( "nonInnov","SS","TSmodel") # constructor
    else stop("specified stucture is not correct for SS model.")
@@ -1668,14 +1680,14 @@ is.ARMA <- function(obj){inherits(obj,"ARMA")}
 
 # complete parameter info. based on representation info. 
 
-setTSmodelParameters <- function(model, constants=NULL)  
+setTSmodelParameters <- function(model, constants=model$constants)  
    UseMethod("setTSmodelParameters")
 
-setTSmodelParameters.default <- function(model, constants=NULL)  
-  setTSmodelParameters(TSmodel(model), constants=NULL)
+setTSmodelParameters.default <- function(model, constants=TSmodel(model)$constants)  
+  setTSmodelParameters(TSmodel(model), constants=constants)
 
 
-setTSmodelParameters.SS <- function(model, constants=NULL) { 
+setTSmodelParameters.SS <- function(model, constants=model$constants) { 
 
  locateSS <- function(A,Ac,a,I,J,plist)# local function for locating parameters
   {indicate <-  (A==1.0)                # constants
@@ -1720,6 +1732,7 @@ setTSmodelParameters.SS <- function(model, constants=NULL) {
     plist <- locateSS(model$H,constants$H,"H",p,n,plist)
     if(!is.null(model$z0)) plist <- locateSS(model$z0,constants$z0,"z",p,n,plist)
     if(!is.null(model$P0)) plist <- locateSS(model$P0,constants$P0,"P",p,n,plist)
+    if(!is.null(model$rootP0)) plist <- locateSS(model$rootP0,constants$rootP0,"rP",p,n,plist)
     if (is.innov.SS(model)) 
       {plist <- locateSS(model$K,constants$K,"K",n,p,plist)
        # note constants$H, etc are logical arrays (if not NULL) to indicate
@@ -1736,7 +1749,7 @@ setTSmodelParameters.SS <- function(model, constants=NULL) {
     model
 }
 
-setTSmodelParameters.ARMA <- function  (model, constants=NULL) { 
+setTSmodelParameters.ARMA <- function  (model, constants=model$constants) { 
 
  locateARMA <- function(A,a,I,J,L,plist){ # local function for locating parameters
   ind <- function(x, i) # equivalent of row and col for higher dim arrays.
@@ -1832,6 +1845,7 @@ setArrays.SS <- function(model, coefficients=NULL){
     R        <-  diag(0,p,p)     # measurement noise
     z       <-  rep(0,n)        # initial state
     P       <-  diag(0,n)       # initial tracking error
+    rP      <-  diag(0,n)       # root initial tracking error
     if (length(coefficients)>0) 
        {i <- a.pos == "f"
         f[cbind(i.pos[i],j.pos[i])] <- coefficients[i]
@@ -1851,6 +1865,8 @@ setArrays.SS <- function(model, coefficients=NULL){
         z[i.pos[i]] <- coefficients[i]
         i <- a.pos == "P"
         P[cbind(i.pos[i],j.pos[i])] <- coefficients[i]
+        i <- a.pos == "rP"
+        rP[cbind(i.pos[i],j.pos[i])] <- coefficients[i]
        }
     if (length(const)>0) 
        {i <- ca.pos == "f"
@@ -1871,6 +1887,8 @@ setArrays.SS <- function(model, coefficients=NULL){
         z[ci.pos[i]] <- const[i]
         i <- ca.pos == "P"
         P[cbind(ci.pos[i],cj.pos[i])] <- const[i]
+        i <- ca.pos == "rP"
+        rP[cbind(ci.pos[i],cj.pos[i])] <- const[i]
        }
     model$F <- f 
     if(!is.null(m)) model$G <- G
@@ -1881,8 +1899,9 @@ setArrays.SS <- function(model, coefficients=NULL){
       {model$Q <-Q
        model$R <-R
       }
-    if(!is.null(model$z0)) model$z0<-z
-    if(!is.null(model$P0)) model$P0<-P
+    if(!is.null(model$z0)) model$z0 <- z
+    if(!is.null(model$P0)) model$P0 <- P
+    if(!is.null(model$rootP0)) model$rootP0 <- rP
     model
 } #end setArrays.SS
 
@@ -2618,8 +2637,11 @@ if (return.state | return.debug.info) state <- matrix(double(1),predictT,n)
 else              state <- matrix(double(1),1,1)    #not used
 if(is.null(model$z0)) z <-rep(0,n)   # initial state
 else  z <-model$z0
-if(is.null(model$P0)) P <- diag(1,n) # initial state tracking error 
-else  P <-model$P0               # this is not used in innov. models
+
+# initial state tracking error  --  not used in innov. models
+ P <-  if(!is.null(model$rootP0)) t(model$rootP0) %*% model$rootP0
+       else if(!is.null(model$P0))  model$P0
+       else   diag(1,n)
 
 if (compiled)
   {
@@ -2749,17 +2771,9 @@ tframe(r$pred) <- tf
 if (! is.null(r$weighted.sqerror))  tframe(r$weighted.sqerror) <- tf
 
 filter <-NULL
-if (return.state | return.track)
-  {if (Innov|(!return.track))  filter$track <- NULL 
-   else                       
-     {filter$track <- r$track
-      tframe(filter$track) <- tf
-     }
-   if (return.state)
-     {filter$state <- r$state
-      tframe(filter$state) <- tf
-     }
-  }
+if (return.track) filter$track <- if (Innov) NULL else tframed(r$track, tf)
+if (return.state) filter$state <- tframed(r$state,tf)
+ 
 if((!is.null(result)) && (result == "pred")) return(r$pred)
 r <- append(residualStats(r$pred, outputData(data), sampleT, warn=warn), 
         list(error.weights=error.weights, weighted.sqerror=r$weighted.sqerror))
@@ -2768,42 +2782,42 @@ if (return.debug.info)
    r$debug.info <- list(m=m, p=p, a=a,b=b,c=c, G=G,FF=FF,K=K,P=P, H=H, u=u,y=y,
         pred=pred, wt.err=wt.err, error.weights=error.weights, sampleT=sampleT)
 
-if ( is.null(result)) 
-   {r <-list(estimates=r, data=data, model=model, filter=filter) 
-    return( classed(r, "TSestModel")) # constructor (l.SS)
-   }
-else 
-   {if (result =="like") return(r$like[1]) # neg.log.like. from residualStats
-    else { return(r[[result]]) }
-   }
+if ( is.null(result)) return( 
+    classed(list(estimates=r, data=data, model=model, filter=filter),
+            "TSestModel")) # constructor (l.SS)
+else if (result =="like") return(r$like[1]) # neg.log.like. from residualStats
+else return(r[[result]]) 
+  
 "should never get to here in l.SS"
 } # end of l.SS
 
 
 
-#smoother <- function(model, data, compiled=.DSEflags()$COMPILED) UseMethod("smoother")
-smoother <- function(model, data, compiled=FALSE) UseMethod("smoother")
+smoother <- function(model, data, compiled=.DSEflags()$COMPILED) UseMethod("smoother")
 
-#smoother.TSestModel <- function(model, data=TSdata(model), compiled=.DSEflags()$COMPILED)
-smoother.TSestModel <- function(model, data=TSdata(model), compiled=FALSE)
-       smoother(TSmodel(model), data,compiled=compiled)
+smoother.TSestModel <- function(model, data=TSdata(model),
+                                compiled=.DSEflags()$COMPILED){
+    smoother(TSmodel(model), data=data, compiled=compiled)
+    }
+    
+smoother.TSmodel <- function(model, data, compiled=.DSEflags()$COMPILED){
+    if  (!is.nonInnov.SS(model))
+       stop("smoothing needs an nonInnov state space model (class nonInnov.SS.TSmodel).")
+    # should neot get to here. (smoother.nonInnov should have been called
+    # instead, but ...)
+    smoother.nonInnov(model, data, compiled=compiled)
+    }
 
-#smoother.default <- function(model, data, compiled=.DSEflags()$COMPILED){
-smoother.default <- function(model, data, compiled=FALSE){
- # See help("smoother") and help("SS") for details of the model:
- filter <- NULL
- estimates <- NULL
- if (is.TSestModel(model)) 
-   {filter    <- model$filter
-    estimates <- model$estimates
-    model     <- TSmodel(model)
-   }
- if  (!is.nonInnov.SS(model)) stop("smoother expecting an nonInnov.SS TSmodel.")
+smoother.nonInnov <- function(model, data, compiled=.DSEflags()$COMPILED){
+ # See help("smoother") and help("SS") for details of the model: 
+ data <- TSdata(data)
+ z <-l(model, data, return.state=TRUE,return.track=TRUE, compiled=compiled)
+ filter    <- z$filter
+ estimates <- z$estimates
  if  (is.null(filter$state) |  is.null(filter$track)) 
-   {filter <- l(model,data, return.state=TRUE,return.track=TRUE)
-    estimates <- filter$estimates
-    filter    <- filter$filter
-   }
+     filter <- l(model,data, return.state=TRUE,return.track=TRUE)$filter
+ model     <- TSmodel(model)
+ if  (!is.nonInnov.SS(model)) stop("smoother expecting an nonInnov.SS TSmodel.")
  if (is.null(model$G))
   {m<-0
    G<-matrix(0,dim(model$F)[2],1)   # can't call compiled with 0 length arrays
@@ -2873,14 +2887,17 @@ smoother.default <- function(model, data, compiled=FALSE){
     tr <- array(NA,dim(filter$track))  # smoother tracking error
     tr[sampleT,,] <- filter$track[sampleT,,]
     for (Time in (sampleT-1):1) 
-      {K <- filter$track[Time,,] %*% t(H) %*% 
-              solve(H %*% filter$track[Time,,] %*% t(H) + RR) #(A5)
+      {#K <- filter$track[Time,,] %*% t(H) %*% 
+       #       solve(H %*% filter$track[Time,,] %*% t(H) + RR) #(A5)
+       K <- filter$track[Time,,] %*%  
+              t(solve(t(H %*% filter$track[Time,,] %*% t(H) + RR), H)) #(A5)
        zt <- filter$state[Time,] + K %*% 
        		(outputData(data)[Time,] - H %*% filter$state[Time,]) #(A6)
        #if (m!=0) zt <- zt + G %*% u[Time,] 
        P <- filter$track[Time,,] - K %*% H %*% filter$track[Time,,] #P(t|t) (A7)
        P <- (P+t(P))/2 #force symmetry to avoid rounding problems
-       J <- P %*% t(FF) %*% solve(filter$track[Time+1,,])             #(A8) 
+       #J <- P %*% t(FF) %*% solve(filter$track[Time+1,,])             #(A8) 
+       J <- P %*%  t(solve(t(filter$track[Time+1,,]), FF))             #(A8) 
        if (m==0)                                          
           sm[Time,] <- zt + J %*% (sm[Time+1,] - FF %*% zt)              #(A9) 
        else 
@@ -2891,12 +2908,13 @@ smoother.default <- function(model, data, compiled=FALSE){
      r <- list(state=sm, track=tr) 
     }  # end S version
  
-  state <- tframed(r$state, list(start=tfstart(outputData(data)),
-              frequency= tffrequency(outputData(data))), 
-              names=dimnames(filter$state)[[2]]) 
-  r <- list(estimates=estimates, data=data, model=model, 
-            filter=filter, smooth=list(state=state, track=r$track), r=r) 
-   classed(r, "TSestModel") # constructor (smoother)
+  tf <- tframe(outputData(data))
+  names <- seriesNames(filter$state) 
+  classed(list(estimates=estimates, data=data, model=model, 
+               filter=filter, 
+	       smooth=list(state=tframed(r$state, tf, names=names),
+	                   track=tframed(r$track, tf))),
+       "TSestModel") # constructor (smoother)
 } # end of smoother
   
 
@@ -3236,10 +3254,10 @@ estMaxLik.TSmodel <- function(obj1, obj2,
     }
   else stop(paste("Minimization method ", algorithm, " not supported."))
  emodel <- l(setTSmodelParameters(setArrays(Shape, coefficients=parms)),data)
- emodel$est$algorithm <- algorithm
- emodel$est$results   <- results
- emodel$est$converged <- converged
- emodel$est$convergenceCode <- convergenceCode
+ emodel$estimates$algorithm <- algorithm
+ emodel$estimates$results   <- results
+ emodel$estimates$converged <- converged
+ emodel$estimates$convergenceCode <- convergenceCode
  emodel$model$description <- paste(description, 
        if(!converged) " (not " else " (", "converged",
        ") from initial model: ", Shape$description)

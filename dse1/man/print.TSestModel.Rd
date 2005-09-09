@@ -2,6 +2,7 @@
 \alias{print.TSestModel}
 \alias{print.SS}
 \alias{print.ARMA}
+\alias{print.TSrestrictedModel}
 
 \title{Display TSmodel Arrays}
 \description{
@@ -11,6 +12,7 @@ Display TSmodel arrays.
     \method{print}{SS}(x, digits=options()$digits, latex=FALSE, ...)
     \method{print}{ARMA}(x, digits=options()$digits, latex=FALSE, L=TRUE, fuzz=1e-10, ...)
     \method{print}{TSestModel}(x, ...)
+    \method{print}{TSrestrictedModel}(x, ...)
     }
 
 \arguments{

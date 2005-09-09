@@ -90,4 +90,5 @@ TSdata                  Construct TSdata time series object
 TSdata.object           time series data object
 TSestModel              Estimated Time Series Model
 TSmodel                 Time Series Models
+TSrestrictedModel       Restrict Model Coefficients
 ytoypc                  Convert to year to year percent change

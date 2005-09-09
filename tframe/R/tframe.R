@@ -127,10 +127,20 @@ tfplot.default <- function(x, ..., tf=tfspan(x , ...), start=tfstart(tf), end=tf
   #  for start.
   if (!is.tframed(x)) UseMethod("plot")
   else
-    {old.par <- par(par)
+    {if(inherits(x, "TSmodel"))
+        stop("tfplot does not know how to plot a model. ",
+             "Consider simulating the model: tfplot(simulate(model)) ",
+             "or evaluating the model with data: tfplot(l(model, data)).")
+     if( !is.numeric(x) )
+        stop("tfplot.default does not know how to plot this object.")
+     old.par <- par(par)
      on.exit(par(old.par)) 
      names <- seriesNames(x)
      Ngraphs <- min(length(series), graphs.per.page)
+     if( (!is.list(xlim)) && (2 == length(xlim)))
+              xlim <- rep(list(xlim), length(series))
+     if( (!is.list(ylim)) && (2 == length(ylim)))
+              ylim <- rep(list(ylim), length(series))
      if(reset.screen)  {
         if ( (! is.null(par)) && (! is.null(par$mar))) mar <- par$mar
         par(mfcol = c(Ngraphs, 1), mar=mar, no.readonly=TRUE)
@@ -145,7 +155,7 @@ tfplot.default <- function(x, ..., tf=tfspan(x , ...), start=tfstart(tf), end=tf
     	   z <- tbind(z, selectSeries(d, series=i)) 
 	tfOnePlot(z, tf=tf, start=start, end=end,
 	          lty=lty, lwd=lwd, pch=pch, col=col, cex=cex,
-		  xlab=xlab, ylab=ylab[i], xlim=xlim, ylim=ylim)
+		  xlab=xlab, ylab=ylab[i], xlim=xlim[[i]], ylim=ylim[[i]])
         if(!is.null(Title) && (i==1)) title(main = Title)
 	}
     }

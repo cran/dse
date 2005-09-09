@@ -48,7 +48,7 @@ new.data <- TSdata(
 if(require("padi") & require("dsepadi"))
  eg4.DSE.data.names <-TSPADIdata(
   input = "B14017", input.transforms= "diff", input.names="R90",
-  output = c("P100000", "V2036138", "V2062811", "b3400"),
+  output = c("P100000", "V2036138", "V2062811", "v37426"),
   output.transforms=c("percentChange", "percentChange",
           "percentChange", "percentChange"),
    output.names=c("CPI", "GDP", "employment", "PFX"),

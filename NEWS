@@ -1,8 +1,62 @@
 
+    o  NOT change testEqual to all.equal as in base?
+    o  NOT fortan split into pieces in different packages?
+    o  NOT revised tframe docmentation?, demo?, unbundled?
+    o  NOT Documentation of state initialization has been improved.
+    o  NOT Spencer's print.ARMA.
+   
 Known Bugs
 
     o Handling of initial conditions for the state space smoother still 
       needs work.
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2005.9-1
+
+Changes (Possibly) Affecting Users
+
+    o An experimental class TSrestrictedmodel has been added, which allows a
+      very general specification of cross-coefficient restrictions,etc. 
+      See  ?TSrestrictedmodel for more details.
+
+    o smoother and l.SS where fixed to use solve(A,B) constructs rather 
+      B %*% solve(A) in some instances where this was not done already.
+      This was done in both the S and fortran versions of the code, so that
+      results for fortran and S versions are nearly identical even in the case
+      of "big k" state tracking initialization, which is known to be numerically
+      problematic. (In more usual cases the results were previously nearly 
+      identical.)
+
+    o a bug was fixed in the structure of additional information passed back 
+      from estMaxLik.
+
+    o a bug was fixed in the structure of some information passed back 
+      from the state space smoother.
+
+    o smoother.default was changed to smoother.TSmodel and gives an error 
+      message if not called with an appropriate SS model. (There is now no 
+      default method.)
+
+    o the setting of constants was added to constuctors ARMA and SS and a bug
+      was fixed in setTSmodelParameters, so that these are not now reset to 
+      parameters after estimation.
+
+    o an argument rootP0 (default NULL) was added to state space (SS) models 
+      so that an initial state covariance (P0) can be specified in a
+      parsimonious form. This may not be a permanent feature. See also the new
+      TSrestrictedModel class.
+
+    o an argument eps (default 1e-15) was added to the stability function and 
+      roots within eps of 1.0 are now considered unstable (unstationary) models.
+
+    o some more argument checking was added to tfplot
+   
+    o Depends lines where added to the bundle description file so that
+      installation should now properly look after dependencies.
+
+Changes Affecting Development
+
+    o The makefile system was revised so that tests are run individually rather
+      than as a single block.
 
                  CHANGES IN DSE AND DSEPLUS VERSION 2005.6-1
 
