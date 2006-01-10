@@ -9,13 +9,13 @@
 \usage{
     simulate(model, ...)
     \method{simulate}{ARMA}(model, y0=NULL, input=NULL, input0=NULL,
-        start=NULL, freq=NULL, sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
+        start=NULL, freq=NULL, sampleT=100, noise=NULL, sd=1, Cov=NULL,
         rng=NULL, noise.model=NULL, compiled=.DSEflags()$COMPILED, ...)
     \method{simulate}{SS}(model, input=NULL, 
-        start=NULL, freq=NULL,sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
+        start=NULL, freq=NULL,sampleT=100, noise=NULL, sd=1, Cov=NULL,
 	rng=NULL, compiled=.DSEflags()$COMPILED, ...)
     \method{simulate}{TSestModel}(model, input=inputData(model),
-			sd=NULL, SIGMA=NULL, ...)
+			sd=NULL, Cov=NULL, ...)
 }
 \arguments{
       \item{model}{An object of class TSmodel or TSestModel.}
@@ -30,10 +30,10 @@ space models. If not specified initial values are set to zero. }
     \item{noise}{
 Noise can be supplied. Otherwise it will be generated.
 If supplied it should be a list as described below in details.}
-    \item{SIGMA}{
+    \item{Cov}{
 The covariance of the noise process. If this is specified then sd is ignored.
 A vector or scalar is treated as a diagonal matrix. For an object of class
-TSestModel, if neither SIGMA nor sd are specified, then SIGMA is set to
+TSestModel, if neither Cov nor sd are specified, then Cov is set to
 the estimated covariance (\code{model$estimates$cov}).}
     \item{sd}{The standard deviation of the noise. This can be a vector.}
     \item{noise.model}{
@@ -54,7 +54,7 @@ there are some additional elements:
    model- the generating model,
    rng - the initial RNG and seed,
    version - the version of S used (random number generators may vary)
-   SIGMA as specified
+   Cov as specified
    sd    as specified
    noise - the noise details as provided in the argument or as generated.
    state - the state variable for state space models.

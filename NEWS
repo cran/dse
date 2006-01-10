@@ -1,15 +1,37 @@
-
-    o  NOT change testEqual to all.equal as in base?
-    o  NOT fortan split into pieces in different packages?
-    o  NOT revised tframe docmentation?, demo?, unbundled?
-    o  NOT Documentation of state initialization has been improved.
-    o  NOT Spencer's print.ARMA.
    
 Known Bugs
 
     o Handling of initial conditions for the state space smoother still 
       needs work.
 
+                 CHANGES IN DSE AND DSEPLUS VERSION 2006.1-1
+
+Changes (Possibly) Affecting Users
+
+    o \reference rather than \references in the documentation was fixed in
+      serveral places and the references were cleaned up. (The mistake seems to
+      have resulted in some references being omitted from earlier
+      documentation.)
+
+    o The argument SIGMA in simulate methods and makeTSnoise was changed to Cov
+      to avoid confusion in forthcoming package tsfa.
+
+    o Splus "For" loops where removed, as these have not been tested recently,
+      and some other variables reported as having no binding were cleaned up.
+
+    o The function findg was removed (it has never really worked).
+
+    o A recursion too deep problem printing some TSdata was fixed. 
+
+    o The simulate generic in dse1 was modified to avoid conflict with
+      the simulate generic in stats (in R-2.2.0).
+ 
+Changes Affecting Development
+
+    o Some further clean up of the Make system. Parallel makes (make -j -k) seem
+      to be working properly now.
+ 
+ 
                  CHANGES IN DSE AND DSEPLUS VERSION 2005.9-1
 
 Changes (Possibly) Affecting Users

@@ -39,9 +39,9 @@ a VAR model with lagged values weighted. This procedure is discussed in
 Gilbert (1995).
 }
 \references{
-    Gilbert, P.D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" \emph{J. of Forecasting: 
-    Special Issue on VAR Modelling}. 14:229-250.
+    Gilbert, P.D. (1995) Combining VAR Estimation and State Space 
+    Model Reduction for Simple Good Predictions \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling}, \bold{14}, 229--250.
 }
 \seealso{
 \code{\link{estBlackBox1}},

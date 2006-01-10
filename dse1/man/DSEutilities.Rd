@@ -18,7 +18,7 @@
     typically called directly by the user.}
 \usage{
    estVARXmean.correction(X, y, bbar, fuzz=sqrt(.Machine$double.eps), warn=TRUE)
-   fake.TSestModel.missing.data(model,data, residual, max.lag)   
+   fake.TSestModel.missing.data(model,data, residual, max.lag, warn=TRUE)   
    printTestValue(x, digits=16)
    read.int(prmt)
    svd.criteria(sv)

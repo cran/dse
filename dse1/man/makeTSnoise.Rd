@@ -5,8 +5,8 @@
     Generate a random time series (matrix). This is a utility typically used in a time
     series model simulate method and not called directly by the user.}
 \usage{
-    makeTSnoise(sampleT,p,lags,noise=NULL, rng=NULL,
-             SIGMA=NULL, sd=1, noise.model=NULL, noise.baseline=0,
+    makeTSnoise(sampleT,p,lags,noise=NULL, rng=NULL, Cov=NULL, sd=1, 
+	     noise.model=NULL, noise.baseline=0,
              tf=NULL, start=NULL,frequency=NULL)
 }
 \arguments{
@@ -17,9 +17,9 @@
        useful in ARMA models.}
     \item{noise}{Noise can be supplied. Otherwise it will be generated.
         If supplied it should be a list as described below under returned value.}
-    \item{SIGMA}{The covariance of the noise process. If this is specified then sd
+    \item{Cov}{The covariance of the noise process. If this is specified then sd
        is ignored. A vector or scalar is treated as a diagonal matrix. For an object of class
-       TSestModel, if neither SIGMA nor sd are specified, then SIGMA is set to
+       TSestModel, if neither Cov nor sd are specified, then Cov is set to
        the estimated covariance (\code{model$estimates$cov}).}
     \item{sd}{The standard deviation of the noise. This can be a vector.}
     \item{noise.model}{A TSmodel to be used for generating noise (not yet

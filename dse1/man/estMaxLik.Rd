@@ -16,7 +16,7 @@
 \arguments{
     \item{obj1}{an object of class TSmodel, TSdata or TSestModel}
     \item{obj2}{TSdata or a TSmodel to be fitted with obj1.}
-    \item{algorithm}{the algorithm ('optim', 'nlm' or 'nlmin') to use for maximization.}
+    \item{algorithm}{the algorithm ('optim', or 'nlm' ) to use for maximization.}
     \item{algorithm.args}{arguments for the optimization algorithm.}
     \item{...}{arguments passed on to other methods.}
 }
@@ -39,7 +39,8 @@ yet been implemented.
   negative log likelihood (as returned by \code{l} ) of the given model 
   structure by adjusting the
   parameter values. A \code{TSmodel} can also have constant values in 
-  some array elements, and these are not changed.
+  some array elements, and these are not changed. (See \code{SS},
+  \code{ARMA} and  \code{fixConstants} regarding setting of constants.)
   
   With the number of parameter typically used in multivariate time series 
   models, the default maximum number of iterations may not be enough. Be sure to
@@ -58,12 +59,15 @@ yet been implemented.
   estimation method may be preferable.
 }
 \seealso{
-\code{\link{optim}}
-\code{\link{nlm}}
-\code{\link{estVARXls}}
-\code{\link{bft}}
-\code{\link{TSmodel}}
-\code{\link{l}}
+\code{\link{optim}},
+\code{\link{nlm}},
+\code{\link{estVARXls}},
+\code{\link{bft}},
+\code{\link{TSmodel}},
+\code{\link{l}},
+\code{\link{SS}},
+\code{\link{ARMA}},
+\code{\link{fixConstants}}
 }
 \examples{
   true.model <- ARMA(A=c(1, 0.5), B=1)

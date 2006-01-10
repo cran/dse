@@ -140,21 +140,24 @@ print(symbol.For("rmaprj"))
 
   if (verbose) cat("dse3 test 14... ")
   zz <- forecastCovWRTtrue(list(mod1,mod2),mod1, 
-          pred.replications=2, Spawn=FALSE, quiet=TRUE, trend=NULL, zero=TRUE)
+          pred.replications=2, quiet=TRUE, trend=NULL, zero=TRUE)
+#          pred.replications=2, Spawn=FALSE, quiet=TRUE, trend=NULL, zero=TRUE)
   ok <- is.forecastCov(zz)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 15... ")
   ok <- testEqual(zz, forecastCovWRTtrue(list(mod1,mod2),mod1, 
-          pred.replications=2, Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,
+#          pred.replications=2, Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,
+          pred.replications=2,
 	  quiet=TRUE, trend=NULL, zero=TRUE, rng=getRNG(zz)))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 16... ")
   zz <- forecastCovEstimatorsWRTtrue(mod1, 
-         Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, quiet=TRUE, 
+#         Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, quiet=TRUE, 
+         quiet=TRUE, 
          estimation.methods=list(estVARXls=NULL, estVARXar=list(warn=FALSE)), 
          est.replications=2, pred.replications=2, rng=test.rng)
   ok <- is.forecastCov(zz)
@@ -165,7 +168,8 @@ print(symbol.For("rmaprj"))
 # Next seems to cause a problem in Splus when .SPAWN is TRUE above although it may
 #  work with default rng (at least it used to) but test.rng is now set
 #  to give same results as in R.
-  ok <- testEqual(zz, forecastCovEstimatorsWRTtrue(mod1, Spawn=FALSE, 
+#  ok <- testEqual(zz, forecastCovEstimatorsWRTtrue(mod1, Spawn=FALSE, 
+  ok <- testEqual(zz, forecastCovEstimatorsWRTtrue(mod1,  
            estimation.methods=list(estVARXls=NULL,estVARXar=list(warn=FALSE)), 
            est.replications=2, pred.replications=2, rng=getRNG(zz)))
   if (is.R()) all.ok <- all.ok & ok 
@@ -254,14 +258,15 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
   if (verbose) cat("  dse3 graphics test 7 ...")
   zz <- forecastCovWRTtrue(list(mod1,mod2),mod1, rng=test.rng,
                pred.replications=2, 
-	       Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, 
+#	       Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, 
 	       trend=NULL, zero=TRUE, quiet=TRUE)
   tfplot(zz, select.cov=c(1))
   if (verbose) cat("ok\n")
 
   if (verbose) cat("  dse3 graphics test 8 ...")
   zz <- forecastCovEstimatorsWRTtrue(mod1, 
-         Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,  rng=test.rng,
+#         Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,  
+	 rng=test.rng,
          estimation.methods=list(estVARXls=NULL,estVARXls=list(max.lag=2)), 
 #        estimation.methods=list(estVARXls=NULL,estVARXar=NULL), 
          est.replications=2, pred.replications=2, quiet=TRUE)

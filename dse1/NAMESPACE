@@ -122,7 +122,7 @@ S3method("toSSnested", "ARMA")
 S3method("toSSnested", "TSestModel")
 
 export("gmap")
-export("findg")
+##export("findg")
 export("fixConstants")
 
 export("toSSinnov")

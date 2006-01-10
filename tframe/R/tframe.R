@@ -11,7 +11,8 @@ freeze <- function(data, ...) UseMethod("freeze")
  
 freeze.default <- function(data, ...){
 #  (... further arguments, currently disregarded)
- if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
+# if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
+ data} 
 
 #internal utility
 # Use this with "for (i in seq(length=m) )" as m==0 returns NULL and for does no loops
@@ -274,6 +275,9 @@ tframe.default <- function(x){ #extract the tframe
   attr(x, "tframe") <- tf
   if((!is.null(value)) && !checktframeConsistent(tframe(x), x))
      stop("time frame value in tframe assignment is not consistent with data.")
+  #classed(x, c("tframed", class(x)))
+  # For my code (dse) it does not seem to matter if this adds "tframed" first or
+  # last. The difference is whether it is the first resort or last before default. 
   classed(x, c(class(x), "tframed"))
 }
 
@@ -446,9 +450,11 @@ latestEndIndex.tframe <- function(x, ...)
 
 ###############################################
 
-"tframe<-.rts" <- function(x, value){rts(x) <- value; x}
-"tframe<-.cts" <- function(x, value) {cts(x) <- value; x}
-"tframe<-.its" <- function(x, value) {its(x) <- value; x}
+# These are for Splus rts cts and its 
+
+#"tframe<-.rts" <- function(x, value){rts(x) <- value; x}
+#"tframe<-.cts" <- function(x, value) {cts(x) <- value; x}
+#"tframe<-.its" <- function(x, value) {its(x) <- value; x}
 
 
 ###############################################

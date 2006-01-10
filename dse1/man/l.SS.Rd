@@ -95,7 +95,10 @@ Additional objects in the result are
        but the tracking error cannot be calculated.
 }
 
-\reference{B. D. O.Anderson & J. B.Moore \emph{Optimal Filtering} p.39,44.}
+\references{
+   Anderson, B. D. O. and Moore, J. B. (1979) \emph{Optimal Filtering}. 
+   Prentice-Hall. (note p.39,44.)
+}
 
 \seealso{
 \code{\link{SS}}

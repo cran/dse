@@ -57,16 +57,14 @@ sets). The file is in the dse1 package directory \emph{otherdata}. It
 file has five columns of numbers and 364 rows. The first column just
 enumerates the rows and is discarded.
 
-% this requires an indication of where the file is, previously DSE.HOME
-\begin{Scode}{eval=FALSE}
+\begin{Scode}
 fileName <- system.file("otherdata", "eg1.dat", package="dse1")
 eg1.DSE.data <- t(matrix(scan(fileName),5, 364))[, 2:5]
 \end{Scode}
 
-
 This matrix can be used to form a \emph{TSdata} object by
 
-\begin{Scode}{eval=FALSE}
+\begin{Scode}
 eg1.DSE.data <- TSdata(input= eg1.DSE.data[,1,drop = F],
                       output= eg1.DSE.data[, 2:4, drop = F])
 \end{Scode}
@@ -303,7 +301,7 @@ stability(ss.from.arma)
 
 The function \emph{roots()} is used by \emph{stability()} and can
 be used by itself to return the roots but not evaluate their 
-magnitude footnote{By default the roots of an ARMA model are calculated by converting
+magnitude \footnote{By default the roots of an ARMA model are calculated by converting
 the model to state space form, for reasons explained in Gilbert (2000).
 By specifying by.poly=T the method can be changed to use an expansion
 of the polynomial determinant.}. When their arguments are \emph{TSmodel}s 

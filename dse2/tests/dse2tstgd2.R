@@ -111,7 +111,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   # NB- non-stationary data. ar is not really valid
   model.eg1.ar <- estVARXar(trimNA(eg1.DSE.data), warn=FALSE) 
   model.eg1.ss <- estSSfromVARX(trimNA(eg1.DSE.data), warn=FALSE) 
-# model.eg1.mle <- est.max.like(trimNA(eg1.DSE.data),model.eg1.ar) # this may be slow
+# model.eg1.mle <- estMaxLik(trimNA(eg1.DSE.data),model.eg1.ar) # this may be slow
   check.value <- if (!is.R()) c(6738.642280883833, 6921.352391513382) else
                               c(6738.562190977154, 6921.352391513382)#ts ar
   #elseif(is.R()) check.value <- c(6735.139112062216, 6921.352391513382)bats ar

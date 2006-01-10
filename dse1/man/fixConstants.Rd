@@ -2,7 +2,8 @@
 \alias{fixConstants}
 \title{Fix TSmodel Coefficients (Parameters) to Constants}
 \description{
-    Fix any coefficients within fuzz of 0.0 or 1.0 to exactly 0.0 or 1.0.
+    Fix specified coefficients to constant values or any coefficients within 
+    fuzz of 0.0 or 1.0 to exactly 0.0 or 1.0.
     This will not change the model much but will affect some estimation 
     techniques and information criteria results, as these are considered to 
     be constants rather than coefficients.

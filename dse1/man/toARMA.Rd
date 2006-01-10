@@ -27,10 +27,11 @@ by the Cayley Hamilton theorem.  It is not very parsimonious.
 An object of class 'ARMA' 'TSmodel' containing an ARMA model.
 }
 \references{See, for example, 
-  M. Aoki(1990)\emph{State Space Modelling of Time Series}. 2d ed. rev. 
-  and enl., Springer-Verlag
+  Aoki, M. (1990) \emph{State Space Modelling of Time Series}. 2d ed. rev. 
+  and enl., Springer-Verlag.
   
-  Aoki and Havenner, Econometric Reviews v.10,No.1, 1991, p13.
+  Aoki, M. and Havenner, A. (1991) State Space Modeling of Multiple Time Series.
+  \emph{Econometric Reviews}, \bold{10}, 1--59.
   }
 \seealso{
 \code{\link{toSS}}

@@ -4,9 +4,9 @@
 \alias{tframe.ts}
 \alias{tframe<-}
 \alias{tframe<-.default}
-\alias{tframe<-.rts}
-\alias{tframe<-.cts}
-\alias{tframe<-.its}
+%%\alias{tframe<-.rts}
+%%\alias{tframe<-.cts}
+%%\alias{tframe<-.its}
 \alias{tframe<-.ts}
 \alias{tframed}
 \alias{tframed.default}
@@ -23,9 +23,9 @@
 
     tframe(x) <- value
     \method{tframe}{default}(x) <- value
-    \method{tframe}{rts}(x) <- value
-    \method{tframe}{cts}(x) <- value
-    \method{tframe}{its}(x) <- value
+%%    \method{tframe}{rts}(x) <- value
+%%    \method{tframe}{cts}(x) <- value
+%%    \method{tframe}{its}(x) <- value
     \method{tframe}{ts}(x) <- value
 
     tframed(x, tf=NULL, names = NULL)

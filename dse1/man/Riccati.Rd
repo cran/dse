@@ -17,14 +17,23 @@
     by eigenvalue decompostion of a symplectic matrix or by iteration.
 }
 \references{
-    R. J. Vaccaro and T.Vukina(1993),
-      "A Solution to the Positivity Problem in the State-Space Approach 
-      to Modeling Vector-Valued Time Series." 
-      \emph{Journal of Economic Dynamics and Control}, 17,
-    Anderson & Moore, (1979) sec 6.7,  
-    D. Vaughan (1970) \emph{IEEE Tr AC}.
-    A. Laub (1983), \emph{Proc IEEE conf Decision and Control}. 
-    Gudmundsson, Kenney and Laub (1992) \emph{IEEE Tr AC}.
+    Vaccaro, R. J. and Vukina, T. (1993),
+      A Solution to the Positivity Problem in the State-Space Approach 
+      to Modeling Vector-Valued Time Series. 
+      \emph{Journal of Economic Dynamics and Control}, \bold{17}, 401--421.
+
+    Anderson, B. D. O. and Moore, J. B. (1979) \emph{Optimal Filtering}. 
+    Prentice-Hall. (note sec 6.7.)  
+
+    Vaughan, D. (1970) A Nonrecursive Algebraic Solution for the Discrete
+    Riccati Equation. \emph{IEEE Tr AC}, 597--599.
+
+    Laub, A. J. (1983) Numerical Aspects of Solving Algebraic Riccati Equations
+      \emph{Proc IEEE conf Decision and Control}, 183--186. 
+
+    Gudmundsson T., Kenney, C., and Laub, A. J. (1992) Scaling of the
+    Discrete-Time Algebraic Riccati Equation to Enhance Stability of the Schur
+    Solution Method  \emph{IEEE Tr AC}, \bold{37}, 513--518.
 }
 \seealso{
     \code{\link{eigen}}

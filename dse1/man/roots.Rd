@@ -52,10 +52,10 @@ determinant of the AR polynomial are returned.
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
     the equivalence. Working paper 93-4, Bank of Canada. Available at
-    <www.bank-banque-canada.ca/pgilbert>
+    \url{www.bank-banque-canada.ca/pgilbert}
 
-    Gilbert, P.D.(2000) A note on the computation of time series model roots, 
-    Applied Economics Letters 7, p423-424
+    Gilbert, P.D. (2000) A note on the computation of time series model roots. 
+    \emph{Applied Economics Letters}, \bold{7}, 423--424
     }
  \concept{DSE}
 \keyword{ts}

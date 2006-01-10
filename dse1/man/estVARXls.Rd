@@ -34,7 +34,11 @@
 \value{A TSestModel object containing a TSmodel object which is a VAR model.}
 \details{
 A VAR model is fitted by least squares regression using lsfit. The
-argument max.lag determines the number of lags. If a trend is not
+argument max.lag determines the number of lags. If it is not specified then
+six lags are used. This is an exceedingly naive approach, so the max.lag
+argument really should be specified (or see \code{bft} for a more complete
+approach to model selection.)
+If a trend is not
 estimated the function estVARXar may be preferred. Missing data is
 allowed in lsfit, but not (yet) by ARMA which generates the model
 predictions, etc., based on the estimated model and the data. (This is
@@ -47,11 +51,11 @@ respect to initial conditions.
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
     the equivalence. Working paper 93-4, Bank of Canada. Available at
-    <www.bank-banque-canada.ca/pgilbert>
+    \url{www.bank-banque-canada.ca/pgilbert}
 
-    Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" J. of Forecasting: 
-    Special Issue on VAR Modelling. 14:229-250.
+    Gilbert, P. D. (1995) Combining VAR Estimation and State Space 
+    Model Reduction for Simple Good Predictions. \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling.} \bold{14}:229--250.
 }
 \seealso{
     \code{\link{estSSfromVARX}}

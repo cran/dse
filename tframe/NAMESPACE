@@ -67,9 +67,9 @@ S3method("tframe","ts")
 
 export("tframe<-")
 S3method("tframe<-","default")
-S3method("tframe<-","rts")
-S3method("tframe<-","cts")
-S3method("tframe<-","its")
+##S3method("tframe<-","rts")
+##S3method("tframe<-","cts")
+##S3method("tframe<-","its")
 S3method("tframe<-","ts")
 
 export("tframed")

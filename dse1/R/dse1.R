@@ -822,15 +822,15 @@ toSSnested.SS <- function(model, n=NULL, Aoki=FALSE, ...){
   #  (... further arguments, currently disregarded)
   # convert to a nested-balanced state space model by svd  a la Mittnik (or Aoki)
   if (is.null(n)) n <-ncol(model$F)  
-  if (Aoki) return(Aoki.balance(model, n=n))
+  if (Aoki) stop("Aoki balancing no longer supported.") #return(Aoki.balance(model, n=n))
   else      return(balanceMittnik(model, n=n)) 
   }
 
 toSSnested.ARMA <- function(model, n=NULL, Aoki=FALSE, ...){
   #  (... further arguments, currently disregarded)
   # convert to a nested-balanced state space model by svd  a la Mittnik (or Aoki)
-  if (is.null(n)) n <- McMillanDegree.calculation(model)$distinct
-  if (Aoki) return(Aoki.balance(model, n=n))
+  if (is.null(n)) n <- McMillanDegree(model)$distinct
+  if (Aoki) stop("Aoki balancing no longer supported.") #return(Aoki.balance(model, n=n))
   else      return(balanceMittnik(model, n=n)) 
   }
 
@@ -943,36 +943,36 @@ gmap <- function(g, model)
 }
 
 
-findg <- function(model1,model2, minf=nlmin){ 
-  if (is.TSestModel(model1)[1]) model1 <- TSmodel(model1)
-  if   (!is.TSmodel(model1)) stop("findg expecting a TSmodel.")
-  if (is.TSestModel(model2)[1]) model2 <- TSmodel(model2)
-  if  (!is.TSmodel(model2 )) stop("findg expecting a TSmodel.")
-
-  if ( !is.SS(model1)| !is.SS(model2)) 
-      stop("findg only works for state space models")
-   n <- dim(model1$F)[1]
-   if ((n!= dim(model2$F)[1])
-     |(dim(model1$G)[2] != dim(model2$G)[2])
-     |(dim(model1$H)[1] != dim(model2$H)[1]))
-      stop("models must have the same dimensions for findg.")
-   para<- c(diag(1,n))
-   zzz.model1 <<- model1         # This could be done with assign(frame=1  ??)
-   zzz.model2 <<- model2
-   zzz.n <<-n
-   func <- function(para){
-      gmodel1<- gmap(matrix(para,zzz.n,zzz.n),zzz.model1)
-      error <-         gmodel1$F-zzz.model2$F
-      error <-c(error,(gmodel1$G-zzz.model2$G))
-      error <-c(error,(gmodel1$H-zzz.model2$H))
-      error <-c(error,(gmodel1$K-zzz.model2$K))
-      error <-c(error,(gmodel1$R-zzz.model2$R))
-      sum(error^2)
-   }
-   para <-minf(func,para)
-   rm(zzz.model1,zzz.model2,zzz.n)
-   matrix(para[[1]],n,n)
-   }
+#findg <- function(model1,model2, minf=nlmin){ 
+#  if (is.TSestModel(model1)[1]) model1 <- TSmodel(model1)
+#  if   (!is.TSmodel(model1)) stop("findg expecting a TSmodel.")
+#  if (is.TSestModel(model2)[1]) model2 <- TSmodel(model2)
+#  if  (!is.TSmodel(model2 )) stop("findg expecting a TSmodel.")
+#
+#  if ( !is.SS(model1)| !is.SS(model2)) 
+#      stop("findg only works for state space models")
+#   n <- dim(model1$F)[1]
+#   if ((n!= dim(model2$F)[1])
+#     |(dim(model1$G)[2] != dim(model2$G)[2])
+#     |(dim(model1$H)[1] != dim(model2$H)[1]))
+#      stop("models must have the same dimensions for findg.")
+#   para<- c(diag(1,n))
+#   zzz.model1 <<- model1	  # This could be done with assign(frame=1  ??)
+#   zzz.model2 <<- model2
+#   zzz.n <<-n
+#   func <- function(para){
+#      gmodel1<- gmap(matrix(para,zzz.n,zzz.n),zzz.model1)
+#      error <- 	gmodel1$F-zzz.model2$F
+#      error <-c(error,(gmodel1$G-zzz.model2$G))
+#      error <-c(error,(gmodel1$H-zzz.model2$H))
+#      error <-c(error,(gmodel1$K-zzz.model2$K))
+#      error <-c(error,(gmodel1$R-zzz.model2$R))
+#      sum(error^2)
+#   }
+#   para <-minf(func,para)
+#   rm(zzz.model1,zzz.model2,zzz.n)
+#   matrix(para[[1]],n,n)
+#   }
 
 
 fixConstants <- function(model, fuzz=1e-5, constants=NULL){ 
@@ -2012,14 +2012,14 @@ printTestValue <- function (x, digits = 16){
 simulate <- function(model, ...)UseMethod("simulate")
 
 simulate.TSestModel <- function(model, input=inputData(model),
-			sd=NULL, SIGMA=NULL, ...)
-  {if (is.null(sd) & is.null(SIGMA)) SIGMA <- model$estimates$cov
-   simulate(TSmodel(model), input=input, sd=sd, SIGMA=SIGMA, ...)
+			sd=NULL, Cov=NULL, ...)
+  {if (is.null(sd) & is.null(Cov)) Cov <- model$estimates$cov
+   simulate(TSmodel(model), input=input, sd=sd, Cov=Cov, ...)
   }
 
 simulate.SS <- function(model, input=NULL,
                  start=NULL, freq=NULL, sampleT=100, 
-                 noise=NULL, sd=1, SIGMA=NULL, rng=NULL, 
+                 noise=NULL, sd=1, Cov=NULL, rng=NULL, 
                  compiled=.DSEflags()$COMPILED, ...)
 {#  (... further arguments, currently disregarded)
 if (is.TSestModel(model)) model <- TSmodel(model)
@@ -2076,9 +2076,9 @@ else set.ts <-  FALSE
     else 
       {w <- matrix(NA,sampleT,p)
        w0 <- rep(NA,p)
-       if (!is.null(SIGMA))
-         {if(length(SIGMA) == 1) SIGMA <- diag(SIGMA, p)
-	  W <- t(chol(SIGMA))
+       if (!is.null(Cov))
+         {if(length(Cov) == 1) Cov <- diag(Cov, p)
+	  W <- t(chol(Cov))
 	  w.help <- t(W %*% matrix(rnorm((sampleT+1)*p),nrow=p,ncol=sampleT+1))
 	  w0 <- w.help[1,]
 	  w <- w.help[-1,]
@@ -2187,12 +2187,12 @@ else set.ts <-  FALSE
  else  seriesNames(y) <- seriesNamesOutput(model)
  TSdata(list(input=input,output=y, state=state, version=version, 
    model=model, description="data generated by simulate.ss",
-   noise=list(w0=w0,w=w, e=e, rng=rng, SIGMA=SIGMA, sd=sd)))
+   noise=list(w0=w0,w=w, e=e, rng=rng, Cov=Cov, sd=sd)))
 }
 
 simulate.ARMA <- function(model, y0=NULL, input=NULL, input0=NULL,
                 start=NULL, freq=NULL, sampleT=100,
-                noise=NULL, sd=1, SIGMA=NULL,
+                noise=NULL, sd=1, Cov=NULL,
                 rng=NULL, noise.model=NULL, 
                 compiled=.DSEflags()$COMPILED, ...)
 {# see details in help("ARMA") and help("simulate.ARMA")
@@ -2244,7 +2244,8 @@ if (!is.null(noise)) {
    }
 
 noise <- makeTSnoise(sampleT,p,b, noise=noise, rng=rng,
-                        SIGMA=SIGMA, sd=sd, noise.model=noise.model,
+                        Cov=Cov, sd=sd, 
+			noise.model=noise.model,
                         start=start, frequency=freq)
 if (is.null(sampleT)) sampleT<-noise$sampleT
  
@@ -2779,7 +2780,7 @@ r <- append(residualStats(r$pred, outputData(data), sampleT, warn=warn),
         list(error.weights=error.weights, weighted.sqerror=r$weighted.sqerror))
 
 if (return.debug.info) 
-   r$debug.info <- list(m=m, p=p, a=a,b=b,c=c, G=G,FF=FF,K=K,P=P, H=H, u=u,y=y,
+   r$debug.info <- list(m=m, p=p, c=c, G=G,FF=FF,K=K,P=P, H=H, u=u,y=y,
         pred=pred, wt.err=wt.err, error.weights=error.weights, sampleT=sampleT)
 
 if ( is.null(result)) return( 
@@ -2797,7 +2798,9 @@ smoother <- function(model, data, compiled=.DSEflags()$COMPILED) UseMethod("smoo
 
 smoother.TSestModel <- function(model, data=TSdata(model),
                                 compiled=.DSEflags()$COMPILED){
-    smoother(TSmodel(model), data=data, compiled=compiled)
+    r <- smoother(TSmodel(model), data=data, compiled=compiled)
+    r$estimates <- model$estimates # otherwise convergence info is lost
+    r
     }
     
 smoother.TSmodel <- function(model, data, compiled=.DSEflags()$COMPILED){
@@ -2955,6 +2958,7 @@ estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
    names <- seriesNames(data)
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
+   if (0 == p) stop("estVARXls requires output data to estimate a model.")
    missing.data <- any(is.na(outputData(data)))
    if (0 != m) { # ensure same time window
 	inputData(data) <- tfwindow(inputData(data),
@@ -3048,7 +3052,7 @@ estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
    else return(l(model, data, warn=warn))
 }
 
-fake.TSestModel.missing.data <- function(model,data, residual, max.lag)
+fake.TSestModel.missing.data <- function(model,data, residual, max.lag, warn=TRUE)
   {pred <- rbind(matrix(NA,max.lag,nseriesOutput(data)),residual) + 
                                                            outputData(data)
    r <- list(estimates = residualStats(pred, outputData(data), warn=warn),
@@ -3086,6 +3090,7 @@ estVARXar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
    data <- freeze(data)
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
+   if (0 == p) stop("estVARXar requires output data to estimate a model.")
    N <- periodsOutput(data)
    if (standardize)
      {svd.cov <- La.svd(var(outputData(data)))
@@ -3230,29 +3235,29 @@ estMaxLik.TSmodel <- function(obj1, obj2,
     convergenceCode <- results$code
     description <- paste("Estimated with max.like/nlm")
    }
- else if (algorithm=="nlmin")
-   {warning("This has not been tested recently (and there have been changes which may affect it.")
-     results <-nlmin(func.like, coef(Shape), max.iter=algorithm.args$max.iter, 
-     	max.fcal=5*algorithm.args$max.iter, ckfc=0.01)
-     parms <- results$parms
-     converged <- results$converged
-     convergenceCode <- results$converged
-     # emodel$est$converged should be improved with conv.type info
-     description <- paste("Estimated with max.like/nlmin")
-   }
- else if (algorithm=="dfpMin")
-    {stop("This optimization method is no longer supported.")
-     results <- dfpMin(func.like, coef(Shape), 
-	dfunc=algorithm.args$dfunc, 
-	max.iter=algorithm.args$max.iter, 
-	ftol=algorithm.args$ftol, gtol=algorithm.args$gtol, 
-	line.search=algorithm.args$line.search) 
-     parms <- results$parms
-     converged <- results$converged
-     convergenceCode <- results$converged
-     description <- paste("Estimated with max.like/dfpMin")
-    }
   else stop(paste("Minimization method ", algorithm, " not supported."))
+# else if (algorithm=="nlmin")
+#   {warning("This has not been tested recently (and there have been changes which may affect it.")
+#     results <-nlmin(func.like, coef(Shape), max.iter=algorithm.args$max.iter, 
+#     	max.fcal=5*algorithm.args$max.iter, ckfc=0.01)
+#     parms <- results$parms
+#     converged <- results$converged
+#     convergenceCode <- results$converged
+#     # emodel$est$converged should be improved with conv.type info
+#     description <- paste("Estimated with max.like/nlmin")
+#   }
+# else if (algorithm=="dfpMin")
+#    {stop("This optimization method is no longer supported.")
+#     results <- dfpMin(func.like, coef(Shape), 
+#	dfunc=algorithm.args$dfunc, 
+#	max.iter=algorithm.args$max.iter, 
+#	ftol=algorithm.args$ftol, gtol=algorithm.args$gtol, 
+#	line.search=algorithm.args$line.search) 
+#     parms <- results$parms
+#     converged <- results$converged
+#     convergenceCode <- results$converged
+#     description <- paste("Estimated with max.like/dfpMin")
+#    }
  emodel <- l(setTSmodelParameters(setArrays(Shape, coefficients=parms)),data)
  emodel$estimates$algorithm <- algorithm
  emodel$estimates$results   <- results
@@ -3319,6 +3324,7 @@ estSSMittnik <- function(data, max.lag=6, n=NULL,
   m <- ncol(inputData(data))
   if(is.null(m))  m <- 0
   p <- ncol(outputData(data))
+  if (0 == p) stop("estSSMittnik requires output data to estimate a model.")
   N <- nrow(outputData(data))
   if (subtract.means)
     {if(m!=0)inputData(data)<-inputData(data)-t(matrix(colMeans(inputData(data)), m,N))
@@ -3367,8 +3373,8 @@ MittnikReduction <- function(model, data=NULL, criterion=NULL,
 }
 
 MittnikReduction.from.Hankel <- function(M, data=NULL, nMax=NULL, 
-   criterion=NULL, verbose=TRUE, warn=TRUE, 
-   Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+   criterion=NULL, verbose=TRUE, warn=TRUE) 
+#   Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 { # See the documentation for MittnikReduction.
 
    data <- freeze(data)
@@ -3378,9 +3384,8 @@ MittnikReduction.from.Hankel <- function(M, data=NULL, nMax=NULL,
    largeModel <- z$model
    svd.crit    <-z$crit
    n <- dim(largeModel$F)[1]
-   if (!Spawn)
-     {# The more complicated For loop used below is to avoid S memory problems
-      #  with the more straight forward version:
+#   if (!Spawn)
+#     {
       values <- NULL 
       for (i in 1:n) 
         {if(m!=0) z <-largeModel$G[1:i,,drop=FALSE]
@@ -3391,31 +3396,32 @@ MittnikReduction.from.Hankel <- function(M, data=NULL, nMax=NULL,
          values <-rbind(values, z)
          if (verbose) cat(".")
         }
-      }
-   else 
-     {if (verbose) cat("Spawning processes to calculate criteria test for state dimension 1 to ",n)
-      forloop <- function(largeModel, data, warn=TRUE)
-           {if(!is.null(largeModel$G)) z <-largeModel$G[1:forloop.i,,drop=FALSE]
-            else                       z <-NULL
-            z <-SS(F=largeModel$F[1:forloop.i,1:forloop.i,drop=FALSE],G=z,
-                     H=largeModel$H[  , 1:forloop.i, drop=FALSE],
-                     K=largeModel$K[1:forloop.i,,drop=FALSE])
-            informationTestsCalculations(l(z,data, warn=warn))
-           }
-       assign("balance.forloop", forloop, where=1)
-       assign("forloop.n", n,   where=1 )
-       assign("forloop.values", matrix(NA,n,12),   where=1 )
-       assign("forloop.largeModel", largeModel, where=1)
-       assign("forloop.data", data,   where=1 )
-       assign("forloop.warn", warn,   where=1 )
-       on.exit(remove(c("balance.forloop", "forloop.i", "forloop.n", 
-          "forloop.values", "forloop.largeModel", 
-          "forloop.data", "forloop.warn"),where=1))
-       For (forloop.i=1:forloop.n,
-         forloop.values[forloop.i,]<-balance.forloop(forloop.largeModel, 
-         forloop.data, forloop.warn), sync=TRUE)
-       values <-forloop.values
-      }
+ #     }
+#   else 
+#     {#  loop used below is to avoid S memory problems
+#      if (verbose) cat("Spawning processes to calculate criteria test for state dimension 1 to ",n)
+#      forloop <- function(largeModel, data, warn=TRUE)
+#           {if(!is.null(largeModel$G)) z <-largeModel$G[1:forloop.i,,drop=FALSE]
+#            else                       z <-NULL
+#            z <-SS(F=largeModel$F[1:forloop.i,1:forloop.i,drop=FALSE],G=z,
+#                     H=largeModel$H[  , 1:forloop.i, drop=FALSE],
+#                     K=largeModel$K[1:forloop.i,,drop=FALSE])
+#            informationTestsCalculations(l(z,data, warn=warn))
+#           }
+#	assign("balance.forloop", forloop, where=1)
+#	assign("forloop.n", n,   where=1 )
+#	assign("forloop.values", matrix(NA,n,12),   where=1 )
+#	assign("forloop.largeModel", largeModel, where=1)
+#	assign("forloop.data", data,   where=1 )
+#	assign("forloop.warn", warn,   where=1 )
+#	on.exit(remove(c("balance.forloop", "forloop.i", "forloop.n", 
+#	   "forloop.values", "forloop.largeModel", 
+#	   "forloop.data", "forloop.warn"),where=1))
+#	For (forloop.i=1:forloop.n,
+#	  forloop.values[forloop.i,]<-balance.forloop(forloop.largeModel, 
+#         forloop.data, forloop.warn), sync=TRUE)
+#       values <-forloop.values
+#      }
     dimnames(values) <- list(NULL,c("port","like","aic","bic", 
           "gvc","rice","fpe","taic","tbic","tgvc","trice","tfpe")) 
     if (verbose) cat("\n")
@@ -4344,6 +4350,7 @@ print.TSdata <- function(x, ...)
       dimnames(x) <- list(tm, nm) 
       attr(x,"tframe") <- NULL
       attr(x,"seriesNames") <- NULL
+      class(x) <- if (all(class(x) == "tframed")) NULL else class(x)[class(x) != "tframed"]
       print(x,...)
       invisible(x)
      }
@@ -4699,7 +4706,7 @@ tframed.TSdata <- function(x, tf=NULL, names=NULL)
 ############################################################
 
 makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
-                        SIGMA=NULL, sd=1, noise.model=NULL,
+                        Cov=NULL, sd=1, noise.model=NULL,
                         noise.baseline=0,
                         tf=NULL, start=NULL,frequency=NULL)
  {# CAUTION: changes here can affect historical comparisons.
@@ -4730,9 +4737,9 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
   if (is.null(noise)) {
     w0 <-matrix(NA,lags,p)
     w <- matrix(NA,sampleT,p)
-    if (!is.null(SIGMA)) {
-        if(length(SIGMA) == 1) SIGMA <- diag(SIGMA, p)
-	W <- t(chol(SIGMA))
+    if (!is.null(Cov)) {
+        if(length(Cov) == 1) Cov <- diag(Cov, p)
+	W <- t(chol(Cov))
         w <- t(W %*% t(matrix(rnorm((lags+sampleT)*p),(lags+sampleT),p)))
 #  above has unfortunate effect that w0 was not from the first p values below
 #   would be better, but changes a lot? of tests
@@ -4780,5 +4787,5 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
            }
       }
   append(noise, list(sampleT=sampleT, rng=rng,
-     SIGMA=SIGMA, sd=sd, noise.model=noise.model,version=as.vector(version)))
+     Cov=Cov, sd=sd, noise.model=noise.model,version=as.vector(version)))
  }
