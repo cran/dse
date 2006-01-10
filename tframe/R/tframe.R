@@ -1,7 +1,5 @@
 
 classed <- function(x, cls) {class(x) <- cls; x}
-# structure would work to replace classed (but adds some overhead).
-#classed <- function(x, cls) structure(x, class=cls)
 
 ###########################################################################
 
@@ -159,8 +157,7 @@ tfplot.default <- function(x, ..., tf=tfspan(x , ...), start=tfstart(tf), end=tf
 	tfOnePlot(z, tf=tf, start=start, end=end,
 	          lty=lty, lwd=lwd, pch=pch, col=col, cex=cex,
 		  xlab=xlab, ylab=ylab[i], xlim=xlim[[i]], ylim=ylim[[i]])
-        if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
-                || options()$PlotTitles)) title(main = Title)
+        if(!is.null(Title) && (i==1)) title(main = Title)
 	}
     }
   invisible()
@@ -522,13 +519,6 @@ testEqual.list <- function(obj1, obj2, fuzz=1e-16)
 
 
 
-###############################################
-
-# Time dimension methods for data manipulation
-
-###############################################
-
-
 
 splice <- function(mat1, mat2, ...) UseMethod("splice")
 
@@ -625,71 +615,12 @@ trimNA.default <- function(x, startNAs= TRUE, endNAs= TRUE)
 }
 
 
-
-diffLog <- function(obj, lag = 1, base = exp(1),
-              names=paste("diff of log of ", seriesNames(obj))) 
-   UseMethod("diffLog")
- 
-diffLog.default <- function(obj, lag = 1, base = exp(1),
-              names=paste("diff of log of ", seriesNames(obj)))
-{#Calculate the difference from lag periods prior for log of data.
- obj <- diff(log(obj, base = base), lag = lag)
- if(is.null(options()$ModSeriesNames) || options()$ModSeriesNames)
-        seriesNames(obj) <- names
- obj
-}
-
-
-ytoypc <- function(obj, names=paste("y to y %ch", seriesNames(obj))) 
-   UseMethod("ytoypc")
- 
-ytoypc.default <- function (obj, names=paste("y to y %ch", seriesNames(obj)) ){
-   obj <- percentChange(obj, lag = tffrequency(obj))
-   if(is.null(options()$ModSeriesNames) || options()$ModSeriesNames)
-        seriesNames(obj) <- names
-   obj
-}
-
-
-aggregate.tframed <- function (x, ...)
-   {tf <- tframe(x)
-    nm <- seriesNames(x)
-    # this is assuming tf is actual a ts tframe
-    r <- aggregate(ts(unclass(x), start=tf[1], end=tf[2], frequency=tf[3]), ...)
-    tframed(r, tf=tframe(r), names=nm)
-   }
-
-percentChange <- function(obj, ...) UseMethod("percentChange")
-
-percentChange.default <- function(obj, base=NULL, lag=1, 
-      cumulate=FALSE, e=FALSE, ...)
-{#  (... further arguments, currently disregarded)
-   cls <- class(obj)
-   # note next has to be applied to a shorter object in the end
-   if (is.tframed(obj)) tf <- list(end=tfend(obj), frequency=tffrequency(obj))
-   else tf <- NULL
-   if (is.null(dim(obj)))
-     {vec <- TRUE
-      obj <- matrix(obj, length(obj),1)
-     }
-   else vec <- FALSE
-   mm <- rbind(base,obj)
-   if (any(cumulate))
-          mm[,cumulate] <-apply(mm[,cumulate,drop=FALSE],2,cumsum)
-   if (any(e)) mm[,e] <- exp(mm[,e,drop=FALSE])
-   N <- dim(mm)[1]
-   pchange <-100*(mm[(lag+1):N,,drop=FALSE] - 
-                    mm[1:(N-lag),,drop=FALSE])/mm[1:(N-lag),,drop=FALSE]
-   if (vec) pchange <- pchange[,1]
-   class(pchange) <- cls
-   if (!is.null(tf)) tframed(pchange, tf) else pchange
-}
-
 ###############################################
 
 # Non-time dimension methods
 
 ###############################################
+
 
 
 nseries <- function(x) UseMethod("nseries") 

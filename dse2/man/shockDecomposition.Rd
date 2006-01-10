@@ -12,14 +12,14 @@
     \item{shock}{data to be used model output. See details.}
 }
 \value{None}
-\section{Side Effects}{
+\sideffects{
 Graphs of the effect of shocks are plotted. 
 }
 \details{All output data is set to zero and then each output in turn is switched to 
 a value of shock (default 1.0) for all periods. 
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 shockDecomposition(model)
 }

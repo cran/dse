@@ -55,7 +55,7 @@ This function makes multiple calls to forecastCovWRTtrue.
 \code{\link{forecastCovEstimatorsWRTdata}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 true.model <- estVARXls(eg1.DSE.data.diff) # just to have a starting model
 z <-  forecastCovEstimatorsWRTtrue(true.model, 
     estimation.methods=list(estVARXls=list(max.lag=4)))

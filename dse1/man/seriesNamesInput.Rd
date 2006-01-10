@@ -46,7 +46,7 @@ The second usages assigns a vector of strings to be the series names of data.
     \code{\link[tframe]{seriesNames}}
 }
 \examples{
-data("eg1.DSE.data", package="dse1")
+if(is.R()) data("eg1.DSE.data", package="dse1")
 seriesNamesOutput(eg1.DSE.data) 
 }
 \concept{DSE}

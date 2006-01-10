@@ -14,7 +14,7 @@ Calculate and plot roots of a model.
     \item{pch}{Character to use for plotting.}
     \item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
 }
-\section{Side Effects}{
+\sideffects{
 The roots are addeded to an existing plot.
 }
 \value{
@@ -25,7 +25,7 @@ determinant of the AR polynomial are returned invisibly.
     \code{\link{plot.roots}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 plot(roots(model))
 addPlotRoots(toSS(model))

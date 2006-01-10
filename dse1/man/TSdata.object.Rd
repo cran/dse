@@ -22,7 +22,7 @@ Other data classes inherit from the class \code{TSdata}.}
 
 \section{Structure}{
 Objects are a list with class the most general class "TSdata". The
-native form for this package has elements \code{input} and
+native form for this library has elements \code{input} and
 \code{output}. Any other elements are ignored. \code{input} and
 \code{output} are matrices (or tframe or time series matrices) of the
 input and output data, with each series in a column.  \code{TSPADIdata}

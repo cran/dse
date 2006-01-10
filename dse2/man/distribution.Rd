@@ -8,14 +8,14 @@
 \description{Plot distribution of estimates.}
 \usage{
     distribution(obj, ...)
-     \method{distribution}{TSdata}(obj, ..., bandwidth=0.2, 
+     \method{distribution}{TSdata}(obj, bandwidth=0.2, 
              select.inputs = seq(length= nseriesInput(obj)),
-             select.outputs= seq(length=nseriesOutput(obj)))
-     \method{distribution}{default}(obj, ..., bandwidth=0.2, series=NULL)
-     \method{distribution}{coefEstEval}(obj, ...,  Sort=FALSE, bandwidth=0.2,
-	graphs.per.page=5)
-     \method{distribution}{rootsEstEval}(obj, ..., mod=TRUE, invert=FALSE, Sort=FALSE,
-        bandwidth=0.2, select=NULL)
+             select.outputs= seq(length=nseriesOutput(obj)), ...)
+     \method{distribution}{default}(obj, bandwidth=0.2, series=NULL, ...)
+     \method{distribution}{coefEstEval}(obj,  Sort=FALSE, bandwidth=0.2,
+	graphs.per.page=5, ...)
+     \method{distribution}{rootsEstEval}(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
+        bandwidth=0.2, select=NULL, ...)
 }
 \arguments{
     \item{obj}{an object as returned by EstEval.} 
@@ -28,7 +28,7 @@
     \item{series}{series to be plotted. (passed to selectSeries)}
     \item{select.inputs}{series to be plotted. (passed to selectSeries)}
     \item{select.outputs}{series to be plotted. (passed to selectSeries)}
-    \item{...}{other objects to be plotted (not working for some methods).}
+    \item{...}{arguments passed to other methods.}
     \item{invert}{logical indicating if the inverse of roots should be plotted}
     \item{mod}{logical indicating if the modulus of roots should be plotted}
     \item{select}{integer vector indicating roots to be plotted. If select 
@@ -46,7 +46,7 @@ available then \code{density} is applied if it is available.
 \code{\link{EstEval}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(TSdata(output=outputData(eg1.DSE.data.diff)), max.lag=2)
 # now use this as the true model
 z <-  EstEval(model, 

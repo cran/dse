@@ -54,7 +54,7 @@ in which case corresponding elements are applied to the different series.
 \code{\link{excludeForecastCov}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- stripMine(eg1.DSE.data.diff, essential.data=c(1,2),
                    estimation.methods=list(estVARXls=list(max.lag=3)))
 z <-  selectForecastCov(z)

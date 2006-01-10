@@ -58,7 +58,7 @@ in simulation.args
 \code{\link{MonteCarloSimulations}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 true.model <- estVARXls(eg1.DSE.data.diff) # A starting model TSestModel
 data <- simulate(true.model)
 models <- list(TSmodel(estVARXar(data)),TSmodel(estVARXls(data)))

@@ -201,8 +201,8 @@ A linear time-invariant state space representation in innovations
 form is given by
 
 \begin{eqnarray}
-  z_{t} = & Fz_{t-1}  + Gu_{t}  + Ke_{t-1} \nonumber\\
-  y_{t} = & Hz_{t}    + e_{t}   \nonumber
+  z_{t}=Fz_{t-1}+Gu_{t}+Ke_{t-1} \\
+  y_{t}=Hz_{t}+e_{t} \nonumber
 \end{eqnarray}
 
 where \emph{$z_{t}$} is the unobserved underlying n dimensional state vector,
@@ -211,8 +211,8 @@ matrix, and K, the Kalman gain. DSE also has some limited
 capabilities to work with the more general non-innovations form
 
 \begin{eqnarray}
-  z_{t} = & Fz_{t-1}  + Gu_{t}  + Qn_{t} \nonumber\\
-  y_{t} = & Hz_{t}    + Re_{t}  \nonumber
+  z_{t}=Fz_{t-1}+Gu_{t}+Qn_{t} \\
+  y_{t}=Hz_{t}+Re_{t} \nonumber
 \end{eqnarray}
 
 where \emph{$n_{t}$} is the system noise, Q, the system noise matrix, and R the

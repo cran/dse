@@ -1,5 +1,4 @@
-importFrom("stats","coef")
-
+##import("stats")
 ##import("setRNG")
 import("tframe")
 import("dse1")

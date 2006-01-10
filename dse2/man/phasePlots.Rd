@@ -11,7 +11,7 @@
     \item{diff}{If TRUE the data is plotted against the difference with lagged values.}
 }
 \value{None}
-\section{Side Effects}{
+\sideffects{
 A plot of (the phase space) the data against (differenced) lagged values is produced.
 }
 \details{
@@ -21,7 +21,7 @@ Some sort of cross-section window would show this but require even more plots.
 A good statistical test would be better!
 }
 \examples{
-data("egJofF.1dec93.data", package="dse1")
+if(is.R()) data("egJofF.1dec93.data", package="dse1")
 phasePlots(egJofF.1dec93.data)
 }
 \concept{DSE}

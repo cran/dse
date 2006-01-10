@@ -30,7 +30,7 @@ Output graphics can be paused between pages by setting par(ask=TRUE).
 \code{\link{tfplot.MonteCarloSimulations}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model)
 distribution(z)

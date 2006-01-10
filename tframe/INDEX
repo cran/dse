@@ -6,15 +6,13 @@ A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
 See also related packages in the bundle dseplus in the devel packages 
 area of CRAN.
-00.tframe.Intro         Tframe - Generic Approach to Handling Time
+00Intro.tframe          Tframe
 addDate                 Add Periods to a Date
 checktframeConsistent   Check for a Consistent tframe
-diffLog                 Calculate the difference of log data
 earliestEnd             Start and End for Objects with Multiple Time
                         Series
 freeze                  Get fixed data snapshot
 nseries                 Number of Series
-percentChange           Calculate percent change
 selectSeries            Extract a Subset of Series
 seriesNames             Names of Series in a time series object
 splice                  Splice Time Series
@@ -29,4 +27,3 @@ tfspan                  Time Span
 tfstart                 Extract Time Frame Information
 tfwindow                Truncate a Time Series
 trimNA                  Trim NAs from Time Series
-ytoypc                  Convert to year to year percent change

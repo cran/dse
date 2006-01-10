@@ -59,12 +59,11 @@ be treated as a parameter, and this is the easiest way to initialize an
 element which is not to be treated as a constant of value 1.0. Any array
 elements can be fixed to constants by specifying the list \code{constants}.
 Arrays which are not specified in the list will be treated in the default 
-way. An alternative for fixing constants is the function \code{fixConstants}}
+way. An alternative for fixing constants is the function code{fixConstants}}
 
 \seealso{
-    \code{\link{TSmodel}},
-    \code{\link{simulate.ARMA}},
-    \code{\link{fixConstants}}
+    \code{\link{TSmodel}}
+    \code{\link{simulate.ARMA}}
 }
 \examples{
     mod1 <- ARMA(A=array(c(1,-.25,-.05), c(3,1,1)), B=array(1,c(1,1,1)))

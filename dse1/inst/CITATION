@@ -1,30 +1,14 @@
 citHeader("To cite package 'dse' in publications please use one or more of:")
 
-citFooter("For BibTex versions of citations use: toBibtex(citation('dse1'))")
+citFooter("For BibTex versions of citations use: toBibtex(citation('CDNmoney'))")
 
-citEntry(entry="article",
-  author =    "Gilbert, P.D.",
-  year =      2000,
-  title =     "A note on the computation of time series model roots", 
-  journal =   "Applied Economics Letters",
-  volume =    7,
-  pages =     "423-424",
-  textVersion =  paste("Gilbert, P. D. (2000) ", 
-          "A note on the computation of time series model roots ",
-          "Applied Economics Letters: 7, 423-424. ", sep="")
-  )
-
-citEntry(entry="article",
-  author =    "Gilbert, P.D.",
-  year =      1995,
-  title =     "Combining VAR Estimation and State Space Model Reduction for 
-                Simple Good Predictions", 
-  journal =   "J. of Forecasting: Special Issue on VAR Modelling",
-  volume =    14,
-  pages =     "229-250",
-  textVersion =  paste("Gilbert, P. D. (1995) ", 
-       "Combining VAR Estimation and State Space Model Reduction for Simple Good Predictions ",
-       "J. of Forecasting: Special Issue on VAR Modelling: 14, 229-250.", sep="")
+citEntry(entry="manual",
+  title        = "Brief User's Guide: Dynamic Systems Estimation Library",
+  author       = "Gilbert, P. D.",
+  organization = "Bank of Canada",
+  address      = "Ottawa, Canada",
+  year         = 2004,
+  url          = "http:www.bank-banque-canada.ca/pgilbert/"
   )
 
 citEntry(entry="techreport",
@@ -34,20 +18,25 @@ citEntry(entry="techreport",
   address =     "Ottawa, Canada",
   type =        "Working Paper",
   number =      "93-4",
-  url =    "http:www.bank-banque-canada.ca/pgilbert/",
-  year =         1993,
-  textVersion =   paste("Gilbert, P. D. (1993) ", 
-       "State Space and ARMA Models: An Overview of the Equivalence ",
-          "Bank of Canada Working Paper 93-4. Ottawa, Canada",
-               "<http://www.bank-banque-canada.ca/pgilbert/>", sep="")
+  note =    "Also available at www.bank-banque-canada.ca/pgilbert/dsedesc.htm",
+  year =         1993
   )
 
-citEntry(entry="manual",
-  title        = "Brief User's Guide: Dynamic Systems Estimation",
-  author       = "Gilbert, P. D.",
-  year         = "2006 or later",
-  url          = "http:www.bank-banque-canada.ca/pgilbert/",
-  textVersion =  paste("Gilbert, P. D. (2006 or later) ", 
-       "Brief User's Guide: Dynamic Systems Estimation",
-     "R package DSE. ", "<http://www.bank-banque-canada.ca/pgilbert/>", sep="")
+citEntry(entry="articlet",
+  author =    "Gilbert, P.D.",
+  year =      1995,
+  title =     "Combining VAR Estimation and State Space Model Reduction for 
+                Simple Good Predictions", 
+  journal =   "J. of Forecasting: Special Issue on VAR Modelling",
+  volume =    14,
+  pages =     "229-250"
+  )
+
+citEntry(entry="article",
+  author =    "Gilbert, P.D.",
+  year =      2000,
+  title =     "A note on the computation of time series model roots", 
+  journal =   "Applied Economics Letters",
+  volume =    7,
+  pages =     "423-424"
   )

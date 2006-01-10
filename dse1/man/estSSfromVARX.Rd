@@ -34,7 +34,7 @@
     \code{\link{estMaxLik}}
 }
 \examples{
-    data("eg1.DSE.data.diff", package="dse1")
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <-estSSfromVARX(eg1.DSE.data.diff)
 }
 \concept{DSE}

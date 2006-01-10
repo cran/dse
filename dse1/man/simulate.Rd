@@ -135,7 +135,7 @@ determine necessary transformation of initial conditions and \code{w0}.
     ARMAX <- ARMA(A=AR, B=MA, C=C) 
     simData <- simulate(ARMAX, sampleT=150, input=matrix(rnorm(300),150,2))
 
-    data("eg1.DSE.data.diff", package="dse1")
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
     simData <- simulate(model)
 

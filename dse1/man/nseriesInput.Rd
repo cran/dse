@@ -41,7 +41,7 @@
     \code{\link{seriesNamesOutput}}
 }
 \examples{
-data("eg1.DSE.data", package="dse1")
+if(is.R()) data("eg1.DSE.data", package="dse1")
 nseriesOutput(eg1.DSE.data) 
 }
 \concept{DSE}

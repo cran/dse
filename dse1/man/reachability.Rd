@@ -29,7 +29,7 @@ model is controllable.
 \code{\link{McMillanDegree}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(estVARXls(eg1.DSE.data.diff))
 reachability(model)
 }

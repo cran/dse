@@ -61,7 +61,7 @@ of the distribution of the simulations at specified periods.
 \code{\link{forecastCovWRTtrue}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model, simulation.args=list(sampleT=100))
 tfplot(z)

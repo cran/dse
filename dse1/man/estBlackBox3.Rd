@@ -49,7 +49,7 @@ squares estimation of a VAR model.
 \code{\link[dse1]{informationTestsCalculations}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  estBlackBox3(eg1.DSE.data.diff)
 }
 \concept{DSE}

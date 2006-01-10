@@ -46,6 +46,23 @@ DSEversion <- function()
 
 ##############################################################################
 
+# Some utilities for insulating DSE code from S/R changes.
+
+##############################################################################
+
+if (is.R())
+  { dseclass    <- class  # pre 1.4.0 .Alias(class)
+   "dseclass<-" <- get("class<-")  #  .Alias(get("class<-"))
+    dsescan <- function(file="",quiet=TRUE, ...){scan(file=file, quiet=quiet, ...)}
+  } else # assuming is.S()
+  { dseclass    <- class
+   "dseclass<-" <- function(x, value){ class(x) <- value ; x }
+    dsescan <- function(file="",quiet=TRUE, ...){scan(file=file, ...)}
+  }
+
+
+##############################################################################
+
 # The code was divided roughly into 
 #   the groups listed below, but the organization has changed a little bit.
 #   The code grouping can be seen by grep ing on the string '<<<<<<' eg:
@@ -82,6 +99,8 @@ DSEversion <- function()
 
 #############################################################################
 #############################################################################
+#resid <- lst$estimates$pred-outputData(lst$data)
+#residual <- object$estimates$pred[,,drop=FALSE] - outputData(object)[,,drop=FALSE]
 residuals.TSestModel <- function(object, ...) object$estimates$pred-outputData(object)
 
 # I don't think this exists really works for namespaces
@@ -171,7 +190,7 @@ print.ARMA <- function(x, digits=options()$digits, latex=FALSE, L=TRUE, fuzz=1e-
         for(i in 1:dim(A)[2]) 
           {for(j in 1:dim(A)[3]) 
              {cat(format(signif(A[1,i,j],digits=digits)))
-              if(dim(A)[1] > 1) for(l in 2:dim(A)[1]) 
+              for(l in 2:dim(A)[1]) 
                  if (abs(A[l,i,j]) > fuzz)
                   {if(1==sign(A[l,i,j])) cat("+")
                    cat(format(signif(A[l,i,j],digits=digits)))
@@ -272,7 +291,7 @@ summary.SS <- function(object, ...)
   {#  (... further arguments, currently disregarded)
    m <- nseriesInput(object)
    p <- nseriesOutput(object)
-   n <- nstates(object)
+   n <- nrow(object$F)
    classed(list(  # summary.SS constructor
          description=object$description,
          input.series=seriesNamesInput(object),
@@ -383,8 +402,7 @@ tfplot.TSestModel <- function(x, ...,
            z<-tbind(z,inputData(model, series=i))
        tframe(z) <-tframe(inputData(model))
        tfOnePlot(z,start=start,end=end, ylab=names[i]) # tsplot
-       if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
-                || options()$PlotTitles)) title(main = Title)
+       if(i==1) title(main = Title)
     } }
   for (i in select.outputs ) 
     {z <-c(outputData(model, series=i),
@@ -395,8 +413,7 @@ tfplot.TSestModel <- function(x, ...,
          z<-cbind(z,model$estimates$pred[,i,drop=FALSE])}
      tframe(z) <- tframe(outputData(model))
      tfOnePlot(z,start=start,end=end, ylab=names[m+i]) # tsplot
-     if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
-                || options()$PlotTitles)) title(main = Title)
+     if(i==1) title(main = Title)
     }
   invisible()
   }
@@ -410,7 +427,7 @@ testEqual.TSestModel <- function(obj1, obj2, fuzz=0) # this could be better
 
 testEqual.TSmodel <- function(obj1, obj2, fuzz=0)
 {# return T if models are identical (excluding description)
-  r       <- all(class(obj1) == class(obj2))
+  r       <- all(dseclass(obj1) == dseclass(obj2))
   if (r) r <-length(coef(obj1)) == length(coef(obj2))
   if (r) r <-all(fuzz >= abs(coef(obj1)   -  coef(obj2)))
   if (r) r <-length(obj1$location) == length(obj2$location)
@@ -518,7 +535,7 @@ McMillanDegree.ARMA <- function(model, fuzz=1e-4, verbose=TRUE, warn=TRUE, ...)
 
 McMillanDegree.SS <- function(model, fuzz=1e-4, ...)
  {#  (... further arguments, currently disregarded)
-   cat("state dimension = ", nstates(model),"/n")
+   cat("state dimension = ",dim(model$F)[1],"/n")
    invisible()
  }
 
@@ -545,8 +562,8 @@ stability.roots <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE)
 
 stability.ARMA <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE) 
    {z <- roots(obj, fuzz=fuzz, randomize=FALSE)
-    if (is.null(z)) {warning("The model has only a zero root.") ; return(TRUE)}
-    else  s <- if (all(Mod(z) < (1.0 - eps))) TRUE else  FALSE
+    if (all(Mod(z) < (1.0 - eps))) s <- TRUE
+    else                   s <- FALSE
     if (verbose)
       {cat("Distinct roots of det(A(L)) and moduli are:\n")
        print(cbind(1/z,Mod(1/z)),digits=digits)
@@ -575,10 +592,6 @@ roots.SS <- function(obj, fuzz=0, randomize=FALSE, ...)
 
 roots.ARMA <- function(obj, fuzz=0, randomize=FALSE, warn=TRUE, by.poly=FALSE, ...) 
 {#  (... further arguments, currently disregarded)
-    if(1 == dim(obj$A)[1]) {
-        warning("An ARMA model with no lags in the AR term has no roots.")
-	return(NULL)
-	}
     if(by.poly) z <- 1/polyrootDet(obj$A)
     else        z <- roots(toSS(obj))
     if (fuzz!=0)
@@ -1470,12 +1483,20 @@ companionMatrix <- function(a)
 
 ############################################################
 
-nstates <- function(x) UseMethod( "nstates")
-nstates.SS <- function(x)  nrow(x$F) 
-nstates.ARMA <- function(x) stop("ARMA models do not have a state vector.")
-nstates.TSestModel <- function(x) nstates(TSmodel(x))
 
-nseriesInput <- function(x) UseMethod( "nseriesInput")
+read.int <- function(prmt)
+   {err <-TRUE
+    while (err)
+     {cat(prmt)
+      n <- as.integer(readline()) # crude. this truncates reals
+      if (is.na(n)) cat("value must be an integer\n")
+      else err <- FALSE
+     }
+    n
+   }
+
+
+nseriesInput <- function(x)UseMethod( "nseriesInput")
 nseriesInput.default <- function(x)
    if (is.null(x$input)) 0 else nseries(x$input)
 nseriesInput.SS <- function(x)   {if (is.null(x$G)) 0 else  dim(x$G)[2] }
@@ -1563,7 +1584,7 @@ checkConsistentDimensions.ARMA <- function(obj1, obj2=NULL) #(model, data)
  }
 
 checkConsistentDimensions.default <- function(obj1, obj2=NULL)
-   {stop(paste("No method for obj1ect of class ", class(obj1), "\n"))}
+   {stop(paste("No method for obj1ect of class ", dseclass(obj1), "\n"))}
 
 
 
@@ -1594,10 +1615,9 @@ ARMA <- function(A=NULL, B=NULL, C=NULL, TREND=NULL,
    if(is.null(B)) stop("B array must be specified for ARMA class models.")
    if(is.null(dim(B)))   B <- array(B, c(length(B),1,1))
    if(2==length(dim(B))) B <- array(B, c(1, dim(B)))
-   if(!is.null(C) && is.null(dim(C))) C <- array(C, c(length(C),1,1))
    model <- list(A=A, B=B, C=C, TREND=TREND, 
                  constants=constants, description=description)
-   class(model) <- c("ARMA","TSmodel") # constructor
+   dseclass(model) <- c("ARMA","TSmodel") # constructor
    if(!is.null(names)) seriesNames(model) <- names
    else
      {if(!is.null( input.names))  seriesNamesInput(model) <- input.names
@@ -1625,8 +1645,8 @@ SS <- function(F.=NULL, G=NULL, H=NULL, K=NULL, Q=NULL, R=NULL,
      }
    model <- list(F=F., G=G, H=H, K=K, Q=Q, R=R, z0=z0, P0=P0, rootP0=rootP0,
                  constants=constants, description=description)
-   if (!is.null(model$K)) class(model) <- c("innov","SS","TSmodel" ) else
-   if (!is.null(model$Q)) class(model) <- c( "nonInnov","SS","TSmodel") # constructor
+   if (!is.null(model$K)) dseclass(model) <- c("innov","SS","TSmodel" ) else
+   if (!is.null(model$Q)) dseclass(model) <- c( "nonInnov","SS","TSmodel") # constructor
    else stop("specified stucture is not correct for SS model.")
    if(!is.null(names)) seriesNames(model) <- names
    else
@@ -1663,7 +1683,7 @@ is.ARMA <- function(obj){inherits(obj,"ARMA")}
 setTSmodelParameters <- function(model, constants=model$constants)  
    UseMethod("setTSmodelParameters")
 
-setTSmodelParameters.TSestModel <- function(model, constants=TSmodel(model)$constants)  
+setTSmodelParameters.default <- function(model, constants=TSmodel(model)$constants)  
   setTSmodelParameters(TSmodel(model), constants=constants)
 
 
@@ -1674,28 +1694,26 @@ setTSmodelParameters.SS <- function(model, constants=model$constants) {
    if (!is.null(Ac)) indicate <- indicate | Ac  # Ac is T for fixed entries
    plist$const <- c(plist$const,A[indicate])
    plist$const.location <- c(plist$const.location,rep(a,sum(indicate)))
-   if (is.vector(A))  # z is not a matrix, (a=="z") also should work
-     {plist$const.i <- c(plist$const.i,(1:length(A))[indicate]) 
-      plist$const.j <- c(plist$const.j,(1:length(A))[indicate]) #dup.but ok
-     }
-   else if(is.matrix(A))
+   if (a!="z")
      {plist$const.i <- c(plist$const.i,row(A)[indicate]) 
       plist$const.j <- c(plist$const.j,col(A)[indicate])
      }
-   else stop("The dimension of something in the SS model structure is bad.")
+   else
+     {plist$const.i <- c(plist$const.i,(1:length(A))[indicate]) 
+      plist$const.j <- c(plist$const.j,(1:length(A))[indicate]) #dup.but ok
+     }
    indicate <- (A!=0.0) & (A!=1.0) 
    if (!is.null(Ac)) indicate <- indicate & (!Ac)
    coef(plist) <- c(coef(plist), A[indicate])          # parameters
    plist$location <- c(plist$location,rep(a,sum(indicate)))
-   if (is.vector(A))  # z is not a matrix, (a=="z") also should work
-     {plist$i <- c(plist$i,(1:length(A))[indicate]) 
-      plist$j <- c(plist$j,(1:length(A))[indicate]) #dup.but ok
-     }
-   else if(is.matrix(A))
+   if (a!="z")
      {plist$i <- c(plist$i,row(A)[indicate])
       plist$j <- c(plist$j,col(A)[indicate])
      }
-   else stop("The dimension of something in the SS model structure is bad.")
+   else
+     {plist$i <- c(plist$i,(1:length(A))[indicate]) 
+      plist$j <- c(plist$j,(1:length(A))[indicate]) #dup.but ok
+     }
    plist
  }# end locateSS    
 
@@ -1707,9 +1725,9 @@ setTSmodelParameters.SS <- function(model, constants=model$constants) {
     if (!is.null(model$G)) if(n!= dim(model$G)[1])
       stop("Model G matrix have first dimension consistent with matrix F.")
     p <-dim(model$H)[1]
-    plist <- list(coefficients=NULL,location=NULL,i=NULL,j=NULL,
-                 const=NULL,const.location=NULL,const.i=NULL,const.j=NULL)
-    plist <- locateSS(model$F, constants$F,"f",n,n,plist)
+    plist <- locateSS(model$F, constants$F,"f",n,n,
+                 list(coefficients=NULL,location=NULL,i=NULL,j=NULL,
+                 const=NULL,const.location=NULL,const.i=NULL,const.j=NULL))
     if(!is.null(m)) plist <- locateSS(model$G,constants$G,"G",n,m,plist)
     plist <- locateSS(model$H,constants$H,"H",p,n,plist)
     if(!is.null(model$z0)) plist <- locateSS(model$z0,constants$z0,"z",p,n,plist)
@@ -1733,7 +1751,7 @@ setTSmodelParameters.SS <- function(model, constants=model$constants) {
 
 setTSmodelParameters.ARMA <- function  (model, constants=model$constants) { 
 
- locateARMA <- function(A,Ac, a,I,J,L,plist){ # local function for locating parameters
+ locateARMA <- function(A,a,I,J,L,plist){ # local function for locating parameters
   ind <- function(x, i) # equivalent of row and col for higher dim arrays.
    {
 	d <- dim(x)
@@ -1743,45 +1761,31 @@ setTSmodelParameters.ARMA <- function  (model, constants=model$constants) {
 	aperm(y, order(id))
    }
    indicate <-  (A==1.0)                # constants
-   if (!is.null(Ac)) indicate <- indicate | Ac  # Ac is T for fixed entries
    plist$const <- c(plist$const,A[indicate])
    plist$const.location <- c(plist$const.location,rep(a,sum(indicate)))
-   if (is.vector(A))# trend is a vector not an array (a=="t")
-     {plist$const.l <- c(plist$const.l, rep(0,sum(indicate))) 
+   if (a!="t")
+     {plist$const.l <- c(plist$const.l,ind(A,1)[indicate]) 
+      plist$const.i <- c(plist$const.i,ind(A,2)[indicate]) 
+      plist$const.j <- c(plist$const.j,ind(A,3)[indicate])
+     }
+   else    # trend is a vector not an array 
+     {plist$const.l <- c(plist$const.l,rep(0,sum(indicate))) 
       plist$const.i <- c(plist$const.i, (1:length(A))[indicate]) 
-      plist$const.j <- c(plist$const.j, rep(0,sum(indicate)))
+      plist$const.j <- c(plist$const.j,rep(0,sum(indicate)))
      }
-   else if (is.matrix(A))  # trend is a matrix
-     {plist$const.l <- c(plist$const.l, rep(0,sum(indicate))) 
-      plist$const.i <- c(plist$const.i, row(A)[indicate]) 
-      plist$const.j <- c(plist$const.j, col(A)[indicate])
-     }
-   else if(3 == length(dim(A)))
-     {plist$const.l <- c(plist$const.l, ind(A,1)[indicate]) 
-      plist$const.i <- c(plist$const.i, ind(A,2)[indicate]) 
-      plist$const.j <- c(plist$const.j, ind(A,3)[indicate])
-     }
-   else stop("The dimension of something in the ARMA model structure is bad.")
    indicate <- (A!=0.0) & (A!=1.0)
-   if (!is.null(Ac)) indicate <- indicate & (!Ac)
    coef(plist) <- c(coef(plist), A[indicate])          # parameters
    plist$location <- c(plist$location,rep(a,sum(indicate)))
-   if (is.vector(A))# trend is a vector not an array (a=="t")
-     {plist$l <- c(plist$l, rep(0,sum(indicate))) 
+   if (a!="t")
+     {plist$l <- c(plist$l,ind(A,1)[indicate] )
+      plist$i <- c(plist$i,ind(A,2)[indicate] )
+      plist$j <- c(plist$j,ind(A,3)[indicate])
+     }
+   else    # trend is a vector not an array
+     {plist$l <- c(plist$l,rep(0,sum(indicate))) 
       plist$i <- c(plist$i, (1:length(A))[indicate]) 
-      plist$j <- c(plist$j, rep(0,sum(indicate)))
+      plist$j <- c(plist$j,rep(0,sum(indicate)))
      }
-   else if (is.matrix(A))  # trend is a matrix
-     {plist$l <- c(plist$l, rep(0,sum(indicate))) 
-      plist$i <- c(plist$i, row(A)[indicate]) 
-      plist$j <- c(plist$j, col(A)[indicate])
-     }
-   else if(3 == length(dim(A)))
-     {plist$l <- c(plist$l, ind(A,1)[indicate] )
-      plist$i <- c(plist$i, ind(A,2)[indicate] )
-      plist$j <- c(plist$j, ind(A,3)[indicate])
-     }
-   else stop("The dimension of something in the ARMA model structure is bad.")
    plist  
  }# end locateARMA
 
@@ -1796,15 +1800,14 @@ setTSmodelParameters.ARMA <- function  (model, constants=model$constants) {
        if (!is.null(model$C))
           if (p!= dim(model$C)[2]) stop("Model C array dim inconsistent with array A.")
 
-       plist <- list(coefficients=NULL,location=NULL,i=NULL,j=NULL,
+       plist <- locateARMA(model$A,"A",p,p,a,
+                     list(coef=NULL,location=NULL,i=NULL,j=NULL,
                          const=NULL,const.location=NULL,
-                         const.i=NULL,const.j=NULL,l=NULL,const.l=NULL)
-       plist <- locateARMA(model$A, constants$A, "A",p,p,a,plist)
-       plist <- locateARMA(model$B, constants$B, "B",p,p,b,plist)
-       if(!is.null(cc)) plist <- 
-                locateARMA(model$C, constants$C, "C",p,m,cc,plist)
-       if(!is.null(model$TREND)) plist <- 
-	        locateARMA(model$TREND, constants$TREND, "t",p,m,cc,plist)
+                         const.i=NULL,const.j=NULL,l=NULL,const.l=NULL))
+       plist <- locateARMA(model$B,"B",p,p,b,plist)
+       if(!is.null(cc)) plist <- locateARMA(model$C,"C",p,m,cc,plist)
+       if(!is.null(model$TREND)) 
+            plist <- locateARMA(model$TREND,"t",p,m,cc,plist)
 
 #       list.add(model, names(plist) ) <- plist
        model[ names(plist) ] <- plist
@@ -1959,12 +1962,24 @@ setArrays.ARMA <- function(model, coefficients=NULL) {
 
 DSE.ar <- function(data, ...) {
   #fix for ar in R ts library (so that univariate case also gives array result)
-  if( !require("stats", warn.conflicts=FALSE)) stop("package ts is required.")
+  if (is.R()) if( !require("stats", warn.conflicts=FALSE)) stop("package ts is required.")
   # before R 1.9.0 required ts not stats
   res <- ar(ts(data), ...)
   if (! is.array(res$ar)) res$ar <- array(res$ar, c(length(res$ar),1,1))
   res
   }
+
+#printTestValue <- function(x, digits=16)
+#  {cat("c( ")
+#   if (all(is.na(x))) cat("NAs")
+#   else if (is.null(x)) cat("NULL")
+#   else if (is.logical(x)) cat(x)
+#   else if (!is.R()) print(x, digits=digits)
+#   else 
+#     for (i in  1:length(x)) cat(", ", formatC(x[i], digits=digits, format="g"))
+#   cat(")\n")
+#   invisible()
+#  }
 
 printTestValue <- function (x, digits = 16){
     cat("c( ")
@@ -2343,15 +2358,14 @@ residualStats <- function(pred, data, sampleT=nrow(pred), warn=TRUE){
         {if(warn) warning("The cov. matrix is singular. Working on subspace.")
          v$d <- v$d[i]
       #   v$u <- v$u[i,i, drop=FALSE]
-      #   v$vt <- v$vt[i,i, drop=FALSE]
+      #   v$v <- v$v[i,i, drop=FALSE]
       #   e <- e[,i, drop=FALSE]
         }
       like1 <- 0.5 * sampleT * log(prod(v$d)) # det
-      # $vt is transposed in La.svd, but not v in svd
-#      if (1 == length(v$d)) OmInv <-  v$u %*% (1/v$d) %*% v$vt 
-#      else OmInv <-  v$u %*% diag(1/v$d) %*% v$vt # more robust than solve(Om)
+#      if (1 == length(v$d)) OmInv <-  v$v %*% (1/v$d) %*%t(v$u) 
+#      else OmInv <-  v$v %*% diag(1/v$d) %*%t(v$u) # more robust than solve(Om)
 #  following is equivalent
-#      OmInv <-  v$u %*% sweep(v$vt,1,1/v$d, "*") 
+#      OmInv <-  v$v %*% sweep(t(v$u),1,1/v$d, "*") 
 #      like2 <- sum(e * (e %*% OmInv)) /2
 #  but this works out to (sampleT*p/2) and fixing for degenerate distributions:
        like2 <- (sampleT*length(v$d))/2
@@ -3054,10 +3068,10 @@ estVARXmean.correction <- function(X, y, bbar,
  v <- La.svd(t(X)%*%X) # this is more robust than solve()
  if (warn && any(abs(v$d[1]*fuzz) > abs(v$d) ) ) 
    warning("The covariance matrix is nearly singular. Check for linearly related data.")
-# if(1 == length(v$d))OmInv <- v$u %*% (1/v$d) %*% v$vt
-# else OmInv <- v$u %*% diag(1/v$d) %*% v$vt	
+# if(1 == length(v$d))OmInv <- v$v %*% (1/v$d) %*% t(v$u)
+# else OmInv <- v$v %*% diag(1/v$d) %*% t(v$u)	
 #  following is equivalent
-# OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") CHECK
+# OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
  OmInv <-  crossprod(v$vt, sweep(t(v$u),1,1/v$d, "*")) 
 
 # t(-OmInv %*% ( 
@@ -3296,7 +3310,7 @@ estBlackBox1 <- function(data,estimation="estVARXls",
                      list(model, criterion=criterion, verbose=verbose))
    #model <- eval(call(reduction,model,criterion=criterion, verbose=verbose))
     if (verbose) 
-       cat("Final reduced state space model, n= ", nstates(model),
+       cat("Final reduced state space model, n= ", dim(model$model$F)[1],
            ", -log likelihood = ", model$estimates$like[1], "\n")
    }
   if (verbose &&  dev.cur() != 1 ) checkResiduals(model)
@@ -3362,17 +3376,6 @@ MittnikReduction.from.Hankel <- function(M, data=NULL, nMax=NULL,
    criterion=NULL, verbose=TRUE, warn=TRUE) 
 #   Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 { # See the documentation for MittnikReduction.
-
-   read.int <- function(prmt)
-     {err <-TRUE
-      while (err)
-       {cat(prmt)
- 	n <- as.integer(readline()) # crude. this truncates reals
- 	if (is.na(n)) cat("value must be an integer\n")
- 	else err <- FALSE
-       }
-      n
-     }
 
    data <- freeze(data)
    m <-ncol(inputData(data))      # dim of input series
@@ -3467,18 +3470,6 @@ balanceMittnik <- function(model, n=NULL){
 
 SVDbalanceMittnik <- function(M, m, n=NULL)
 {#                   # Form k block Hankel Matrix from M.
-
-   read.int <- function(prmt)
-     {err <-TRUE
-      while (err)
-       {cat(prmt)
- 	n <- as.integer(readline()) # crude. this truncates reals
- 	if (is.na(n)) cat("value must be an integer\n")
- 	else err <- FALSE
-       }
-      n
-     }
-
    p <- nrow(M)     # dim of endo. series
    r <- m + p       # each sub-matrix is p x r   (= p x (m+p) )
    k<- dim(M)[2] / r
@@ -3713,15 +3704,15 @@ estBlackBox4 <- function(data, estimation="estVARXls",
 
 Portmanteau <- function(res){
   # Portmanteau statistic for residual
-  if (!require("stats", warn.conflicts = FALSE)) stop("package ts is required.")
+  if (is.R()) if (!require("stats", warn.conflicts = FALSE)) stop("package ts is required.")
   # before R 1.9.0 required ts not stats
   ac <- acf(as.ts(res),type="covariance", plot=FALSE)$acf
   p <- dim(ac)[1]
 #  a0 <- solve(ac[1,,])  the following is more robust than solve for
 #              degenerate densities
   v <- La.svd(ac[1,,])
-#  if(1 == length(v$d)) a0 <- t(v$vt) %*%     (1/v$d) %*% t(v$u)
-#	           else a0 <- t(v$vt) %*% diag(1/v$d) %*% t(v$u)	
+#  if(1 == length(v$d)) a0 <- v$v %*%     (1/v$d) %*% t(v$u)
+#	           else a0 <- v$v %*% diag(1/v$d) %*% t(v$u)	
 #  following is equivalent
   a0 <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
   P <-0
@@ -3762,7 +3753,7 @@ checkResiduals.default <- function(obj, ac=TRUE, pac=TRUE,
   resid0 <- sweep(resid, 2, mn, FUN="-")
 #  resid0 <- resid - t(array(colMeans(resid),rev(dim(resid)))) # mean 0
   cusum <- apply(resid0,2,cumsum)/ t(array(diag(var(resid0)),rev(dim(resid0))))
-  if (!require("stats", warn.conflicts = FALSE)) stop("package ts is required.")
+  if (is.R()) if (!require("stats", warn.conflicts = FALSE)) stop("package ts is required.")
   # before R 1.9.0 required ts not stats
   if(plot. &&  dev.cur() != 1 ) 
     {graphs.per.page <- min(p, graphs.per.page)
@@ -3797,13 +3788,19 @@ checkResiduals.default <- function(obj, ac=TRUE, pac=TRUE,
         mtext("Autocorrelations", side=3, outer=TRUE, cex=1.5, line=3)
        }
      if (pac)
-       {pacr <- acf(as.ts(resid), plot=TRUE, type= "partial",
+       {#par(mfrow = c(1, 1), mar = c(2.1, 4.1,3.1, 0.1), oma=c(0,0,5,0) )
+        #if(is.R()) pacr <- 
+	#  pacf(as.ts(resid), plot=TRUE, mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
+	#else   
+	pacr <- acf(as.ts(resid), plot=TRUE, type= "partial",
 	           mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
         mtext("Partial Autocorrelations", side=3, outer=TRUE, cex=1.5, line=3)
        }
     }
   else 
     {if (ac)  acr  <- acf(as.ts(resid), plot=FALSE)$acf
+     #if (pac) pacr <- if (is.R()) pacf(as.ts(resid), plot=FALSE)$acf
+     #                     else    
      if (pac)	  pacr <- acf(as.ts(resid), plot=FALSE, type= "partial")$acf
     }
   if (ac & verbose)
@@ -3974,6 +3971,50 @@ trimNA.TSdata <- function(x, startNAs=TRUE, endNAs=TRUE){
 
 
 
+diffLog <- function(x,  lag = 1, base = exp(1), ...)
+{#  (... further arguments, currently disregarded)
+ #Calculate the difference from lag periods prior for log of data.
+ diff(log(x, base = base), lag = lag)
+}
+
+
+ytoypc <- function(ser) {
+  # Convert level data to year over year percent change.
+  # note: percentChange can alter the name, so grab it first.
+  nm <- paste("y to y %ch", seriesNames(ser))
+  ser <- percentChange(ser, lag=tffrequency(ser))
+  seriesNames(ser) <- nm
+  ser
+ }
+ 
+
+
+percentChange <- function(obj, ...) UseMethod("percentChange")
+
+percentChange.default <- function(obj, base=NULL, lag=1, 
+      cumulate=FALSE, e=FALSE, ...)
+{#  (... further arguments, currently disregarded)
+   cls <- dseclass(obj)
+   # note next has to be applied to a shorter object in the end
+   if (is.tframed(obj)) tf <- list(end=tfend(obj), frequency=tffrequency(obj))
+   else tf <- NULL
+   if (is.null(dim(obj)))
+     {vec <- TRUE
+      obj <- matrix(obj, length(obj),1)
+     }
+   else vec <- FALSE
+   mm <- rbind(base,obj)
+   if (any(cumulate))
+          mm[,cumulate] <-apply(mm[,cumulate,drop=FALSE],2,cumsum)
+   if (any(e)) mm[,e] <- exp(mm[,e,drop=FALSE])
+   N <- dim(mm)[1]
+   pchange <-100*(mm[(lag+1):N,,drop=FALSE] - 
+                    mm[1:(N-lag),,drop=FALSE])/mm[1:(N-lag),,drop=FALSE]
+   if (vec) pchange <- pchange[,1]
+   dseclass(pchange) <- cls
+   if (!is.null(tf)) tframed(pchange, tf) else pchange
+}
+
 percentChange.TSestModel <- function(obj, base=NULL, lag=1,
    cumulate=FALSE, e=FALSE, ...)
   {#  (... further arguments, currently disregarded)
@@ -3988,6 +4029,16 @@ percentChange.TSdata <- function(obj, base=NULL, lag=1,
    obj
   }
 
+
+standardize <- function(ser){
+	if (!is.matrix(ser)) stop("series should be a matrix.")
+	means <- colMeans(ser)
+	new <- ser - t(matrix(means, ncol(ser), nrow(ser)))
+	svd.cov <- La.svd(var(new))
+        scalefac <- svd.cov$u %*% diag(1/svd.cov$d^0.5, ncol = length(svd.cov$d))
+        new <- new %*% t(scalefac)
+	tframed(new, tf=tframe(ser), names=seriesNames(ser))
+    }
 
 
 ############################################################
@@ -4397,7 +4448,7 @@ tfplot.TSdata <- function(x, ...,
      old.par <- par(mfcol = c(Ngraphs, 1), mar=mar, no.readonly=TRUE) # previously c(5.1,6.1,4.1,2.1)) 
      on.exit(par(old.par))
     }
-  #if (is.null(Title)) Title <- ""
+  if (is.null(Title)) Title <- ""
   if (!is.null(ylab))
        names <- rep(ylab, nseriesInput(x) + nseriesOutput(x))
   else names <-  c(seriesNamesInput(x),  seriesNamesOutput(x))
@@ -4415,8 +4466,7 @@ tfplot.TSdata <- function(x, ...,
          }
        tframe(z) <-tframe(inputData(x))
        tfOnePlot(z,ylab=names[i], start=start, end=end) 
-       if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
-                || options()$PlotTitles)) title(main = Title)
+       if(i==1) title(main = Title)
     } }
   for (i in select.outputs) 
     {j <-0
@@ -4432,8 +4482,7 @@ tfplot.TSdata <- function(x, ...,
        }
      tframe(z) <-tframe(outputData(x))
      tfOnePlot(z,ylab=names[nseriesInput(x) + i],start=start, end=end) # tsplot
-     if(!is.null(Title) && (0 == nseriesInput(x)) && (i==1) && 
-      (is.null(options()$PlotTitles) || options()$PlotTitles)) title(main = Title)
+     if((0 == nseriesInput(x)) & (i==1)) title(main = Title)
     }
   invisible()
 }
@@ -4446,13 +4495,13 @@ outputData.TSdata <- function(x, series=seqN(nseriesOutput(x)))
 
 
 "inputData<-.TSdata" <- function(x, value) 
-   {cls <- class(x); x$input <- value; class(x) <- cls
+   {cls <- dseclass(x); x$input <- value; dseclass(x) <- cls
     x
    }
 
 
 "outputData<-.TSdata" <- function(x, value)
-   {cls <- class(x); x$output <-value; class(x) <- cls
+   {cls <- dseclass(x); x$output <-value; dseclass(x) <- cls
     x
    }
 

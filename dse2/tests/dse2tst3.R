@@ -172,8 +172,9 @@ print(symbol.For("rmaprj"))
   ok <- testEqual(zz, forecastCovEstimatorsWRTtrue(mod1,  
            estimation.methods=list(estVARXls=NULL,estVARXar=list(warn=FALSE)), 
            est.replications=2, pred.replications=2, rng=getRNG(zz)))
-  all.ok <- all.ok & ok 
-  if (verbose) if (ok) cat("ok\n") else cat("failed!\n") 
+  if (is.R()) all.ok <- all.ok & ok 
+  if (is.R()) {if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }} else 
+              cat("dse3 test 17 skipped!\n")
 
   if (graphics)
       {ok <- dse3.graphics.tests(verbose=verbose,  pause=FALSE)

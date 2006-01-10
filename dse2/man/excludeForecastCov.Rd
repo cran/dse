@@ -23,7 +23,7 @@ Exclude results which depend on the indicated series from a
 \code{\link{selectForecastCov}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- stripMine(eg1.DSE.data.diff, essential.data=c(1,2),
                    estimation.methods=list(estVARXls=list(max.lag=3)))
 z <-  excludeForecastCov(z, exclude.series=3)

@@ -25,7 +25,7 @@
 \details{ \code{eps} prevents the indication of a stable model when 
      the largest root is within rounding error of 1.0.
 }
-\section{Side Effects}{
+\sideffects{
 The eigenvalues of the state transition matrix or the roots of the
 determinant of the AR polynomial are printed if verbose is T.
 }
@@ -33,7 +33,7 @@ determinant of the AR polynomial are printed if verbose is T.
 \code{\link{McMillanDegree}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 stability(model)
 }

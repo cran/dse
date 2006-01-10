@@ -19,7 +19,7 @@ does not result in smaller models which are balanced.
 \code{\link{MittnikReduction}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     z <-  MittnikReducedModels(toSS(estVARXls(eg1.DSE.data.diff))) 
 }
 \concept{DSE}

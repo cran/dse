@@ -11,7 +11,7 @@
 \code{\link{informationTests}}
 }
 \examples{
-require("stats")
+if(is.R()) require("stats")
 Portmanteau(matrix(rnorm(200), 100,2)) # but typically with a residual
 }
 \concept{DSE}

@@ -34,9 +34,9 @@ determinant of the AR polynomial are returned.
 }
 \details{
    The equality of roots for equivalent state space and ARMA models is
-   illustrated in \cite{Gilbert (1993)}. The calculation of ARMA model roots is
+   illustrated in Gilbert (1993). The calculation of ARMA model roots is
    more stable if the model is converted to state space and the roots
-   calculated from the state transition matrix (see \cite{Gilbert,2000}). The
+   calculated from the state transition matrix (see Gilbert,2000). The
    calculation is done this way by default. If \code{by.poly=TRUE} then
    the determinant of the AR polynomial is expanded to get the roots.
    }
@@ -45,7 +45,7 @@ determinant of the AR polynomial are returned.
   \code{\link{McMillanDegree}}
   }
 \examples{
-  data("eg1.DSE.data.diff", package="dse1")
+  if(is.R()) data("eg1.DSE.data.diff", package="dse1")
   model <- estVARXls(eg1.DSE.data.diff)
   roots(model)
   }

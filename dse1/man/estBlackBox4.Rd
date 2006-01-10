@@ -45,7 +45,7 @@ For each lag up to max.lag a VAR model is estimated and then a
 reduction procedure applied to select the best reduced model. Finally
 the best of the best reduced models is selected. The default estimation
 procedure is least squares estimation of the VAR models. This procedure
-is described as the brute force technique (bft) in \cite{Gilbert (1995)}.
+is described as the brute force technique (bft) in Gilbert (1995).
 }
 \references{
     Gilbert, P.D. (1995) Combining VAR Estimation and State Space 
@@ -59,7 +59,7 @@ is described as the brute force technique (bft) in \cite{Gilbert (1995)}.
 \code{\link[dse1]{informationTestsCalculations}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  bft(eg1.DSE.data.diff)
 }
 \concept{DSE}

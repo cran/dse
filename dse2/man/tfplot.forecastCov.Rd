@@ -35,7 +35,7 @@
        before starting.}
     \item{lty}{see details.}
     \item{Legend}{optional legend passed to \code{legend}.}
-    \item{Title}{optional legend passed to \code{title} (but see details).}
+    \item{Title}{optional legend passed to \code{title}.}
     \item{y.limit}{optional limit on the y scale. Covariance values larger
        than y.limit will not be shown.}
     \item{line.labels}{logical indicating line labels should be printed.}
@@ -51,16 +51,12 @@ If lty is NULL (default) it is set to
      seq(length(select.cov) +select.true+select.zero+select.trend),
  and corrected if these are TRUE but not in the object.
 
-    The \code{Title} is not put on the plot if the global option
-    PlotTitles is FALSE. This can be set with \code{options(PlotTitles=FALSE)}. 
-    This provides a convenient  mechanism to omit all titles when the title
-    may be added separately (e.g. in Latex).
 }
 \seealso{
     \code{\link{plot}}
 }
 \examples{
-    data("eg1.DSE.data.diff", package="dse1")
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
     z <- forecastCov(model, data=eg1.DSE.data.diff)
     tfplot(z)

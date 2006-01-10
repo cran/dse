@@ -33,7 +33,7 @@
     way to program functions which use methods consistent with the tframe
     library logic.
 }
-\section{Side Effects}{An object is printed.}
+\sideffects{An object is printed.}
 \seealso{
     \code{\link{tfplot}}
     \code{\link{tframe}}

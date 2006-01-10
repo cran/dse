@@ -79,7 +79,7 @@ Essential.data indicates the subset of output variables to included in all
 \code{\link[dse1]{estBlackBox4}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- stripMine(eg1.DSE.data.diff, 
     estimation.methods=list(bft=list(max.lag=2, verbose=FALSE)))
 }

@@ -8,6 +8,8 @@
 \alias{estVARXmean.correction}
 \alias{fake.TSestModel.missing.data}
 \alias{printTestValue}
+\alias{dsescan}
+\alias{read.int}
 \alias{svd.criteria}
 
 \title{DSE Utilities}
@@ -18,6 +20,7 @@
    estVARXmean.correction(X, y, bbar, fuzz=sqrt(.Machine$double.eps), warn=TRUE)
    fake.TSestModel.missing.data(model,data, residual, max.lag, warn=TRUE)   
    printTestValue(x, digits=16)
+   read.int(prmt)
    svd.criteria(sv)
    criteria.table.heading()
    criteria.table.legend()

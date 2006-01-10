@@ -65,7 +65,7 @@ respect to initial conditions.
     \code{\link{estMaxLik}}
 }
 \examples{
-    data("eg1.DSE.data.diff", package="dse1")
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
 }
 \concept{DSE}

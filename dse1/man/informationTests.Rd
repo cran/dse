@@ -15,12 +15,12 @@
 }
 
 \value{A matrix of the value for each model on each test returned invisibly.}
-\section{Side Effects}{Criteria are tabulated for all models in the list.}
+\sideffects{Criteria are tabulated for all models in the list.}
 \seealso{
     \code{\link{informationTestsCalculations}}
 }
 \examples{
-    data("eg1.DSE.data.diff", package="dse1")
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model1 <- estVARXls(eg1.DSE.data.diff)
     model2 <- estVARXar(eg1.DSE.data.diff)
     informationTests(model1, model2)}

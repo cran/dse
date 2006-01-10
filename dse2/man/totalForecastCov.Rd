@@ -15,7 +15,7 @@ An object similar to that returned by forecastCov, with the covariance
 summed over all selected series.
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model1 <- estVARXar(eg1.DSE.data.diff)
 model2 <- estVARXls(eg1.DSE.data.diff)
 z <-  totalForecastCov(forecastCov(model1, model2,

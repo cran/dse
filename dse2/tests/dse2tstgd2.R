@@ -23,24 +23,25 @@ all.ok <- TRUE
 
   cat("Guide part 2 test 1 ... \n")
 
-  # Old Splus value 
-  #  {test.rng1 <- list(kind="default", normal.kind="default", 
-  #                     seed=c(13,44,1,25,56,0,6,33,22,13,13,0) )
-  #   test.rng2 <- list(kind="default", normal.kind="default", 
-  #                      seed=c(13,43,7,57,62,3,30,29,24,54,47,2) )
-  #   test.rng4 <- list(kind="default", normal.kind="default", 
-  #                     seed=c(29,55,47,18,33,1,15,15,34,46,13,2) )
-  #   test.rng3 <- list(kind="default", normal.kind="default", 
-  #                      seed=c( 53,41,26,39,10,1,19,25,56,32,28,3) )
-  #As of R 1.7.1 a bug was recognized in Kinderman-Ramage and it was changed.
-  #   These tests use the old version named "Buggy Kinderman-Ramage" to
-  #   get old results for comparison.
-  test.rng1 <- test.rng2 <- test.rng3 <- test.rng4 <- 
-  if (as.numeric(version$major)+0.1*as.numeric(version$minor) >= 1.71 )
+  if (!is.R())
+    {test.rng1 <- list(kind="default", normal.kind="default", 
+                       seed=c(13,44,1,25,56,0,6,33,22,13,13,0) )
+     test.rng2 <- list(kind="default", normal.kind="default", 
+                        seed=c(13,43,7,57,62,3,30,29,24,54,47,2) )
+     test.rng4 <- list(kind="default", normal.kind="default", 
+                        seed=c(29,55,47,18,33,1,15,15,34,46,13,2) )
+     test.rng3 <- list(kind="default", normal.kind="default", 
+                        seed=c( 53,41,26,39,10,1,19,25,56,32,28,3) )
+    } else 
+    {#As of R 1.7.1 a bug was recognized in Kinderman-Ramage and it was changed.
+     #   These tests use the old version named "Buggy Kinderman-Ramage" to
+     #   get old results for comparison.
+     test.rng1 <- test.rng2 <- test.rng3 <- test.rng4 <- 
+      if (as.numeric(version$major)+0.1*as.numeric(version$minor) >= 1.71 )
            list(kind="Wichmann-Hill", normal.kind="Buggy Kinderman-Ramage",
 	        seed=c(979, 1479, 1542)) else
            list(kind="Wichmann-Hill", normal.kind="Kinderman-Ramage",
-	        seed=c(979, 1479, 1542))
+	        seed=c(979, 1479, 1542))}
 	   # might consider also 
 	   #list(kind="Wichmann-Hill", normal.kind="user-supplied", seed=c(979, 1479, 1542))}
            # R's Box-Muller was declared not reproducible. 
@@ -88,8 +89,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
  
   z <- checkResiduals(model.eg1.ls, plot.=FALSE, pac=TRUE)
-  # Old Splus value c(4.67445135116577148, 3274.42578125,      -2371.9997808950302)
-  check.value <-    c(4.674448837156188,   3274.4226534894947, -2371.999780895034)
+  check.value <- (
+  if (!is.R())c(4.67445135116577148, 3274.42578125,      -2371.9997808950302)
+  else        c(4.674448837156188,   3274.4226534894947, -2371.999780895034) )
 # above minor modification of the value in 1.8.0 beta
 #  else        c(4.674448837156188,   3274.422653488969,  -2371.999780895034) )
 # using my old acf instead of bats version gives
@@ -110,10 +112,10 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   model.eg1.ar <- estVARXar(trimNA(eg1.DSE.data), warn=FALSE) 
   model.eg1.ss <- estSSfromVARX(trimNA(eg1.DSE.data), warn=FALSE) 
 # model.eg1.mle <- estMaxLik(trimNA(eg1.DSE.data),model.eg1.ar) # this may be slow
-  # Old Splus value c(6738.642280883833, 6921.352391513382)
-  check.value <-    c(6738.562190977154, 6921.352391513382)#ts ar
-  # R bats ar       c(6735.139112062216, 6921.352391513382)bats ar
-# using my old ar:=ls gives c(6921.352391513380, 6921.352391513380)#ar:=ls
+  check.value <- if (!is.R()) c(6738.642280883833, 6921.352391513382) else
+                              c(6738.562190977154, 6921.352391513382)#ts ar
+  #elseif(is.R()) check.value <- c(6735.139112062216, 6921.352391513382)bats ar
+# using my old ar:=ls gives      c(6921.352391513380, 6921.352391513380)#ar:=ls
 
   tst <- c(model.eg1.ar$estimates$like[1], model.eg1.ss$estimates$like[1])  
   printTestValue(c(tst), digits=18)
@@ -148,13 +150,13 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   cat("Guide part 2 test 4b... \n")
   z <- informationTests(model.eg1.ar, model.eg1.ss, Print=FALSE, warn=FALSE)
-#  # Old Splus value   check.value <- 231152.464267979725
-#  R check.value <- 231151.0300943982  # ts ar
-#  R check.value <- 230978.2532793634  bats ar
-#  R using my old ar=ls gives        233856.9237566061   #using ls for ar
+#  if (is.S())      check.value <- 231152.464267979725
+#  else if (is.R()) check.value <- 231151.0300943982  # ts ar
+# else if (is.R()) check.value <- 230978.2532793634  bats ar
+# using my old ar=ls gives        233856.9237566061   #using ls for ar
 # a small change in the accounting for degenerate subspaces in dse.2000.4 gives
-  # Splus value    225328.464267979754 
-   check.value <-  225327.03009431256
+  check.value <- if (!is.R()) 225328.464267979754 else
+                              225327.03009431256
   if (print.values) printTestValue(sum(z[!is.na(z)]) )  
   error <- abs(check.value - sum(z[!is.na(z)]) )
   ok <-  1000*fuzz.large > error #fuzz.large works in Solaris but not Linux
@@ -295,8 +297,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 #   tfplot(coef(e.ar.mod1))
 
 
-  # Old Splus value -0.29855874505752699744 
-  check.value <-    -0.3699580622977686
+  check.value <- if (!is.R()) -0.29855874505752699744 else
+                              -0.3699580622977686
   error <- abs( check.value - sum(coef(e.ls.mod1$result[[100]])))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -321,8 +323,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
      distribution(coef(e.ls.mod2), bandwidth=.2)
     
 
-  # Old Splus value -1.0021490287427212706 
-  check.value  <-   -1.0028944627996934
+  check.value <- if (!is.R()) -1.0021490287427212706 else
+                              -1.0028944627996934
   error <- abs(check.value - sum(coef(e.ls.mod2$result[[100]])))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -340,8 +342,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
      distribution(roots(e.ls.mod2), bandwidth=.1) 
   
 
-  # Old Splus value 0.36159459310761993267 
-  check.value <-    0.2119677206564640
+  check.value <- if (!is.R()) 0.36159459310761993267 else
+                              0.2119677206564640
 # error <- Mod(0.36159459310761993267+0i - sum(e.ls.mod1.roots$result[[100]]))
   error <- Mod(check.value   - sum(e.ls.mod1.roots$result[[100]]))
   ok <- fuzz.small > error
@@ -358,8 +360,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   # the fuzz.small has to be relaxed here to accomodate differences in rnorm
   #   between Splus3.1 and Splus3.2  (the numbers are from Splus3.2)
 
-  # Old Splus value c(60.927013860328429473, 62.32729288591478678, 63.17808145947956433)
-  check.value <-    c(54.164759056117504,    53.519297277839669,   59.341526159411558)
+  check.value <- if (!is.R()) 
+      c(60.927013860328429473, 62.32729288591478678, 63.17808145947956433) else 
+      c(54.164759056117504,    53.519297277839669,   59.341526159411558)
   error <- max(abs(check.value -c(sum(pc$forecastCov[[1]]), 
                       sum(pc$forecastCov.zero), sum(pc$forecastCov.trend) )))
   ok <- fuzz.large > error
@@ -374,8 +377,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
  	estimation.methods=list(estVARXls=list(max.lag=3)),
  	est.replications=2, pred.replications=10, quiet=TRUE)
 
-  # Old Splus value c(58.75543799264762157,60.451513998215133938, 64.089618782185240775)
-  check.value <-    c(51.237201863944890,  53.519297277839669,    59.341526159411558)
+  check.value <- if (!is.R()) 
+     c(58.75543799264762157,60.451513998215133938, 64.089618782185240775) else
+     c(51.237201863944890,  53.519297277839669,    59.341526159411558)
   error <- max(abs(check.value - c(sum(pc.rd$forecastCov[[1]]),
                   sum(pc.rd$forecastCov.zero), sum(pc.rd$forecastCov.trend))))
   ok <- fuzz.large > error
@@ -405,11 +409,11 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   options(opts)
   zf<- zf$horizonForecasts[3,30,]
   tfplot(z)
-  # Old Splus value 
-  #   c(6120.97621905043979, 175568.040899036743, 24.568074094041549,
-  #     1e-10*c(158049871127.845642, 3330592793.50789356, 
-  #            1242727188.69001055, 1606263575.00784183)) 
-  check.value <-    c(6120.97621905044,  175568.0408990367,  24.56807409404155, 
+  check.value <- if (!is.R()) 
+     c(6120.97621905043979, 175568.040899036743, 24.568074094041549,
+       1e-10*c(158049871127.845642, 3330592793.50789356, 
+              1242727188.69001055, 1606263575.00784183)) else
+     c(6120.97621905044,  175568.0408990367,  24.56807409404155, 
        1e-10*c(158034797997.4372,  3330592793.507894,
               1242727188.690011,  1606263575.007842))
 # using my old ls for ar instead of bats version gives

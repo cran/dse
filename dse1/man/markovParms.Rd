@@ -29,7 +29,7 @@
     See references for \code{\link{MittnikReduction}}. 
 }
 \examples{
-    data("eg1.DSE.data.diff", package="dse1")
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
     markovParms(model)
 }

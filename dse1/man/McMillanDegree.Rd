@@ -26,7 +26,7 @@ Calculate the McMillan degree of an ARMA TSmodel.
 A list with elements gross and distinct containing all roots 
 and distinct roots.
 }
-\section{Side Effects}{
+\sideffects{
 The number of roots and distinct roots is printed if verbose is TRUE.
 }
 \seealso{
@@ -34,7 +34,7 @@ The number of roots and distinct roots is printed if verbose is TRUE.
 \code{\link{stability}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 McMillanDegree(model)
 }

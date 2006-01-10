@@ -18,12 +18,12 @@
 \value{A state space model in a TSestModel object.}
 \details{
 \code{balanceMittnik} calculate a state space model balance a la Mittnik.
-\code{n} is intended primarily for producing a state space model from the markov
-parameters of an \code{ARMA} model, but if it is supplied with an \code{SS} model the
+n is intended primarily for producing a state space model from the markov
+parameters of an ARMA model, but if it is supplied with an SS model the
 result will be a model with state dimension n based on the n largest
 singular values of the svd of a Hankel matrix of markov parameters generated 
-by the original model. If \code{n} is not supplied then the singular values are
-printed and the program prompts for \code{n}. \code{balanceMittnik} calls
+by the original model. If n is not supplied then the singular values are
+printed and the program prompts for n. \code{balanceMittnik} calls
 \code{SVDbalanceMittnik}
 
 \code{SVDbalanceMittnik} calculates a nested-balanced state space 
@@ -48,7 +48,7 @@ See also \code{MittnikReduction} and references.
     \code{\link{MittnikReduction}}
 }
 \examples{
-    data("eg1.DSE.data.diff", package="dse1")
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
     \dontrun{newmodel <-balanceMittnik(model)}
     # this prints information about singular values and prompts with

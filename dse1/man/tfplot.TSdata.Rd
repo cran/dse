@@ -25,7 +25,7 @@
     \item{tf}{an alternate way to specify start and end of plot.}
     \item{select.inputs}{series to be plotted. (passed to selectSeries)}
     \item{select.outputs}{series to be plotted. (passed to selectSeries)}
-    \item{Title}{string to use for plot title (passed to plot - see tfplot).}
+    \item{Title}{string to use for plot title (passed to plot).}
     \item{xlab}{string to use for x label (passed to plot).}
     \item{ylab}{string to use for y label (passed to plot).}
     \item{graphs.per.page}{integer indicating number of graphs to place on a

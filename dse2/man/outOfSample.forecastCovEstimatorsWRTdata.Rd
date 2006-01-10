@@ -35,7 +35,7 @@ sub-sample used for calculating the forecast covariance.
 \code{\link{estimateModels}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  outOfSample.forecastCovEstimatorsWRTdata(eg1.DSE.data.diff,
            estimation.methods=list(estVARXls=list(max.lag=4)))
 }

@@ -36,7 +36,7 @@ The procedure ar is used by combine exogeneous variables and endogenous variable
 and estimating as if all variables were endogenous. The estVARXar 
 method does not support trend estimation (as in estVARXls).
 
-If \code{aic=TRUE} the number of lags is determined by an AIC statistic (see ar). 
+If aic=TRUE the number of lags is determined by an AIC statistic (see ar). 
 If an exogenous (input) 
 variable is supplied the input and output are combined (i.e.- both
 treated as outputs) for estimation, and the resulting model is
@@ -75,7 +75,7 @@ the model for the exog. variable (as estimated by ar() is  discarded.
     \code{\link{DSE.ar}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXar(eg1.DSE.data.diff)
 }
 \concept{DSE}

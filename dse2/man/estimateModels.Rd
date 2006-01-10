@@ -40,7 +40,7 @@ estimation.methods with resulting models as elements.
 \code{\link{outOfSample.forecastCovEstimatorsWRTdata}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <-  estimateModels(eg1.DSE.data.diff, estimation.methods= list(
         bft=list(verbose=FALSE), 
         estVARXar=list(max.lag=3)))

@@ -76,7 +76,7 @@ the last value of input.
 \code{\link{horizonForecasts}}
 }
 \examples{
-    data("egJofF.1dec93.data", package="dse1")
+    if(is.R()) data("egJofF.1dec93.data", package="dse1")
     model <- estVARXls(window(egJofF.1dec93.data, end=c(1985,12)))
     pr <- forecast(model, conditioning.inputs=inputData(egJofF.1dec93.data))
     #tfplot(pr) Rbug 0.90.1

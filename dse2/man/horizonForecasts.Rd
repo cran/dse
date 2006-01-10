@@ -50,7 +50,7 @@ ie. calculate forecasts but return only those indicated by horizons.
 \code{\link{featherForecasts}}
 }
 \examples{
-data("eg1.DSE.data.diff", package="dse1")
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 z <-  horizonForecasts(model, eg1.DSE.data.diff)
 }

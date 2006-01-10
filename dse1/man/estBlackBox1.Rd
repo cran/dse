@@ -22,7 +22,7 @@
     \item{max.lag}{integer indicating the maximum number of lags to consider.}
 }
 \value{A state space model in an object of class TSestModel.}
-\section{Side Effects}{
+\sideffects{
 If verbose is TRUE then estimation information is printed and checkResiduals is run, 
 which gives plots of information about the residuals.
 }
@@ -31,7 +31,7 @@ which gives plots of information about the residuals.
 }
 
 \examples{
-data("egJofF.1dec93.data", package="dse1")
+if(is.R()) data("egJofF.1dec93.data", package="dse1")
 goodmodel <- estBlackBox1(egJofF.1dec93.data)
 }
 \concept{DSE}
