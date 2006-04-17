@@ -1,9 +1,8 @@
 \name{setTSmodelParameters}
 \alias{setTSmodelParameters}
-\alias{setTSmodelParameters.default}
+\alias{setTSmodelParameters.TSestModel}
 \alias{setTSmodelParameters.ARMA}
 \alias{setTSmodelParameters.SS}
-\alias{setTSmodelParameters.TSrestrictedModel}
 
 \title{Set TSmodel Parameter Information}
 \description{
@@ -12,11 +11,9 @@
 }
 \usage{
     setTSmodelParameters(model, constants=model$constants)
-    \method{setTSmodelParameters}{default}(model, constants=TSmodel(model)$constants)
+    \method{setTSmodelParameters}{TSestModel}(model, constants=TSmodel(model)$constants)
     \method{setTSmodelParameters}{ARMA}(model, constants=model$constants)
     \method{setTSmodelParameters}{SS}(model, constants=model$constants)
-    \method{setTSmodelParameters}{TSrestrictedModel}(model,
-         constants=TSmodel(model$TSmodel)$constants)  
 }
 \arguments{
     \item{model}{An object of class TSmodel.}
@@ -25,14 +22,13 @@
 }
 \value{An object of class 'TSmodel'.}
 \seealso{
-
-\code{\link{setArrays}}
+  \code{\link{setArrays}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
     model <- setTSmodelParameters(model)
 }
 \concept{DSE}
-\keyword{ts}
+\keyword{internal}
 

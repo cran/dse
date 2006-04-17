@@ -35,7 +35,7 @@ The sample size is determined by periodsOutput(data).
 \code{\link{l.ARMA}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 sumSqerror(1e-10 + coef(model), model=TSmodel(model), 
         data=TSdata(model), error.weights=c(1,1,10))

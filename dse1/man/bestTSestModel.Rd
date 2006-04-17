@@ -37,7 +37,7 @@
 \code{\link[dse1]{informationTestsCalculations}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 models <- list(estVARXls(eg1.DSE.data.diff), estVARXar(eg1.DSE.data.diff))
 z <-  bestTSestModel(models)
 }

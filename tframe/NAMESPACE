@@ -95,6 +95,7 @@ S3method("tfdiff","default")
 S3method("tfdiff","tframe")
 
 S3method("diff","tframed")
+S3method("aggregate","tframed")
 
 export("tfwindow")
 S3method("tfwindow","default")
@@ -146,4 +147,11 @@ export("tbind")
 S3method("tbind","default")
 S3method("tbind","ts")
 
+export("percentChange")
+S3method("percentChange","default")
+
 export("addDate")
+export("diffLog")
+S3method("diffLog","default")
+export("ytoypc")
+S3method("ytoypc","default")

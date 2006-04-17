@@ -44,12 +44,12 @@ Box-Jenkins type of analysis the matrix may be data which is being evaluated to
 determine a model. The method for a TSestModel evaluates the residuals
 calculated by subtracting the output data from the model predictions.}
 
-\sideffects{
+\section{Side Effects}{
     Diagnostic information is printed and plotted if a device is available.
 Output graphics can be paused between pages by setting par(ask=TRUE).
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
     checkResiduals(model)
 }

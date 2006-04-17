@@ -87,7 +87,7 @@ estSSMittnik.
     \code{\link[dse1]{informationTestsCalculations}}
 }
 \examples{
-    if(is.R()) data("egJofF.1dec93.data", package="dse1")
+    data("egJofF.1dec93.data", package="dse1")
     model <- toSS(estVARXls(egJofF.1dec93.data))
     newmodel <-MittnikReduction(model, criterion="taic")
 }

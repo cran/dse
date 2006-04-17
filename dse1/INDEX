@@ -7,7 +7,8 @@ be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as c
 See also related packages in the bundle dseplus in the devel packages 
 area of CRAN.
 .DSEflags               Flags to Indicate Use of Compiled Code
-00Intro.dse1            DSE
+00.dse.Intro            Dynamic Systems Estimation - Multivariate Time
+                        Series Package
 ARMA                    ARMA Model Constructor
 DSEversion              Print Version Information
 McMillanDegree          Calculate McMillan Degree
@@ -20,7 +21,6 @@ TSdata                  Construct TSdata time series object
 TSdata.object           time series data object
 TSestModel              Estimated Time Series Model
 TSmodel                 Time Series Models
-TSrestrictedModel       Restrict Model Coefficients
 addPlotRoots            Add Model Roots to a plot
 balanceMittnik          Balance a state space model
 bestTSestModel          Select Best Model
@@ -30,10 +30,11 @@ checkBalanceMittnik     Check Balance of a TSmodel
 checkConsistentDimensions
                         Check Consistent Dimensions
 checkResiduals          Autocorrelations Diagnostics
-coef.TSmodel            Extract Model Parameters
+coef.TSmodel            Extract or set Model Parameters
 combine                 Combine two objects.
 combine.TSdata          Combine series from two TSdata objects.
-diffLog                 Calculate the difference of log data
+dse-package             Dynamic Systems Estimation - Multivariate Time
+                        Series Package
 eg1.DSE.data            Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data      Eleven Time Series used in Gilbert (1995)
 estBlackBox             Estimate a TSmodel
@@ -61,8 +62,9 @@ l.ARMA                  Evaluate an ARMA TSmodel
 l.SS                    Evaluate a state space TSmodel
 markovParms             Markov Parameters
 nseriesInput            Number of Series in in Input or Output
+nstates                 State Dimension of a State Space Model
 observability           Calculate Model Observability Matrix
-percentChange           Calculate percent change
+percentChange.TSdata    Calculate percent change
 periods.TSdata          Specific Methods for tframed Data
 periodsInput            TSdata Periods
 plot.roots              Plot Model Roots
@@ -74,11 +76,9 @@ roots                   Calculate Model Roots
 scale.TSdata            Scale Methods for TS objects
 seriesNames.TSdata      Series Names Specific Methods
 seriesNamesInput        TSdata Series Names
-setTSmodelParameters    Set TSmodel Parameter Information
 simulate                Simulate a TSmodel
 smoother                Evaluate a smoother with a TSmodel
 stability               Calculate Stability of a TSmodel
-standardize             standardize data
 state                   Extract State
 sumSqerror              Calculate sum of squared prediction errors
 summary.TSdata          Specific Methods for Summary
@@ -90,4 +90,3 @@ toSS                    Convert to State Space Model
 toSSChol                Convert to Non-Innovation State Space Model
 toSSOform               Convert to Oform
 toSSinnov               Convert to State Space Innovations Model
-ytoypc                  Convert to year to year percent change

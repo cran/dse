@@ -51,7 +51,7 @@ If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
 \code{\link{forecastCovWRTtrue}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(TSdata(output=outputData(eg1.DSE.data.diff)))
     z <-  EstEval(model, 
        estimation="estVARXls", estimation.args=list(max.lag=2))

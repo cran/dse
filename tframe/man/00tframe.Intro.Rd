@@ -1,40 +1,51 @@
-\name{00Intro.tframe}
-\alias{00Intro.tframe}
-\title{Tframe}
+\name{00tframe.Intro}
+\alias{00.tframe.Intro}
+\alias{tframe.Intro}
+\alias{tframe-package}
 
-\center{Generic Methods for Handling Time}
+\docType{package}
+
+\title{Tframe - Generic Approach to Handling Time}
 
 \description{Programs for implementing an object oriented approach to
-    handling different time representations.}
-\section{Introduction}{
-The \emph{tframe} library facilitates an object oriented approach
-to handling different time representations in S/R. It provides generic methods
+    handling different time representations.
+}
+
+\details{
+The \pkg{tframe} package provides a kernel of functions for programming time series 
+methods in a way that makes them relatively independently of the representation 
+of time. pkg{tframe} is intended to make it easier to write code which can 
+use any new/better 
+time representations when they appear. It also provides plotting, time 
+windowing, and some other utility functions which are specifically intended 
+for time series.
+
+\pkg{tframe} provides generic methods
 by which code can be developed without too much dependence on the
 representation of time (i.e. specific time series objects). This can make
 most code very robust with respect to other (and future)
-improved/different representations of time. However, something like putting
-the time axis label on a plot will require a method which is specific
-to the time representation. The methods also provide a
-simple way to fix some inconsistency which have occured with the
-mix of possible time representations.
+improved/different representations of time. However, details
+like putting the time axis label on a plot may require a method for the
+the specific time representation. 
 
 The classes and methods associated with the implementation of rts, cts
 and its in Splus and ts in R accomplish some of these objectives. 
 For many time series programs the availability of a \emph{window} method 
-provided by those classes is the main method which is needed. However, after
-calculations are done the time attributes of the resulting objects are
-often lost and the programmer must re-assign time attributes to the resulting
-object if those are to be retained. This has typically been done with something
-like tsp(), but these functions rely on a particular time representation and
-would not always make sense for another representation. In order to address this,
-the tframe methods attempt to further separate the time representation from 
-the data to allow statements like
+provided by those classes is the main method which is needed. However, 
+the time attributes of calculated objects are
+often lost and programmers must re-assign time attributes to the resulting
+object if they are to be retained. Historically this was done with 
+\code{tsp}, but this relies on a particular time representation and
+would not work for other representations. In order to address this,
+the \pkg{tframe} methods attempt to separate the time representation from 
+the data and allow statements like
 
 \code{tframe(x) <- tframe(y)}
 
-to make the time frame of x the same as that of y, without the need to
-worry about what time representation is used in y (e.g. ts, rts, cts,
-its, ...). In this assignment x and y need not be too similar (one
+to make the time frame of \code{x} the same as that of \code{y}, 
+without the need to
+worry about what time representation is used in \code{y}.
+In this assignment \code{x} and \code{y} need not be too similar (one
 might be a univariate series while the other is a matrix or an array or
 list of spatial or panel time series data), as long as they are similar
 in the time dimension. For the case where \code{tsp(x) <- tsp(y)} would 
@@ -120,11 +131,34 @@ Many of the functions in the library are not yet individually documented
 are all very short and can be examined easily. 
 The code in the tests subdirectory provides a short set of tests and may
 serve as an example.
+
+\tabular{ll}{
+Package: \tab tframe\cr
+Depends: \tab R\cr
+License: \tab free, see LICENSE file for details.\cr
+URL: \tab http://www.bank-banque-canada.ca/pgilbert\cr
 }
 
+The main objects are:
+\preformatted{
+tfdata      time series input and output data structure
+}
+}
+
+\author{
+Paul Gilbert <pgilbert@bank-banque-canada.ca>
+
+Maintainer: Paul Gilbert <pgilbert@bank-banque-canada.ca>  
+}
+
+\seealso{
+\code{\link{tframe}},
+\code{\link{tframed}},
+\code{\link{tfwindow}},
+\code{\link{tfplot}}
+}
 \keyword{programming}
 \keyword{utilities}
 \keyword{ts}
 
-\author{Paul Gilbert}
 

@@ -1,8 +1,52 @@
    
 Known Bugs
 
-    o Handling of initial conditions for the state space smoother still 
-      needs work.
+    o Handling of initial conditions for the state space filter and smoother 
+      still needs work.
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2006.4-1
+
+Changes (Possibly) Affecting Users
+
+    o 00Intro.dse1.Rd was renamed 00.dse.Intro.Rd and 00Intro.tframe.Rd was 
+      renamed 00.tframe.Intro.Rd.  Also, aliases dse, dse.Intro, and dse-package
+      were added, and similarly for tframe. With luck, this will mean users can
+      find the general package description.
+    
+    o A bug in setting non- zero or one constants in ARMA models was fixed. (The
+      constants were still treated as parameters in estMaxLik().)
+    
+    o A bug in setting non- zero or one constants in ARMA models was fixed.
+    
+    o A bug printing ARMA models with no lags in the AR part was fixed.
+    
+    o Some of the general documentation was cleaned up (a bit).
+ 
+    o percentChange, ytoypc, and diffLog were moved from dse1 to tframe, and all
+      were made generic.
+ 
+    o pre-pending of info to names (e.g. %ch ) in above was changed so that it 
+      can be turned off using a global option setting ModSeriesNames=FALSE.
+ 
+    o All methods for tfplot were changed so that adding the Title 
+      can be turned off using a global option setting PlotTitles=FALSE.
+ 
+    o A tframe method for aggregate was added to tframe.
+ 
+    o The function standardize was removed. (It has been deprecated in favour of
+      scale for a long time).
+ 
+    o The function dseclass was removed (since it was only used to compensate
+      for differences with Splus, which is not longer being tested).
+ 
+    o The functions dsescan and read.int were removed. (dsescan was replaced 
+      with R's scan and read.int was moved to a local function in programs
+      that used it.)
+
+Changes Affecting Development
+ 
+    o Several Splus test values where commented out (since Splus is not 
+      longer being tested).
 
                  CHANGES IN DSE AND DSEPLUS VERSION 2006.1-1
 

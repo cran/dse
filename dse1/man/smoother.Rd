@@ -3,7 +3,6 @@
 \alias{smoother.TSestModel}
 \alias{smoother.TSmodel}
 \alias{smoother.nonInnov}
-\alias{smoother.TSrestrictedModel}
 
 \title{Evaluate a smoother with a TSmodel}
 \description{Evaluate a state space model.}
@@ -12,8 +11,6 @@
     \method{smoother}{nonInnov}(model, data, compiled=.DSEflags()$COMPILED)
     \method{smoother}{TSmodel}(model, data, compiled=.DSEflags()$COMPILED)
     \method{smoother}{TSestModel}(model, data=TSdata(model),
-      compiled=.DSEflags()$COMPILED)
-    \method{smoother}{TSrestrictedModel}(model, data,
       compiled=.DSEflags()$COMPILED)
 }
 \arguments{

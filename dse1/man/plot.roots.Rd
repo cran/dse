@@ -11,7 +11,7 @@ values as returned by the function roots).}
     \item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
     \item{...}{(further arguments, currently disregarded).}
 }
-\sideffects{The roots and a unit circle are plotted on the complex plane.}
+\section{Side Effects}{The roots and a unit circle are plotted on the complex plane.}
 \value{
 The eigenvalues of the state transition matrix or the inverse of the roots of the
 determinant of the AR polynomial are returned invisibly.
@@ -23,7 +23,7 @@ determinant of the AR polynomial are returned invisibly.
     \code{\link{McMillanDegree}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
     plot(roots(model))
 }

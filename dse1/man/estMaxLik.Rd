@@ -32,7 +32,7 @@ yet been implemented.
 \details{
   One of \code{obj1} or \code{obj2} should specify a \code{TSmodel} and 
   the other \code{TSdata}. If \code{obj1} is a \code{TSestModel} and 
-  \code{obj2} is NULL, then the data is extracted from \code{obj1}. 
+  \code{obj2} is \code{NULL}, then the data is extracted from \code{obj1}. 
   The \code{TSmodel} object is used to specify both the initial parameter 
   values and the model structure (the placement of the parameters
   in the various arrays of the TSmodel). Estimation attempts to minimimize the
@@ -50,7 +50,7 @@ yet been implemented.
   specified optimization \code{algorithm} (so see the help for the alogrithm). 
   The example below is for the default \code{optim} algorithm.
 }
-\warning{
+\section{Warning}{
   Maximum likelihood estimation of multivariate time series models tends to be
   problematic, even when a good structure and good starting parameter values
   are known. This is especially true for state space models. Also, it seems that
