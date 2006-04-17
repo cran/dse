@@ -45,7 +45,7 @@ The second usages assigns the input or output series.
     \code{\link[tframe]{selectSeries}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data", package="dse1")
+data("eg1.DSE.data", package="dse1")
 outputData(eg1.DSE.data) 
 }
 \concept{DSE}

@@ -50,7 +50,7 @@ Gilbert (1995).
 \code{\link[dse1]{informationTestsCalculations}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 z <-  estBlackBox2(eg1.DSE.data.diff)
 }
 \concept{DSE}

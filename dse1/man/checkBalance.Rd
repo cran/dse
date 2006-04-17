@@ -17,7 +17,7 @@ Calculate the difference between observability and reachability gramians.}
     \item{model}{A TSmodel object.}
 }
 \value{No value is returned.}
-\sideffects{
+\section{Side Effects}{
 Differences  between the observability and reachability gramians are printed.
 }
 \details{
@@ -28,7 +28,7 @@ Balanced models should have equal observability and reachability gramians.
     \code{\link[dse2]{MittnikReduction}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- toSS(estVARXls(eg1.DSE.data.diff))
     checkBalance(model)
 }

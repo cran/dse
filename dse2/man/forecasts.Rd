@@ -25,7 +25,7 @@
     \code{\link{forecast}}
 }
 \examples{
-    if(is.R()) data("egJofF.1dec93.data", package="dse1")
+    data("egJofF.1dec93.data", package="dse1")
     model <- estVARXls(window(egJofF.1dec93.data, end=c(1985,12)))
     pr <- forecast(model, conditioning.inputs=inputData(egJofF.1dec93.data))
     z <- forecasts(pr)

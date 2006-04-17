@@ -46,7 +46,7 @@ variable) is as long as necessary for the most future forecast.
 \code{\link{horizonForecasts}}
 }
 \examples{
-if(is.R()) data("egJofF.1dec93.data", package="dse1")
+data("egJofF.1dec93.data", package="dse1")
 model <- estVARXls(egJofF.1dec93.data)
 pr <- featherForecasts(model, egJofF.1dec93.data)
 tfplot(pr)

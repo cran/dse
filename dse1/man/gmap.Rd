@@ -23,7 +23,7 @@ polynomials are premultiplied by g. If g is a scalar it is treated
 as a diagonal matrix.
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(estVARXls(eg1.DSE.data.diff))
 gmap(2, model)
 }

@@ -10,7 +10,7 @@
     \item{...}{(further arguments, currently disregarded).}
 }
 \value{None}
-\sideffects{A plot}
+\section{Side Effects}{A plot}
 \seealso{
     \code{\link{mineStepwise}}
 }

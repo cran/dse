@@ -30,7 +30,7 @@
     \code{\link{toSSinnov}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)
 %    model <- toSSOform(model)
 }

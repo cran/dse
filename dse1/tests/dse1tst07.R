@@ -15,7 +15,7 @@ cat("dse1 test 7a...\n")
   A[1,,] <- diag(1,length(true.roots))
   A[2,,] <- diag(-true.roots, length(true.roots))
   # the following relies on roots using by.poly=FALSE
-  if(!is.R()) options(expressions=1024)# really if(is.Splus())
+  # Splus needed options(expressions=1024)
    tst <-  sort(roots( ARMA(A=A, B=diag(1,length(true.roots)) ),by.poly=FALSE))
    good <- sort(true.roots)
    error <- max(Mod(good - tst))

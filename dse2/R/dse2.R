@@ -233,7 +233,7 @@ forecasts.forecast <- function(obj){obj$forecast}
 testEqual.forecast <- function(obj1, obj2, fuzz=1e-14)
 {# N.B. models are not compared (so equivalent models will compare true)
  # inputs are not compared, so they may be provided differently.
- r <- all(dseclass(obj1) == dseclass(obj2))
+ r <- all(class(obj1) == class(obj2))
  if (r) r <- all(outputData(obj1$data) == outputData(obj2$data))
  if (r) r <- all(obj1$horizon == obj2$horizon)
  if (r) r <- fuzz > max(abs(obj1$pred - obj2$pred))
@@ -272,7 +272,8 @@ tfplot.forecast <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
             }
          tframe(z) <- tf
          tfOnePlot(z, ylab = ylab[i],start=start, end=end)
-         if(i == series[1]) title(main = Title)
+         if(!is.null(Title) && (i == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles)) title(main = Title)
         }
    invisible()
 }
@@ -387,7 +388,8 @@ tfplot.featherForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf)
          for (t in 1:length(x$from.periods))
             zz <- tbind(zz, selectSeries(x$featherForecasts[[t]], i))
          tfOnePlot(zz,start=start,end=end, ylab=ylab[i], lty=ltys)
-         if(i == series[1]) title(main = Title)
+         if(!is.null(Title) && (i == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles))  title(main = Title)
         }
    invisible()
 }
@@ -880,7 +882,7 @@ print.EstEval <- function(x, digits=options()$digits, ...)
 summary.EstEval <- function(object, ...)
  {#  (... further arguments, currently disregarded)
   classed(list( # constructor summary.EstEval
-     class=dseclass(object),
+     class=class(object),
      estimation=object$estimation,
      estimation.args= if(!is.list((object$estimation.args)[[1]]))
                            object$estimation.args    else    NULL,
@@ -935,7 +937,8 @@ tfplot.EstEval <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
   	tfOnePlot(tframed(tbind(truth[,j], r), tf), ylab= ylab[j],
 	              lty=c(1,rep(2, N)), col=c("black",rep("red",N)),
 		      start=start,end=end)
-        if(j == series[1]) title(main = Title)
+        if(!is.null(Title) && (j == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles)) title(main = Title)
         }
   invisible()
  }
@@ -1306,7 +1309,7 @@ summary.TSmodelEstEval <- function(object, ...)
  #summary(roots(object))  these are slow
 
   classed(list( # constructor summary.TSmodelEstEval
-     class=dseclass(object),
+     class=class(object),
      conv=conv,
      default=summary.default(object)),
   "summary.TSmodelEstEval")
@@ -1509,7 +1512,7 @@ summary.estimatedModels <- function(object, ...)
         }
     }
   classed(list(  # constructor summary.estimatedModels
-     class=dseclass(object),
+     class=class(object),
      trend.coef=object$trend.coef,
      estimation.names=estimation.names,
      estimation.methods=estimation.methods,
@@ -1566,7 +1569,7 @@ is.horizonForecasts <- function(obj) { inherits(obj,"horizonForecasts") }
 
 testEqual.horizonForecasts <- function(obj1, obj2, fuzz=1e-14)
 {# N.B. models are not compared (so equivalent models will compare true)
- r <- all(dseclass(obj1) == dseclass(obj2))
+ r <- all(class(obj1) == class(obj2))
  if (r) r <- testEqual(obj1$data, obj2$data)
  if (r) r <- all(obj1$horizons == obj2$horizons)
  if (r) r <- obj1$discard.before == obj2$discard.before
@@ -1798,7 +1801,8 @@ tfplot.horizonForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf)
       #   complains if the frequencies do not match
       zz<- tframed(tbind(unclass(output)[,i],t((x$horizonForecasts)[,,i])), tf)
       tfOnePlot(zz,start=start, end=end, ylab =ylab[i])
-      if(i == series[1]) title(main = Title)
+      if(!is.null(Title) && (i == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles))  title(main = Title)
      }
    invisible()
    }
@@ -1855,7 +1859,7 @@ horizonForecasts.forecastCov <- function(obj,horizons=NULL,
  if (!is.null(obj$model))
    {proj <- horizonForecasts.TSmodel(obj$model, obj$data, horizons=horizons, 
                        discard.before=discard.before)
-    dseclass(proj) <- "horizonForecasts"
+    class(proj) <- "horizonForecasts"
    }
  else if (!is.null(obj$multi.model))
    {proj <-vector("list", length(obj$multi.model))
@@ -1863,7 +1867,7 @@ horizonForecasts.forecastCov <- function(obj,horizons=NULL,
       proj[[i]] <-horizonForecasts.TSmodel(
              (obj$multi.model)[[i]], obj$data, 
              horizons=horizons, discard.before=discard.before)
-    dseclass(proj) <- c("multiModelHorizonForecasts","horizonForecasts")
+    class(proj) <- c("multiModelHorizonForecasts","horizonForecasts")
    }
  else  stop("Object does not include a model.\n")
  invisible(proj)
@@ -1874,7 +1878,8 @@ tfplot.multiModelHorizonForecasts <- function(x,
   #  (... further arguments, currently disregarded)
   for (i in seq(length(x)))
     {tfplot(x[[i]], start=start, end=end, series=series)
-     cat("press return to continue>");key<-dsescan(what="");cat("\n")
+     #cat("press return to continue>");key<-dsescan(what="");cat("\n")
+     cat("press Enter to continue>"); key<- readLines(n=1)
     }
   invisible()
   }
@@ -2049,7 +2054,7 @@ forecastCovSingleModel <- function( model, data=NULL, horizons=1:12,
 
 forecastCovCompiled <- function(model, data, horizons=1:12 ,
     discard.before=minimumStartupLag(model)) 
-   if (exists(paste("forecastCovCompiled.", dseclass(model)[1], sep="")))
+   if (exists(paste("forecastCovCompiled.", class(model)[1], sep="")))
       UseMethod("forecastCovCompiled") else
       stop("compiled code for this model class is not available. Try forecastCov( ...,compiled=F)")
 
@@ -2247,7 +2252,7 @@ summary.forecastCov <- function(object, horizons=object$horizons,
     summary.stats[[i]] <- z
    }
   classed(list(  # constructor summary.forecastCov
-     class=dseclass(object),
+     class=class(object),
      horizons=length(object$horizons),
      models=length(object$multi.model),
      seriesNamesOutput=seriesNamesOutput(object$data),
@@ -2379,8 +2384,8 @@ tfplot.forecastCov <- function(x, ..., series = 1:dim(x$forecastCov[[1]])[2],
                 labels <- x$selection.index[labels]
             text(dim(z)[1], z[dim(z)[1], ], labels)
         }
-        if ((i == 1) & (!is.null(Title))) 
-            title(main = Title)
+        if(!is.null(Title) && (i == 1) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles))  title(main = Title)
     }
     if (is.null(Legend)) {
         Legend <- paste("prediction covariance", select.cov[show])
@@ -2775,7 +2780,7 @@ summary.forecastCovEstimatorsWRTtrue <- function(object, digits=options()$digits
   for (i in seq(Ms)) 
      conv<- append(conv,object$estimatedModels[[i]]$multi.model[[1]]$converged)
   classed(list( # constructor summary.forecastCovEstimatorsWRTtrue
-    dseclass(object), 
+    class(object), 
     horizons=length(object$horizons), 
     Ms=Ms,
     conv=conv,
@@ -2950,7 +2955,7 @@ print.forecastCovEstimatorsWRTdata.subsets <- function(x,
 
 summary.forecastCovEstimatorsWRTdata.subsets <- function(object, ...)
   {#  (... further arguments, currently disregarded)
-   classed(list( dseclass(object),  #summary constructor
+   classed(list( class(object),  #summary constructor
         horizons=object$horizons, 
         essential.data=object$essential.data,
         output.names=seriesNamesOutput(object$all.data), 
@@ -3217,11 +3222,11 @@ stripMine <- function(all.data, essential.data=1,
  #  returned, so extra calls do not cause errors and are very quick.
  #  This is useful when you are too lazy to calculate the exact number of steps.
 
-  if (dseclass(all.data)[1] == "forecastCovEstimatorsWRTdata.subsets")
+  if (class(all.data)[1] == "forecastCovEstimatorsWRTdata.subsets")
        {cat("done.\n")
         return(all.data)
        }
-  if (dseclass(all.data)[1] == "stripMine.intermediate.result")
+  if (class(all.data)[1] == "stripMine.intermediate.result")
     {r <- all.data$forecastCov
      start <- 1+all.data$end
      estimation.sample <- all.data$estimation.sample
@@ -3283,7 +3288,7 @@ stripMine <- function(all.data, essential.data=1,
          horizons=horizons, 
          discard.before=discard.before)
   if (end == nrow(variable.index))
-    dseclass(r) <- c("forecastCovEstimatorsWRTdata.subsets", "forecastCov")
+    class(r) <- c("forecastCovEstimatorsWRTdata.subsets", "forecastCov")
   else
     {r<-classed(append(r, list(estimation.sample=estimation.sample, #constructor
              quiet=quiet, step.size=step.size, end=end, m=m,p=p)),

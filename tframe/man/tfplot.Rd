@@ -28,7 +28,7 @@
     \item{tf}{a tframe or tframed object which can be used to specify start and
     end.}
     \item{series}{series to be plotted. (passed to selectSeries)}
-    \item{Title}{string to use for plot title.}
+    \item{Title}{string to use for plot title (but see details).}
     \item{lty}{passed to matplot. See also par.)}
     \item{lwd}{passed to matplot. See also par.)}
     \item{pch}{passed to matplot. See also par.)}
@@ -68,8 +68,13 @@
     elements giving the max and min, which are applied to all graphs, or a list
     of length equal to the number of series to be plotted with each list element
     being the two element vector for the corresponding plot limits. 
+
+    The \code{Title} is not put on the plot if the global option
+    PlotTitles is FALSE. This can be set with \code{options(PlotTitles=FALSE)}. 
+    This provides a convenient  mechanism to omit all titles when the title
+    may be added separately (e.g. in Latex).
 }
-\sideffects{An object is plotted.}
+\section{Side Effects}{An object is plotted.}
 \seealso{
     \code{\link{tfprint}}
     \code{\link{tframe}}

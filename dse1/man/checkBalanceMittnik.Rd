@@ -19,7 +19,7 @@ of the model transformed to Mittnik's form.
     \item{model}{An object of class TSmodel.}
 }
 \value{No value is returned.}
-\sideffects{
+\section{Side Effects}{
 Differences  between the observability and reachability gramians are printed.}
 \details{
 Balanced models should have equal observability and reachability gramians.
@@ -29,7 +29,7 @@ Balanced models should have equal observability and reachability gramians.
 \code{\link[dse2]{MittnikReduction}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- toSS(estVARXls(eg1.DSE.data.diff))
     checkBalanceMittnik(model)
 }

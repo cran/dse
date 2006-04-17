@@ -38,7 +38,7 @@ An object of class 'ARMA' 'TSmodel' containing an ARMA model.
 \code{\link{fixConstants}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(estVARXls(eg1.DSE.data.diff))
 model <- toARMA(model)
 }

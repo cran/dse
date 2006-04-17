@@ -36,5 +36,3 @@
 }
 \value{A time series matrix.}
 \keyword{internal}
-
-

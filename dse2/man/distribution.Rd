@@ -46,7 +46,7 @@ available then \code{density} is applied if it is available.
 \code{\link{EstEval}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(TSdata(output=outputData(eg1.DSE.data.diff)), max.lag=2)
 # now use this as the true model
 z <-  EstEval(model, 
