@@ -2343,14 +2343,15 @@ residualStats <- function(pred, data, sampleT=nrow(pred), warn=TRUE){
         {if(warn) warning("The cov. matrix is singular. Working on subspace.")
          v$d <- v$d[i]
       #   v$u <- v$u[i,i, drop=FALSE]
-      #   v$v <- v$v[i,i, drop=FALSE]
+      #   v$vt <- v$vt[i,i, drop=FALSE]
       #   e <- e[,i, drop=FALSE]
         }
       like1 <- 0.5 * sampleT * log(prod(v$d)) # det
-#      if (1 == length(v$d)) OmInv <-  v$v %*% (1/v$d) %*%t(v$u) 
-#      else OmInv <-  v$v %*% diag(1/v$d) %*%t(v$u) # more robust than solve(Om)
+      # $vt is transposed in La.svd, but not v in svd
+#      if (1 == length(v$d)) OmInv <-  v$u %*% (1/v$d) %*% v$vt 
+#      else OmInv <-  v$u %*% diag(1/v$d) %*% v$vt # more robust than solve(Om)
 #  following is equivalent
-#      OmInv <-  v$v %*% sweep(t(v$u),1,1/v$d, "*") 
+#      OmInv <-  v$u %*% sweep(v$vt,1,1/v$d, "*") 
 #      like2 <- sum(e * (e %*% OmInv)) /2
 #  but this works out to (sampleT*p/2) and fixing for degenerate distributions:
        like2 <- (sampleT*length(v$d))/2
@@ -3053,10 +3054,10 @@ estVARXmean.correction <- function(X, y, bbar,
  v <- La.svd(t(X)%*%X) # this is more robust than solve()
  if (warn && any(abs(v$d[1]*fuzz) > abs(v$d) ) ) 
    warning("The covariance matrix is nearly singular. Check for linearly related data.")
-# if(1 == length(v$d))OmInv <- v$v %*% (1/v$d) %*% t(v$u)
-# else OmInv <- v$v %*% diag(1/v$d) %*% t(v$u)	
+# if(1 == length(v$d))OmInv <- v$u %*% (1/v$d) %*% v$vt
+# else OmInv <- v$u %*% diag(1/v$d) %*% v$vt	
 #  following is equivalent
-# OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
+# OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") CHECK
  OmInv <-  crossprod(v$vt, sweep(t(v$u),1,1/v$d, "*")) 
 
 # t(-OmInv %*% ( 
@@ -3719,8 +3720,8 @@ Portmanteau <- function(res){
 #  a0 <- solve(ac[1,,])  the following is more robust than solve for
 #              degenerate densities
   v <- La.svd(ac[1,,])
-#  if(1 == length(v$d)) a0 <- v$v %*%     (1/v$d) %*% t(v$u)
-#	           else a0 <- v$v %*% diag(1/v$d) %*% t(v$u)	
+#  if(1 == length(v$d)) a0 <- t(v$vt) %*%     (1/v$d) %*% t(v$u)
+#	           else a0 <- t(v$vt) %*% diag(1/v$d) %*% t(v$u)	
 #  following is equivalent
   a0 <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
   P <-0

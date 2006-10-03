@@ -1,8 +1,10 @@
-   
-Known Bugs
 
-    o Handling of initial conditions for the state space filter and smoother 
-      still needs work.
+                 CHANGES IN DSE AND DSEPLUS VERSION 2006.10-1
+
+Changes (Possibly) Affecting Users
+
+    o Namespace imports were fixed as need for R-2.4.0.
+
 
                  CHANGES IN DSE AND DSEPLUS VERSION 2006.4-1
 

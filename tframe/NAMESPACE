@@ -1,4 +1,8 @@
-import("stats")
+importFrom("stats","start")
+importFrom("stats","end")
+importFrom("stats","frequency")
+importFrom("stats","time")
+importFrom("stats","aggregate")
 
 export("freeze")
 S3method("freeze","default")

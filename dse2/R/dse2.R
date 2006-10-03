@@ -947,19 +947,25 @@ tfplot.EstEval <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
 
 distribution <- function(obj, ...)UseMethod("distribution")
 
-distribution.TSdata <- function(obj, bandwidth=0.2, 
+#distribution.TSdata <- function(obj, bandwidth=0.2, 
+#        select.inputs = seq(length= nseriesInput(obj)),
+#        select.outputs= seq(length=nseriesOutput(obj)), ...)
+distribution.TSdata <- function(obj, ..., bandwidth=0.2, 
         select.inputs = seq(length= nseriesInput(obj)),
-        select.outputs= seq(length=nseriesOutput(obj)), ...)
-  {#  (... further arguments, currently disregarded)
+        select.outputs= seq(length=nseriesOutput(obj)))
+  {#  (... further objects, currently disregarded)
    if (0 !=  nseriesInput(obj))
       distribution( inputData(obj), bandwidth=bandwidth, series=select.inputs)
    if (0 != nseriesOutput(obj))
-      distribution(outputData(obj), bandwidth=bandwidth, series=select.inputs)
+      distribution(outputData(obj), bandwidth=bandwidth, series=select.outputs)
    invisible(obj)
   }
 
-distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
-  {#  (... further arguments, currently disregarded)
+# this should be something like distribution.tframed if distribution becomes
+#  generic in EstEval.  ALSO SEE distribution.factorsEstEval RE ...
+#distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
+distribution.default <- function(obj, ..., bandwidth=0.2, series=NULL)
+  {#  (... further objects, currently disregarded)
    # obj should be a ts matrix (perhaps this should be a tf method).
    # If series is NULL then all series are ploted.
    # note that this graphic can be fairly misleading:
@@ -1079,9 +1085,9 @@ plot.rootsEstEval <- function(x, complex.plane=TRUE, cumulate=TRUE, norm=FALSE,
 
 roots.rootsEstEval <- function(obj, ...)   {obj}
 
-distribution.rootsEstEval <- function(obj, mod=TRUE, invert=FALSE, Sort=FALSE, 
-    bandwidth=0.2, select=NULL, ...)
-{#  (... further arguments, currently disregarded)
+distribution.rootsEstEval <- function(obj, ..., mod=TRUE, invert=FALSE, Sort=FALSE, 
+    bandwidth=0.2, select=NULL)
+{#  (... further objectss, currently disregarded)
  # if mod is true the modulus is used, otherwise real and imaginary are separated.
  # if invert is true the reciprical is used.
  # if Sort is true then sort is applied (before cumulate). This is of particular interest
@@ -1215,9 +1221,9 @@ roots.coefEstEval <- function(obj, criterion.args=NULL, ...)
   invisible(classed(obj, c("rootsEstEval","EstEval")))# constructor
 }
 
-distribution.coefEstEval <- function(obj,  Sort=FALSE, bandwidth=0.2,
-	graphs.per.page=5, ...)
-{#  (... further arguments, currently disregarded)
+distribution.coefEstEval <- function(obj, ...,  Sort=FALSE, bandwidth=0.2,
+	graphs.per.page=5)
+{#  (... further objects, currently disregarded)
  # if Sort is true then sort is applied (before ave). This is of particular interest
  #   with estimation methods like black.box which may not return parameters
  #   of the same length or in the same order.

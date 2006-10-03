@@ -1,6 +1,11 @@
 useDynLib(dse1)
 
-##import("stats")
+importFrom("stats","window")
+importFrom("stats","start")
+importFrom("stats","end")
+importFrom("stats","frequency")
+importFrom("stats","coef")
+
 import("tframe")
 ##import("setRNG")
 
