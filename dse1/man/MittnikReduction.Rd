@@ -9,8 +9,8 @@ Balance and reduce the state dimension of a state space model a la Mittnik.
 \usage{
     MittnikReduction(model, data=NULL, criterion=NULL, verbose=TRUE,warn=TRUE)
     MittnikReduction.from.Hankel(M, data=NULL, nMax=NULL, 
-       criterion=NULL, verbose=TRUE, warn=TRUE, 
-       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+       criterion=NULL, verbose=TRUE, warn=TRUE) 
+%%       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 }
 \arguments{
     \item{model}{An object of class TSmodel or TSestModel.}
@@ -26,7 +26,7 @@ Balance and reduce the state dimension of a state space model a la Mittnik.
     \item{M}{a matrix. See details.}
     \item{nMax}{integer indicating the state dimension of the largest model
        considered.}
-    \item{Spawn}{logical indicating if Splus For loops should be used.}
+%%    \item{Spawn}{logical indicating if Splus For loops should be used.}
 }
 \value{
 A state space model balance a la Mittnik in an object of class TSestModel.
@@ -62,22 +62,22 @@ estSSMittnik.
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
     the equivalence. Working paper 93-4, Bank of Canada. Available at
-    <www.bank-banque-canada.ca/pgilbert>
+    \url{www.bank-banque-canada.ca/pgilbert}.
 
-    Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" \emph{J. of Forecasting: 
-    Special Issue on VAR Modelling}. 14:229-250.
+    Gilbert, P. D. (1995) Combining VAR Estimation and State Space 
+    Model Reduction for Simple Good Predictions. \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling}, \bold{14}, 229-250.
 
     Mittnik, S. (1989), Multivariate Time Series Analysis With State 
-    Space Models, \emph{Computers Math Appl.} Vol 17, No 8/9, pp1189-1201.
+    Space Models. \emph{Computers Math Appl.} \bold{17}, 1189--1201.
    
     Mittnik, S. (1990), Macroeconomic Forecasting Experience With 
-    Balance State Space Models,  
-    \emph{International Journal Of Forecasting}, Vol 6, pp337-348.
+    Balance State Space Models.  
+    \emph{International Journal Of Forecasting}, \bold{6}, 337--348.
   
     Mittnik, S. (1990), Forecasting With Balanced State Space 
     Representations of Multivariate Distributed Lag Models. 
-    \emph{J. of Forecasting}, Vol.9, 207-218.  
+    \emph{J. of Forecasting}, \bold{9}, 207--218.  
 }
 \seealso{
     \code{\link{estVARXls}}
@@ -87,7 +87,7 @@ estSSMittnik.
     \code{\link[dse1]{informationTestsCalculations}}
 }
 \examples{
-    if(is.R()) data("egJofF.1dec93.data", package="dse1")
+    data("egJofF.1dec93.data", package="dse1")
     model <- toSS(estVARXls(egJofF.1dec93.data))
     newmodel <-MittnikReduction(model, criterion="taic")
 }

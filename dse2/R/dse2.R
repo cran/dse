@@ -233,7 +233,7 @@ forecasts.forecast <- function(obj){obj$forecast}
 testEqual.forecast <- function(obj1, obj2, fuzz=1e-14)
 {# N.B. models are not compared (so equivalent models will compare true)
  # inputs are not compared, so they may be provided differently.
- r <- all(dseclass(obj1) == dseclass(obj2))
+ r <- all(class(obj1) == class(obj2))
  if (r) r <- all(outputData(obj1$data) == outputData(obj2$data))
  if (r) r <- all(obj1$horizon == obj2$horizon)
  if (r) r <- fuzz > max(abs(obj1$pred - obj2$pred))
@@ -272,7 +272,8 @@ tfplot.forecast <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
             }
          tframe(z) <- tf
          tfOnePlot(z, ylab = ylab[i],start=start, end=end)
-         if(i == series[1]) title(main = Title)
+         if(!is.null(Title) && (i == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles)) title(main = Title)
         }
    invisible()
 }
@@ -387,7 +388,8 @@ tfplot.featherForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf)
          for (t in 1:length(x$from.periods))
             zz <- tbind(zz, selectSeries(x$featherForecasts[[t]], i))
          tfOnePlot(zz,start=start,end=end, ylab=ylab[i], lty=ltys)
-         if(i == series[1]) title(main = Title)
+         if(!is.null(Title) && (i == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles))  title(main = Title)
         }
    invisible()
 }
@@ -573,8 +575,8 @@ MonteCarloSimulations.default <- function (model, simulation.args=NULL,
 
 MonteCarloSimulations.TSestModel <- function(model, simulation.args=NULL, 
            replications=100, rng=NULL, quiet=FALSE, ...)
-  {if (is.null(simulation.args$sd) & is.null(simulation.args$SIGMA)) 
-     simulation.args$SIGMA <- model$estimates$cov
+  {if (is.null(simulation.args$sd) & is.null(simulation.args$Cov)) 
+     simulation.args$Cov <- model$estimates$cov
    if (is.null(simulation.args$input)) simulation.args$input <- inputData(model)
    MonteCarloSimulations(TSmodel(model), simulation.args=simulation.args, 
            replications=replications, rng=rng, quiet=quiet, ...)
@@ -594,30 +596,30 @@ MonteCarloSimulations.MonteCarloSimulations <- function(model, simulation.args=N
 
 
 MonteCarloSimulations.TSmodel <- function(model, simulation.args=NULL,
-          replications=100, rng=NULL, quiet=FALSE, 
-	  Spawn=if (exists(".SPAWN")) .SPAWN else FALSE, ...)
+          replications=100, rng=NULL, quiet=FALSE, ...)
+#	  Spawn=if (exists(".SPAWN")) .SPAWN else FALSE, ...)
 { 
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
  
  arglist <- append(list(model), simulation.args)
- if (Spawn)
-  {if (!quiet)cat("Spawning processes to calculate ", replications, " replications.\n")
-   assign("sim.forloop.n", replications, where = 1)
-   assign("sim.forloop.result", list(NULL), where = 1)
- #  assign("sim.forloop.model", model, where = 1)
-   assign("sim.forloop.arglist", arglist, where = 1)
-   on.exit(remove(c("sim.forloop.i", "sim.forloop.n", "sim.forloop.result",
-       "sim.forloop.arglist"),where = 1))
-   For(sim.forloop.i = 1:sim.forloop.n, sim.forloop.result[[sim.forloop.i]] <- 
-       do.call("simulate",  sim.forloop.arglist),
-       first=options(warn=-1), sync = TRUE)
-   result <- array(NA, c(dim(sim.forloop.result[[1]]$output),replications))
-   tfr <- tframe(sim.forloop.result[[1]]$output)
-   for (i in 1:replications) result[,,i] <- sim.forloop.result[[i]]$output
-  }
- else
-  {#r <- simulate(model, list(...))$output
+# if (Spawn)
+#  {if (!quiet)cat("Spawning processes to calculate ", replications, " replications.\n")
+#   assign("sim.forloop.n", replications, where = 1)
+#   assign("sim.forloop.result", list(NULL), where = 1)
+# #  assign("sim.forloop.model", model, where = 1)
+#   assign("sim.forloop.arglist", arglist, where = 1)
+#   on.exit(remove(c("sim.forloop.i", "sim.forloop.n", "sim.forloop.result",
+#       "sim.forloop.arglist"),where = 1))
+#   For(sim.forloop.i = 1:sim.forloop.n, sim.forloop.result[[sim.forloop.i]] <- 
+#       do.call("simulate",  sim.forloop.arglist),
+#       first=options(warn=-1), sync = TRUE)
+#   result <- array(NA, c(dim(sim.forloop.result[[1]]$output),replications))
+#   tfr <- tframe(sim.forloop.result[[1]]$output)
+#   for (i in 1:replications) result[,,i] <- sim.forloop.result[[i]]$output
+#  }
+# else {
+   #r <- simulate(model, list(...))$output
    r <- do.call("simulate", arglist)$output
    result <- array(NA, c(dim(r),replications))
    tfr <- tframe(r)
@@ -625,7 +627,7 @@ MonteCarloSimulations.TSmodel <- function(model, simulation.args=NULL,
    if (1 < replications)
      for (i in 2:replications) 
         result[,,i] <- outputData(do.call("simulate", arglist))
-  }
+#  }
 # default does not work on array seriesNames(result) <- seriesNamesOutput(model)
 if (length(seriesNamesOutput(model)) != dim(result)[2])
  stop("length of names (",length(seriesNamesOutput(model)),
@@ -677,7 +679,7 @@ summary.MonteCarloSimulations <- function(object,
  {#  (... further arguments, currently disregarded)
   stats <- NULL
   if (!is.null(series))
-    {if (sim.dim[3] <20) 
+    {if (dim(object$simulations)[3] <20) 
         warning("SD calculation is not very good with so few simulations.")
      names <- seriesNamesOutput(object)
      if(is.null(names)) names <- seriesNamesOutput(object$model)
@@ -801,8 +803,8 @@ distribution.MonteCarloSimulations <- function(obj,
 EstEval <- function( model, replications=100, rng=NULL, quiet=FALSE, 
                        simulation.args=NULL,
                        estimation=NULL, estimation.args=NULL, 
-                       criterion ="coef", criterion.args =NULL, 
-		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+                       criterion ="coef", criterion.args =NULL) 
+#		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 {
  if(is.null(estimation)) stop("estimation method must be specified.")
  if (is.EstEval(model) | is.MonteCarloSimulations(model))
@@ -815,45 +817,45 @@ EstEval <- function( model, replications=100, rng=NULL, quiet=FALSE,
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
  
- if (!Spawn)
-   {if(!quiet) cat("Calculating ", replications, " estimates.\n")
+# if (!Spawn) {
+    if(!quiet) cat("Calculating ", replications, " estimates.\n")
     result <- vector("list",replications)
     for (i in 1:replications)
        {data <- do.call("simulate", append(list(model), simulation.args))
-        m   <-  do.call(estimation, append(list(data),  estimation.args))
+	m   <-  do.call(estimation, append(list(data),  estimation.args))
         result[[i]]<-do.call(criterion, append(list(m), criterion.args))
        }
-   }
- else
-    {if(!quiet)
-        cat("Spawning processes to calculate ", replications, " estimates.\n")
-     est.forloop <- function(estimation, estimation.args, model, 
-                             simulation.args, criterion, criterion.args)
-       {data <- do.call("simulate", append(list(model), simulation.args))
-        m   <-  do.call(estimation, append(list(data),  estimation.args))
-        do.call(criterion, append(list(m), criterion.args))
-       }
-     assign("est.forloop", est.forloop, where = 1)
-     assign("est.forloop.n", replications, where = 1)
-     assign("est.forloop.result", list(NULL), where = 1)
-     assign("est.forloop.estimation", estimation, where = 1)
-     assign("est.forloop.model", model, where = 1)
-     assign("est.forloop.simulation.args", simulation.args, where = 1)
-     assign("est.forloop.criterion", criterion, where = 1)
-     assign("est.forloop.estimation.args", estimation.args, where = 1)
-     assign("est.forloop.criterion.args", criterion.args, where = 1)
-
-     on.exit(remove(c("est.forloop", "est.forloop.i", "est.forloop.n",
-         "est.forloop.result",  "est.forloop.estimation","est.forloop.model",
-         "est.forloop.simulation.args", "est.forloop.criterion", 
-         "est.forloop.estimation.args","est.forloop.criterion.args"),where = 1))
-
-     For(est.forloop.i = 1:est.forloop.n, est.forloop.result[[est.forloop.i ]]<-
-       est.forloop(est.forloop.estimation, est.forloop.estimation.args, est.forloop.model, 
-       est.forloop.simulation.args, est.forloop.criterion, est.forloop.criterion.args),
-       first=options(warn=-1), sync = TRUE)
-     result<-est.forloop.result
-    }
+#   }
+# else {
+#     if(!quiet)
+#	 cat("Spawning processes to calculate ", replications, " estimates.\n")
+#     est.forloop <- function(estimation, estimation.args, model, 
+#			      simulation.args, criterion, criterion.args)
+#	{data <- do.call("simulate", append(list(model), simulation.args))
+#	 m   <-  do.call(estimation, append(list(data),  estimation.args))
+#	 do.call(criterion, append(list(m), criterion.args))
+#	}
+#     assign("est.forloop", est.forloop, where = 1)
+#     assign("est.forloop.n", replications, where = 1)
+#     assign("est.forloop.result", list(NULL), where = 1)
+#     assign("est.forloop.estimation", estimation, where = 1)
+#     assign("est.forloop.model", model, where = 1)
+#     assign("est.forloop.simulation.args", simulation.args, where = 1)
+#     assign("est.forloop.criterion", criterion, where = 1)
+#     assign("est.forloop.estimation.args", estimation.args, where = 1)
+#     assign("est.forloop.criterion.args", criterion.args, where = 1)
+#
+#     on.exit(remove(c("est.forloop", "est.forloop.i", "est.forloop.n",
+#	  "est.forloop.result",  "est.forloop.estimation","est.forloop.model",
+#	  "est.forloop.simulation.args", "est.forloop.criterion", 
+#	  "est.forloop.estimation.args","est.forloop.criterion.args"),where = 1))
+#
+#     For(est.forloop.i = 1:est.forloop.n, est.forloop.result[[est.forloop.i ]]<-
+#	est.forloop(est.forloop.estimation, est.forloop.estimation.args, est.forloop.model, 
+#	est.forloop.simulation.args, est.forloop.criterion, est.forloop.criterion.args),
+#	first=options(warn=-1), sync = TRUE)
+#     result<-est.forloop.result
+#    }
 invisible(classed( # constructor EstEval (EstEvals)
       list(result=result,truth=truth,model=model,
            rng=rng, version=version,
@@ -880,7 +882,7 @@ print.EstEval <- function(x, digits=options()$digits, ...)
 summary.EstEval <- function(object, ...)
  {#  (... further arguments, currently disregarded)
   classed(list( # constructor summary.EstEval
-     class=dseclass(object),
+     class=class(object),
      estimation=object$estimation,
      estimation.args= if(!is.list((object$estimation.args)[[1]]))
                            object$estimation.args    else    NULL,
@@ -935,7 +937,8 @@ tfplot.EstEval <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
   	tfOnePlot(tframed(tbind(truth[,j], r), tf), ylab= ylab[j],
 	              lty=c(1,rep(2, N)), col=c("black",rep("red",N)),
 		      start=start,end=end)
-        if(j == series[1]) title(main = Title)
+        if(!is.null(Title) && (j == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles)) title(main = Title)
         }
   invisible()
  }
@@ -944,19 +947,25 @@ tfplot.EstEval <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
 
 distribution <- function(obj, ...)UseMethod("distribution")
 
-distribution.TSdata <- function(obj, bandwidth=0.2, 
+#distribution.TSdata <- function(obj, bandwidth=0.2, 
+#        select.inputs = seq(length= nseriesInput(obj)),
+#        select.outputs= seq(length=nseriesOutput(obj)), ...)
+distribution.TSdata <- function(obj, ..., bandwidth=0.2, 
         select.inputs = seq(length= nseriesInput(obj)),
-        select.outputs= seq(length=nseriesOutput(obj)), ...)
-  {#  (... further arguments, currently disregarded)
+        select.outputs= seq(length=nseriesOutput(obj)))
+  {#  (... further objects, currently disregarded)
    if (0 !=  nseriesInput(obj))
       distribution( inputData(obj), bandwidth=bandwidth, series=select.inputs)
    if (0 != nseriesOutput(obj))
-      distribution(outputData(obj), bandwidth=bandwidth, series=select.inputs)
+      distribution(outputData(obj), bandwidth=bandwidth, series=select.outputs)
    invisible(obj)
   }
 
-distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
-  {#  (... further arguments, currently disregarded)
+# this should be something like distribution.tframed if distribution becomes
+#  generic in EstEval.  ALSO SEE distribution.factorsEstEval RE ...
+#distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
+distribution.default <- function(obj, ..., bandwidth=0.2, series=NULL)
+  {#  (... further objects, currently disregarded)
    # obj should be a ts matrix (perhaps this should be a tf method).
    # If series is NULL then all series are ploted.
    # note that this graphic can be fairly misleading:
@@ -1076,9 +1085,9 @@ plot.rootsEstEval <- function(x, complex.plane=TRUE, cumulate=TRUE, norm=FALSE,
 
 roots.rootsEstEval <- function(obj, ...)   {obj}
 
-distribution.rootsEstEval <- function(obj, mod=TRUE, invert=FALSE, Sort=FALSE, 
-    bandwidth=0.2, select=NULL, ...)
-{#  (... further arguments, currently disregarded)
+distribution.rootsEstEval <- function(obj, ..., mod=TRUE, invert=FALSE, Sort=FALSE, 
+    bandwidth=0.2, select=NULL)
+{#  (... further objectss, currently disregarded)
  # if mod is true the modulus is used, otherwise real and imaginary are separated.
  # if invert is true the reciprical is used.
  # if Sort is true then sort is applied (before cumulate). This is of particular interest
@@ -1212,9 +1221,9 @@ roots.coefEstEval <- function(obj, criterion.args=NULL, ...)
   invisible(classed(obj, c("rootsEstEval","EstEval")))# constructor
 }
 
-distribution.coefEstEval <- function(obj,  Sort=FALSE, bandwidth=0.2,
-	graphs.per.page=5, ...)
-{#  (... further arguments, currently disregarded)
+distribution.coefEstEval <- function(obj, ...,  Sort=FALSE, bandwidth=0.2,
+	graphs.per.page=5)
+{#  (... further objects, currently disregarded)
  # if Sort is true then sort is applied (before ave). This is of particular interest
  #   with estimation methods like black.box which may not return parameters
  #   of the same length or in the same order.
@@ -1306,7 +1315,7 @@ summary.TSmodelEstEval <- function(object, ...)
  #summary(roots(object))  these are slow
 
   classed(list( # constructor summary.TSmodelEstEval
-     class=dseclass(object),
+     class=class(object),
      conv=conv,
      default=summary.default(object)),
   "summary.TSmodelEstEval")
@@ -1499,19 +1508,21 @@ summary.estimatedModels <- function(object, ...)
  {#  (... further arguments, currently disregarded)
   if (!is.null(object$trend.coef)) cat("trend coef: ", object$trend.coef, "\n")
   if (!is.null(object$multi.model))
-    {estimation.names   <- vector(NA, length(object$multi.model))
-     estimation.methods <- vector(NA, length(object$multi.model))
+    {estimation.names     <- vector(NA, length(object$multi.model))
+     estimation.methods   <- vector(NA, length(object$multi.model))
+     estimation.converged <- vector(NA, length(object$multi.model))
      for (j in 1:length(object$multi.model))
-        {estimation.names[j] <- name(object$estimation.methods)[j]
+        {estimation.names[j] <- names(object$estimation.methods)[j]
          estimation.methods[j] <-    object$estimation.methods[[j]]
+         estimation.converged[j] <-  object$multi.model[[j]]$converged
         }
     }
   classed(list(  # constructor summary.estimatedModels
-     class=dseclass(object),
+     class=class(object),
      trend.coef=object$trend.coef,
      estimation.names=estimation.names,
      estimation.methods=estimation.methods,
-     conv=conv),
+     converged=estimation.converged),
   "summary.estimatedModels")
  }
 
@@ -1520,9 +1531,10 @@ print.summary.estimatedModels <- function(x, digits=options()$digits, ...)
   cat("Object of class: ",x$class, "\n")
   cat("Estimated models:\n")
   if (!is.null(x$trend.coef)) cat("trend coef: ", x$trend.coef, "\n")
-  if (!is.null(object$multi.model))
+  if (!is.null(x$multi.model))
     {for (j in 1:length(x$estimation.methods))
-        cat(x$estimation.names[j],  x$estimation.methods[j], "\n")
+        cat(x$estimation.names[j],  x$estimation.methods[j],
+	    x$estimation.converged[j],"\n")
     }
   invisible(x)
 }
@@ -1563,7 +1575,7 @@ is.horizonForecasts <- function(obj) { inherits(obj,"horizonForecasts") }
 
 testEqual.horizonForecasts <- function(obj1, obj2, fuzz=1e-14)
 {# N.B. models are not compared (so equivalent models will compare true)
- r <- all(dseclass(obj1) == dseclass(obj2))
+ r <- all(class(obj1) == class(obj2))
  if (r) r <- testEqual(obj1$data, obj2$data)
  if (r) r <- all(obj1$horizons == obj2$horizons)
  if (r) r <- obj1$discard.before == obj2$discard.before
@@ -1795,7 +1807,8 @@ tfplot.horizonForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf)
       #   complains if the frequencies do not match
       zz<- tframed(tbind(unclass(output)[,i],t((x$horizonForecasts)[,,i])), tf)
       tfOnePlot(zz,start=start, end=end, ylab =ylab[i])
-      if(i == series[1]) title(main = Title)
+      if(!is.null(Title) && (i == series[1]) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles))  title(main = Title)
      }
    invisible()
    }
@@ -1852,7 +1865,7 @@ horizonForecasts.forecastCov <- function(obj,horizons=NULL,
  if (!is.null(obj$model))
    {proj <- horizonForecasts.TSmodel(obj$model, obj$data, horizons=horizons, 
                        discard.before=discard.before)
-    dseclass(proj) <- "horizonForecasts"
+    class(proj) <- "horizonForecasts"
    }
  else if (!is.null(obj$multi.model))
    {proj <-vector("list", length(obj$multi.model))
@@ -1860,7 +1873,7 @@ horizonForecasts.forecastCov <- function(obj,horizons=NULL,
       proj[[i]] <-horizonForecasts.TSmodel(
              (obj$multi.model)[[i]], obj$data, 
              horizons=horizons, discard.before=discard.before)
-    dseclass(proj) <- c("multiModelHorizonForecasts","horizonForecasts")
+    class(proj) <- c("multiModelHorizonForecasts","horizonForecasts")
    }
  else  stop("Object does not include a model.\n")
  invisible(proj)
@@ -1871,7 +1884,8 @@ tfplot.multiModelHorizonForecasts <- function(x,
   #  (... further arguments, currently disregarded)
   for (i in seq(length(x)))
     {tfplot(x[[i]], start=start, end=end, series=series)
-     cat("press return to continue>");key<-dsescan(what="");cat("\n")
+     #cat("press return to continue>");key<-dsescan(what="");cat("\n")
+     cat("press Enter to continue>"); key<- readLines(n=1)
     }
   invisible()
   }
@@ -2046,7 +2060,7 @@ forecastCovSingleModel <- function( model, data=NULL, horizons=1:12,
 
 forecastCovCompiled <- function(model, data, horizons=1:12 ,
     discard.before=minimumStartupLag(model)) 
-   if (exists(paste("forecastCovCompiled.", dseclass(model)[1], sep="")))
+   if (exists(paste("forecastCovCompiled.", class(model)[1], sep="")))
       UseMethod("forecastCovCompiled") else
       stop("compiled code for this model class is not available. Try forecastCov( ...,compiled=F)")
 
@@ -2244,7 +2258,7 @@ summary.forecastCov <- function(object, horizons=object$horizons,
     summary.stats[[i]] <- z
    }
   classed(list(  # constructor summary.forecastCov
-     class=dseclass(object),
+     class=class(object),
      horizons=length(object$horizons),
      models=length(object$multi.model),
      seriesNamesOutput=seriesNamesOutput(object$data),
@@ -2265,7 +2279,7 @@ print.summary.forecastCov <- function(x, digits=options()$digits, ...)
   for (i in seq(length(x$models)))
     {cat("Model", i, x$description[i],  "\n")
      cat("   variable", x$names,"\n")
-     print(summary.stats[[i]], digits = digits)   
+     print(x$summary.stats[[i]], digits = digits)   
     }
   cat("\n")
   print(x$nxt)
@@ -2376,8 +2390,8 @@ tfplot.forecastCov <- function(x, ..., series = 1:dim(x$forecastCov[[1]])[2],
                 labels <- x$selection.index[labels]
             text(dim(z)[1], z[dim(z)[1], ], labels)
         }
-        if ((i == 1) & (!is.null(Title))) 
-            title(main = Title)
+        if(!is.null(Title) && (i == 1) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles))  title(main = Title)
     }
     if (is.null(Legend)) {
         Legend <- paste("prediction covariance", select.cov[show])
@@ -2691,8 +2705,8 @@ forecastCovEstimatorsWRTtrue <- function(true.model, rng=NULL,
                        simulation.args=NULL,
                        est.replications=2, pred.replications=2,
                        discard.before=10, horizons=1:12,quiet=FALSE,
-                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED,
-		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED)
+#		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 {# Calculate the forecasts cov of models estimated from simulations of 
  # true.model with estimation methods indicated by estimation.methods (see 
  #       estimateModels). 
@@ -2722,7 +2736,7 @@ forecastCovEstimatorsWRTtrue <- function(true.model, rng=NULL,
          estimatedModels[[i]] <- models
          rn <- forecastCovWRTtrue( models$multi.model, true.model, 
                     pred.replications=pred.replications, zero=TRUE, quiet=quiet,
-                    simulation.args=simulation.args, Spawn=Spawn,
+                    simulation.args=simulation.args, #Spawn=Spawn,
                     horizons=horizons, discard.before=discard.before,
                     trend=cbind(1,1:periods(data)) %*% models$trend.coef,
                     compiled=compiled)
@@ -2772,7 +2786,7 @@ summary.forecastCovEstimatorsWRTtrue <- function(object, digits=options()$digits
   for (i in seq(Ms)) 
      conv<- append(conv,object$estimatedModels[[i]]$multi.model[[1]]$converged)
   classed(list( # constructor summary.forecastCovEstimatorsWRTtrue
-    dseclass(object), 
+    class(object), 
     horizons=length(object$horizons), 
     Ms=Ms,
     conv=conv,
@@ -2870,8 +2884,8 @@ forecastCovReductionsWRTtrue <- function(true.model, rng=NULL,
                        est.replications=2, pred.replications=2,
                        discard.before=10, horizons=1:12,quiet=FALSE,
                        estimation.methods=NULL,
-                       criteria=NULL, compiled=.DSEflags()$COMPILED,
-		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+                       criteria=NULL, compiled=.DSEflags()$COMPILED)
+#		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 {
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
@@ -2894,7 +2908,7 @@ forecastCovReductionsWRTtrue <- function(true.model, rng=NULL,
          information.criteria <- append(information.criteria, list(crit))
          rn <- forecastCovWRTtrue( models$multi.model, true.model, 
                     pred.replications=pred.replications, zero=TRUE, quiet=quiet,
-                    simulation.args=simulation.args, Spawn=Spawn,
+                    simulation.args=simulation.args, #Spawn=Spawn,
                     horizons=horizons, discard.before=discard.before,
                     trend=cbind(1,1:periods(data)) %*% models$trend.coef,
                     compiled=compiled)
@@ -2947,7 +2961,7 @@ print.forecastCovEstimatorsWRTdata.subsets <- function(x,
 
 summary.forecastCovEstimatorsWRTdata.subsets <- function(object, ...)
   {#  (... further arguments, currently disregarded)
-   classed(list( dseclass(obj),  #summary constructor
+   classed(list( class(object),  #summary constructor
         horizons=object$horizons, 
         essential.data=object$essential.data,
         output.names=seriesNamesOutput(object$all.data), 
@@ -3214,11 +3228,11 @@ stripMine <- function(all.data, essential.data=1,
  #  returned, so extra calls do not cause errors and are very quick.
  #  This is useful when you are too lazy to calculate the exact number of steps.
 
-  if (dseclass(all.data)[1] == "forecastCovEstimatorsWRTdata.subsets")
+  if (class(all.data)[1] == "forecastCovEstimatorsWRTdata.subsets")
        {cat("done.\n")
         return(all.data)
        }
-  if (dseclass(all.data)[1] == "stripMine.intermediate.result")
+  if (class(all.data)[1] == "stripMine.intermediate.result")
     {r <- all.data$forecastCov
      start <- 1+all.data$end
      estimation.sample <- all.data$estimation.sample
@@ -3280,7 +3294,7 @@ stripMine <- function(all.data, essential.data=1,
          horizons=horizons, 
          discard.before=discard.before)
   if (end == nrow(variable.index))
-    dseclass(r) <- c("forecastCovEstimatorsWRTdata.subsets", "forecastCov")
+    class(r) <- c("forecastCovEstimatorsWRTdata.subsets", "forecastCov")
   else
     {r<-classed(append(r, list(estimation.sample=estimation.sample, #constructor
              quiet=quiet, step.size=step.size, end=end, m=m,p=p)),

@@ -9,9 +9,8 @@
                        simulation.args=NULL,
                        est.replications = 2, pred.replications = 2,
                        discard.before = 10, horizons = 1:12, quiet =FALSE,
-                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED, 
-                       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE
-		       )
+                       estimation.methods=NULL, compiled=.DSEflags()$COMPILED) 
+%%                       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE
     is.forecastCovEstimatorsWRTtrue(obj)
 }
 \arguments{
@@ -25,7 +24,7 @@
       beginning of forecasts to discard for calculating covariances.}
     \item{horizons}{Horizons for which forecast covariance should be calculated.}
     \item{rng}{If specified then it is used to set RNG.}
-    \item{Spawn}{If TRUE then Splus For loops are used.}
+%%    \item{Spawn}{If TRUE then Splus For loops are used.}
     \item{quiet}{If TRUE then some messages are not printed.}
     \item{compiled}{a logical indicating if the compiled version of the code
        should be used. (FALSE would typically only be used for debugging.)}
@@ -56,7 +55,7 @@ This function makes multiple calls to forecastCovWRTtrue.
 \code{\link{forecastCovEstimatorsWRTdata}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 true.model <- estVARXls(eg1.DSE.data.diff) # just to have a starting model
 z <-  forecastCovEstimatorsWRTtrue(true.model, 
     estimation.methods=list(estVARXls=list(max.lag=4)))

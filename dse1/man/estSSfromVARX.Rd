@@ -20,10 +20,10 @@
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
     the equivalence. Working paper 93-4, Bank of Canada. Available at
-    <www.bank-banque-canada.ca/pgilbert>
+    \url{www.bank-banque-canada.ca/pgilbert}.
 
-    Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" \emph{J. of Forecasting: 
+    Gilbert, P. D. (1995) Combining VAR Estimation and State Space 
+    Model Reduction for Simple Good Predictions. \emph{J. of Forecasting: 
     Special Issue on VAR Modelling}. 14:229-250.
 }
 \seealso{
@@ -34,7 +34,7 @@
     \code{\link{estMaxLik}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <-estSSfromVARX(eg1.DSE.data.diff)
 }
 \concept{DSE}

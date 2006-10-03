@@ -29,7 +29,7 @@ of points from the beginning of the sample to use for estimation.
 \code{\link{horizonForecasts}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 z <-  estimatorsHorizonForecastsWRTdata(eg1.DSE.data.diff, 
     estimation.methods=list(estVARXls=list(max.lag=3), 
                 estVARXar=list(max.lag=3)))

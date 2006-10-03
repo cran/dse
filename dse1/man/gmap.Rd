@@ -23,10 +23,41 @@ polynomials are premultiplied by g. If g is a scalar it is treated
 as a diagonal matrix.
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(estVARXls(eg1.DSE.data.diff))
 gmap(2, model)
 }
 \concept{DSE}
 \keyword{ts}
+
+%%\name{findg}
+%%\alias{findg}
+%%\title{Find Equivalence Transformation}
+%%\description{
+%%   Try to find a matrix g which makes two models equivalent.
+%%   }
+%%\usage{
+%%    findg(model1, model2, minf=nlmin)
+%%}
+%%\arguments{
+%%
+%%    \item{model1, model2}{Objects of class TSmodel.}
+%%    \item{minf}{Algorithm used to minimize the difference.}
+%%}
+%%\value{A matrix which converts one model to the other.}
+%%\details{
+%%This is set up as a minimization problem with the objective 
+%%to reduce the squared difference between parameters.
+%%}
+%%\note{WARNING: This program does not work very well.
+%%  It is also rather crude and can be very slow.
+%%  }
+%%\seealso{
+%%    \code{\link{gmap}}
+%%}
+%%\examples{
+%%# findg(model1, model2)
+%%}
+%%\concept{DSE}
+%%\keyword{ts}
 

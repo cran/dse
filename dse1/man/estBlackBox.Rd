@@ -18,7 +18,7 @@ This is an active area of ongoing research and so the actual routine called
 will probably change with new versions.
 }
 \examples{
-if(is.R()) data("egJofF.1dec93.data", package="dse1")
+data("egJofF.1dec93.data", package="dse1")
 goodmodel <- estBlackBox(egJofF.1dec93.data)
 }
 \concept{DSE}

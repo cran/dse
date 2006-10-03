@@ -9,8 +9,8 @@
                        est.replications=2, pred.replications=2,
                        discard.before=10, horizons=1:12,quiet=FALSE,
                        estimation.methods=NULL,
-                       criteria=NULL, compiled=.DSEflags()$COMPILED, 
-                       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+                       criteria=NULL, compiled=.DSEflags()$COMPILED) 
+%%                       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 }
 \arguments{
     \item{true.model}{An object of class TSmodel or TSestModel.}
@@ -25,7 +25,7 @@
        in order to simulate the true model.}
     \item{horizons}{Horizons for which forecast covariance should be calculated.}
     \item{rng}{If specified then it is used to set RNG.}
-    \item{Spawn}{If TRUE then Splus For loops are used.}
+%%    \item{Spawn}{If TRUE then Splus For loops are used.}
     \item{quiet}{If TRUE then some messages are not printed.}
     \item{estimation.methods}{a list as used by estimateModels.}
     \item{criteria}{a ...}

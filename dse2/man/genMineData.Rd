@@ -51,7 +51,7 @@
 }
 
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     umodel <- build.diagonal.model(
             build.input.models(eg1.DSE.data.diff, max.lag=2))
     z  <- TSdata(output=outputData(eg1.DSE.data.diff), 

@@ -1,5 +1,7 @@
 
 classed <- function(x, cls) {class(x) <- cls; x}
+# structure would work to replace classed (but adds some overhead).
+#classed <- function(x, cls) structure(x, class=cls)
 
 ###########################################################################
 
@@ -11,7 +13,8 @@ freeze <- function(data, ...) UseMethod("freeze")
  
 freeze.default <- function(data, ...){
 #  (... further arguments, currently disregarded)
- if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
+# if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
+ data} 
 
 #internal utility
 # Use this with "for (i in seq(length=m) )" as m==0 returns NULL and for does no loops
@@ -156,7 +159,8 @@ tfplot.default <- function(x, ..., tf=tfspan(x , ...), start=tfstart(tf), end=tf
 	tfOnePlot(z, tf=tf, start=start, end=end,
 	          lty=lty, lwd=lwd, pch=pch, col=col, cex=cex,
 		  xlab=xlab, ylab=ylab[i], xlim=xlim[[i]], ylim=ylim[[i]])
-        if(!is.null(Title) && (i==1)) title(main = Title)
+        if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
+                || options()$PlotTitles)) title(main = Title)
 	}
     }
   invisible()
@@ -274,6 +278,9 @@ tframe.default <- function(x){ #extract the tframe
   attr(x, "tframe") <- tf
   if((!is.null(value)) && !checktframeConsistent(tframe(x), x))
      stop("time frame value in tframe assignment is not consistent with data.")
+  #classed(x, c("tframed", class(x)))
+  # For my code (dse) it does not seem to matter if this adds "tframed" first or
+  # last. The difference is whether it is the first resort or last before default. 
   classed(x, c(class(x), "tframed"))
 }
 
@@ -446,9 +453,11 @@ latestEndIndex.tframe <- function(x, ...)
 
 ###############################################
 
-"tframe<-.rts" <- function(x, value){rts(x) <- value; x}
-"tframe<-.cts" <- function(x, value) {cts(x) <- value; x}
-"tframe<-.its" <- function(x, value) {its(x) <- value; x}
+# These are for Splus rts cts and its 
+
+#"tframe<-.rts" <- function(x, value){rts(x) <- value; x}
+#"tframe<-.cts" <- function(x, value) {cts(x) <- value; x}
+#"tframe<-.its" <- function(x, value) {its(x) <- value; x}
 
 
 ###############################################
@@ -511,6 +520,13 @@ testEqual.list <- function(obj1, obj2, fuzz=1e-16)
 
 #if (!exists("lag.default"))  lag.default <- function(x, ...) {stop("no lag function") }
 
+
+
+###############################################
+
+# Time dimension methods for data manipulation
+
+###############################################
 
 
 
@@ -609,12 +625,71 @@ trimNA.default <- function(x, startNAs= TRUE, endNAs= TRUE)
 }
 
 
+
+diffLog <- function(obj, lag = 1, base = exp(1),
+              names=paste("diff of log of ", seriesNames(obj))) 
+   UseMethod("diffLog")
+ 
+diffLog.default <- function(obj, lag = 1, base = exp(1),
+              names=paste("diff of log of ", seriesNames(obj)))
+{#Calculate the difference from lag periods prior for log of data.
+ obj <- diff(log(obj, base = base), lag = lag)
+ if(is.null(options()$ModSeriesNames) || options()$ModSeriesNames)
+        seriesNames(obj) <- names
+ obj
+}
+
+
+ytoypc <- function(obj, names=paste("y to y %ch", seriesNames(obj))) 
+   UseMethod("ytoypc")
+ 
+ytoypc.default <- function (obj, names=paste("y to y %ch", seriesNames(obj)) ){
+   obj <- percentChange(obj, lag = tffrequency(obj))
+   if(is.null(options()$ModSeriesNames) || options()$ModSeriesNames)
+        seriesNames(obj) <- names
+   obj
+}
+
+
+aggregate.tframed <- function (x, ...)
+   {tf <- tframe(x)
+    nm <- seriesNames(x)
+    # this is assuming tf is actual a ts tframe
+    r <- aggregate(ts(unclass(x), start=tf[1], end=tf[2], frequency=tf[3]), ...)
+    tframed(r, tf=tframe(r), names=nm)
+   }
+
+percentChange <- function(obj, ...) UseMethod("percentChange")
+
+percentChange.default <- function(obj, base=NULL, lag=1, 
+      cumulate=FALSE, e=FALSE, ...)
+{#  (... further arguments, currently disregarded)
+   cls <- class(obj)
+   # note next has to be applied to a shorter object in the end
+   if (is.tframed(obj)) tf <- list(end=tfend(obj), frequency=tffrequency(obj))
+   else tf <- NULL
+   if (is.null(dim(obj)))
+     {vec <- TRUE
+      obj <- matrix(obj, length(obj),1)
+     }
+   else vec <- FALSE
+   mm <- rbind(base,obj)
+   if (any(cumulate))
+          mm[,cumulate] <-apply(mm[,cumulate,drop=FALSE],2,cumsum)
+   if (any(e)) mm[,e] <- exp(mm[,e,drop=FALSE])
+   N <- dim(mm)[1]
+   pchange <-100*(mm[(lag+1):N,,drop=FALSE] - 
+                    mm[1:(N-lag),,drop=FALSE])/mm[1:(N-lag),,drop=FALSE]
+   if (vec) pchange <- pchange[,1]
+   class(pchange) <- cls
+   if (!is.null(tf)) tframed(pchange, tf) else pchange
+}
+
 ###############################################
 
 # Non-time dimension methods
 
 ###############################################
-
 
 
 nseries <- function(x) UseMethod("nseries") 

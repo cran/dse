@@ -51,7 +51,7 @@
     \code{\link[base]{scale}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     # This is a simple example. Usually scale would have something 
     # to do with the magnitude of the data.
     z <- scale(eg1.DSE.data.diff, 

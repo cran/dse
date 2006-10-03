@@ -39,9 +39,8 @@ dse4.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse4 test 3 ... ")
-#Rbug needs stepwise
-if (is.R()) warning("skipping test 4 (requires stepwise).")
-else
+  cat("skipping test 4 (requires stepwise).")
+  if (FALSE) 
  {
    all.data <- TSdata(input=eg1.DSE.data.diff$output, 
                    output=eg1.DSE.data.diff$input )

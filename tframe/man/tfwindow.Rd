@@ -34,7 +34,7 @@ truncates to a window without first checking if the data is already within
 the window. Since window produces a warning in this situation, the optional 
 argument is frequently useful when tfwindow is used by other code.
 In Splus \code{tfwindow} also corrects for some bugs in older versions 
-of code{window}.
+of \code{window}.
 
 The method for windowing a tframe is a utility to be used by other programs and
 would not typically be called by a user.

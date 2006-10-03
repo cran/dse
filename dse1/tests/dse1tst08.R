@@ -36,7 +36,7 @@ cat("dse1 test 8b ...\n")
   sigma <- solve(t(VARmodelB$model$B[1,,]) %*% VARmodelB$model$B[1,,])
   sigma <- (sigma + t(sigma))/2 # insure symetric - chol is sensitive
   zzz <- simulate(TSmodel(VARmodelB), rng=getRNG(z), 
-                     input=inputData(eg1.DSE.data.diff), SIGMA=sigma)
+                     input=inputData(eg1.DSE.data.diff), Cov=sigma)
   ok <- testEqual(z, zzz, fuzz=fuzz.small)
   error <- max(abs(outputData(z) - outputData(zzz)))
    cat("max. error ", max(error), "\n")
@@ -53,7 +53,7 @@ cat("dse1 test 8c ...\n")
   sigma <- VARmodel$estimates$cov
   sigma <- (sigma + t(sigma))/2 # insure symetric - chol is sensitive
   zz <- simulate(TSmodel(VARmodel), rng=getRNG(z), 
-                     input=inputData(eg1.DSE.data.diff), SIGMA=sigma)
+                     input=inputData(eg1.DSE.data.diff), Cov=sigma)
 
   if ( ! testEqual(z, zz, fuzz=fuzz.small)) 
      {

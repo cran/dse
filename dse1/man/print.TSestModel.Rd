@@ -2,7 +2,6 @@
 \alias{print.TSestModel}
 \alias{print.SS}
 \alias{print.ARMA}
-\alias{print.TSrestrictedModel}
 
 \title{Display TSmodel Arrays}
 \description{
@@ -12,7 +11,6 @@ Display TSmodel arrays.
     \method{print}{SS}(x, digits=options()$digits, latex=FALSE, ...)
     \method{print}{ARMA}(x, digits=options()$digits, latex=FALSE, L=TRUE, fuzz=1e-10, ...)
     \method{print}{TSestModel}(x, ...)
-    \method{print}{TSrestrictedModel}(x, ...)
     }
 
 \arguments{
@@ -30,12 +28,12 @@ Display TSmodel arrays.
     \item{...}{arguments passed to other methods.}
 }
 \value{The object is returned invisibly.}
-\sideffects{The model arrays are displayed.}
+\section{Side Effects}{The model arrays are displayed.}
 \note{BUG: digits cannot be controlled for some numbers (e.g.- 1.0 is printed
 as 0.9999999999)
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 print(model)
 print(model, digits=3)
@@ -45,7 +43,7 @@ print(model, digits=3, fuzz=0.001, latex=TRUE)
 
 
 \seealso{
-    \code{\link{print}}
+    \code{\link{print}},
     \code{\link{summary}}
 }
 \concept{DSE}

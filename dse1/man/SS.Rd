@@ -102,7 +102,10 @@ Matrices are as specified above in the arguments, and
     way. An alternative for fixing constants is the function code{fixConstants}}
 }
 
-\reference{B. D. O.Anderson & J. B.Moore \emph{Optimal Filtering} p.39,44.}
+\references{
+Anderson, B. D. O. and Moore, J. B. (1979) \emph{Optimal Filtering}. 
+   Prentice-Hall. (note p.39,44.)
+}
 
 \seealso{
     \code{\link{TSmodel}}

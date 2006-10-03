@@ -36,7 +36,7 @@ The procedure ar is used by combine exogeneous variables and endogenous variable
 and estimating as if all variables were endogenous. The estVARXar 
 method does not support trend estimation (as in estVARXls).
 
-If aic=TRUE the number of lags is determined by an AIC statistic (see ar). 
+If \code{aic=TRUE} the number of lags is determined by an AIC statistic (see ar). 
 If an exogenous (input) 
 variable is supplied the input and output are combined (i.e.- both
 treated as outputs) for estimation, and the resulting model is
@@ -59,11 +59,11 @@ the model for the exog. variable (as estimated by ar() is  discarded.
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
     the equivalence. Working paper 93-4, Bank of Canada. Available at
-    <www.bank-banque-canada.ca/pgilbert>
+    \url{www.bank-banque-canada.ca/pgilbert}
 
-    Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" \emph{J. of Forecasting: 
-    Special Issue on VAR Modelling.} 14:229-250.
+    Gilbert, P. D. (1995) Combining VAR Estimation and State Space 
+    Model Reduction for Simple Good Predictions. \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling.} \bold{14}:229--250.
 }
 \seealso{
     \code{\link{estSSfromVARX}}
@@ -75,7 +75,7 @@ the model for the exog. variable (as estimated by ar() is  discarded.
     \code{\link{DSE.ar}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXar(eg1.DSE.data.diff)
 }
 \concept{DSE}

@@ -2,7 +2,8 @@
 \alias{fixConstants}
 \title{Fix TSmodel Coefficients (Parameters) to Constants}
 \description{
-    Fix any coefficients within fuzz of 0.0 or 1.0 to exactly 0.0 or 1.0.
+    Fix specified coefficients to constant values or any coefficients within 
+    fuzz of 0.0 or 1.0 to exactly 0.0 or 1.0.
     This will not change the model much but will affect some estimation 
     techniques and information criteria results, as these are considered to 
     be constants rather than coefficients.
@@ -19,9 +20,9 @@
     An object of class 'SS' 'TSmodel' with some array entries set to
     constants 0.0 or 1.0.
 }
-\details{If constants is not NULL then parameters within fuzz of 0.0 or 1.0 set 
-    as constants 0.0 or 1.0. If constants is not NULL then it should be a list 
-       with logical arrays named F, G ..., with TRUE corresponding to any 
+\details{If constants is not NULL then parameters within fuzz of 0.0 or 1.0 are 
+  set as constants 0.0 or 1.0. If constants is not NULL then it should be a 
+  list with logical arrays named F, G ..., with TRUE corresponding to any 
        array elements which are to  be treated as constant.
 }
 \examples{
@@ -35,7 +36,7 @@
               F = matrix(c(TRUE, FALSE, FALSE, FALSE), 2,2)))
     ss
     coef(ss)
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- toARMA(toSS(estVARXls(eg1.DSE.data.diff)))
     model <- fixConstants(model)
 }

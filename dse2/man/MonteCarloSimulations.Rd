@@ -16,8 +16,8 @@
     \method{MonteCarloSimulations}{default}(model, simulation.args = NULL, 
  		replications = 100, rng = NULL, quiet =FALSE, ...)
     \method{MonteCarloSimulations}{TSmodel}(model, simulation.args=NULL,
-          replications=100, rng=NULL, quiet=FALSE, 
-	  Spawn=if (exists(".SPAWN")) .SPAWN else FALSE, ...)
+          replications=100, rng=NULL, quiet=FALSE, ...)
+%%	  Spawn=if (exists(".SPAWN")) .SPAWN else FALSE, ...)
     \method{MonteCarloSimulations}{TSestModel}(model, simulation.args=NULL, 
            replications=100, rng=NULL, quiet=FALSE, ...)
     \method{MonteCarloSimulations}{EstEval}(model, simulation.args=NULL,
@@ -34,7 +34,7 @@
     \item{rng}{The RNG and starting seed.}
     \item{quiet}{logical indicating if printing and many warning messages should
        be suppressed.}
-    \item{Spawn}{If TRUE "For" loops are used in Splus.}
+%%    \item{Spawn}{If TRUE "For" loops are used in Splus.}
     \item{obj}{an object.}
     \item{...}{arguments passed to other methods.}
 }
@@ -61,7 +61,7 @@ of the distribution of the simulations at specified periods.
 \code{\link{forecastCovWRTtrue}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model, simulation.args=list(sampleT=100))
 tfplot(z)

@@ -8,8 +8,8 @@
     EstEval(model, replications=100, rng=NULL, quiet=FALSE, 
                        simulation.args=NULL,
                        estimation=NULL, estimation.args=NULL, 
-                       criterion ="coef", criterion.args =NULL, 
-		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+                       criterion ="coef", criterion.args =NULL) 
+%%		       Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
     is.EstEval(obj)
 }
 \arguments{
@@ -25,7 +25,7 @@
     the information which is to be retained.}
     \item{criterion.args}{
     A list of any arguments to be passed to the criterion function.}
-    \item{Spawn}{a logical indication if Splus For loops should be used.}
+%%    \item{Spawn}{a logical indication if Splus For loops should be used.}
     \item{obj}{an object.}
 }
 \value{
@@ -51,7 +51,7 @@ If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
 \code{\link{forecastCovWRTtrue}}
 }
 \examples{
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(TSdata(output=outputData(eg1.DSE.data.diff)))
     z <-  EstEval(model, 
        estimation="estVARXls", estimation.args=list(max.lag=2))

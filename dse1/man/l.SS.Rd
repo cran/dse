@@ -71,7 +71,7 @@ likelihood and \code{result=3} returns the one step ahead predictions.
 If \code{z0} is supplied in the model object it is used as the estimate 
 of the state at time 0. If not supplied it is set to zero.
 
-If \code{rootP0} is supplied  in the model object then t(rootP0) %*% rootP0 is
+If \code{rootP0} is supplied  in the model object then t(rootP0) \%*\% rootP0 is
 used as P0. 
 If \code{P0} is supplied or calculated from rootP0 in the model object, it is 
 used as the initial 
@@ -95,7 +95,10 @@ Additional objects in the result are
        but the tracking error cannot be calculated.
 }
 
-\reference{B. D. O.Anderson & J. B.Moore \emph{Optimal Filtering} p.39,44.}
+\references{
+   Anderson, B. D. O. and Moore, J. B. (1979) \emph{Optimal Filtering}. 
+   Prentice-Hall. (note p.39,44.)
+}
 
 \seealso{
 \code{\link{SS}}
@@ -108,7 +111,7 @@ Additional objects in the result are
 \code{\link{smoother}}
 }
 \examples{
-if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
 lmodel <- l(model,eg1.DSE.data.diff)
 summary(lmodel)

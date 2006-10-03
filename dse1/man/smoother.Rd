@@ -3,7 +3,6 @@
 \alias{smoother.TSestModel}
 \alias{smoother.TSmodel}
 \alias{smoother.nonInnov}
-\alias{smoother.TSrestrictedModel}
 
 \title{Evaluate a smoother with a TSmodel}
 \description{Evaluate a state space model.}
@@ -12,8 +11,6 @@
     \method{smoother}{nonInnov}(model, data, compiled=.DSEflags()$COMPILED)
     \method{smoother}{TSmodel}(model, data, compiled=.DSEflags()$COMPILED)
     \method{smoother}{TSestModel}(model, data=TSdata(model),
-      compiled=.DSEflags()$COMPILED)
-    \method{smoother}{TSrestrictedModel}(model, data,
       compiled=.DSEflags()$COMPILED)
 }
 \arguments{
@@ -35,26 +32,36 @@ and \code{track} (which may or may not have been in the original arguement).
 }
 \details{
 Calculate fixed interval smoother state values for a model.
-Smoother first runs the filter and usess the filtered state to calculate 
+Smoother first runs the filter and uses the filtered state to calculate 
 a smoothed  estimate of the state (sometimes called a two sided filter).
-The smoother requires an non-innovations for model. The method for a TSmodel
-simply gives an error message if the model does not inherit class
-code{nonInnov}.
+The smoother requires an non-innovations form model. The method for a TSmodel
+gives an error message if the model does not inherit from class
+\code{nonInnov}.
 
-Note: this does not allow the same option as l.SS for calculating over a
+Note: this does not allow the same option as \code{l.SS} for calculating over a
    sub-sample. Smoothing is done over the length of the available filter
    data (which will be calculated to the length of the data if not
-   supplied). For models with an input smoothing will only be done to the
-   length of input data if that is smaller than the available filter data. 
-See \link{SS} for details of the model:
+   supplied). For models with an input, smoothing will only be done over the
+   input data period if that is shorter than the filter data. 
+
+See \code{\link{SS}} for details of the model:
 
        z(t) = Fz(t-1) + Gu(t) + Qe(t)
        y(t) = Hz(t)  + Rw(t)
 
 }
-\reference{B. D. O.Anderson & J. B.Moore \emph{Optimal Filtering}}
-\reference{appendix of Shumway and Stoffer, 1982, \emph{J.of Time Series}, 253-264}
-\reference{Jazwinski 1970}
+\references{
+   Anderson, B. D. O. and Moore, J. B. (1979) \emph{Optimal Filtering}. 
+   Prentice-Hall.
+   
+   Shumway R. H. and Stoffer D.S. (1982) An Approach to Time Series Smoothing
+   and Forecasting Using the EM Algorithm. 
+   \emph{J. of Time Series Analysis}, \bold{3}, 253--264 (note
+   appendix).
+   
+   Jazwinski, A. H. (1970) \emph{Stochastic Processes and Filtering Theory}. 
+   Academic Press.
+}
 
 \seealso{
 \code{\link{state}},
