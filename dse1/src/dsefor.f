@@ -1089,8 +1089,7 @@ C
       DO 2001 I=1,P
 2001         EY(IT,I)= TREND(IT,I)
 C
-      IF (IA.GE.2) THEN
-        DO 2002 L=2,IA
+      DO 2002 L=2,IA
          DO 2002 I=1,P
             DO 2002 J=1,P
                 IF ((IT+1-L) .LE.NSMPL) THEN
@@ -1098,8 +1097,7 @@ C
                 ELSE
                    EY(IT,I)=EY(IT,I)-A(L,I,J)*EY(IT+1-L,J)
                 ENDIF
-2002    CONTINUE
-      ENDIF
+2002  CONTINUE
       IF (IB.GE.2) THEN
          DO 2004 L=2,IB
             IF ((IT+1-L).LE.NSMPL) THEN

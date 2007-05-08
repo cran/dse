@@ -387,15 +387,13 @@ tfplot.TSestModel <- function(x, ...,
                 || options()$PlotTitles)) title(main = Title)
     } }
   for (i in select.outputs ) 
-    {#z <-c(outputData(model, series=i),
-     #      rep(NA,periods(model$estimates$pred) - periodsOutput(model)))
-     z <- outputData(model, series=i)
+    {z <-c(outputData(model, series=i),
+           rep(NA,periods(model$estimates$pred)-periods(TSdata(model))))
      for (model in append(list(x),list(...))){
          if (! is.TSestModel(model)) 
 	    stop("Argument in ... to be plotted is not a TSestModel object.")
-         #z <- cbind(z,model$estimates$pred[,i,drop=FALSE])}
-         z <- tbind(z,selectSeries(model$estimates$pred, series=i))}
-     #tframe(z) <- tframe(outputData(model))
+         z<-cbind(z,model$estimates$pred[,i,drop=FALSE])}
+     tframe(z) <- tframe(outputData(model))
      tfOnePlot(z,start=start,end=end, ylab=names[m+i]) # tsplot
      if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
                 || options()$PlotTitles)) title(main = Title)
@@ -1814,21 +1812,21 @@ setTSmodelParameters.ARMA <- function  (model, constants=model$constants) {
 }
 
 
-setArrays <- function(model, coefficients=NULL, constants=NULL)  
+setArrays <- function(model, coefficients=NULL)  
   # complete representaion info. based on parameter info.  
   UseMethod("setArrays")
    
-setArrays.TSestModel <- function(model, coefficients=NULL, constants=NULL)  
- setArrays(TSmodel(model), coefficients=coefficients, constants=constants) 
+setArrays.TSestModel <- function(model, coefficients=NULL)  
+ setArrays(TSmodel(model), coefficients=coefficients) 
     
-setArrays.SS <- function(model, coefficients=NULL, constants=NULL){
+setArrays.SS <- function(model, coefficients=NULL){
 	# N.B. Dimension and class (innov/ nonInnov) info. is assumed accurate
     if (is.null(coefficients)) coefficients   <- coef(model)
                         else   model$coefficients <- coefficients
     a.pos  <- model$location
     i.pos  <- model$i
     j.pos  <- model$j
-    const  <-if (is.null(constants)) model$const else constants #untested
+    const  <- model$const
     ca.pos <- model$const.location
     ci.pos <- model$const.i
     cj.pos <- model$const.j  
@@ -1904,14 +1902,14 @@ setArrays.SS <- function(model, coefficients=NULL, constants=NULL){
     model
 } #end setArrays.SS
 
-setArrays.ARMA <- function(model, coefficients=NULL, constants=NULL) { 
+setArrays.ARMA <- function(model, coefficients=NULL) { 
 	# N.B. Dimension and class info. is assumed accurate
        if (is.null(coefficients)) coefficients    <- coef(model)
                         else   model$coefficients <- coefficients
        a.pos  <- model$location
        i.pos  <- model$i
        j.pos  <- model$j
-       const  <-if (is.null(constants)) model$const else constants #untested
+       const  <- model$const
        ca.pos <- model$const.location
        ci.pos <- model$const.i
        cj.pos <- model$const.j  
@@ -2035,7 +2033,6 @@ if (!checkConsistentDimensions(model)) stop("The SS model is not correct.")
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
  
-if (!is.null(noise) && is.matrix(noise)) noise <- list(w=noise)
 
 set.ts <- TRUE             
 if (!is.null(start))
@@ -2082,7 +2079,7 @@ else set.ts <-  FALSE
    }
  else
    {#  noise is not null
-   # already done if (is.matrix(noise)) noise <- list(w=noise)
+   if (is.matrix(noise)) noise <- list(w=noise)
    if (is.null(noise$w))
        stop("supplied noise structure is not correct. w must be specified.")
    if (is.null(noise$w0)) noise$w0 <- rep(0,p)
@@ -2215,12 +2212,6 @@ if (m!=0) for (l in 1:dim(C)[1]) C[l,,] <- invA0 %*% C[l,,]
 if(!is.null(TREND)) TREND <- t(invA0 %*% t(TREND))
 
 set.ts <- TRUE             
-
-if (!is.null(noise)) {
-   if (is.matrix(noise)) noise <- list(w=noise)
-   if (is.null(noise$w0)) noise$w0 <-matrix(0,b,p)
-   }
-
 if (!is.null(start))
   {if (!is.null(freq))   tf <- list(start=start, frequency=freq)
    else
@@ -2232,6 +2223,10 @@ else if( (!is.null(input))   && is.tframed(input))   tf <- tframe(input)
 else if ((!is.null(noise$w)) && is.tframed(noise$w)) tf <- tframe(noise$w)
 else set.ts <-  FALSE
 
+if (!is.null(noise)) {
+   if (is.matrix(noise)) noise <- list(w=noise)
+   if (is.null(noise$w0)) noise$w0 <-matrix(0,b,p)
+   }
 
 noise <- makeTSnoise(sampleT,p,b, noise=noise, rng=rng,
                         Cov=Cov, sd=sd, 
@@ -2389,20 +2384,15 @@ if (!is.ARMA(model)) stop("l.ARMA expecting an ARMA TSmodel.")
 
 #dat <- freeze(obj2)
 dat <- obj2
-tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
-
 if(!checkConsistentDimensions(model,dat)) stop("dimension error")
 if (is.null(sampleT))  sampleT  <- periodsOutput(dat)
 if (is.null(predictT)) predictT <- sampleT
 if (sampleT > predictT) stop("sampleT cannot exceed predictT.")
 if (sampleT > periodsOutput(dat)) stop("sampleT cannot exceed length of data.")
-
 if (0 != nseriesInput(dat))
   {if (periodsInput(dat) < predictT)
       stop("input data must be at least as long as requested prediction.")
    if (any(is.na(inputData(dat)))) stop("input data cannot contain NAs.")
-   if(!all(startInput(dat) == startOutput(dat)))
-	   stop("input and output data must start at the same time.")
   }
 if (any(is.na(outputData(dat)))) stop("output data cannot contain NAs.")
 
@@ -2430,9 +2420,6 @@ if (compiled)
      {C <- array(0,c(1,p,1))    # can't pass 0 length array to compiled
       u <- matrix(0,predictT,1)
      }
-   else # since input and output are declared same dim in fortran
-      if (periods(y) < periods(u)) y <- 
-	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
    if (is.null(TREND)) TREND <- matrix(0,predictT, p)
    is  <- max(m,p)
 
@@ -2457,7 +2444,7 @@ if (compiled)
                          as.integer( dim(C)[1]),  # 1+order of C  
                          sampleT=as.integer(sampleT),
                          predictT=as.integer(predictT),
-                         as.integer(periods(y)), 
+                         as.integer(periodsOutput(dat)), 
                          if(is.double(u)) u else as.double(u), # as.double() works ok with compiled but
                           #messes up the dim(u) returned in the list
                          if(is.double(y)) y else as.double(y),	     
@@ -2535,7 +2522,7 @@ else   # start S version
        if (m!=0) for (l in 1:dim(C)[1]) C[l,,] <- invA0 %*% C[l,,]  
        if(!is.null(TREND)) TREND <- t(invA0 %*% t(TREND))
        if(!is.null(TREND)) pred[Time,] <- pred[Time,]+TREND[Time,]
-       if (a >= 2) for (l in 2:a) 
+       for (l in 2:a) 
           if(Time+1-l<=sampleT)
              if (p==1) pred[Time,] <- pred[Time,]-c(A[l,,]  *  y[Time+1-l,]) 
              else      pred[Time,] <- pred[Time,]-c(A[l,,] %*% y[Time+1-l,])
@@ -2554,6 +2541,7 @@ else   # start S version
    r<-list(pred=pred,   weighted.sqerror=wt.err)
   } # end of S version
 
+tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
 tframe(r$pred) <- tf
 if (! is.null(r$weighted.sqerror))  tframe(r$weighted.sqerror) <- tf
 if((!is.null(result)) && (result == "pred")) return(r$pred)
@@ -2610,11 +2598,14 @@ FF<-    model$F
 H <-    model$H
 n <- dim(FF)[2]
 p <- dim(H)[1]
-y <- outputData(data)
-m <- if(is.null(model$G)) 0 else dim(model$G)[2]
-
-if (m != 0)
-  {G <-model$G
+if (is.null(model$G))
+  {m<-0
+   G<-matrix(0,n,1)       # can't call compiled with 0 length arrays
+   u <- matrix(0,predictT,1)
+  }
+else
+  {m <- dim(model$G)[2]
+   G <-model$G
    u <- inputData(data)
   } 
 if (Innov)            # K or Q,R can be NUll in model, which messes up compiled
@@ -2642,14 +2633,7 @@ else  z <-model$z0
        else   diag(1,n)
 
 if (compiled)
-  {if (m == 0) {
-      G<-matrix(0,n,1)       # can't call compiled with 0 length arrays
-      u <- matrix(0,predictT,1)
-      } 
-   else {# since input and output are declared same dim in fortran
-      if (periods(y) < periods(u)) y <- 
-	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
-      }
+  {
 #   storage.mode(error.weights)     <- "double"
 #   storage.mode(state) <- "double"
 #   storage.mode(track) <- "double"
@@ -2679,9 +2663,10 @@ IS <- max(n,p)
                   as.integer(p), 
                   sampleT=as.integer(sampleT), 
                   predictT=as.integer(predictT), 
-                  as.integer(periods(y)),  
+                  as.integer(periodsOutput(data)),  
                   if(is.double(u)) u else as.double(u), 
-                  if(is.double(y)) y else as.double(y),  
+                  if(is.double(outputData(data)))
+		                outputData(data) else as.double(outputData(data)),  
                   if(is.double(FF)) FF else as.double(FF),   
                   if(is.double(G)) G else as.double(G),	
                   if(is.double(H)) H else as.double(H),  
@@ -2707,7 +2692,8 @@ IS <- max(n,p)
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
   }
 else                  #  S version
-  {vt    <-  rep(0,p)     # initial prediction error
+  {y <- outputData(data)
+   vt    <-  rep(0,p)     # initial prediction error
    pred  <- matrix(0,predictT,p) 
    wt.err <- NULL
    if (1 < length(error.weights)) wt.err <- matrix(0,predictT,p)

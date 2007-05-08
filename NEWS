@@ -1,44 +1,5 @@
-   
-Known Bugs
 
-    o Handling of initial conditions for the state space filter and smoother 
-      still needs work.
-
-                 CHANGES IN DSE VERSION 2007.11-1
-
-
-Changes (Possibly) Affecting Users
-
-    o GPL-2 license option was added explicitely. 
-
-    o Function mineStepwise and method plot.mineStepwise were removed. 
-      It used stepwise and probably has not worked in a long time.
-
-                 CHANGES IN DSE VERSION 2007.7-1
-
-Changes (Possibly) Affecting Users
-
-    o fixed a bug passing data to dse1 fortran arma code when the input data was
-      longer than the output data. This especially affected forecast() in dse2.
-
-    o fixed a bug passing data to dse1 fortran kf code as with arma.
-
-    o fixed a bug in l.ARMA which caused an error when predictT exceeded 
-      sampleT and compiled=FALSE.
-
-    o the  ... arg to forecast() is now passed along to l(). Among other things,
-      this allows compiled=FALSE to be used with forecast() which helps testing.
-
-                 CHANGES IN DSE VERSION 2007.5-2
- 
-Changes Affecting Development
-
-    o dseplus is no longer maintained as a bundle.
-
-    o constants was added as argument in setArrays.
-
-
-                CHANGES IN DSE VERSION 2007.5-1
+                 CHANGES IN DSE AND DSEPLUS VERSION 2007.5-1
 
 Changes (Possibly) Affecting Users
 

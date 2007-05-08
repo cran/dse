@@ -70,8 +70,7 @@ test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Mul
 
   z <- residuals(VARmodelB)
   z <- acf(VARmodelB)
-  #x11()
-  get(getOption("device"))()
+  x11()
   acf(VARmodelB)
 
    good <- VARmodel$estimates$pred

@@ -29,7 +29,7 @@ variables for the forecast periods.}
     \item{percent}{
     A vector indication percentages of the last input to use for 
     forecast periods.}
-    \item{...}{arguments passed to l().}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
 The result is an object of class forecast which is a list with 

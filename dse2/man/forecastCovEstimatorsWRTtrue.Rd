@@ -3,7 +3,7 @@
 \alias{is.forecastCovEstimatorsWRTtrue}
 
 \title{Compare Forecasts Cov Relative to True Model Output}
-\description{Compare covariance of the forecasts less the true model output}
+\description{}
 \usage{
     forecastCovEstimatorsWRTtrue(true.model, rng=NULL,
                        simulation.args=NULL,
