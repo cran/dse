@@ -318,7 +318,7 @@ featherForecasts.TSdata <- function(obj, model, ...)
 
 featherForecasts.TSmodel <- function(obj, data, horizon=36,
              from.periods =NULL, ...)
-  {data <- freeze(data)
+  {#data <- freeze(data)
    if (is.null(from.periods))
      {if(0 == nseriesOutput(data)) from.periods <-
              10*seq(floor(periods(data)/10))
@@ -362,7 +362,7 @@ tfplot.featherForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf)
 {#  (... further arguments, currently disregarded)
  #The default starting point for plots is the start of data.
  #The default ending point for plots is the end of forecasts.
-   freq <- tffrequency(x$data)
+   freq <- tffrequency(outputData(x$data))
    names <- seriesNamesOutput(x)
    if(is.null(names)) names <- paste("output", series)
    if (is.null(start)) start <- tfstart(outputData(x$data))
@@ -1779,6 +1779,7 @@ horizonForecastsCompiled.SS <- function( obj, data, horizons=1:4,
 }
 
 
+
 forecasts.horizonForecasts <- function(obj){obj$horizonForecasts}
 
 tfplot.horizonForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
@@ -3085,7 +3086,7 @@ mineStepwise <- function(data, essential.data=1,
       method="efroymson", f.crit=2, intercept=TRUE,
       subtract.means=FALSE,  standardize=FALSE, 
       lags.in=6, lags.out=6, trend=FALSE, plot.=TRUE) 
-{  data <- freeze(data)
+{  #data <- freeze(data)
    m <- ncol(inputData(data))
    p <- ncol(outputData(data))
    if(is.null(m))  m <- 0

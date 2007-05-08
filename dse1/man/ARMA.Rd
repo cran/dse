@@ -43,6 +43,12 @@ where
     \item{TREND}{is a matrix the same dimension as y, a p-vector
       (which gets replicated for each time period), or NULL.}
 
+This is sometime called a vector ARMA (VARMA) model, but the univariate case is
+also handled by this structure. VAR models are a  special case 
+where \code{B(L) = I}.  ARIMA models are also special cases where the 
+polynomial arrays have unit roots, but these are not distinguished in a
+separate term as is sometimes done in other programs.
+
 The name of last term, \code{TREND}, is misleading. If it is NULL it is treated
 as zero. If it is a p-vector, then this constant vector is added to the
 the p-vector \code{y(t)} at each period. For a stable model this would give the
@@ -59,12 +65,18 @@ be treated as a parameter, and this is the easiest way to initialize an
 element which is not to be treated as a constant of value 1.0. Any array
 elements can be fixed to constants by specifying the list \code{constants}.
 Arrays which are not specified in the list will be treated in the default 
-way. An alternative for fixing constants is the function \code{fixConstants}}
+way. An alternative for fixing constants is the function \code{fixConstants}.
 
+The function \code{ARMA} sets up a model but does not estimate it. See 
+\code{\link{estVARXls}} for one possibility for estimating VAR models and
+\code{\link{estMaxLik}} for one possibility for estimating ARMA models.
+}
 \seealso{
     \code{\link{TSmodel}},
     \code{\link{simulate.ARMA}},
     \code{\link{fixConstants}}
+    \code{\link{estVARXls}}
+    \code{\link{estMaxLik}}
 }
 \examples{
     mod1 <- ARMA(A=array(c(1,-.25,-.05), c(3,1,1)), B=array(1,c(1,1,1)))

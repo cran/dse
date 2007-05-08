@@ -48,6 +48,10 @@ calculated by subtracting the output data from the model predictions.}
     Diagnostic information is printed and plotted if a device is available.
 Output graphics can be paused between pages by setting par(ask=TRUE).
 }
+\seealso{
+\code{\link{informationTests}},
+\code{\link{Portmanteau}}
+}
 \examples{
     data("eg1.DSE.data.diff", package="dse1")
     model <- estVARXls(eg1.DSE.data.diff)

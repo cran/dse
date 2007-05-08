@@ -31,8 +31,8 @@
 
 DSEversion <- function() 
   {if (!is.R()) return("version cannot be determined.") else
-   z <- c("setRNG", "syskern", "tframe", "dse1","dse2", "dsepadi","monitor", 
-          "juice", "curve", "CDNmoney", "dfa", "padi", "dseNN")
+   z <- c("setRNG", "tframe", "dse1","dse2", "dsepadi","monitor", 
+          "curve", "CDNmoney", "tsfa", "TSdbi", "padi")
    z <- z[ z %in% library()$results[,1] ]
    r <- NULL
    for (pac in z ) 
@@ -2382,7 +2382,8 @@ l.ARMA <- function(obj1, obj2, sampleT=NULL, predictT=NULL,result=NULL,
 model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
 if (!is.ARMA(model)) stop("l.ARMA expecting an ARMA TSmodel.")
 
-dat <- freeze(obj2)
+#dat <- freeze(obj2)
+dat <- obj2
 if(!checkConsistentDimensions(model,dat)) stop("dimension error")
 if (is.null(sampleT))  sampleT  <- periodsOutput(dat)
 if (is.null(predictT)) predictT <- sampleT
@@ -2574,7 +2575,8 @@ l.SS <- function(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
 model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
 if (!is.SS(model)) stop("l.SS expecting an SS TSmodel.")
 
-data <- freeze(obj2)
+#data <- freeze(obj2)
+data <- obj2
 if(!checkConsistentDimensions(model, data)) stop("dimension error.\n")
 if (is.null(sampleT))  sampleT  <- periodsOutput(data)
 if (is.null(predictT)) predictT <- sampleT
@@ -2940,7 +2942,7 @@ estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
  # Data should be of class TSdata.
  # lag.weight is an exponential weight applied to lags. It should be in (0,1].
    if (is.null(max.lag)) max.lag <- 6
-   data <- freeze(data)
+   #data <- freeze(data)
    names <- seriesNames(data)
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
@@ -3073,7 +3075,7 @@ estVARXar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
       standardize=FALSE, unstandardize=TRUE, aic=TRUE, max.lag=NULL, 
       method="yule-walker", warn=TRUE) 
 {
-   data <- freeze(data)
+   #data <- freeze(data)
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
    if (0 == p) stop("estVARXar requires output data to estimate a model.")
@@ -3172,7 +3174,8 @@ estWtVariables <- function(data, variable.weights,
  dimnames(inv.wts)          <-list(NULL, seriesNamesOutput(data))
  dimnames(variable.weights) <-list(NULL, seriesNamesOutput(data))
  scaled.model <- do.call(estimation, append(list(
-           freeze(scale(data, scale=list(output=inv.wts)))), estimation.args))
+                  scale(data, scale=list(output=inv.wts))),  estimation.args))
+#           freeze(scale(data, scale=list(output=inv.wts)))), estimation.args))
  model <-scale(TSmodel(scaled.model), scale=list(output=variable.weights))
  model$description <- 
     paste("model estimated by estWtVariables with", estimation)
@@ -3197,9 +3200,11 @@ estMaxLik.TSmodel <- function(obj1, obj2,
  # "nml" algorithm.args=list(hessian=T, iterlim=20, 
  #     dfunc=gradNumerical, line.search="nlm",ftol=1e-5, gtol=1e-3,)
  Shape <- obj1
- data <- freeze(obj2)
+ #data <- freeze(obj2)
+ data <- obj2
  func.like <- function(coefficients, Shape,data)
-      {l(setArrays(Shape, coefficients=coefficients), data, result="like") }
+      {l(setArrays(Shape, coefficients=coefficients), data, result="like",
+         warn=FALSE) }
 
  if (algorithm=="optim")
     {results <- optim(coef(Shape), func.like, method=algorithm.args$method,
@@ -3306,7 +3311,7 @@ estBlackBox1 <- function(data,estimation="estVARXls",
 
 estSSMittnik <- function(data, max.lag=6, n=NULL, 
     subtract.means=FALSE, normalize=FALSE)
-{ data <- freeze(data)
+{ #data <- freeze(data)
   m <- ncol(inputData(data))
   if(is.null(m))  m <- 0
   p <- ncol(outputData(data))
@@ -3374,7 +3379,7 @@ MittnikReduction.from.Hankel <- function(M, data=NULL, nMax=NULL,
       n
      }
 
-   data <- freeze(data)
+   #data <- freeze(data)
    m <-ncol(inputData(data))      # dim of input series
    if(is.null(m))m<-0
    z <-SVDbalanceMittnik(M, m, nMax)
@@ -4390,7 +4395,7 @@ tfplot.TSdata <- function(x, ...,
  # start is the starting point (date)  and end the ending point for
  # plotting. If not specified the whole sample is plotted.
 # output graphics can be paused between pages by setting par(ask=T).
-  x <- freeze(x)
+  #x <- freeze(x)
   Ngraphs <- length(select.outputs) + length(select.inputs)
   if(reset.screen)
     {Ngraphs <- min(Ngraphs, graphs.per.page)
@@ -4409,7 +4414,7 @@ tfplot.TSdata <- function(x, ...,
        for (d in append(list(x),list(...)) ) 
          {if (!is.TSdata(d))
             stop("Expecting TSdata objects. Do not truncate argument names as that can cause a problem here.")
-          d <- freeze(d)
+          #d <- freeze(d)
           j <- j + 1
           z[, j] <- inputData(d, series = i)
          }
@@ -4426,7 +4431,7 @@ tfplot.TSdata <- function(x, ...,
      for (d in append(list(x),list(...)) ) 
        {if (!is.TSdata(d))
             stop("Expecting TSdata objects. Do not truncate argument names as that can cause a problem here.")
-        d <- freeze(d)
+        #d <- freeze(d)
         j <- j+1
         z[,j]<-outputData(d, series=i) 
        }
@@ -4640,12 +4645,12 @@ as.TSdata <- function(d)
  x
 }
 
-tframed.TSdata <- function(x, tf=NULL, names=NULL)  
+tframed.TSdata <- function(x, tf=NULL, names=NULL, ...)  
 {# switch to tframe representation
  if(0 != (nseriesOutput(x)))
-       outputData(x) <-tframed(outputData(x), tf=tf, names=names$output)
+       outputData(x) <-tframed(outputData(x), tf=tf, names=names$output, ...)
  if (0 != (nseriesInput(x)))
-        inputData(x) <-tframed(inputData(x),  tf=tf, names=names$input)
+        inputData(x) <-tframed(inputData(x),  tf=tf, names=names$input, ...)
  x
 }  
 
