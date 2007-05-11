@@ -1,5 +1,14 @@
 
-                 CHANGES IN DSE AND DSEPLUS VERSION 2007.5-1
+                 CHANGES IN DSE VERSION 2007.5-2
+ 
+Changes Affecting Development
+
+    o dseplus is no longer maintained as a bundle.
+
+    o constants was added as argument in setArrays.
+
+
+                CHANGES IN DSE VERSION 2007.5-1
 
 Changes (Possibly) Affecting Users
 

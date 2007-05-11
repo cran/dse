@@ -1812,21 +1812,21 @@ setTSmodelParameters.ARMA <- function  (model, constants=model$constants) {
 }
 
 
-setArrays <- function(model, coefficients=NULL)  
+setArrays <- function(model, coefficients=NULL, constants=NULL)  
   # complete representaion info. based on parameter info.  
   UseMethod("setArrays")
    
-setArrays.TSestModel <- function(model, coefficients=NULL)  
- setArrays(TSmodel(model), coefficients=coefficients) 
+setArrays.TSestModel <- function(model, coefficients=NULL, constants=NULL)  
+ setArrays(TSmodel(model), coefficients=coefficients, constants=constants) 
     
-setArrays.SS <- function(model, coefficients=NULL){
+setArrays.SS <- function(model, coefficients=NULL, constants=NULL){
 	# N.B. Dimension and class (innov/ nonInnov) info. is assumed accurate
     if (is.null(coefficients)) coefficients   <- coef(model)
                         else   model$coefficients <- coefficients
     a.pos  <- model$location
     i.pos  <- model$i
     j.pos  <- model$j
-    const  <- model$const
+    const  <-if (is.null(constants)) model$const else constants #untested
     ca.pos <- model$const.location
     ci.pos <- model$const.i
     cj.pos <- model$const.j  
@@ -1902,14 +1902,14 @@ setArrays.SS <- function(model, coefficients=NULL){
     model
 } #end setArrays.SS
 
-setArrays.ARMA <- function(model, coefficients=NULL) { 
+setArrays.ARMA <- function(model, coefficients=NULL, constants=NULL) { 
 	# N.B. Dimension and class info. is assumed accurate
        if (is.null(coefficients)) coefficients    <- coef(model)
                         else   model$coefficients <- coefficients
        a.pos  <- model$location
        i.pos  <- model$i
        j.pos  <- model$j
-       const  <- model$const
+       const  <-if (is.null(constants)) model$const else constants #untested
        ca.pos <- model$const.location
        ci.pos <- model$const.i
        cj.pos <- model$const.j  
