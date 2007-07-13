@@ -165,6 +165,27 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
 
 # Section 5 - Forecasting
+  cat("Guide part 2 test 5 pre-test a... \n")
+  eg4.DSE.model <- estVARXls(eg4.DSE.data)
+  longIn.data <- TSdata(
+              input= ts(rbind(inputData(eg4.DSE.data), matrix(.1,10,1)), 
+                       start=start(eg4.DSE.data),
+                       frequency=frequency(eg4.DSE.data)),    
+              output=outputData(eg4.DSE.data))
+  seriesNames(longIn.data) <- seriesNames(eg4.DSE.data)
+  z  <- forecast(TSmodel(eg4.DSE.model), longIn.data)
+  zz <- forecast(TSmodel(eg4.DSE.model), longIn.data, compiled=FALSE)
+  error <- max(abs(z$pred - zz$pred))
+  ok <-  fuzz.small > error 
+  if (ok) cat("ok\n") else {
+     max.error <- if (is.na(max.error)) error else max(error, max.error)
+     cat("failed! error= ", error,"\n") 
+     if(!testEqual(z$data$output, zz$data$output))
+         cat("output data comparison for forecast() and longIn.data failed.\n") 
+     if(!testEqual(z$data$input, zz$data$input))
+         cat("input data comparison for forecast() and longIn.data failed.\n") 
+     }
+  all.ok <- all.ok & ok 
 
   cat("Guide part 2 test 5 ... \n")
   eg4.DSE.model <- estVARXls(eg4.DSE.data)
@@ -188,6 +209,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   cat("Guide part 2 test 6 ... \n")
   zz <- forecast(TSmodel(eg4.DSE.model), new.data)
+  #tfplot(zz$pred, forecast(TSmodel(eg4.DSE.model), new.data, compiled=FALSE)$pred) 
   z <-  forecast(TSmodel(eg4.DSE.model), trimNA(new.data), 
 		conditioning.inputs=inputData(new.data))
   tfplot(zz, start=c(1990,6))

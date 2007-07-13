@@ -54,20 +54,24 @@ shockDecomposition <- function(model, horizon=30, shock=rep(1,horizon))
   p <-nseriesOutput(model)
 
   if (is.TSestModel(model)) 
-     {data <- TSdata(model)   # just for input
+     {if( m > 0 ) inData <- inputData(model)[1:horizon,1:m]# loose tframe
+      else inData <- NULL
       model <- TSmodel(model)
      }
   else 
-    {if( m > 0 ) data <- TSdata(input=matrix(0,horizon,m))
-     else        data <- TSdata(output=matrix(0,horizon,p))
+    {if( m > 0 ) inData <- matrix(0,horizon,m)
+     else        inData <- NULL
     }
    if (!is.TSmodel(model)) stop("shockDecomposition expecting a TSmodel.")
    model$z0 <- NULL    # zero initial conditions
    par(mfrow = c(p, p) , mar = c(2.1, 4.1,3.1, 0.1) )
+   sh <- matrix(0, horizon, p) 
+   seriesNames(sh)     <- seriesNamesOutput(model)
+   seriesNamesInput(model) <- NULL
    for (i in 1:p)
-     {outputData(data) <- matrix(0, horizon, p)
-      outputData(data)[,i] <- shock   
-      z <- l(model,data)
+     {shi <- sh
+      shi[,i] <- shock   
+      z <- l(model,TSdata(input=inData, output=shi))
       tfplot(z, reset.screen = FALSE)
      }
 invisible()
@@ -97,7 +101,7 @@ forecast.TSdata <- function(obj, model, ...){forecast(model, obj, ...)}
 
 forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
     conditioning.inputs.forecasts=NULL, percent=NULL, ...)
-{#  (... further arguments, currently disregarded)
+{#  (... further arguments passed to l())
  # obj must be a TSmodel
  # Calculate (multiple) forecasts from the end of data to a horizon determined
  # either from supplied input data or the argument horizon (more details below).
@@ -148,7 +152,7 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
       if (!is.null(percent))
           warning("model does not take inputs. percent ignored.")
       pr <- l(obj, data, sampleT =sampleT, 
-                           predictT=sampleT+horizon)$estimates$pred
+                           predictT=sampleT+horizon, ...)$estimates$pred
       pred <- tfwindow(pr, end=tfend(output), warn=FALSE)
       pr <- tfwindow(pr, start=c(0,1)+tfend(output), warn=FALSE)
     #  pr[1:(sampleT-1),] <- NA
@@ -203,7 +207,7 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
       if (sampleT > predictT) 
          stop("input series must be at least as long as output series (after NAs are removed).")
       horizon <- predictT - sampleT
-      pr <- l(obj, pdata, sampleT=sampleT, predictT=predictT)$estimates$pred
+      pr <- l(obj, pdata, sampleT=sampleT, predictT=predictT, ...)$estimates$pred
 #    The following lines sometimes cause problems if output is output[...,]
 #    See comments in dse2.function.tests
         if (0 == length(proj)) pred <- tfwindow(pr, end=tfend(output), warn=FALSE)

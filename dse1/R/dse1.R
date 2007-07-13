@@ -387,13 +387,15 @@ tfplot.TSestModel <- function(x, ...,
                 || options()$PlotTitles)) title(main = Title)
     } }
   for (i in select.outputs ) 
-    {z <-c(outputData(model, series=i),
-           rep(NA,periods(model$estimates$pred)-periods(TSdata(model))))
+    {#z <-c(outputData(model, series=i),
+     #      rep(NA,periods(model$estimates$pred) - periodsOutput(model)))
+     z <- outputData(model, series=i)
      for (model in append(list(x),list(...))){
          if (! is.TSestModel(model)) 
 	    stop("Argument in ... to be plotted is not a TSestModel object.")
-         z<-cbind(z,model$estimates$pred[,i,drop=FALSE])}
-     tframe(z) <- tframe(outputData(model))
+         #z <- cbind(z,model$estimates$pred[,i,drop=FALSE])}
+         z <- tbind(z,selectSeries(model$estimates$pred, series=i))}
+     #tframe(z) <- tframe(outputData(model))
      tfOnePlot(z,start=start,end=end, ylab=names[m+i]) # tsplot
      if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
                 || options()$PlotTitles)) title(main = Title)
@@ -2384,15 +2386,20 @@ if (!is.ARMA(model)) stop("l.ARMA expecting an ARMA TSmodel.")
 
 #dat <- freeze(obj2)
 dat <- obj2
+tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
+
 if(!checkConsistentDimensions(model,dat)) stop("dimension error")
 if (is.null(sampleT))  sampleT  <- periodsOutput(dat)
 if (is.null(predictT)) predictT <- sampleT
 if (sampleT > predictT) stop("sampleT cannot exceed predictT.")
 if (sampleT > periodsOutput(dat)) stop("sampleT cannot exceed length of data.")
+
 if (0 != nseriesInput(dat))
   {if (periodsInput(dat) < predictT)
       stop("input data must be at least as long as requested prediction.")
    if (any(is.na(inputData(dat)))) stop("input data cannot contain NAs.")
+   if(!all(startInput(dat) == startOutput(dat)))
+	   stop("input and output data must start at the same time.")
   }
 if (any(is.na(outputData(dat)))) stop("output data cannot contain NAs.")
 
@@ -2420,6 +2427,9 @@ if (compiled)
      {C <- array(0,c(1,p,1))    # can't pass 0 length array to compiled
       u <- matrix(0,predictT,1)
      }
+   else # since input and output are declared same dim in fortran
+      if (periods(y) < periods(u)) y <- 
+	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
    if (is.null(TREND)) TREND <- matrix(0,predictT, p)
    is  <- max(m,p)
 
@@ -2444,7 +2454,7 @@ if (compiled)
                          as.integer( dim(C)[1]),  # 1+order of C  
                          sampleT=as.integer(sampleT),
                          predictT=as.integer(predictT),
-                         as.integer(periodsOutput(dat)), 
+                         as.integer(periods(y)), 
                          if(is.double(u)) u else as.double(u), # as.double() works ok with compiled but
                           #messes up the dim(u) returned in the list
                          if(is.double(y)) y else as.double(y),	     
@@ -2522,7 +2532,7 @@ else   # start S version
        if (m!=0) for (l in 1:dim(C)[1]) C[l,,] <- invA0 %*% C[l,,]  
        if(!is.null(TREND)) TREND <- t(invA0 %*% t(TREND))
        if(!is.null(TREND)) pred[Time,] <- pred[Time,]+TREND[Time,]
-       for (l in 2:a) 
+       if (a >= 2) for (l in 2:a) 
           if(Time+1-l<=sampleT)
              if (p==1) pred[Time,] <- pred[Time,]-c(A[l,,]  *  y[Time+1-l,]) 
              else      pred[Time,] <- pred[Time,]-c(A[l,,] %*% y[Time+1-l,])
@@ -2541,7 +2551,6 @@ else   # start S version
    r<-list(pred=pred,   weighted.sqerror=wt.err)
   } # end of S version
 
-tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
 tframe(r$pred) <- tf
 if (! is.null(r$weighted.sqerror))  tframe(r$weighted.sqerror) <- tf
 if((!is.null(result)) && (result == "pred")) return(r$pred)
@@ -2598,14 +2607,11 @@ FF<-    model$F
 H <-    model$H
 n <- dim(FF)[2]
 p <- dim(H)[1]
-if (is.null(model$G))
-  {m<-0
-   G<-matrix(0,n,1)       # can't call compiled with 0 length arrays
-   u <- matrix(0,predictT,1)
-  }
-else
-  {m <- dim(model$G)[2]
-   G <-model$G
+y <- outputData(data)
+m <- if(is.null(model$G)) 0 else dim(model$G)[2]
+
+if (m != 0)
+  {G <-model$G
    u <- inputData(data)
   } 
 if (Innov)            # K or Q,R can be NUll in model, which messes up compiled
@@ -2633,7 +2639,14 @@ else  z <-model$z0
        else   diag(1,n)
 
 if (compiled)
-  {
+  {if (m == 0) {
+      G<-matrix(0,n,1)       # can't call compiled with 0 length arrays
+      u <- matrix(0,predictT,1)
+      } 
+   else {# since input and output are declared same dim in fortran
+      if (periods(y) < periods(u)) y <- 
+	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
+      }
 #   storage.mode(error.weights)     <- "double"
 #   storage.mode(state) <- "double"
 #   storage.mode(track) <- "double"
@@ -2663,10 +2676,9 @@ IS <- max(n,p)
                   as.integer(p), 
                   sampleT=as.integer(sampleT), 
                   predictT=as.integer(predictT), 
-                  as.integer(periodsOutput(data)),  
+                  as.integer(periods(y)),  
                   if(is.double(u)) u else as.double(u), 
-                  if(is.double(outputData(data)))
-		                outputData(data) else as.double(outputData(data)),  
+                  if(is.double(y)) y else as.double(y),  
                   if(is.double(FF)) FF else as.double(FF),   
                   if(is.double(G)) G else as.double(G),	
                   if(is.double(H)) H else as.double(H),  
@@ -2692,8 +2704,7 @@ IS <- max(n,p)
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
   }
 else                  #  S version
-  {y <- outputData(data)
-   vt    <-  rep(0,p)     # initial prediction error
+  {vt    <-  rep(0,p)     # initial prediction error
    pred  <- matrix(0,predictT,p) 
    wt.err <- NULL
    if (1 < length(error.weights)) wt.err <- matrix(0,predictT,p)
