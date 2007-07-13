@@ -1,3 +1,23 @@
+   
+Known Bugs
+
+    o Handling of initial conditions for the state space filter and smoother 
+      still needs work.
+
+                 CHANGES IN DSE VERSION 2007.7-1
+
+Changes (Possibly) Affecting Users
+
+    o fixed a bug passing data to dse1 fortran arma code when the input data was
+      longer than the output data. This especially affected forecast() in dse2.
+
+    o fixed a bug passing data to dse1 fortran kf code as with arma.
+
+    o fixed a bug in l.ARMA which caused an error when predictT exceeded 
+      sampleT and compiled=FALSE.
+
+    o the  ... arg to forecast() is now passed along to l(). Among other things,
+      this allows compiled=FALSE to be used with forecast() which helps testing.
 
                  CHANGES IN DSE VERSION 2007.5-2
  
