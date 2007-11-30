@@ -59,7 +59,7 @@
        to \code{plot}. See \code{par}.}
     \item{criterion}{criterion which should be used to extract something from
          the object which will then be plotted. See \code{EstEval}.}
-    \item{criterion.args}{arguments to be passed to code{criterion}.}
+    \item{criterion.args}{arguments to be passed to \code{criterion}.}
     \item{...}{arguments passed to other methods.}
 }
 

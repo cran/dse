@@ -10,7 +10,7 @@
 \title{Specific Methods for tframed Data}
 \description{See the generic function description.}
 \usage{
-    \method{tframed}{TSdata}(x, tf=NULL, names=NULL)
+    \method{tframed}{TSdata}(x, tf=NULL, names=NULL, ...)
     \method{tframe}{TSdata}(x) <- value
     \method{tfwindow}{TSdata}(x, tf=NULL, start=tfstart(tf), end=tfend(tf), warn=TRUE)
     \method{tbind}{TSdata}(x, d2, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)

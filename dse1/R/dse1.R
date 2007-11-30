@@ -31,8 +31,8 @@
 
 DSEversion <- function() 
   {if (!is.R()) return("version cannot be determined.") else
-   z <- c("setRNG", "syskern", "tframe", "dse1","dse2", "dsepadi","monitor", 
-          "juice", "curve", "CDNmoney", "dfa", "padi", "dseNN")
+   z <- c("setRNG", "tframe", "dse1","dse2", "dsepadi","monitor", 
+          "curve", "CDNmoney", "tsfa", "TSdbi", "padi")
    z <- z[ z %in% library()$results[,1] ]
    r <- NULL
    for (pac in z ) 
@@ -387,13 +387,15 @@ tfplot.TSestModel <- function(x, ...,
                 || options()$PlotTitles)) title(main = Title)
     } }
   for (i in select.outputs ) 
-    {z <-c(outputData(model, series=i),
-           rep(NA,periods(model$estimates$pred)-periods(TSdata(model))))
+    {#z <-c(outputData(model, series=i),
+     #      rep(NA,periods(model$estimates$pred) - periodsOutput(model)))
+     z <- outputData(model, series=i)
      for (model in append(list(x),list(...))){
          if (! is.TSestModel(model)) 
 	    stop("Argument in ... to be plotted is not a TSestModel object.")
-         z<-cbind(z,model$estimates$pred[,i,drop=FALSE])}
-     tframe(z) <- tframe(outputData(model))
+         #z <- cbind(z,model$estimates$pred[,i,drop=FALSE])}
+         z <- tbind(z,selectSeries(model$estimates$pred, series=i))}
+     #tframe(z) <- tframe(outputData(model))
      tfOnePlot(z,start=start,end=end, ylab=names[m+i]) # tsplot
      if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
                 || options()$PlotTitles)) title(main = Title)
@@ -1812,21 +1814,21 @@ setTSmodelParameters.ARMA <- function  (model, constants=model$constants) {
 }
 
 
-setArrays <- function(model, coefficients=NULL)  
+setArrays <- function(model, coefficients=NULL, constants=NULL)  
   # complete representaion info. based on parameter info.  
   UseMethod("setArrays")
    
-setArrays.TSestModel <- function(model, coefficients=NULL)  
- setArrays(TSmodel(model), coefficients=coefficients) 
+setArrays.TSestModel <- function(model, coefficients=NULL, constants=NULL)  
+ setArrays(TSmodel(model), coefficients=coefficients, constants=constants) 
     
-setArrays.SS <- function(model, coefficients=NULL){
+setArrays.SS <- function(model, coefficients=NULL, constants=NULL){
 	# N.B. Dimension and class (innov/ nonInnov) info. is assumed accurate
     if (is.null(coefficients)) coefficients   <- coef(model)
                         else   model$coefficients <- coefficients
     a.pos  <- model$location
     i.pos  <- model$i
     j.pos  <- model$j
-    const  <- model$const
+    const  <-if (is.null(constants)) model$const else constants #untested
     ca.pos <- model$const.location
     ci.pos <- model$const.i
     cj.pos <- model$const.j  
@@ -1902,14 +1904,14 @@ setArrays.SS <- function(model, coefficients=NULL){
     model
 } #end setArrays.SS
 
-setArrays.ARMA <- function(model, coefficients=NULL) { 
+setArrays.ARMA <- function(model, coefficients=NULL, constants=NULL) { 
 	# N.B. Dimension and class info. is assumed accurate
        if (is.null(coefficients)) coefficients    <- coef(model)
                         else   model$coefficients <- coefficients
        a.pos  <- model$location
        i.pos  <- model$i
        j.pos  <- model$j
-       const  <- model$const
+       const  <-if (is.null(constants)) model$const else constants #untested
        ca.pos <- model$const.location
        ci.pos <- model$const.i
        cj.pos <- model$const.j  
@@ -2033,6 +2035,7 @@ if (!checkConsistentDimensions(model)) stop("The SS model is not correct.")
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
  
+if (!is.null(noise) && is.matrix(noise)) noise <- list(w=noise)
 
 set.ts <- TRUE             
 if (!is.null(start))
@@ -2079,7 +2082,7 @@ else set.ts <-  FALSE
    }
  else
    {#  noise is not null
-   if (is.matrix(noise)) noise <- list(w=noise)
+   # already done if (is.matrix(noise)) noise <- list(w=noise)
    if (is.null(noise$w))
        stop("supplied noise structure is not correct. w must be specified.")
    if (is.null(noise$w0)) noise$w0 <- rep(0,p)
@@ -2212,6 +2215,12 @@ if (m!=0) for (l in 1:dim(C)[1]) C[l,,] <- invA0 %*% C[l,,]
 if(!is.null(TREND)) TREND <- t(invA0 %*% t(TREND))
 
 set.ts <- TRUE             
+
+if (!is.null(noise)) {
+   if (is.matrix(noise)) noise <- list(w=noise)
+   if (is.null(noise$w0)) noise$w0 <-matrix(0,b,p)
+   }
+
 if (!is.null(start))
   {if (!is.null(freq))   tf <- list(start=start, frequency=freq)
    else
@@ -2223,10 +2232,6 @@ else if( (!is.null(input))   && is.tframed(input))   tf <- tframe(input)
 else if ((!is.null(noise$w)) && is.tframed(noise$w)) tf <- tframe(noise$w)
 else set.ts <-  FALSE
 
-if (!is.null(noise)) {
-   if (is.matrix(noise)) noise <- list(w=noise)
-   if (is.null(noise$w0)) noise$w0 <-matrix(0,b,p)
-   }
 
 noise <- makeTSnoise(sampleT,p,b, noise=noise, rng=rng,
                         Cov=Cov, sd=sd, 
@@ -2343,14 +2348,15 @@ residualStats <- function(pred, data, sampleT=nrow(pred), warn=TRUE){
         {if(warn) warning("The cov. matrix is singular. Working on subspace.")
          v$d <- v$d[i]
       #   v$u <- v$u[i,i, drop=FALSE]
-      #   v$v <- v$v[i,i, drop=FALSE]
+      #   v$vt <- v$vt[i,i, drop=FALSE]
       #   e <- e[,i, drop=FALSE]
         }
       like1 <- 0.5 * sampleT * log(prod(v$d)) # det
-#      if (1 == length(v$d)) OmInv <-  v$v %*% (1/v$d) %*%t(v$u) 
-#      else OmInv <-  v$v %*% diag(1/v$d) %*%t(v$u) # more robust than solve(Om)
+      # $vt is transposed in La.svd, but not v in svd
+#      if (1 == length(v$d)) OmInv <-  v$u %*% (1/v$d) %*% v$vt 
+#      else OmInv <-  v$u %*% diag(1/v$d) %*% v$vt # more robust than solve(Om)
 #  following is equivalent
-#      OmInv <-  v$v %*% sweep(t(v$u),1,1/v$d, "*") 
+#      OmInv <-  v$u %*% sweep(v$vt,1,1/v$d, "*") 
 #      like2 <- sum(e * (e %*% OmInv)) /2
 #  but this works out to (sampleT*p/2) and fixing for degenerate distributions:
        like2 <- (sampleT*length(v$d))/2
@@ -2381,16 +2387,22 @@ l.ARMA <- function(obj1, obj2, sampleT=NULL, predictT=NULL,result=NULL,
 model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
 if (!is.ARMA(model)) stop("l.ARMA expecting an ARMA TSmodel.")
 
-dat <- freeze(obj2)
+#dat <- freeze(obj2)
+dat <- obj2
+tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
+
 if(!checkConsistentDimensions(model,dat)) stop("dimension error")
 if (is.null(sampleT))  sampleT  <- periodsOutput(dat)
 if (is.null(predictT)) predictT <- sampleT
 if (sampleT > predictT) stop("sampleT cannot exceed predictT.")
 if (sampleT > periodsOutput(dat)) stop("sampleT cannot exceed length of data.")
+
 if (0 != nseriesInput(dat))
   {if (periodsInput(dat) < predictT)
       stop("input data must be at least as long as requested prediction.")
    if (any(is.na(inputData(dat)))) stop("input data cannot contain NAs.")
+   if(!all(startInput(dat) == startOutput(dat)))
+	   stop("input and output data must start at the same time.")
   }
 if (any(is.na(outputData(dat)))) stop("output data cannot contain NAs.")
 
@@ -2418,6 +2430,9 @@ if (compiled)
      {C <- array(0,c(1,p,1))    # can't pass 0 length array to compiled
       u <- matrix(0,predictT,1)
      }
+   else # since input and output are declared same dim in fortran
+      if (periods(y) < periods(u)) y <- 
+	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
    if (is.null(TREND)) TREND <- matrix(0,predictT, p)
    is  <- max(m,p)
 
@@ -2442,7 +2457,7 @@ if (compiled)
                          as.integer( dim(C)[1]),  # 1+order of C  
                          sampleT=as.integer(sampleT),
                          predictT=as.integer(predictT),
-                         as.integer(periodsOutput(dat)), 
+                         as.integer(periods(y)), 
                          if(is.double(u)) u else as.double(u), # as.double() works ok with compiled but
                           #messes up the dim(u) returned in the list
                          if(is.double(y)) y else as.double(y),	     
@@ -2520,7 +2535,7 @@ else   # start S version
        if (m!=0) for (l in 1:dim(C)[1]) C[l,,] <- invA0 %*% C[l,,]  
        if(!is.null(TREND)) TREND <- t(invA0 %*% t(TREND))
        if(!is.null(TREND)) pred[Time,] <- pred[Time,]+TREND[Time,]
-       for (l in 2:a) 
+       if (a >= 2) for (l in 2:a) 
           if(Time+1-l<=sampleT)
              if (p==1) pred[Time,] <- pred[Time,]-c(A[l,,]  *  y[Time+1-l,]) 
              else      pred[Time,] <- pred[Time,]-c(A[l,,] %*% y[Time+1-l,])
@@ -2539,7 +2554,6 @@ else   # start S version
    r<-list(pred=pred,   weighted.sqerror=wt.err)
   } # end of S version
 
-tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
 tframe(r$pred) <- tf
 if (! is.null(r$weighted.sqerror))  tframe(r$weighted.sqerror) <- tf
 if((!is.null(result)) && (result == "pred")) return(r$pred)
@@ -2573,7 +2587,8 @@ l.SS <- function(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
 model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
 if (!is.SS(model)) stop("l.SS expecting an SS TSmodel.")
 
-data <- freeze(obj2)
+#data <- freeze(obj2)
+data <- obj2
 if(!checkConsistentDimensions(model, data)) stop("dimension error.\n")
 if (is.null(sampleT))  sampleT  <- periodsOutput(data)
 if (is.null(predictT)) predictT <- sampleT
@@ -2595,14 +2610,11 @@ FF<-    model$F
 H <-    model$H
 n <- dim(FF)[2]
 p <- dim(H)[1]
-if (is.null(model$G))
-  {m<-0
-   G<-matrix(0,n,1)       # can't call compiled with 0 length arrays
-   u <- matrix(0,predictT,1)
-  }
-else
-  {m <- dim(model$G)[2]
-   G <-model$G
+y <- outputData(data)
+m <- if(is.null(model$G)) 0 else dim(model$G)[2]
+
+if (m != 0)
+  {G <-model$G
    u <- inputData(data)
   } 
 if (Innov)            # K or Q,R can be NUll in model, which messes up compiled
@@ -2630,7 +2642,14 @@ else  z <-model$z0
        else   diag(1,n)
 
 if (compiled)
-  {
+  {if (m == 0) {
+      G<-matrix(0,n,1)       # can't call compiled with 0 length arrays
+      u <- matrix(0,predictT,1)
+      } 
+   else {# since input and output are declared same dim in fortran
+      if (periods(y) < periods(u)) y <- 
+	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
+      }
 #   storage.mode(error.weights)     <- "double"
 #   storage.mode(state) <- "double"
 #   storage.mode(track) <- "double"
@@ -2660,10 +2679,9 @@ IS <- max(n,p)
                   as.integer(p), 
                   sampleT=as.integer(sampleT), 
                   predictT=as.integer(predictT), 
-                  as.integer(periodsOutput(data)),  
+                  as.integer(periods(y)),  
                   if(is.double(u)) u else as.double(u), 
-                  if(is.double(outputData(data)))
-		                outputData(data) else as.double(outputData(data)),  
+                  if(is.double(y)) y else as.double(y),  
                   if(is.double(FF)) FF else as.double(FF),   
                   if(is.double(G)) G else as.double(G),	
                   if(is.double(H)) H else as.double(H),  
@@ -2689,8 +2707,7 @@ IS <- max(n,p)
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
   }
 else                  #  S version
-  {y <- outputData(data)
-   vt    <-  rep(0,p)     # initial prediction error
+  {vt    <-  rep(0,p)     # initial prediction error
    pred  <- matrix(0,predictT,p) 
    wt.err <- NULL
    if (1 < length(error.weights)) wt.err <- matrix(0,predictT,p)
@@ -2939,7 +2956,7 @@ estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
  # Data should be of class TSdata.
  # lag.weight is an exponential weight applied to lags. It should be in (0,1].
    if (is.null(max.lag)) max.lag <- 6
-   data <- freeze(data)
+   #data <- freeze(data)
    names <- seriesNames(data)
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
@@ -3053,10 +3070,10 @@ estVARXmean.correction <- function(X, y, bbar,
  v <- La.svd(t(X)%*%X) # this is more robust than solve()
  if (warn && any(abs(v$d[1]*fuzz) > abs(v$d) ) ) 
    warning("The covariance matrix is nearly singular. Check for linearly related data.")
-# if(1 == length(v$d))OmInv <- v$v %*% (1/v$d) %*% t(v$u)
-# else OmInv <- v$v %*% diag(1/v$d) %*% t(v$u)	
+# if(1 == length(v$d))OmInv <- v$u %*% (1/v$d) %*% v$vt
+# else OmInv <- v$u %*% diag(1/v$d) %*% v$vt	
 #  following is equivalent
-# OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
+# OmInv <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") CHECK
  OmInv <-  crossprod(v$vt, sweep(t(v$u),1,1/v$d, "*")) 
 
 # t(-OmInv %*% ( 
@@ -3072,7 +3089,7 @@ estVARXar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
       standardize=FALSE, unstandardize=TRUE, aic=TRUE, max.lag=NULL, 
       method="yule-walker", warn=TRUE) 
 {
-   data <- freeze(data)
+   #data <- freeze(data)
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
    if (0 == p) stop("estVARXar requires output data to estimate a model.")
@@ -3171,7 +3188,8 @@ estWtVariables <- function(data, variable.weights,
  dimnames(inv.wts)          <-list(NULL, seriesNamesOutput(data))
  dimnames(variable.weights) <-list(NULL, seriesNamesOutput(data))
  scaled.model <- do.call(estimation, append(list(
-           freeze(scale(data, scale=list(output=inv.wts)))), estimation.args))
+                  scale(data, scale=list(output=inv.wts))),  estimation.args))
+#           freeze(scale(data, scale=list(output=inv.wts)))), estimation.args))
  model <-scale(TSmodel(scaled.model), scale=list(output=variable.weights))
  model$description <- 
     paste("model estimated by estWtVariables with", estimation)
@@ -3196,9 +3214,11 @@ estMaxLik.TSmodel <- function(obj1, obj2,
  # "nml" algorithm.args=list(hessian=T, iterlim=20, 
  #     dfunc=gradNumerical, line.search="nlm",ftol=1e-5, gtol=1e-3,)
  Shape <- obj1
- data <- freeze(obj2)
+ #data <- freeze(obj2)
+ data <- obj2
  func.like <- function(coefficients, Shape,data)
-      {l(setArrays(Shape, coefficients=coefficients), data, result="like") }
+      {l(setArrays(Shape, coefficients=coefficients), data, result="like",
+         warn=FALSE) }
 
  if (algorithm=="optim")
     {results <- optim(coef(Shape), func.like, method=algorithm.args$method,
@@ -3305,7 +3325,7 @@ estBlackBox1 <- function(data,estimation="estVARXls",
 
 estSSMittnik <- function(data, max.lag=6, n=NULL, 
     subtract.means=FALSE, normalize=FALSE)
-{ data <- freeze(data)
+{ #data <- freeze(data)
   m <- ncol(inputData(data))
   if(is.null(m))  m <- 0
   p <- ncol(outputData(data))
@@ -3373,7 +3393,7 @@ MittnikReduction.from.Hankel <- function(M, data=NULL, nMax=NULL,
       n
      }
 
-   data <- freeze(data)
+   #data <- freeze(data)
    m <-ncol(inputData(data))      # dim of input series
    if(is.null(m))m<-0
    z <-SVDbalanceMittnik(M, m, nMax)
@@ -3719,8 +3739,8 @@ Portmanteau <- function(res){
 #  a0 <- solve(ac[1,,])  the following is more robust than solve for
 #              degenerate densities
   v <- La.svd(ac[1,,])
-#  if(1 == length(v$d)) a0 <- v$v %*%     (1/v$d) %*% t(v$u)
-#	           else a0 <- v$v %*% diag(1/v$d) %*% t(v$u)	
+#  if(1 == length(v$d)) a0 <- t(v$vt) %*%     (1/v$d) %*% t(v$u)
+#	           else a0 <- t(v$vt) %*% diag(1/v$d) %*% t(v$u)	
 #  following is equivalent
   a0 <-  t(v$vt) %*% sweep(t(v$u),1,1/v$d, "*") 
   P <-0
@@ -4389,7 +4409,7 @@ tfplot.TSdata <- function(x, ...,
  # start is the starting point (date)  and end the ending point for
  # plotting. If not specified the whole sample is plotted.
 # output graphics can be paused between pages by setting par(ask=T).
-  x <- freeze(x)
+  #x <- freeze(x)
   Ngraphs <- length(select.outputs) + length(select.inputs)
   if(reset.screen)
     {Ngraphs <- min(Ngraphs, graphs.per.page)
@@ -4408,7 +4428,7 @@ tfplot.TSdata <- function(x, ...,
        for (d in append(list(x),list(...)) ) 
          {if (!is.TSdata(d))
             stop("Expecting TSdata objects. Do not truncate argument names as that can cause a problem here.")
-          d <- freeze(d)
+          #d <- freeze(d)
           j <- j + 1
           z[, j] <- inputData(d, series = i)
          }
@@ -4425,7 +4445,7 @@ tfplot.TSdata <- function(x, ...,
      for (d in append(list(x),list(...)) ) 
        {if (!is.TSdata(d))
             stop("Expecting TSdata objects. Do not truncate argument names as that can cause a problem here.")
-        d <- freeze(d)
+        #d <- freeze(d)
         j <- j+1
         z[,j]<-outputData(d, series=i) 
        }
@@ -4639,12 +4659,12 @@ as.TSdata <- function(d)
  x
 }
 
-tframed.TSdata <- function(x, tf=NULL, names=NULL)  
+tframed.TSdata <- function(x, tf=NULL, names=NULL, ...)  
 {# switch to tframe representation
  if(0 != (nseriesOutput(x)))
-       outputData(x) <-tframed(outputData(x), tf=tf, names=names$output)
+       outputData(x) <-tframed(outputData(x), tf=tf, names=names$output, ...)
  if (0 != (nseriesInput(x)))
-        inputData(x) <-tframed(inputData(x),  tf=tf, names=names$input)
+        inputData(x) <-tframed(inputData(x),  tf=tf, names=names$input, ...)
  x
 }  
 

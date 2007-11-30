@@ -10,10 +10,10 @@
     This function is used internally and is not normally called by a user. 
 }
 \usage{
-    setArrays(model, coefficients=NULL)
-    \method{setArrays}{ARMA}(model, coefficients=NULL)
-    \method{setArrays}{SS}(model, coefficients=NULL)
-    \method{setArrays}{TSestModel}(model, coefficients=NULL)
+    setArrays(model, coefficients=NULL, constants=NULL)
+    \method{setArrays}{ARMA}(model, coefficients=NULL, constants=NULL)
+    \method{setArrays}{SS}(model, coefficients=NULL, constants=NULL)
+    \method{setArrays}{TSestModel}(model, coefficients=NULL, constants=NULL)
     }
 \arguments{
     \item{model}{An object of class TSmodel.}

@@ -53,7 +53,7 @@ cat("dse1 test 4 ...\n")
      }
 
 
-cat("dse1 test 5 ...\n")
+cat("dse1 test 5a...\n")
    good <- VARmodel$estimates$like[1]
    tst  <- l(ARMAmodel, eg1.DSE.data.diff,warn=FALSE)$estimates$like[1]
    error <- max(abs(good-tst))
@@ -63,6 +63,35 @@ cat("dse1 test 5 ...\n")
      {printTestValue(c(tst), digits=18)
       all.ok <- FALSE  
      }
+
+
+cat("dse1 test 5b...\n")
+  # longer input data is used by forecast in dse2
+  data("egJofF.1dec93.data", package="dse1")
+  eg4.DSE.data<- egJofF.1dec93.data
+  outputData(eg4.DSE.data) <- outputData(eg4.DSE.data, series=c(1,2,6,7))
+  eg4.DSE.model <- estVARXls(eg4.DSE.data)
+  longIn.data <- TSdata(
+              input= ts(rbind(inputData(eg4.DSE.data), matrix(.1,10,1)), 
+                       start=start(eg4.DSE.data),
+                       frequency=frequency(eg4.DSE.data)),    
+              output=outputData(eg4.DSE.data))
+  seriesNames(longIn.data) <- seriesNames(eg4.DSE.data)
+  z  <- l(TSmodel(eg4.DSE.model), longIn.data) 
+  zz <- l(TSmodel(eg4.DSE.model), longIn.data, compiled=FALSE) 
+  error <- max(abs(z$estimates$pred - zz$estimates$pred))
+  #tfplot(z$estimates$pred, zz$estimates$pred)
+  #z$estimates$pred[1:5,] ; zz$estimates$pred[1:5,]
+  ok <-  fuzz.small > error 
+  if (ok) cat("ok\n") else {
+     max.error <- if (is.na(max.error)) error else max(error, max.error)
+     cat("failed! error= ", error,"\n") 
+     if(!testEqual(outputData(z), outputData(zz)))
+         cat("output data comparison for l() and longIn.data failed.\n") 
+     if(!testEqual(inputData(z), inputData(zz)))
+         cat("input data comparison for l() and longIn.data failed.\n") 
+     }
+  all.ok <- all.ok & ok 
 
 
 cat("dse1 test 6a...\n")

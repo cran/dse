@@ -14,6 +14,7 @@ including multi-variate state-space and \acronym{ARMA} (\acronym{VAR},
 
 \section{Usage}{
    library("dse1") 
+
    library("dse2") 
 }
 

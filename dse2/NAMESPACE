@@ -1,4 +1,5 @@
-##import("stats")
+importFrom("stats","coef")
+
 ##import("setRNG")
 import("tframe")
 import("dse1")
@@ -185,9 +186,9 @@ S3method("combine", "forecastCovEstimatorsWRTtrue")
 export("genMineData")
 export("build.diagonal.model")
 export("build.input.models")
-S3method("plot", "mineStepwise")
+##S3method("plot", "mineStepwise")
 
-export("mineStepwise")
+##export("mineStepwise")
 export("permute")
 export("is.forecastCovEstimatorsWRTdata.subsets")
 export("stripMine")

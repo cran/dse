@@ -9,8 +9,8 @@
     forecastCovWRTtrue(models, true.model, 
         pred.replications=1, simulation.args=NULL, quiet=FALSE, rng=NULL, 
 	compiled=.DSEflags()$COMPILED,
-        horizons=1:12, discard.before=10, trend=NULL, zero=NULL, 
-	Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+        horizons=1:12, discard.before=10, trend=NULL, zero=NULL) 
+%%	Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
     is.forecastCovWRTdata(obj)
 }
 \arguments{
@@ -28,7 +28,7 @@
     in order to simulate the true model.}
     \item{horizons}{Horizons for which forecast covariance should be calculated.}
     \item{rng}{If specified then it is used to set RNG.}
-    \item{Spawn}{If TRUE then Splus For loops are used.}
+%%    \item{Spawn}{If TRUE then Splus For loops are used.}
     \item{quiet}{If TRUE then some messages are not printed.}
     \item{compiled}{a logical indicating if compiled code should be
       used. (Usually true except for debugging.)}

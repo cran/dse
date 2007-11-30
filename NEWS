@@ -4,6 +4,73 @@ Known Bugs
     o Handling of initial conditions for the state space filter and smoother 
       still needs work.
 
+                 CHANGES IN DSE VERSION 2007.11-1
+
+
+Changes (Possibly) Affecting Users
+
+    o GPL-2 license option was added explicitely. 
+
+    o Function mineStepwise and method plot.mineStepwise were removed. 
+      It used stepwise and probably has not worked in a long time.
+
+                 CHANGES IN DSE VERSION 2007.7-1
+
+Changes (Possibly) Affecting Users
+
+    o fixed a bug passing data to dse1 fortran arma code when the input data was
+      longer than the output data. This especially affected forecast() in dse2.
+
+    o fixed a bug passing data to dse1 fortran kf code as with arma.
+
+    o fixed a bug in l.ARMA which caused an error when predictT exceeded 
+      sampleT and compiled=FALSE.
+
+    o the  ... arg to forecast() is now passed along to l(). Among other things,
+      this allows compiled=FALSE to be used with forecast() which helps testing.
+
+                 CHANGES IN DSE VERSION 2007.5-2
+ 
+Changes Affecting Development
+
+    o dseplus is no longer maintained as a bundle.
+
+    o constants was added as argument in setArrays.
+
+
+                CHANGES IN DSE VERSION 2007.5-1
+
+Changes (Possibly) Affecting Users
+
+    o tframe was removed from the dse bundle and released as a stand alone
+      package.
+
+    o Calls to function freeze (which made an R copy of data from a database
+      based on a database descriptor) where removed from dse1 and dse2, and a
+      few other places, since this functionality was rarely used by functions 
+      in these packages. This has simplified other package dependencies.
+
+    o warnings in optimization in the estMaxLik function evaluation was switched 
+      to FALSE so that warnings about working on a subspace should not happen.
+      The warning is still generated at the end if the problem persists in the
+      final model.
+ 
+Changes Affecting Development
+
+    o A number of small fixes caught by R-2.5.0 were incorporated
+
+    o The syskern package in dseplus is defunct and the few remaining functions
+      were moved to the monitor package, which was the only place they were
+      being used. That package is being revised and may not be released for
+      awhile.
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2006.10-1
+
+Changes (Possibly) Affecting Users
+
+    o Namespace imports were fixed as need for R-2.4.0.
+
+
                  CHANGES IN DSE AND DSEPLUS VERSION 2006.4-1
 
 Changes (Possibly) Affecting Users

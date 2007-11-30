@@ -10,12 +10,13 @@ if(!require("setRNG"))stop("this test requires setRNG.")
    random.number.test() 
 
 
+verbose <- TRUE 
+synopsis <- TRUE
+fuzz.small <- 1e-14 
+fuzz.large <- 1e-8
+graphics <- FALSE
+max.error <- NA
 
-
-
-dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
-    fuzz.small=1e-14, fuzz.large=1e-8, graphics=TRUE)
-{max.error <- NA
  data("eg1.DSE.data.diff", package="dse1")
 # The seed is not important for most of these tests, but AIC eliminates all
 #  parameters occassionally in some model selection tests.
@@ -75,8 +76,7 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
-print(library.dynam())
-print(symbol.For("rmaprj"))
+#print(library.dynam())
   if (verbose) cat("dse3 test 8a... ")
   z <- horizonForecasts(mod1, data, horizons=c(6,12), discard.before=20)
   error <- max(abs( c(z$horizonForecasts[,100,])  -
@@ -189,13 +189,15 @@ print(symbol.For("rmaprj"))
     }
 
   if (all.ok) invisible(TRUE)  else stop("FAILED")
-}
 
 
 
+# dse3.graphics.tests 
 
-dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
-{data("eg1.DSE.data.diff", package="dse1")
+verbose <- TRUE
+synopsis <- TRUE
+
+data("eg1.DSE.data.diff", package="dse1")
  
   if (synopsis & !verbose) cat("dse3 graphics tests ...")
   if (verbose) cat("  dse3 graphics test 1 ...")
@@ -277,10 +279,3 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
      else cat("completed\n")
     }
       
-  invisible(TRUE)
-}
-
-
-
-   dse3.function.tests(verbose=TRUE, graphics=FALSE) 
-   dse3.graphics.tests(verbose=TRUE)

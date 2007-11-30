@@ -54,20 +54,24 @@ shockDecomposition <- function(model, horizon=30, shock=rep(1,horizon))
   p <-nseriesOutput(model)
 
   if (is.TSestModel(model)) 
-     {data <- TSdata(model)   # just for input
+     {if( m > 0 ) inData <- inputData(model)[1:horizon,1:m]# loose tframe
+      else inData <- NULL
       model <- TSmodel(model)
      }
   else 
-    {if( m > 0 ) data <- TSdata(input=matrix(0,horizon,m))
-     else        data <- TSdata(output=matrix(0,horizon,p))
+    {if( m > 0 ) inData <- matrix(0,horizon,m)
+     else        inData <- NULL
     }
    if (!is.TSmodel(model)) stop("shockDecomposition expecting a TSmodel.")
    model$z0 <- NULL    # zero initial conditions
    par(mfrow = c(p, p) , mar = c(2.1, 4.1,3.1, 0.1) )
+   sh <- matrix(0, horizon, p) 
+   seriesNames(sh)     <- seriesNamesOutput(model)
+   seriesNamesInput(model) <- NULL
    for (i in 1:p)
-     {outputData(data) <- matrix(0, horizon, p)
-      outputData(data)[,i] <- shock   
-      z <- l(model,data)
+     {shi <- sh
+      shi[,i] <- shock   
+      z <- l(model,TSdata(input=inData, output=shi))
       tfplot(z, reset.screen = FALSE)
      }
 invisible()
@@ -97,7 +101,7 @@ forecast.TSdata <- function(obj, model, ...){forecast(model, obj, ...)}
 
 forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
     conditioning.inputs.forecasts=NULL, percent=NULL, ...)
-{#  (... further arguments, currently disregarded)
+{#  (... further arguments passed to l())
  # obj must be a TSmodel
  # Calculate (multiple) forecasts from the end of data to a horizon determined
  # either from supplied input data or the argument horizon (more details below).
@@ -148,7 +152,7 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
       if (!is.null(percent))
           warning("model does not take inputs. percent ignored.")
       pr <- l(obj, data, sampleT =sampleT, 
-                           predictT=sampleT+horizon)$estimates$pred
+                           predictT=sampleT+horizon, ...)$estimates$pred
       pred <- tfwindow(pr, end=tfend(output), warn=FALSE)
       pr <- tfwindow(pr, start=c(0,1)+tfend(output), warn=FALSE)
     #  pr[1:(sampleT-1),] <- NA
@@ -203,7 +207,7 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
       if (sampleT > predictT) 
          stop("input series must be at least as long as output series (after NAs are removed).")
       horizon <- predictT - sampleT
-      pr <- l(obj, pdata, sampleT=sampleT, predictT=predictT)$estimates$pred
+      pr <- l(obj, pdata, sampleT=sampleT, predictT=predictT, ...)$estimates$pred
 #    The following lines sometimes cause problems if output is output[...,]
 #    See comments in dse2.function.tests
         if (0 == length(proj)) pred <- tfwindow(pr, end=tfend(output), warn=FALSE)
@@ -318,7 +322,7 @@ featherForecasts.TSdata <- function(obj, model, ...)
 
 featherForecasts.TSmodel <- function(obj, data, horizon=36,
              from.periods =NULL, ...)
-  {data <- freeze(data)
+  {#data <- freeze(data)
    if (is.null(from.periods))
      {if(0 == nseriesOutput(data)) from.periods <-
              10*seq(floor(periods(data)/10))
@@ -362,7 +366,7 @@ tfplot.featherForecasts <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf)
 {#  (... further arguments, currently disregarded)
  #The default starting point for plots is the start of data.
  #The default ending point for plots is the end of forecasts.
-   freq <- tffrequency(x$data)
+   freq <- tffrequency(outputData(x$data))
    names <- seriesNamesOutput(x)
    if(is.null(names)) names <- paste("output", series)
    if (is.null(start)) start <- tfstart(outputData(x$data))
@@ -947,19 +951,25 @@ tfplot.EstEval <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
 
 distribution <- function(obj, ...)UseMethod("distribution")
 
-distribution.TSdata <- function(obj, bandwidth=0.2, 
+#distribution.TSdata <- function(obj, bandwidth=0.2, 
+#        select.inputs = seq(length= nseriesInput(obj)),
+#        select.outputs= seq(length=nseriesOutput(obj)), ...)
+distribution.TSdata <- function(obj, ..., bandwidth=0.2, 
         select.inputs = seq(length= nseriesInput(obj)),
-        select.outputs= seq(length=nseriesOutput(obj)), ...)
-  {#  (... further arguments, currently disregarded)
+        select.outputs= seq(length=nseriesOutput(obj)))
+  {#  (... further objects, currently disregarded)
    if (0 !=  nseriesInput(obj))
       distribution( inputData(obj), bandwidth=bandwidth, series=select.inputs)
    if (0 != nseriesOutput(obj))
-      distribution(outputData(obj), bandwidth=bandwidth, series=select.inputs)
+      distribution(outputData(obj), bandwidth=bandwidth, series=select.outputs)
    invisible(obj)
   }
 
-distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
-  {#  (... further arguments, currently disregarded)
+# this should be something like distribution.tframed if distribution becomes
+#  generic in EstEval.  ALSO SEE distribution.factorsEstEval RE ...
+#distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
+distribution.default <- function(obj, ..., bandwidth=0.2, series=NULL)
+  {#  (... further objects, currently disregarded)
    # obj should be a ts matrix (perhaps this should be a tf method).
    # If series is NULL then all series are ploted.
    # note that this graphic can be fairly misleading:
@@ -1079,9 +1089,9 @@ plot.rootsEstEval <- function(x, complex.plane=TRUE, cumulate=TRUE, norm=FALSE,
 
 roots.rootsEstEval <- function(obj, ...)   {obj}
 
-distribution.rootsEstEval <- function(obj, mod=TRUE, invert=FALSE, Sort=FALSE, 
-    bandwidth=0.2, select=NULL, ...)
-{#  (... further arguments, currently disregarded)
+distribution.rootsEstEval <- function(obj, ..., mod=TRUE, invert=FALSE, Sort=FALSE, 
+    bandwidth=0.2, select=NULL)
+{#  (... further objectss, currently disregarded)
  # if mod is true the modulus is used, otherwise real and imaginary are separated.
  # if invert is true the reciprical is used.
  # if Sort is true then sort is applied (before cumulate). This is of particular interest
@@ -1215,9 +1225,9 @@ roots.coefEstEval <- function(obj, criterion.args=NULL, ...)
   invisible(classed(obj, c("rootsEstEval","EstEval")))# constructor
 }
 
-distribution.coefEstEval <- function(obj,  Sort=FALSE, bandwidth=0.2,
-	graphs.per.page=5, ...)
-{#  (... further arguments, currently disregarded)
+distribution.coefEstEval <- function(obj, ...,  Sort=FALSE, bandwidth=0.2,
+	graphs.per.page=5)
+{#  (... further objects, currently disregarded)
  # if Sort is true then sort is applied (before ave). This is of particular interest
  #   with estimation methods like black.box which may not return parameters
  #   of the same length or in the same order.
@@ -1771,6 +1781,7 @@ horizonForecastsCompiled.SS <- function( obj, data, horizons=1:4,
 		  PACKAGE="dse1"
 		  )$proj
 }
+
 
 
 forecasts.horizonForecasts <- function(obj){obj$horizonForecasts}
@@ -2561,8 +2572,8 @@ tfplot.forecastCovEstimatorsWRTdata <- function(x,
 forecastCovWRTtrue <- function( models, true.model, 
         pred.replications=1, simulation.args=NULL, quiet=FALSE, 
         rng=NULL, compiled=.DSEflags()$COMPILED,
-        horizons=1:12, discard.before=10, trend=NULL, zero=NULL, 
-	Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
+        horizons=1:12, discard.before=10, trend=NULL, zero=NULL) 
+#	Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
 {# models should be a list of models
  # The true model is used to generate more
  # data and for each generated data set the forecasts of the 
@@ -2574,84 +2585,84 @@ forecastCovWRTtrue <- function( models, true.model,
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
       
- if (Spawn & (pred.replications > 1))
-   {if(!quiet) 
-      cat("Spawning processes to calculate ", pred.replications,
-            " forecast replications.\n")
-    rep.forloop <- function(models, true.model, simulation.args,
-                         horizons, discard.before, zero, trend, compiled=.DSEflags()$COMPILED)
-      {data<-do.call("simulate",append(list(true.model), simulation.args))
-       r <- NULL
-       for (j in 1:length(models))
-              {r <- c(r, forecastCovSingleModel(models[[j]],data,
-                                  compiled=compiled, horizons=horizons, 
-                                  discard.before=discard.before)$forecastCov)
-              }
-         r.true <- forecastCovSingleModel(true.model,data, compiled=compiled,
-                               horizons=horizons,
-                               discard.before=discard.before)$forecastCov
-         if (is.null(trend)) r.trend <- NULL
-         else  r.trend <-forecastCov(TSdata(output=trend), data=data,
-	     discard.before=discard.before,horizons=horizons)$forecastCov[[1]]
-         if(is.null(zero)) r.zero <- NULL
-         else r.zero <- forecastCov(TSdata(
-              output=array(0,dim(outputData(data)))), data=data, 
-              discard.before=discard.before, horizons=horizons)$forecastCov[[1]]
-         c(dim(r.true),r.true, r.zero, r.trend,r)
-       }
-
-    assign("rep.forloop", rep.forloop, where = 1)
-    assign("rep.forloop.n", pred.replications, where = 1)
-    assign("rep.forloop.result", 0, where = 1)
-    assign("rep.forloop.true.model", true.model, where = 1)
-    assign("rep.forloop.simulation.args", simulation.args, where = 1)
-    assign("rep.forloop.models", models, where = 1)
-    assign("rep.forloop.horizons", horizons, where = 1)
-    assign("rep.forloop.discard.before", discard.before, where = 1)
-    assign("rep.forloop.trend", trend, where = 1)
-    assign("rep.forloop.zero", zero, where = 1)
-    assign("rep.forloop.compiled", compiled, where = 1)
-    on.exit(remove(c("rep.forloop", "rep.forloop.i", "rep.forloop.n",
-       "rep.forloop.models",  "rep.forloop.true.model",
-       "rep.forloop.simulation.args","rep.forloop.result",
-       "rep.forloop.horizons", "rep.forloop.discard.before", 
-       "rep.forloop.trend","rep.forloop.zero","rep.forloop.compiled"),where = 1))
-
-    For(rep.forloop.i = 1:rep.forloop.n, 
-       rep.forloop.result <- rep.forloop.result +
-          rep.forloop(rep.forloop.models, rep.forloop.true.model,
-          rep.forloop.simulation.args, rep.forloop.horizons,
-          rep.forloop.discard.before, rep.forloop.zero, rep.forloop.trend,
-          rep.forloop.compiled),
-       first=options(warn=-1), sync = TRUE)
-
-    names <- list(paste("horizon",as.character(horizons)),NULL,NULL)
-    result  <- rep.forloop.result/pred.replications
-    d <- result[1:3]  # this is not a very elegant way to pass this info.
-    l <- prod(d)
-    r.true  <- array(result[4:(3+l)], d)
-    dimnames(r.true)  <- names
-    lj <- 1
-    if (is.null(zero)) r.zero <- NULL
-    else
-      {r.zero  <- array(result[(4+l):(3+2*l)], d)
-       lj <-lj+1
-       dimnames(r.zero)  <- names
-      }
-    if (is.null(trend)) r.trend <- NULL
-    else
-      {r.trend  <- array(result[(4+lj*l):(3+(1+lj)*l)], d)
-       lj <-lj+1
-       dimnames(r.trend) <- names
-      }
-    r <- vector("list", length(models))
-    for (j in 1:length(models))
-      {r[[j]] <- array(result[(4+lj*l):(3+(1+lj)*l)], d) 
-       lj <-lj+1
-       dimnames(r[[j]])  <- names
-      }
-     }
-   else
+# if (Spawn & (pred.replications > 1))
+#   {if(!quiet) 
+#      cat("Spawning processes to calculate ", pred.replications,
+#	     " forecast replications.\n")
+#    rep.forloop <- function(models, true.model, simulation.args,
+#			  horizons, discard.before, zero, trend, compiled=.DSEflags()$COMPILED)
+#      {data<-do.call("simulate",append(list(true.model), simulation.args))
+#	r <- NULL
+#	for (j in 1:length(models))
+#	       {r <- c(r, forecastCovSingleModel(models[[j]],data,
+#				   compiled=compiled, horizons=horizons, 
+#				   discard.before=discard.before)$forecastCov)
+#	       }
+#	  r.true <- forecastCovSingleModel(true.model,data, compiled=compiled,
+#				horizons=horizons,
+#				discard.before=discard.before)$forecastCov
+#	  if (is.null(trend)) r.trend <- NULL
+#	  else  r.trend <-forecastCov(TSdata(output=trend), data=data,
+#	      discard.before=discard.before,horizons=horizons)$forecastCov[[1]]
+#	  if(is.null(zero)) r.zero <- NULL
+#	  else r.zero <- forecastCov(TSdata(
+#	       output=array(0,dim(outputData(data)))), data=data, 
+#	       discard.before=discard.before, horizons=horizons)$forecastCov[[1]]
+#	  c(dim(r.true),r.true, r.zero, r.trend,r)
+#	}
+#
+#    assign("rep.forloop", rep.forloop, where = 1)
+#    assign("rep.forloop.n", pred.replications, where = 1)
+#    assign("rep.forloop.result", 0, where = 1)
+#    assign("rep.forloop.true.model", true.model, where = 1)
+#    assign("rep.forloop.simulation.args", simulation.args, where = 1)
+#    assign("rep.forloop.models", models, where = 1)
+#    assign("rep.forloop.horizons", horizons, where = 1)
+#    assign("rep.forloop.discard.before", discard.before, where = 1)
+#    assign("rep.forloop.trend", trend, where = 1)
+#    assign("rep.forloop.zero", zero, where = 1)
+#    assign("rep.forloop.compiled", compiled, where = 1)
+#    on.exit(remove(c("rep.forloop", "rep.forloop.i", "rep.forloop.n",
+#	"rep.forloop.models",  "rep.forloop.true.model",
+#	"rep.forloop.simulation.args","rep.forloop.result",
+#	"rep.forloop.horizons", "rep.forloop.discard.before", 
+#	"rep.forloop.trend","rep.forloop.zero","rep.forloop.compiled"),where = 1))
+#
+#    For(rep.forloop.i = 1:rep.forloop.n, 
+#	rep.forloop.result <- rep.forloop.result +
+#	   rep.forloop(rep.forloop.models, rep.forloop.true.model,
+#	   rep.forloop.simulation.args, rep.forloop.horizons,
+#	   rep.forloop.discard.before, rep.forloop.zero, rep.forloop.trend,
+#	   rep.forloop.compiled),
+#	first=options(warn=-1), sync = TRUE)
+#
+#    names <- list(paste("horizon",as.character(horizons)),NULL,NULL)
+#    result  <- rep.forloop.result/pred.replications
+#    d <- result[1:3]  # this is not a very elegant way to pass this info.
+#    l <- prod(d)
+#    r.true  <- array(result[4:(3+l)], d)
+#    dimnames(r.true)  <- names
+#    lj <- 1
+#    if (is.null(zero)) r.zero <- NULL
+#    else
+#      {r.zero  <- array(result[(4+l):(3+2*l)], d)
+#	lj <-lj+1
+#	dimnames(r.zero)  <- names
+#      }
+#    if (is.null(trend)) r.trend <- NULL
+#    else
+#      {r.trend  <- array(result[(4+lj*l):(3+(1+lj)*l)], d)
+#       lj <-lj+1
+#       dimnames(r.trend) <- names
+#      }
+#    r <- vector("list", length(models))
+#    for (j in 1:length(models))
+#      {r[[j]] <- array(result[(4+lj*l):(3+(1+lj)*l)], d) 
+#       lj <-lj+1
+#       dimnames(r[[j]])  <- names
+#      }
+#     }
+#   else
      {r <-vector("list",length(models))
       r.true <- 0
       if (!is.null(zero)) r.zero <- 0
@@ -3052,111 +3063,111 @@ build.diagonal.model <- function(multi.models)
 ############################################################################
 
 
-plot.mineStepwise <- function(x, ...)
-  {#  (... further arguments, currently disregarded)
-  cases <- length(x$stepwise$rss)
-   o <- rev(order(x$stepwise$rss))
-   vo <- dim(x$s.output.indicator)[2]
-   plto <- t(matrix(1:vo, vo, cases)) * x$s.output.indicator[o,]
-   if (!is.null(x$s.input.indicator))
-     {vi <- dim(x$s.input.indicator)[2]
-      plti <- t(matrix(-1:(-vi), vi, cases)) * x$s.input.indicator[o,]
-      plt <- cbind(plti,plto)
-     }
-   plt[plt==0] <- NA
-   matplot(0:(cases-1), plt, type="p", pch="+")
-   y <- NULL
-   io <-   x$io.indicator   & (1==x$lag.indicator)
-   if (any(io)) y <- c(y,paste("output",  x$v.indicator[io]))
-   io <-  (!x$io.indicator) & (0==x$lag.indicator)
-   if (any(io)) y <- c(y,paste(" input", x$v.indicator[io]))
-   cat("y axis above zero (outputs) and below zero (inputs) indicate", y, "\n")
-   invisible()
-  }
-
-
-mineStepwise <- function(data, essential.data=1,
-      method="efroymson", f.crit=2, intercept=TRUE,
-      subtract.means=FALSE,  standardize=FALSE, 
-      lags.in=6, lags.out=6, trend=FALSE, plot.=TRUE) 
-{  data <- freeze(data)
-   m <- ncol(inputData(data))
-   p <- ncol(outputData(data))
-   if(is.null(m))  m <- 0
-   N <- nrow(outputData(data))
-   if (standardize)
-     {svd.cov <- svd(var(outputData(data)))
-      scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
-      data <- scale(data, scale=list(output=scalefac))
-     }
-   if (subtract.means)
-    {if(m!=0)
-       {input.means<-colMeans(inputData(data))
-        inputData(data)<-inputData(data)-t(matrix( input.means, m,N))
-       }
-     output.means <- colMeans(outputData(data))
-     outputData(data)  <- outputData(data) - t(matrix(output.means, p,N))
-    }
- # The matrix Past is blocks of data:
- #  [ out-1 | out-2 | ... | out-max.lag | in | in-1 | ... | in-max.lag ]
- # so the result M has a corresponding structure.
- # If there is an input variable (m!=0) then it is shifted to give feedthrough 
- #    in one period. If lags.in=lags.out this has the result that a data point
- #    is lost at the beginning of the input series.
-   if(m==0)
-     {Past <- matrix(NA,N-lags.out, p*lags.out)
-      io.indicator <- c(rep(TRUE, p*lags.out))
-      v.indicator  <- c(rep(1:p, lags.out)) 
-      lag.indicator  <- c(t(matrix(1:lags.out, lags.out,p))) 
-      for (i in 0:(lags.out-1)) 
-         Past[,(1+p*i):(p*(1+i))] <-outputData(data)[(lags.out-i):(N-i-1),]
-      Present <- outputData(data)[(lags.out+1):N, essential.data]
-     }
-   else 
-     {shift <- max(lags.in+1, lags.out) # start pt. for Present
-      Past <- matrix(NA,N-shift+1, p*lags.out+m*(1+lags.in))
-      io.indicator <- c(rep(TRUE, p*lags.out), rep(FALSE, m*(1+lags.in)))
-      v.indicator  <- c(rep(1:p, lags.out), rep(1:m, (1+lags.in))) 
-      lag.indicator<- c(t(matrix(1:lags.out, lags.out,  p)), 
-                        t(matrix(0:lags.in, (1+lags.in),m))) 
-      for (i in 0:(lags.out-1)) 
-        Past[,(1+p*i):(p*(1+i))] <-outputData(data)[(shift-1-i):(N-1-i),]
-      for (i in 0:lags.in) 
-        Past[,(p*lags.out+1+m*i):(p*lags.out+m*(1+i))] <-
-                                   inputData(data) [(shift-i):(N-i),]
-      Present <- outputData(data)[shift:N, essential.data]
-     }
-   dimnames(Past) <- list(NULL, c(
-         paste(c(paste("out.v", matrix(1:p, p, lags.out), "L",sep="")),
-               c(t(matrix(1:lags.out,  lags.out, p))), sep=""),
-         paste(c(paste("in.v", matrix(1:m, m, lags.in), "L",sep="")),
-               c(t(matrix(0:lags.in, 1+lags.in,  m))), sep="")) )
-   plot. <- plot. &  dev.cur() != 1 
-   if (plot.) par(mfcol=c(2,1))
-   M <- stepwise(Past,Present, method=method,f.crit=f.crit, intercept=intercept,
-                 plot=plot.)
-   # Now construct an inidicator (s.indicator) of the series which are used in
-   # each element of rss returned by tepwise.
-   # The trick is to collapse obj$stepwise$which using obj$v.indicator so that
-   #   any lags of a variable get lumped together.
-   p <- v.indicator * io.indicator
-   # part of the following (not the outer part) is an inner 
-   # prod. with | in place of + and  & in place of *
-   s.output.indicator <-  0 != (M$which %*% outer(p, 1:max(p),"==") )
-   m <- v.indicator * !io.indicator
-   if (max(m) !=0)
-      s.input.indicator <- 0 != (M$which %*% outer(m, 1:max(m), "==") )
-
-   M <- classed(list(stepwise=M, io.indicator=io.indicator,  #constructor
-             v.indicator=v.indicator,
-             lag.indicator=lag.indicator, Past=Past,
-             lags.in=lags.in, lags.out=lags.out,
-             s.input.indicator=s.input.indicator, 
-             s.output.indicator=s.output.indicator), "mineStepwise")
-   if (plot.) plot(M)
-   invisible(M)
-}
-
+#plot.mineStepwise <- function(x, ...)
+#  {#  (... further arguments, currently disregarded)
+#  cases <- length(x$stepwise$rss)
+#   o <- rev(order(x$stepwise$rss))
+#   vo <- dim(x$s.output.indicator)[2]
+#   plto <- t(matrix(1:vo, vo, cases)) * x$s.output.indicator[o,]
+#   if (!is.null(x$s.input.indicator))
+#     {vi <- dim(x$s.input.indicator)[2]
+#      plti <- t(matrix(-1:(-vi), vi, cases)) * x$s.input.indicator[o,]
+#      plt <- cbind(plti,plto)
+#     }
+#   plt[plt==0] <- NA
+#   matplot(0:(cases-1), plt, type="p", pch="+")
+#   y <- NULL
+#   io <-   x$io.indicator   & (1==x$lag.indicator)
+#   if (any(io)) y <- c(y,paste("output",  x$v.indicator[io]))
+#   io <-  (!x$io.indicator) & (0==x$lag.indicator)
+#   if (any(io)) y <- c(y,paste(" input", x$v.indicator[io]))
+#   cat("y axis above zero (outputs) and below zero (inputs) indicate", y, "\n")
+#   invisible()
+#  }
+#
+#
+#mineStepwise <- function(data, essential.data=1,
+#      method="efroymson", f.crit=2, intercept=TRUE,
+#      subtract.means=FALSE,  standardize=FALSE, 
+#      lags.in=6, lags.out=6, trend=FALSE, plot.=TRUE) 
+#{  #data <- freeze(data)
+#   m <- ncol(inputData(data))
+#   p <- ncol(outputData(data))
+#   if(is.null(m))  m <- 0
+#   N <- nrow(outputData(data))
+#   if (standardize)
+#     {svd.cov <- svd(var(outputData(data)))
+#      scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
+#      data <- scale(data, scale=list(output=scalefac))
+#     }
+#   if (subtract.means)
+#    {if(m!=0)
+#	{input.means<-colMeans(inputData(data))
+#	 inputData(data)<-inputData(data)-t(matrix( input.means, m,N))
+#	}
+#     output.means <- colMeans(outputData(data))
+#     outputData(data)  <- outputData(data) - t(matrix(output.means, p,N))
+#    }
+# # The matrix Past is blocks of data:
+# #  [ out-1 | out-2 | ... | out-max.lag | in | in-1 | ... | in-max.lag ]
+# # so the result M has a corresponding structure.
+# # If there is an input variable (m!=0) then it is shifted to give feedthrough 
+# #    in one period. If lags.in=lags.out this has the result that a data point
+# #    is lost at the beginning of the input series.
+#   if(m==0)
+#     {Past <- matrix(NA,N-lags.out, p*lags.out)
+#      io.indicator <- c(rep(TRUE, p*lags.out))
+#      v.indicator  <- c(rep(1:p, lags.out)) 
+#      lag.indicator  <- c(t(matrix(1:lags.out, lags.out,p))) 
+#      for (i in 0:(lags.out-1)) 
+#	  Past[,(1+p*i):(p*(1+i))] <-outputData(data)[(lags.out-i):(N-i-1),]
+#      Present <- outputData(data)[(lags.out+1):N, essential.data]
+#     }
+#   else 
+#     {shift <- max(lags.in+1, lags.out) # start pt. for Present
+#      Past <- matrix(NA,N-shift+1, p*lags.out+m*(1+lags.in))
+#      io.indicator <- c(rep(TRUE, p*lags.out), rep(FALSE, m*(1+lags.in)))
+#      v.indicator  <- c(rep(1:p, lags.out), rep(1:m, (1+lags.in))) 
+#      lag.indicator<- c(t(matrix(1:lags.out, lags.out,  p)), 
+#			 t(matrix(0:lags.in, (1+lags.in),m))) 
+#      for (i in 0:(lags.out-1)) 
+#	 Past[,(1+p*i):(p*(1+i))] <-outputData(data)[(shift-1-i):(N-1-i),]
+#      for (i in 0:lags.in) 
+#	 Past[,(p*lags.out+1+m*i):(p*lags.out+m*(1+i))] <-
+#				    inputData(data) [(shift-i):(N-i),]
+#      Present <- outputData(data)[shift:N, essential.data]
+#     }
+#   dimnames(Past) <- list(NULL, c(
+#	  paste(c(paste("out.v", matrix(1:p, p, lags.out), "L",sep="")),
+#		c(t(matrix(1:lags.out,  lags.out, p))), sep=""),
+#	  paste(c(paste("in.v", matrix(1:m, m, lags.in), "L",sep="")),
+#		c(t(matrix(0:lags.in, 1+lags.in,  m))), sep="")) )
+#   plot. <- plot. &  dev.cur() != 1 
+#   if (plot.) par(mfcol=c(2,1))
+#   M <- stepwise(Past,Present, method=method,f.crit=f.crit, intercept=intercept,
+#		  plot=plot.)
+#   # Now construct an inidicator (s.indicator) of the series which are used in
+#   # each element of rss returned by tepwise.
+#   # The trick is to collapse obj$stepwise$which using obj$v.indicator so that
+#   #	any lags of a variable get lumped together.
+#   p <- v.indicator * io.indicator
+#   # part of the following (not the outer part) is an inner 
+#   # prod. with | in place of + and  & in place of *
+#   s.output.indicator <-  0 != (M$which %*% outer(p, 1:max(p),"==") )
+#   m <- v.indicator * !io.indicator
+#   if (max(m) !=0)
+#      s.input.indicator <- 0 != (M$which %*% outer(m, 1:max(m), "==") )
+#
+#   M <- classed(list(stepwise=M, io.indicator=io.indicator,  #constructor
+#	      v.indicator=v.indicator,
+#	      lag.indicator=lag.indicator, Past=Past,
+#	      lags.in=lags.in, lags.out=lags.out,
+#	      s.input.indicator=s.input.indicator, 
+#	      s.output.indicator=s.output.indicator), "mineStepwise")
+#   if (plot.) plot(M)
+#   invisible(M)
+#}
+#
 
 ############################################################################
 #
