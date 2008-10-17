@@ -45,23 +45,15 @@ new.data <- TSdata(
    output = ts(rbind(outputData(eg4.DSE.data), matrix(.3,5,4)),
             start=start(eg4.DSE.data), frequency = frequency(eg4.DSE.data))) 
 
-if(require("padi") & require("dsepadi"))
- eg4.DSE.data.names <-TSPADIdata(
-  input = "B14017", input.transforms= "diff", input.names="R90",
-  output = c("P100000", "V2036138", "V2062811", "v37426"),
-  output.transforms=c("percentChange", "percentChange",
-          "percentChange", "percentChange"),
-   output.names=c("CPI", "GDP", "employment", "PFX"),
-   server="ets")
-
 \end{Scode}
 
 \section{Forecasting}
 
 
-The TSestModel object returned by estimation is a TSmodel with TSdata
+The \emph{TSestModel} object returned by estimation is a \emph{TSmodel}
+with \emph{TSdata}
 and some estimation information. To use different data, the new data
-needs to be in a variable which is a TSdata object. For example, suppose
+needs to be in a variable which is a \emph{TSdata} object. For example, suppose
 a model is estimated by
 
 \begin{Scode}
@@ -69,17 +61,9 @@ eg4.DSE.model <- estVARXls(eg4.DSE.data)
 \end{Scode}
 
 
-and suppose new data becomes available. If you have direct database
-access this might be done with something like
-
-\begin{Scode}
-if(require("padi") && checkPADIserver("ets"))
-  new.data <- freeze(eg4.DSE.data.names) #requires padi and correct databases 
-\end{Scode}
-
-
-If database access is not available then, for example purposes, 
-new.data can be generated with
+and suppose new data becomes available. Data might come directly from a database
+(see the \emph{TSdbi} package for an example). For the following demonstration 
+purposes \emph{new.data} is generated with
 
 \begin{Scode}
 new.data <- TSdata(input=ts(rbind(inputData(eg4.DSE.data), matrix(.1,10,1)),
@@ -90,7 +74,7 @@ new.data <- TSdata(input=ts(rbind(inputData(eg4.DSE.data), matrix(.1,10,1)),
 
 
 This simply appends ten observations of 0.1 onto the input and five
-observations of 0.3 onto the outputs. The function ts assigns time
+observations of 0.3 onto the outputs. The function \emph{ts} assigns time
 series attributes which are taken from \emph{eg4.DSE.data}. The model
 can be evaluated with the new data by
 
@@ -100,27 +84,17 @@ z <- l(TSmodel(eg4.DSE.model), trimNA(new.data))
 
 
 Recall that \emph{TSmodel(}) extracts the \emph{TSmodel} from the
-\emph{TSestModel}. If database access is available the above can be
-done in one step:
-
-\begin{Scode}
-if(require("padi") && checkPADIserver("ets"))
-  z <- l(TSmodel(eg4.DSE.model), trimNA(
-    freeze(eg4.DSE.data.names))) #requires padi and correct databases 
-\end{Scode}
-
-
+\emph{TSestModel}.
 \emph{trimNA} on a \emph{TSdata} object removes NAs from the ends
 and truncates both input and output to the same sub-sample. \emph{l()}
 does not easily give forecasts beyond the period where all data is
 available. (Optional arguments can be used to achieve this, but the
 function forecast is more convenient.)
 
-
 Forecasts are conditioned on input so it must be supplied for periods
 for which forecasts are to be calculated. (That is, input is not forecast
 by the model.) When more data is available for input than for output,
-as in new.data generated above, then \emph{forecast()} will use input
+as in \emph{new.data} generated above, then \emph{forecast()} will use input
 data and produce a forecast of output.
 
 \begin{Scode}
@@ -137,7 +111,7 @@ z <- forecast(TSmodel(eg4.DSE.model), trimNA(new.data),
 \end{Scode}
 
 
-The conditioning.inputs override input in the TSdata supplied in
+The \emph{conditioning.inputs} override input in the \emph{TSdata} supplied in
 the second argument to the function.
 
 
@@ -160,17 +134,6 @@ z <- forecast(eg4.DSE.model, conditioning.inputs.forecasts = matrix(.5,6,1))
 This would use the input data from \emph{eg4.DSE.model} and append
 6 periods of 0.5 to it.
 
-\begin{Scode}
-if(require("padi") && checkPADIserver("ets"))
-   z <- forecast(TSmodel(eg4.DSE.model), freeze(eg4.DSE.data.names),
-   conditioning.inputs.forecasts = matrix(.5,6,1)) 
-   #requires padi and correct databases 
-\end{Scode}
-
-
-retrieves new data and appends 6 periods of 0.5 to the input series
-
-
 Some generic functions which work with the structure returned by
 forecast:
 
@@ -183,7 +146,6 @@ tfplot(z)
 
 tfplot(z, start=c(1990,1)) 
 \end{Scode}
-
 
 If you actually want the numbers from the forecast they can be extracted
 with
@@ -688,7 +650,6 @@ generate forecasts for all the estimated models.
 
 \section{Adding New TSdata Classes }
 
-
 Data used by functions in this library are objects of class TSdata.
 The default methods assume that this is a list with an element output
 and optionally an element input, each of which is a (multivariate)
@@ -696,54 +657,17 @@ time series object. New classes of time series can be defined and
 the DSE library should work as long as the methods describe in the
 tframe library are implemented for the new time series class. This
 usually will not require any changes to TSdata methods (or anything
-else in the DSE library). The time series class tfPADIdata defined
-in the tframe library is an object which does not contain data, but
-only a description of where to get the data. The generic function
-freeze() calls freeze.tfPADIdata() which uses the location descriptor
-in order to get a fixed copy of the data as a time series matrix.
-
-
-More generally, it is possible to define new specific classes of
-TSdata. The TSPADIdata object described in the appendix on database
-interfaces is an object of class TSdata and specific class TSPADIdata.
-The input and output for this class are time series location descriptors
-of class tfPADIdata. Many functions in this library require matrices
-for input and output in order to do calculations. In this case they
-use the function freeze() before doing any calculations. The method
-freeze.TSPADIdata() uses freeze.tfPADIdata() on each element.
-
+else in the DSE library). 
 
 \section{Adding New TSmodel Classes}
 
-
 Models used in the library are of class "TSmodel" with secondary
 classes to indicate specific types of models. The original library
-supported subclass "ARMA" and "SS". The current version also support
-subclass "troll". ({*}{*}{*} The interface for running troll models
-is broken at present. Another, more easily available example is under
-construction) To run models in this subclass requires the Troll software
-from Intex Solutions, Inc. It also requires the TSPADI interface.
+supported subclass "ARMA" and "SS". 
 The main methods which will be necessary for a new class of models
 "xxx" are print.xxx, is.xxx, l.xxx, simulate.xxx, seriesNamesInput.xxx,
 seriesNamesOutput.xxx, checkConsistentDimensions.xxx, and MonteCarloSimulations.xxx.
 Also, the method to.xxx is useful for converting models from existing
 classes to this new class where possible. Models should inherit from
 TSmodel.
-
-
-The troll class of models is fairly interesting from a programming
-perspective, since the data is not native to S/R and the models are
-not run within S/R. One reason for wanting to do this is to use all
-of the other tools in the library to analyze models which have already
-been built and are running in other environments. Troll has very good
-algorithms for running "forward looking models" which are currently
-popular in economics. The tools in the DSE library (e.g. functions
-for analyzing forecasting properties) can be used as if the troll
-models were run directly in S/R, even though they are actually run
-with completely separate software.
-
-
-The troll TSmodels provide an example of how to implement additional
-classes of models.
-
 \end{document}

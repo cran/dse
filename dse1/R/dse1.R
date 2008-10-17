@@ -2035,6 +2035,7 @@ if (!checkConsistentDimensions(model)) stop("The SS model is not correct.")
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
  
+if (!is.null(noise) && is.matrix(noise)) noise <- list(w=noise)
 
 set.ts <- TRUE             
 if (!is.null(start))
@@ -2081,7 +2082,7 @@ else set.ts <-  FALSE
    }
  else
    {#  noise is not null
-   if (is.matrix(noise)) noise <- list(w=noise)
+   # already done if (is.matrix(noise)) noise <- list(w=noise)
    if (is.null(noise$w))
        stop("supplied noise structure is not correct. w must be specified.")
    if (is.null(noise$w0)) noise$w0 <- rep(0,p)
@@ -2214,6 +2215,12 @@ if (m!=0) for (l in 1:dim(C)[1]) C[l,,] <- invA0 %*% C[l,,]
 if(!is.null(TREND)) TREND <- t(invA0 %*% t(TREND))
 
 set.ts <- TRUE             
+
+if (!is.null(noise)) {
+   if (is.matrix(noise)) noise <- list(w=noise)
+   if (is.null(noise$w0)) noise$w0 <-matrix(0,b,p)
+   }
+
 if (!is.null(start))
   {if (!is.null(freq))   tf <- list(start=start, frequency=freq)
    else
@@ -2225,10 +2232,6 @@ else if( (!is.null(input))   && is.tframed(input))   tf <- tframe(input)
 else if ((!is.null(noise$w)) && is.tframed(noise$w)) tf <- tframe(noise$w)
 else set.ts <-  FALSE
 
-if (!is.null(noise)) {
-   if (is.matrix(noise)) noise <- list(w=noise)
-   if (is.null(noise$w0)) noise$w0 <-matrix(0,b,p)
-   }
 
 noise <- makeTSnoise(sampleT,p,b, noise=noise, rng=rng,
                         Cov=Cov, sd=sd, 

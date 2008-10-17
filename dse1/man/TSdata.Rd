@@ -8,8 +8,8 @@
 
 \title{Construct TSdata time series object}
 \description{
-    Constructor for generating or extracting a "TSdata" object 
-    containing data for use by TSmodels.
+    Constructor for constructing or extracting a "TSdata" object 
+    (use by TSmodels).
 }
 \usage{
     TSdata(data=NULL, ...)
@@ -33,7 +33,7 @@
     Generic method to construct or extract a TSdata object. The default 
     method constructs a TSdata object. Specific methods extract the TSdata
     from other objects (which must contain TSdata).
-    The function \code{is.TSdata(data)} returns TRUE is data inherits 
+    The function \code{is.TSdata(data)} returns TRUE if data inherits 
     from "TSdata" and FALSE otherwise.
 
     The function \code{as.TSdata} uses the elements input and output 
@@ -49,11 +49,8 @@
 }
 \seealso{
 \code{\link{TSdata.object}},
-\code{\link[tframe]{freeze}},
-\code{\link[dse2]{freeze.TSPADIdata}},
 \code{\link{TSmodel}},
 \code{\link{TSestModel.object}}
-\code{\link[dse2]{setTSPADIdata}}
 }
 \concept{DSE}
 \keyword{ts}

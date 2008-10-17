@@ -109,12 +109,6 @@ input and output is the structure which the functions in DSE
 expect. More details on this structure are available in the help for
 TSdata. The input and output elements can be defined in a number of
 different ways and new representations can be fairly easily added.
-For example, when the data is on a remote database as used by
-TSPADI, the R object is just a description
-of where to get the data, rather than the data itself. In this
-case the \emph{freeze()} function is used automatically by many functions
-in DSE to get a copy of the data when calculations are to be performed.
-
 
 Once data is available a model can be estimated:
 
