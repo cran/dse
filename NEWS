@@ -4,12 +4,22 @@ Known Bugs
     o Handling of initial conditions for the state space filter and smoother 
       still needs work.
 
+                 CHANGES IN DSE VERSION 2008.10-1
+
+
+Changes (Possibly) Affecting Users
+
+    o Changed the way a default graphics device is opened in a test, because
+      of a change in R . 
+
+    o Some documentation cleanup related to previous changes. 
+
                  CHANGES IN DSE VERSION 2007.11-1
 
 
 Changes (Possibly) Affecting Users
 
-    o GPL-2 license option was added explicitely. 
+   o GPL-2 license option was added explicitely. 
 
     o Function mineStepwise and method plot.mineStepwise were removed. 
       It used stepwise and probably has not worked in a long time.
