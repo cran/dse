@@ -38,11 +38,13 @@ estimation.args and criterion.args should be NULL if no args are needed.
 If model is an object of class 'EstEval' or 'simulation'
 then the model and the seed!!! are extracted so the evaluation will be
 based on the same generated sample.
-criterion can be { 'coef', 'roots', 'TSmodel', 'TSestModel'}
-With the default (coef) or with TSmodel the other criteria can be reconstructed
+criterion can be \code{ 'coef', 'roots', 'TSmodel', or 'TSestModel'}.
+With the default (\code{coef}) or with \code{TSmodel} the other criteria 
+can be reconstructed
 (when the estimation method finds a known form for the model - which
-is not always the case, for example with estBlackBox methods).
-If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
+is not always the case, for example with \code{estBlackBox} methods).
+If \code{criterion = 'roots'} then 
+\code{criterion.args= list(verbose=FALSE)} is advised.
 }
 \seealso{
 \code{\link[dse1]{simulate}}

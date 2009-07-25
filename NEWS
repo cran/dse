@@ -4,6 +4,12 @@ Known Bugs
     o Handling of initial conditions for the state space filter and smoother 
       still needs work.
 
+
+                 CHANGES IN DSE VERSION 2009.7-1
+
+  o minor documentation corrections as found by a new R-devel.
+
+
                  CHANGES IN DSE VERSION 2008.10-1
 
 

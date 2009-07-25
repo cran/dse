@@ -22,6 +22,7 @@ example, \code{estVARXls}. They contains a time series model (TSmodel),
 data (TSdata), and information obtained by evaluating the model 
 with the data in an element called \code{estimates} containing:
  
+\describe{
     \item{like}{
     The negative log likelihood function value (a vector of the total, 
     constant, the det part, and the cov part)}
@@ -56,7 +57,7 @@ This is NULL for innovations models.}
     \item{track}{
     The smoothed estimate of the state tracking error P(t|sampleT). 
     This is NULL for innovations models.}
-}
+}}
 
 \seealso{
     \code{\link{estVARXls}},

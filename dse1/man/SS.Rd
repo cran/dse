@@ -60,6 +60,7 @@ or the innovations model:
        y(t) = Hz(t)  + w(t)
 
 Matrices are as specified above in the arguments, and 
+\describe{
     \item{y}{is the p dimensional output data.}
     \item{u}{is the m dimensional exogenous (input) data.}
     \item{z}{is the n dimensional (estimated) state at time t,  
@@ -86,8 +87,8 @@ Matrices are as specified above in the arguments, and
     otherwise in the simulate 
     method \code{simulate.SS} for this class of model, but the assumption is
     usually maintained when estimating models of this form (although, not by all
-    authors).
-    
+    authors).}
+}   
     Typically, an non-innovations form is harder to identify than an innovations
     form. Non-innovations form would typically be choosen when there is
     considerable theoretical or physical knowledge of the system (e.g. the
@@ -99,7 +100,7 @@ Matrices are as specified above in the arguments, and
     element which is not to be treated as a constant of value 1.0. Any matrix
     elements can be fixed to constants by specifying the list \code{constants}.
     Matrices which are not specified in the list will be treated in the default 
-    way. An alternative for fixing constants is the function code{fixConstants}}
+    way. An alternative for fixing constants is the function \code{fixConstants}.
 }
 
 \references{
