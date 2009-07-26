@@ -33,15 +33,16 @@ The ARMA model is defined by:
       A(L)y(t) =  B(L)w(t) + C(L)u(t) + TREND(t)
 
 where
+\describe{
     \item{A}{(axpxp) is the auto-regressive polynomial array.}
     \item{B}{(bxpxp) is the moving-average polynomial array.}
-    \item{C}{
-    (cxpxm) is the  input polynomial array. C should be NULL if 
+    \item{C}{(cxpxm) is the  input polynomial array. C should be NULL if 
     there is no input}
     \item{y}{is the p dimensional output data.}
     \item{u}{is the m dimensional control (input) data.}
     \item{TREND}{is a matrix the same dimension as y, a p-vector
       (which gets replicated for each time period), or NULL.}
+}
 
 This is sometime called a vector ARMA (VARMA) model, but the univariate case is
 also handled by this structure. VAR models are a  special case 

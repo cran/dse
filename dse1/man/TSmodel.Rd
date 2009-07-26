@@ -15,16 +15,18 @@
 \arguments{
     \item{obj}{ 
       An object containing an object of class TSmodel or a list containing the 
-      information necessary to build an object of class "TSmodel".}
+      information necessary to build an object of class \code{TSmodel}.}
     \item{...}{arguments passed to other methods.}
 }
 \details{
-This is a generic method which will extract a "TSmodel" from an object (e.g. a
-TSestModel. The default method will try to build an ARMA or state-space 
-"TSmodel" from a list, which must contain the necessary information.
+This is a generic method which will extract a \code{TSmodel} from an 
+object (e.g. a \code{TSestModel}. 
+The default method will try to build an ARMA or state-space 
+\code{TSmodel} from a list, which must contain the necessary information.
 
 This class of objects is returned by estimation methods or can be built 
-according to the description for specific sub-classes (eg "ARMA", "SS").
+according to the description for specific 
+sub-classes (e.g. \code{ARMA}, \code{SS}).
 
 The \code{TSmodel} class of objects has methods for the generic functions
 \code{print, testEqual, seriesNames, seriesNamesInput,

@@ -87,7 +87,7 @@ Additional objects in the result are
      error at each period ahead.
  \code{trackError} is the time series of P, the one step ahead estimate 
        of the state tracking error matrix at each 
-       period, Cov{z(t)-E[z(t)|t-1]}
+       period, Cov(z(t)-E[z(t)|t-1])
        The tracking error can only be calculated if Q and R are provided 
        (i.e. non innovations form models).
        Using the Kalman Innov K directly these are not necessary 

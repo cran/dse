@@ -2,7 +2,7 @@
 \alias{TSdata.object}
 \title{time series data object}
 \description{
-Class "TSdata" of time series data objects for use with TSmodels.
+Class \code{TSdata} of time series data objects for use with TSmodels.
 }
 
 \section{Generation}{
@@ -21,7 +21,7 @@ Also, the function \code{is.TSdata} is supported.
 Other data classes inherit from the class \code{TSdata}.}
 
 \section{Structure}{
-Objects are a list with class the most general class "TSdata". The
+Objects are a list with class the most general class \code{TSdata}. The
 native form for this package has elements \code{input} and
 \code{output}. Any other elements are ignored. \code{input} and
 \code{output} are matrices (or tframe or time series matrices) of the
