@@ -5,6 +5,17 @@ Known Bugs
       still needs work.
 
 
+                 CHANGES IN DSE VERSION 2009.9-1
+
+  o The dse bundle has been unbundled and the packages dse1 and dse2 renamed to
+    dse and EvalEst respectively.  Some additional reorganization has been done 
+    to give a slightly different focus to the second package. Stub packages dse1
+    and dse2 have been created to facilitate conversion for users' existing 
+    code. These stub packages simply require dse and EvalEst respectively.
+    
+  o The renaming has not been done in the NEWS files below.
+
+ 
                  CHANGES IN DSE VERSION 2009.7-1
 
   o minor documentation corrections as found by a new R-devel.
