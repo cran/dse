@@ -1,0 +1,475 @@
+   
+Known Bugs
+
+    o Handling of initial conditions for the state space filter and smoother 
+      still needs work.
+
+
+                 CHANGES IN DSE VERSION 2009.9-1
+
+  o The dse bundle has been unbundled and the packages dse1 and dse2 renamed to
+    dse and EvalEst respectively.  Some additional reorganization has been done 
+    to give a slightly different focus to the second package. Stub packages dse1
+    and dse2 have been created to facilitate conversion for users' existing 
+    code. These stub packages simply require dse and EvalEst respectively.
+    
+  o The renaming has not been done in the NEWS files below.
+
+ 
+                 CHANGES IN DSE VERSION 2009.7-1
+
+  o minor documentation corrections as found by a new R-devel.
+
+
+                 CHANGES IN DSE VERSION 2008.10-1
+
+
+Changes (Possibly) Affecting Users
+
+    o Changed the way a default graphics device is opened in a test, because
+      of a change in R . 
+
+    o Some documentation cleanup related to previous changes. 
+
+                 CHANGES IN DSE VERSION 2007.11-1
+
+
+Changes (Possibly) Affecting Users
+
+   o GPL-2 license option was added explicitely. 
+
+    o Function mineStepwise and method plot.mineStepwise were removed. 
+      It used stepwise and probably has not worked in a long time.
+
+                 CHANGES IN DSE VERSION 2007.7-1
+
+Changes (Possibly) Affecting Users
+
+    o fixed a bug passing data to dse1 fortran arma code when the input data was
+      longer than the output data. This especially affected forecast() in dse2.
+
+    o fixed a bug passing data to dse1 fortran kf code as with arma.
+
+    o fixed a bug in l.ARMA which caused an error when predictT exceeded 
+      sampleT and compiled=FALSE.
+
+    o the  ... arg to forecast() is now passed along to l(). Among other things,
+      this allows compiled=FALSE to be used with forecast() which helps testing.
+
+                 CHANGES IN DSE VERSION 2007.5-2
+ 
+Changes Affecting Development
+
+    o dseplus is no longer maintained as a bundle.
+
+    o constants was added as argument in setArrays.
+
+
+                CHANGES IN DSE VERSION 2007.5-1
+
+Changes (Possibly) Affecting Users
+
+    o tframe was removed from the dse bundle and released as a stand alone
+      package.
+
+    o Calls to function freeze (which made an R copy of data from a database
+      based on a database descriptor) where removed from dse1 and dse2, and a
+      few other places, since this functionality was rarely used by functions 
+      in these packages. This has simplified other package dependencies.
+
+    o warnings in optimization in the estMaxLik function evaluation was switched 
+      to FALSE so that warnings about working on a subspace should not happen.
+      The warning is still generated at the end if the problem persists in the
+      final model.
+ 
+Changes Affecting Development
+
+    o A number of small fixes caught by R-2.5.0 were incorporated
+
+    o The syskern package in dseplus is defunct and the few remaining functions
+      were moved to the monitor package, which was the only place they were
+      being used. That package is being revised and may not be released for
+      awhile.
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2006.10-1
+
+Changes (Possibly) Affecting Users
+
+    o Namespace imports were fixed as need for R-2.4.0.
+
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2006.4-1
+
+Changes (Possibly) Affecting Users
+
+    o 00Intro.dse1.Rd was renamed 00.dse.Intro.Rd and 00Intro.tframe.Rd was 
+      renamed 00.tframe.Intro.Rd.  Also, aliases dse, dse.Intro, and dse-package
+      were added, and similarly for tframe. With luck, this will mean users can
+      find the general package description.
+    
+    o A bug in setting non- zero or one constants in ARMA models was fixed. (The
+      constants were still treated as parameters in estMaxLik().)
+    
+    o A bug in setting non- zero or one constants in ARMA models was fixed.
+    
+    o A bug printing ARMA models with no lags in the AR part was fixed.
+    
+    o Some of the general documentation was cleaned up (a bit).
+ 
+    o percentChange, ytoypc, and diffLog were moved from dse1 to tframe, and all
+      were made generic.
+ 
+    o pre-pending of info to names (e.g. %ch ) in above was changed so that it 
+      can be turned off using a global option setting ModSeriesNames=FALSE.
+ 
+    o All methods for tfplot were changed so that adding the Title 
+      can be turned off using a global option setting PlotTitles=FALSE.
+ 
+    o A tframe method for aggregate was added to tframe.
+ 
+    o The function standardize was removed. (It has been deprecated in favour of
+      scale for a long time).
+ 
+    o The function dseclass was removed (since it was only used to compensate
+      for differences with Splus, which is not longer being tested).
+ 
+    o The functions dsescan and read.int were removed. (dsescan was replaced 
+      with R's scan and read.int was moved to a local function in programs
+      that used it.)
+
+Changes Affecting Development
+ 
+    o Several Splus test values where commented out (since Splus is not 
+      longer being tested).
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2006.1-1
+
+Changes (Possibly) Affecting Users
+
+    o \reference rather than \references in the documentation was fixed in
+      serveral places and the references were cleaned up. (The mistake seems to
+      have resulted in some references being omitted from earlier
+      documentation.)
+
+    o The argument SIGMA in simulate methods and makeTSnoise was changed to Cov
+      to avoid confusion in forthcoming package tsfa.
+
+    o Splus "For" loops where removed, as these have not been tested recently,
+      and some other variables reported as having no binding were cleaned up.
+
+    o The function findg was removed (it has never really worked).
+
+    o A recursion too deep problem printing some TSdata was fixed. 
+
+    o The simulate generic in dse1 was modified to avoid conflict with
+      the simulate generic in stats (in R-2.2.0).
+ 
+Changes Affecting Development
+
+    o Some further clean up of the Make system. Parallel makes (make -j -k) seem
+      to be working properly now.
+ 
+ 
+                 CHANGES IN DSE AND DSEPLUS VERSION 2005.9-1
+
+Changes (Possibly) Affecting Users
+
+    o An experimental class TSrestrictedmodel has been added, which allows a
+      very general specification of cross-coefficient restrictions,etc. 
+      See  ?TSrestrictedmodel for more details.
+
+    o smoother and l.SS where fixed to use solve(A,B) constructs rather 
+      B %*% solve(A) in some instances where this was not done already.
+      This was done in both the S and fortran versions of the code, so that
+      results for fortran and S versions are nearly identical even in the case
+      of "big k" state tracking initialization, which is known to be numerically
+      problematic. (In more usual cases the results were previously nearly 
+      identical.)
+
+    o a bug was fixed in the structure of additional information passed back 
+      from estMaxLik.
+
+    o a bug was fixed in the structure of some information passed back 
+      from the state space smoother.
+
+    o smoother.default was changed to smoother.TSmodel and gives an error 
+      message if not called with an appropriate SS model. (There is now no 
+      default method.)
+
+    o the setting of constants was added to constuctors ARMA and SS and a bug
+      was fixed in setTSmodelParameters, so that these are not now reset to 
+      parameters after estimation.
+
+    o an argument rootP0 (default NULL) was added to state space (SS) models 
+      so that an initial state covariance (P0) can be specified in a
+      parsimonious form. This may not be a permanent feature. See also the new
+      TSrestrictedModel class.
+
+    o an argument eps (default 1e-15) was added to the stability function and 
+      roots within eps of 1.0 are now considered unstable (unstationary) models.
+
+    o some more argument checking was added to tfplot
+   
+    o Depends lines where added to the bundle description file so that
+      installation should now properly look after dependencies.
+
+Changes Affecting Development
+
+    o The makefile system was revised so that tests are run individually rather
+      than as a single block.
+
+                 CHANGES IN DSE AND DSEPLUS VERSION 2005.6-1
+
+Changes (Possibly) Affecting Users
+
+    o the matrix inversion routine was switched to use Lapack routines
+      distributed with R. These work better in some circumstances 
+
+    o fixed a bug in fortran code for the state space smoother (SMOOTH) when
+      the output dimension exceeded the state dimension. The matrix
+      inversion was also switched (see above) which gives improved results. 
+      
+    o fixed a bug in the state space smoother when the model has input data u_t.
+
+    o a bug in TREND for ARMA models was fixed again.(Some details where missed 
+      in fix in the previous release.
+
+    o several minor documention errors were fixed.
+
+Changes Affecting Development
+
+    o added additional tests of the smoother.
+
+    o added test to check that setting TREND works.
+
+
+                CHANGES IN DSE AND DSEPLUS VERSION 2005.4-1
+ 
+Changes (Possibly) Affecting Users
+
+    o package guides have been renamed from "pac-guide.pdf" to "pac.pdf"
+      (e.g. dse1-guide.pdf is now dse1.pdf) so they can be displayed with e.g.
+      print(vignette("dse1")) and the vignette code loaded in an editor with
+      e.g. edit(vignette("dse1")). The combined guide is still dse-guide.pdf.
+
+    o more arguments have been added to tfplot to pass to par() and matplot. 
+      These give better control over plot line colours and styles.      
+
+    o a bug constructing a TSdata format with univariate ts is fixed.        
+
+    o a bug in TREND for ARMA models was fixed.
+
+    o acfM was removed. This was a utility for some code that was previously
+      removed. (Use acf to calculate autocorrelations.)
+
+Changes Affecting Development
+
+    o more testing of TSdata constructors and methods has been added.          
+
+
+                CHANGES IN DSE AND DSEPLUS VERSION 2005.1-1
+ 
+Changes (Possibly) Affecting Users
+
+    o added NAMESPACES to all packages (except setRNG). Exporting generics but 
+      not specific methods means calling specific methods must be avoided.
+      NAMESPACES in bundles seemed to require switching .DSECOMPILED and .DSEDUP
+      global flags to "dynamic variables" using a local function.
+          
+    o moved makeTSnoise from tframe to dse1 so tframe does not require setRNG.
+          
+    o fortran code for state space models was changed to pass scratch arrays
+      from R, so state and output dimension can now be arbitrarily large.
+      Previously the state and output dimensions could not exceed a fortran 
+      parameter IS=100 without being recompiled, and an error was not always
+      indicated. (There still seems to be a bug in maximum likelihood 
+      estimation when the state or output dimension exceeds 100.) 
+          
+    o fixed fortran code (SIMSS) to use w instead of e as measurement 
+      equation noise for non-innovations models (as in S version of code) and 
+      fixed related test. 
+
+Changes Affecting Development
+
+    o revise makefiles QC system to combine Rcode and codetest targets, which 
+      are now called $(CODETEST). This has a target that is the tested 
+      lib/package rather than a flag, which is more reliable and makes 
+      reading the makefiles much easier. The tarball target was changed in the
+      same way.
+
+    o revise makefiles QC system to use configure so that QC can take place in
+      a separate directory. Testing of different architectures and different R
+      versions should now take place in a different directory, so the TMP and 
+      FLAGS naming convention was simplified.
+          
+    o revise makefiles to test demos separately, and other makefile cleanup.
+          
+    o reversed dependency between padi and dsepadi as generic is now in 
+      dsepadi (so that padi is not necessary for most things).
+
+                CHANGES IN DSE AND DSEPLUS VERSION 2004.10-1
+ 
+Changes (Possibly) Affecting Users
+ 
+    o  The NEWS file for setRNG is now maintained separately in that package.
+
+    o  Started using separate version numbers for setRNG and syskern, but still
+       using a common one for all dse and dseplus packages.
+
+    o   moved some more documentation from the code into the help files. There
+        is still some clean up to do.
+
+    o   fixed documentation mistakes, bugs and error checking in
+        simulations with user supplied random numbers.
+
+    o  TREND in ARMA models generalized and documented better and to indicate
+       that this term in ARMA models handles more than just trends.
+
+    o  added "state" extraction utility and examples in SS, l.SS and 
+       smoother documentation 
+
+    o  added a check in seriesNames<- that the number of names matched the 
+       number of series.
+    
+    o added \concept{DSE} in the documentation. 
+
+Changes Affecting Development
+          
+    o  require(ts) and require(mva) changed to require(stats) for R 1.9.0
+      
+    o  continuing Makefile cleanup.
+
+    o  moved bundle constuction to Bundle directory.
+
+    o  moved NEWS to Bundle directory.
+
+
+                CHANGES IN DSE, setRNG,  AND DSEPLUS VERSION 2004.4-1
+ 
+Changes (Possibly) Affecting Users
+ 
+    o   fixed window.default (tfwindow) warnings in vignettes
+          
+    o   fixed a bug in the constructor TSdata.default which prevented
+        tframe and series name information from being properly used
+	in the resulting TSdata object.
+
+Changes Affecting Development
+          
+    o   fixed some version number tests which will not work correctly in R-2.0.
+
+
+		CHANGES IN DSE, setRNG, AND DSEPLUS VERSION 2004.3-1
+
+Changes (Possibly) Affecting Users
+
+    o	setRNG has been unbundled from dse and is distributed as a standalone
+        package, but is required by dse.
+    
+    o	the tframe package was reworked to avoid the need to override generic
+        functions (start, end, frequency, time, and diff) in base, as this is
+	not allowed in 1.9.0. New generic functions (tfstart, ...) were 
+	added to look after some programming situations where the old 
+	generics do not work. Users typically should not need to use these 
+	methods at the command line (but may prefer to for programming). The
+	method periods() was renamed tfperiods() to give a consistent naming
+	convention.
+	
+    o	a tf (time frame) argument, which can replace start, end and frequency,
+        was added to several functions.	
+	
+    o	start. and end. where replaced by start and end in tfwindow, tfplot, and
+        simulate methods, since the code can now distinguish the function 
+	start() from the variable start.
+	
+    o	the names of some method arguments were modified to match generic
+        arguments (as caught be R 1.9.0 tools).
+
+Changes Affecting Development
+
+    o	makefiles were re-arranged and cleaned up.
+
+    o	as.double() and double() calls to .Fortran changed slightly.
+
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.9-1
+
+Changes (Possibly) Affecting Users
+
+    o	fixed bug in fixConstants which prevented setting of arbitrary elements
+        in SS models to constant (non-parameter) values other than 0 or 1. The
+	documentation of fixConstants was also improved.
+
+    o	fixed bug causing occassional seg faults in smoother.
+
+    o	fixed bug preventing estMaxLik properly setting the estimated parameters
+        in SS models (so they appeared to be unchanged).
+
+    o	usage of random seed tightened up to correspond to R 1.8.0
+
+    o	minor documentation errors caught by new tools() have been fixed.
+
+Changes Affecting Development
+
+    o	use of tools() in Makefiles has been been further refined.
+
+    o	prcomp eliminated as version in R 1.8.0 now supports complex matrix.
+    
+
+    
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.6-1
+
+Changes (Possibly) Affecting Users
+
+    o	several more program names have been revised so as to avoid confusion 
+	with methods for generics with similar names. (That is, function 
+	foo.bar has been changed to fooBar, or to barFoo in some cases.)
+    o	DSEversion (previously version.DSE) gives the version of 
+    	each package.
+
+Changes Affecting Development
+
+    o	testing in Makefiles has been been further refined.
+
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.4-1
+
+Changes (Possibly) Affecting Users
+
+    o	dseplus which works with the previous dse changes is released.
+    
+Changes Affecting Development
+
+    o	testing in Makefiles has been been further refined.
+    o	test tolerances in dseplus have been adjusted for R 1.7.0 and Splus 3.3.
+    o	very minor changes because of R 1.7.0 name spaces.
+
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.2-1
+
+Changes (Possibly) Affecting Users
+
+    o	several program names have been revised so as to avoid confusion 
+	with methods for generics with similar names. For this reason, the
+	new Users' Guide should be used, despite its problems.
+
+    o	the Users' guide is (being) broken down into pieces for each 
+    	package and re-written using Sweave (with .Stex files in inst/doc).
+	The Users' Guide (dse-guide.pdf) is still placed in dse1/inst/doc
+	as the bundle structure does not have a place for documentation.
+
+    o	the old package syskern has been divided into setRNG which is included
+	with dse and a new package syskern which is moved to dseplus.
+
+    o	most routines have been convert to use La.svd and La.eigen in place 
+    	of svd and eigen (and test values were revised slightly in some cases).
+
+    o	DSE.HOME has been removed and .path.package is used in its place.
+
+    o	version.DSE now gives the version of each package.
+
+Changes Affecting Development
+
+    o	testing in Makefiles has been revised so code (Rcode+tests) is the 
+	only inter-package dependency. Examples, demos, and guides do not 
+	affect other packages.
+
+    o	reliance on bundle structure is largely removed, and Makefiles 
+	have been re-organized to reflect this.
