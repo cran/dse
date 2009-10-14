@@ -111,7 +111,7 @@ determine necessary transformation of initial conditions and \code{w0}.
 }
 
 \seealso{
-  \code{\link[tframe]{makeTSnoise}},
+  \code{\link{makeTSnoise}},
   \code{\link{TSmodel}},
   \code{\link{TSdata}},
   \code{\link{ARMA}},

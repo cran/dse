@@ -59,8 +59,8 @@ respect to initial conditions.
 }
 \seealso{
     \code{\link{estSSfromVARX}}
-    \code{\link[EvalEst]{estSSMittnik}}
-    \code{\link[EvalEst]{bft}}
+    \code{\link{estSSMittnik}}
+    \code{\link{bft}}
     \code{\link{estVARXar}}
     \code{\link{estMaxLik}}
 }

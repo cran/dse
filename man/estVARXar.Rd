@@ -67,11 +67,11 @@ the model for the exog. variable (as estimated by ar() is  discarded.
 }
 \seealso{
     \code{\link{estSSfromVARX}}
-    \code{\link[EvalEst]{estSSMittnik}}
-    \code{\link[EvalEst]{bft}}
+    \code{\link{estSSMittnik}}
+    \code{\link{bft}}
     \code{\link{estVARXls}}
     \code{\link{estMaxLik}}
-    \code{\link[ts]{ar}}
+    \code{\link[stats]{ar}}
     \code{\link{DSE.ar}}
 }
 \examples{

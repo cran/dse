@@ -85,10 +85,10 @@ The main diagnositic methods are:
 The methods for producing and evaluating forecasts are:
 \describe{
    \item{\link{l}}{evaluate a model with data (and simple forecasts)}
-   \item{\link[EvalEst]{forecast}}{calculate forecasts }
-   \item{\link[EvalEst]{featherForecasts}}{calculate forecasts starting at different periods}
-   \item{\link[EvalEst]{horizonForecasts}}{calculate forecasts at different horizons}
-   \item{\link[EvalEst]{forecastCov}}{calculate the covariance of forecasts}
+   \item{\link{forecast}}{calculate forecasts }
+   \item{\link{featherForecasts}}{calculate forecasts starting at different periods}
+   \item{\link{horizonForecasts}}{calculate forecasts at different horizons}
+   \item{\link{forecastCov}}{calculate the covariance of forecasts}
    \item{\link[EvalEst]{MonteCarloSimulations}}{multiple simulations}
 }
 

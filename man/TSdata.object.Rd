@@ -25,20 +25,15 @@ Objects are a list with class the most general class \code{TSdata}. The
 native form for this package has elements \code{input} and
 \code{output}. Any other elements are ignored. \code{input} and
 \code{output} are matrices (or tframe or time series matrices) of the
-input and output data, with each series in a column.  \code{TSPADIdata}
-objects inherit from this class but have a somewhat different
-structure.  \code{TSPADIdata} makes it possible to retrieve data from
-an external database when it is needed. These subclass objects do not
-contain the actual data, but only the names of the series and the data
-base where they are located. The function setTSPADIdata can be used to set
-up an object of class c("TSPADIdata", "TSdata").
+input and output data, with each series in a column.  It is possible to 
+populate this structure directly from a time series database. See the 
+\pkg{TSdbi} package for more details.
 }
 
 \seealso{
-\code{\link{TSdata}}
-\code{\link{TSmodel}}
+\code{\link{TSdata}},
+\code{\link{TSmodel}},
 \code{\link{TSestModel.object}}
-\code{\link[dsepadi]{TSPADIdata}}
 }
 \concept{DSE}
 \keyword{ts}
