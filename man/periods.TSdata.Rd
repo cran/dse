@@ -27,9 +27,12 @@
 
 \seealso{
     \code{\link[tframe]{periods}}, 
-    \code{\link[tframe]{start}},
-    \code{\link[tframe]{end}},
-    \code{\link[tframe]{frequency}}
+    \code{\link[tframe]{tfstart}},
+    \code{\link[tframe]{tfend}},
+    \code{\link[tframe]{tffrequency}}
+    \code{\link[stats]{start}},
+    \code{\link[stats]{end}},
+    \code{\link[stats]{frequency}}
 }
 \concept{DSE}
 \keyword{ts}

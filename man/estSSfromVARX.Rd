@@ -28,8 +28,8 @@
 }
 \seealso{
     \code{\link{toSS}}
-    \code{\link[EvalEst]{estSSMittnik}}
-    \code{\link[EvalEst]{bft}}
+    \code{\link{estSSMittnik}}
+    \code{\link{bft}}
     \code{\link{estVARXls}}
     \code{\link{estMaxLik}}
 }

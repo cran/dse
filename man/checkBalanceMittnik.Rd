@@ -26,7 +26,7 @@ Balanced models should have equal observability and reachability gramians.
 }
 \seealso{
 \code{\link{checkBalance}}
-\code{\link[EvalEst]{MittnikReduction}}
+\code{\link{MittnikReduction}}
 }
 \examples{
     data("eg1.DSE.data.diff", package="dse")
