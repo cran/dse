@@ -46,8 +46,9 @@ citEntry(entry="manual",
   title        = "Brief User's Guide: Dynamic Systems Estimation",
   author       = "Gilbert, P. D.",
   year         = "2006 or later",
-  url          = "http:www.bank-banque-canada.ca/pgilbert/",
+  url          = "http://cran.r-project.org/web/packages/dse/vignettes/dse-guide.pdf",
   textVersion =  paste("Gilbert, P. D. (2006 or later) ", 
        "Brief User's Guide: Dynamic Systems Estimation",
-     "R package DSE. ", "<http://www.bank-banque-canada.ca/pgilbert/>", sep="")
+     " distributed with the dse package. ", 
+     "<http://cran.r-project.org/web/packages/dse/vignettes/dse-guide.pdf>", sep="")
   )

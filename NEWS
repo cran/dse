@@ -4,6 +4,13 @@ Known Bugs
    o	Handling of initial conditions for the state space filter and smoother 
 	still needs work.
 
+Changes in dse version 2009.12-1
+
+   o	fixed reference to ts in error messages (now stats).
+
+   o	Additional documentation clean-up.
+
+
 Changes in dse version 2009.10-2
 
    o	Standardized NEWS format for new function news().
