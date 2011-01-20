@@ -1961,7 +1961,7 @@ setArrays.ARMA <- function(model, coefficients=NULL, constants=NULL) {
 
 DSE.ar <- function(data, ...) {
   #fix for ar in R ts library (so that univariate case also gives array result)
-  if( !require("stats", warn.conflicts=FALSE)) stop("package ts is required.")
+  if( !require("stats", warn.conflicts=FALSE)) stop("package stats is required.")
   # before R 1.9.0 required ts not stats
   res <- ar(ts(data), ...)
   if (! is.array(res$ar)) res$ar <- array(res$ar, c(length(res$ar),1,1))
@@ -3732,7 +3732,7 @@ estBlackBox4 <- function(data, estimation="estVARXls",
 
 Portmanteau <- function(res){
   # Portmanteau statistic for residual
-  if (!require("stats", warn.conflicts = FALSE)) stop("package ts is required.")
+  if (!require("stats", warn.conflicts = FALSE)) stop("package stats is required.")
   # before R 1.9.0 required ts not stats
   ac <- acf(as.ts(res),type="covariance", plot=FALSE)$acf
   p <- dim(ac)[1]
@@ -3781,7 +3781,7 @@ checkResiduals.default <- function(obj, ac=TRUE, pac=TRUE,
   resid0 <- sweep(resid, 2, mn, FUN="-")
 #  resid0 <- resid - t(array(colMeans(resid),rev(dim(resid)))) # mean 0
   cusum <- apply(resid0,2,cumsum)/ t(array(diag(var(resid0)),rev(dim(resid0))))
-  if (!require("stats", warn.conflicts = FALSE)) stop("package ts is required.")
+  if (!require("stats", warn.conflicts = FALSE)) stop("package stats is required.")
   # before R 1.9.0 required ts not stats
   if(plot. &&  dev.cur() != 1 ) 
     {graphs.per.page <- min(p, graphs.per.page)
