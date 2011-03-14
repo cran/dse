@@ -195,7 +195,7 @@ forecast.TSmodel <- function(obj, data,  horizon=36, conditioning.inputs=NULL,
      {if(!all(tfstart(policy) == tfstart(output)))
             stop("input and output data must have the same starting period (after NAs are removed).")
       pdata <- TSdata(input=policy, output=output)
-      predictT <- periods(policy)
+      predictT <- Tobs(policy)
       if (sampleT > predictT) 
          stop("input series must be at least as long as output series (after NAs are removed).")
       horizon <- predictT - sampleT
@@ -261,9 +261,9 @@ tfplot.forecast <- function(x, tf=NULL, start=tfstart(tf), end=tfend(tf),
    for(i in series) 
         {z <- c(output[,i], rep(NA,H))
          for (t in 1:N)
-            {zz <- c(rep(NA,periods(output)),x$forecast[[t]][,i],
+            {zz <- c(rep(NA,Tobs(output)),x$forecast[[t]][,i],
                      rep(NA,H-dim(x$forecast[[t]])[1]))
-             zz[periods(output) ] <- output[periods(output), i] #so line joins last data to first forecast
+             zz[Tobs(output) ] <- output[Tobs(output), i] #so line joins last data to first forecast
              z <- cbind(z,zz)
             }
          tframe(z) <- tf
@@ -317,18 +317,18 @@ featherForecasts.TSmodel <- function(obj, data, horizon=36,
   {#data <- freeze(data)
    if (is.null(from.periods))
      {if(0 == nseriesOutput(data)) from.periods <-
-             10*seq(floor(periods(data)/10))
+             10*seq(floor(Tobs(data)/10))
       else from.periods <-
-             10*seq(floor(min(periods(data), periodsInput(data)-horizon)/10))
+             10*seq(floor(min(Tobs(data), TobsInput(data)-horizon)/10))
      }
-   # periods.TSPADIdata returns NA rather than fetching data. Note:Previously freeze
+   # Tobs.TSPADIdata returns NA rather than fetching data. Note:Previously freeze
    #  was not done above and pr below just left NULL for TSPADIdata, so some
    #  of this can be cleaned out.
-   if ((!is.na(periods(data))) && (max(from.periods) > periods(data) ))
+   if ((!is.na(Tobs(data))) && (max(from.periods) > Tobs(data) ))
      stop("from.periods cannot exceed available output data.")
    if (0 != (nseriesInput(data)))
-     if ((!is.na(periodsInput(data))) && 
-        ((max(from.periods)+horizon) > periodsInput(data) ))
+     if ((!is.na(TobsInput(data))) && 
+        ((max(from.periods)+horizon) > TobsInput(data) ))
        stop("forecasts cannot exceed available input data.")
    shf <- startShift(obj,data,y0=NULL)  # ? y0=y0)
    proj <- NULL
@@ -495,13 +495,13 @@ horizonForecasts.TSmodel <- function(obj, data, horizons=1:4,
  # Projections are not calculated before discard.before or after
  #   the end of outputData(data).
  # Each horizon is aligned so that horizonForecasts[h,t,] contains the forecast
- #   for the data point outputData(data)[t,] (from horizon[h] periods prior).
+ #   for the data point outputData(data)[t,] (from horizon[h] Tobs prior).
  
    if(!checkConsistentDimensions(obj,data)) stop("dimension error\n")
    if (compiled) proj <- horizonForecastsCompiled(obj, data, 
                            horizons=horizons, discard.before=discard.before)
    else
-     {TT <-periods(data)
+     {TT <-Tobs(data)
       proj <- array(NA,c(length(horizons),dim(outputData(data))))
       for (t in discard.before:(TT-min(horizons)) )
         {horizons <- horizons[t <= (TT-horizons)]
@@ -527,7 +527,7 @@ horizonForecastsCompiled.ARMA <- function( obj, data, horizons=1:4,
                    dim(obj$A)[1]-1, ")."))
  horizons <- sort(horizons)
   p <- nseriesOutput(data)
-  TT <- periods(data)
+  TT <- Tobs(data)
   proj <- array(0,c(length(horizons),TT,p))
   storage.mode(proj) <- "double"
   m <- nseriesInput(obj)
@@ -584,7 +584,7 @@ horizonForecastsCompiled.SS <- function( obj, data, horizons=1:4,
 	 discard.before=minimumStartupLag(obj))
 { horizons <- sort(horizons)
   p <- nseriesOutput(data)
-  TT <- periods(data)
+  TT <- Tobs(data)
   proj <- array(0,c(length(horizons),TT,p))
   storage.mode(proj) <- "double"
      gain <- is.innov.SS(obj)
@@ -599,7 +599,7 @@ horizonForecastsCompiled.SS <- function( obj, data, horizons=1:4,
      else
        {m <- dim(obj$G)[2]
         G <-obj$G
-        u <- inputData(data)[1:periods(data),,drop=FALSE]
+        u <- inputData(data)[1:Tobs(data),,drop=FALSE]
        } 
      if (gain)     # K or Q,R can be NUll in obj, which messes up compiled
        {K <-    obj$K
@@ -723,7 +723,7 @@ estimateModels <- function(data, estimation.sample=NULL,
         inputData(data) <- inputData(data)[1:estimation.sample,, drop=FALSE]
     }
    r <-list(estimation.methods=estimation.methods)
-  if (trend) r$trend.coef <- lsfit(1:periods(data), outputData(data))$coef
+  if (trend) r$trend.coef <- lsfit(1:Tobs(data), outputData(data))$coef
   if (!is.null(estimation.methods))
     {r$multi.model <- vector("list", length(estimation.methods))
      for (j in 1:length(estimation.methods))
@@ -921,7 +921,7 @@ forecastCov.TSdata <- function(obj, ..., data=NULL,
    pred <- obj
    horizons <- sort(horizons)
    p <- nseriesOutput(data)
-   TT  <- periods(data)
+   TT  <- Tobs(data)
    cov <- array(0,c(length(horizons), p,p))
    N <- rep(0,length(horizons))   # the sample size used at each horizon
    err <- pred$output - outputData(data)
@@ -961,14 +961,14 @@ forecastCov.TSdata <- function(obj, ..., data=NULL,
 
 forecastCov.TSestModel <- function(obj, ..., data=TSdata(obj), 
   horizons=1:12, discard.before=NULL, zero=FALSE, trend=FALSE, 
-  estimation.sample= periods(TSdata(obj)), compiled=.DSEflags()$COMPILED)
+  estimation.sample= Tobs(TSdata(obj)), compiled=.DSEflags()$COMPILED)
  {forecastCov(TSmodel(obj), ..., data=data,
      horizons=horizons, discard.before=discard.before, zero=zero, trend=trend,
      estimation.sample=estimation.sample, compiled=compiled)}
 
 forecastCov.TSmodel <- function(obj, ..., data=NULL, 
        horizons=1:12, discard.before=NULL, zero=FALSE, trend=FALSE, 
-       estimation.sample= periods(data), compiled=.DSEflags()$COMPILED)
+       estimation.sample= Tobs(data), compiled=.DSEflags()$COMPILED)
  {if (is.null(data)) stop("data= must be supplied.")
   model.list <- list(obj, ...)
   r <- list(data=data, horizons=horizons, discard.before=discard.before)
@@ -989,7 +989,7 @@ forecastCov.TSmodel <- function(obj, ..., data=NULL,
       }
   if (trend)
      {y <- outputData(data)[1:estimation.sample,]
-      pred <- cbind(1,1:periods(data)) %*%
+      pred <- cbind(1,1:Tobs(data)) %*%
                               (lsfit(1:estimation.sample, y)$coef)
       if (is.null(discard.before))
          r$forecastCov.trend <- forecastCov(TSdata(output=pred), data=data,
@@ -1026,7 +1026,7 @@ forecastCovSingleModel <- function( model, data=NULL, horizons=1:12,
   else
     { p <- nseriesOutput(data)
       shf <- startShift(model,data) #,y0=y0)
-      TT  <-periods(data)-(shf$shift)*(shf$lags+shf$terminal.periods)
+      TT  <-Tobs(data)-(shf$shift)*(shf$lags+shf$terminal.periods)
       cov <- array(0,c(length(horizons), p,p))
       N <- rep(0,length(horizons))   # the sample size used at each horizon
   # there is a problem here with troll models trying to simulate further than
@@ -1068,7 +1068,7 @@ forecastCovCompiled.ARMA <- function(model, data, horizons=1:12 ,
                     dim(model$A)[1]-1, ")."))
   horizons <- sort(horizons)
   p <- nseriesOutput(data)
-  TT <- periods(data)
+  TT <- Tobs(data)
   cov <- array(0,c(length(horizons), p,p))
   N <- rep(0,length(horizons))   # the sample size used of each horizon
   m <- dim(model$C)[3]
@@ -1138,7 +1138,7 @@ forecastCovCompiled.SS <- function(model, data, horizons=1:12 ,
     discard.before=minimumStartupLag(model))
 { horizons <- sort(horizons)
   p <- nseriesOutput(data)
-  TT <- periods(data)
+  TT <- Tobs(data)
   cov <- array(0,c(length(horizons), p,p))
   N <- rep(0,length(horizons))   # the sample size used at each horizon
      gain <- is.innov.SS(model)
@@ -1483,7 +1483,7 @@ forecastCovEstimatorsWRTdata <- function(data, estimation.sample=NULL,
                 horizons=horizons)$forecastCov[[1]]
      }
   if (trend)
-     {pred <- cbind(1,1:periods(data)) %*% models$trend.coef
+     {pred <- cbind(1,1:Tobs(data)) %*% models$trend.coef
       r$forecastCov.trend <- forecastCov(TSdata(output=pred), data=data, 
               discard.before=discard.before, 
               horizons=horizons)$forecastCov[[1]]
@@ -1735,7 +1735,7 @@ forecastCovEstimatorsWRTtrue <- function(true.model, rng=NULL,
                     pred.replications=pred.replications, zero=TRUE, quiet=quiet,
                     simulation.args=simulation.args, #Spawn=Spawn,
                     horizons=horizons, discard.before=discard.before,
-                    trend=cbind(1,1:periods(data)) %*% models$trend.coef,
+                    trend=cbind(1,1:Tobs(data)) %*% models$trend.coef,
                     compiled=compiled)
          if (i==1)
            r<-rn[c("forecastCov","forecastCov.true",
@@ -1907,7 +1907,7 @@ forecastCovReductionsWRTtrue <- function(true.model, rng=NULL,
                     pred.replications=pred.replications, zero=TRUE, quiet=quiet,
                     simulation.args=simulation.args, #Spawn=Spawn,
                     horizons=horizons, discard.before=discard.before,
-                    trend=cbind(1,1:periods(data)) %*% models$trend.coef,
+                    trend=cbind(1,1:Tobs(data)) %*% models$trend.coef,
                     compiled=compiled)
          if (i==1)
            r<-rn[c("forecastCov","forecastCov.true","forecastCov.zero","forecastCov.trend")]
@@ -2181,7 +2181,7 @@ stripMine <- function(all.data, essential.data=1,
   else
     {start <- 1
      if (estimation.sample < 1.0 )  estimation.sample <- 
-           as.integer(round(estimation.sample*periods(all.data)))
+           as.integer(round(estimation.sample*Tobs(all.data)))
      discard.before <- discard.before+estimation.sample
 
     #first  gen. combinations of non-essential data
