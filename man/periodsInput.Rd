@@ -1,11 +1,11 @@
-\name{periodsInput}
-\alias{periodsInput}
-\alias{periodsInput.TSdata}
-\alias{periodsInput.TSestModel}
+\name{TobsInput}
+\alias{TobsInput}
+\alias{TobsInput.TSdata}
+\alias{TobsInput.TSestModel}
 
-\alias{periodsOutput}
-\alias{periodsOutput.TSdata}
-\alias{periodsOutput.TSestModel}
+\alias{TobsOutput}
+\alias{TobsOutput.TSdata}
+\alias{TobsOutput.TSestModel}
 
 \alias{startInput}
 \alias{startInput.TSdata}
@@ -34,13 +34,13 @@
 \title{TSdata Periods}
 \description{Apply a method to the input or output data.}
 \usage{
-    periodsInput(x)
-    \method{periodsInput}{TSdata}(x)
-    \method{periodsInput}{TSestModel}(x)
+    TobsInput(x)
+    \method{TobsInput}{TSdata}(x)
+    \method{TobsInput}{TSestModel}(x)
 
-    periodsOutput(x)
-    \method{periodsOutput}{TSdata}(x)
-    \method{periodsOutput}{TSestModel}(x)
+    TobsOutput(x)
+    \method{TobsOutput}{TSdata}(x)
+    \method{TobsOutput}{TSestModel}(x)
 
     startInput(x)
     \method{startInput}{TSdata}(x)
@@ -73,16 +73,16 @@
 \value{Depends.}
 \details{
     Apply a method to the input or output data so, for example,
-    periodsInput(x) in theory does periods(inputData(x)), which 
-    returns the number of periods in input data. The actual implementation
-    may not do periods(inputData(x)). For example, with TSPADIdata 
+    TobsInput(x) in theory does Tobs(inputData(x)), which 
+    returns the number of observation periods in input data. The actual implementation
+    may not do Tobs(inputData(x)). For example, with TSPADIdata 
     inputData(x) requires a database retrieval which may be fairly slow,
     while the number of periods may be available much more quickly.
 }
 
 \examples{
     data("eg1.DSE.data.diff", package="dse")
-    periodsOutput(eg1.DSE.data.diff)
+    TobsOutput(eg1.DSE.data.diff)
 }
 \concept{DSE}
 \keyword{ts}

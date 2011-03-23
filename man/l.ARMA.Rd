@@ -39,7 +39,7 @@ faster.
 sampleT is the length of data which should be used to 
 calculate the one-step ahead predictions, and likelihood value for the model:
 Output data must be at least as long as sampleT. If sampleT is not supplied it
-is taken to be periods(data).
+is taken to be Tobs(data).
 
 Input data must be at least as long as predictT. predictT must be at least as
 large as sampleT. If predictT is not supplied it

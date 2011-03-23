@@ -1,6 +1,6 @@
-\name{periods.TSdata}
-\alias{periods.TSdata}
-\alias{periods.TSestModel}
+\name{Tobs.TSdata}
+\alias{Tobs.TSdata}
+\alias{Tobs.TSestModel}
 \alias{start.TSdata}
 \alias{start.TSestModel}
 \alias{end.TSdata}
@@ -11,8 +11,8 @@
 \title{Specific Methods for tframed Data}
 \description{See the generic function description.}
 \usage{
-    \method{periods}{TSdata}(x, ...)
-    \method{periods}{TSestModel}(x)
+    \method{Tobs}{TSdata}(x, ...)
+    \method{Tobs}{TSestModel}(x)
     \method{start}{TSdata}(x, ...)
     \method{start}{TSestModel}(x, ...)
     \method{end}{TSdata}(x, ...)
@@ -26,7 +26,7 @@
 }
 
 \seealso{
-    \code{\link[tframe]{periods}}, 
+    \code{\link[tframe]{Tobs}}, 
     \code{\link[tframe]{tfstart}},
     \code{\link[tframe]{tfend}},
     \code{\link[tframe]{tffrequency}}

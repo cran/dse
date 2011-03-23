@@ -388,7 +388,7 @@ tfplot.TSestModel <- function(x, ...,
     } }
   for (i in select.outputs ) 
     {#z <-c(outputData(model, series=i),
-     #      rep(NA,periods(model$estimates$pred) - periodsOutput(model)))
+     #      rep(NA,Tobs(model$estimates$pred) - TobsOutput(model)))
      z <- outputData(model, series=i)
      for (model in append(list(x),list(...))){
          if (! is.TSestModel(model)) 
@@ -2022,7 +2022,7 @@ if (!checkConsistentDimensions(model)) stop("The SS model is not correct.")
  p <- dim(H)[1]
  if (m!=0)
    {if( is.null(input)) stop("input series must be supplied for this model.")
-    if (sampleT != periods(input) ) input <- tfTruncate(input, end=sampleT)
+    if (sampleT != Tobs(input) ) input <- tfTruncate(input, end=sampleT)
    }
  if (is.innov.SS(model))
    {K <-    model$K}
@@ -2093,7 +2093,7 @@ else set.ts <-  FALSE
     if (is.matrix(w0)) w0 <- rep(0,p) # see note in man re VAR compatiblity
     w <- noise$w
     e <- noise$e
-    sampleT <- periods(w)
+    sampleT <- Tobs(w)
    }
 
  y <- matrix(0,sampleT,p)
@@ -2204,7 +2204,7 @@ if (p == length(TREND)) TREND <- t(matrix(TREND, p, sampleT))
 
 if (m!=0)
    {if( is.null(input)) stop("input series must be supplied for this model.")
-    if (sampleT != periods(input) ) input <- tfTruncate(input, end=sampleT)
+    if (sampleT != Tobs(input) ) input <- tfTruncate(input, end=sampleT)
    }
  
 if (p==1) invA0 <- matrix(1/A[1,,],1,1)
@@ -2392,13 +2392,13 @@ dat <- obj2
 tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
 
 if(!checkConsistentDimensions(model,dat)) stop("dimension error")
-if (is.null(sampleT))  sampleT  <- periodsOutput(dat)
+if (is.null(sampleT))  sampleT  <- TobsOutput(dat)
 if (is.null(predictT)) predictT <- sampleT
 if (sampleT > predictT) stop("sampleT cannot exceed predictT.")
-if (sampleT > periodsOutput(dat)) stop("sampleT cannot exceed length of data.")
+if (sampleT > TobsOutput(dat)) stop("sampleT cannot exceed length of data.")
 
 if (0 != nseriesInput(dat))
-  {if (periodsInput(dat) < predictT)
+  {if (TobsInput(dat) < predictT)
       stop("input data must be at least as long as requested prediction.")
    if (any(is.na(inputData(dat)))) stop("input data cannot contain NAs.")
    if(!all(startInput(dat) == startOutput(dat)))
@@ -2431,8 +2431,8 @@ if (compiled)
       u <- matrix(0,predictT,1)
      }
    else # since input and output are declared same dim in fortran
-      if (periods(y) < periods(u)) y <- 
-	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
+      if (Tobs(y) < Tobs(u)) y <- 
+	   rbind(y, matrix(0, Tobs(u) - Tobs(y), nseries(y)))
    if (is.null(TREND)) TREND <- matrix(0,predictT, p)
    is  <- max(m,p)
 
@@ -2457,7 +2457,7 @@ if (compiled)
                          as.integer( dim(C)[1]),  # 1+order of C  
                          sampleT=as.integer(sampleT),
                          predictT=as.integer(predictT),
-                         as.integer(periods(y)), 
+                         as.integer(Tobs(y)), 
                          if(is.double(u)) u else as.double(u), # as.double() works ok with compiled but
                           #messes up the dim(u) returned in the list
                          if(is.double(y)) y else as.double(y),	     
@@ -2590,13 +2590,13 @@ if (!is.SS(model)) stop("l.SS expecting an SS TSmodel.")
 #data <- freeze(obj2)
 data <- obj2
 if(!checkConsistentDimensions(model, data)) stop("dimension error.\n")
-if (is.null(sampleT))  sampleT  <- periodsOutput(data)
+if (is.null(sampleT))  sampleT  <- TobsOutput(data)
 if (is.null(predictT)) predictT <- sampleT
 if (sampleT > predictT) stop("sampleT cannot exceed predictT.\n")
-if (sampleT > periodsOutput(data))
+if (sampleT > TobsOutput(data))
     stop("sampleT cannot exceed length of data.\n")
 if (0 != nseriesInput(data))
-  {if (periodsInput(data) < predictT)
+  {if (TobsInput(data) < predictT)
       stop("input data must be at least as long as requested prediction.\n")
    if (any(is.na(inputData(data)))) stop("input data cannot contain NAs.\n")
   }
@@ -2647,8 +2647,8 @@ if (compiled)
       u <- matrix(0,predictT,1)
       } 
    else {# since input and output are declared same dim in fortran
-      if (periods(y) < periods(u)) y <- 
-	   rbind(y, matrix(0, periods(u) - periods(y), nseries(y)))
+      if (Tobs(y) < Tobs(u)) y <- 
+	   rbind(y, matrix(0, Tobs(u) - Tobs(y), nseries(y)))
       }
 #   storage.mode(error.weights)     <- "double"
 #   storage.mode(state) <- "double"
@@ -2679,7 +2679,7 @@ IS <- max(n,p)
                   as.integer(p), 
                   sampleT=as.integer(sampleT), 
                   predictT=as.integer(predictT), 
-                  as.integer(periods(y)),  
+                  as.integer(Tobs(y)),  
                   if(is.double(u)) u else as.double(u), 
                   if(is.double(y)) y else as.double(y),  
                   if(is.double(FF)) FF else as.double(FF),   
@@ -2969,7 +2969,7 @@ estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
               start=startInput(data), end=endInput(data), warn=FALSE)
 	missing.data <- any(missing.data, is.na(inputData(data)))
    }
-   N <- periodsOutput(data)
+   N <- TobsOutput(data)
    if (standardize)
      {svd.cov <- La.svd(var(outputData(data)))
       scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
@@ -3093,7 +3093,7 @@ estVARXar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
    if (0 == p) stop("estVARXar requires output data to estimate a model.")
-   N <- periodsOutput(data)
+   N <- TobsOutput(data)
    if (standardize)
      {svd.cov <- La.svd(var(outputData(data)))
       scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
@@ -4138,10 +4138,10 @@ scale.ARMA <- function(x, center=FALSE, scale=NULL)
 #                   see also tframe.s                          <<<<<<<<<<
 
 ############################################################################
-# periods and periods.default are defined in tfame.s
+# Tobs and Tobs.default are defined in tfame.s
 
-periodsInput <- function(x)UseMethod( "periodsInput")
-periodsOutput <- function(x)UseMethod("periodsOutput")
+TobsInput <- function(x)UseMethod( "TobsInput")
+TobsOutput <- function(x)UseMethod("TobsOutput")
 
 startInput <- function(x)UseMethod("startInput")
 startOutput <- function(x)UseMethod("startOutput")
@@ -4250,9 +4250,9 @@ frequency.TSestModel <- function(x, ...)tffrequency(x$data)
 frequencyInput.TSestModel <- function(x)frequencyInput(x$data)
 frequencyOutput.TSestModel <- function(x)frequencyOutput(x$data)
 
-periods.TSestModel <- function(x)periods(x$data)
-periodsInput.TSestModel <- function(x)periodsInput(x$data)
-periodsOutput.TSestModel <- function(x)periodsOutput(x$data)
+Tobs.TSestModel <- function(x)Tobs(x$data)
+TobsInput.TSestModel <- function(x)TobsInput(x$data)
+TobsOutput.TSestModel <- function(x)TobsOutput(x$data)
 
 inputData.TSestModel <- function(x, series=seqN(nseriesInput(x)))
     inputData(x$data, series=series)
@@ -4423,7 +4423,7 @@ tfplot.TSdata <- function(x, ...,
 #  if (0 != length(select.inputs)) 
     {for (i in select.inputs) 
       {j <- 0
-       z <- matrix(NA, periodsInput(x), length(append(list(x),list(...))))
+       z <- matrix(NA, TobsInput(x), length(append(list(x),list(...))))
        if(mode(i)=="character") i <- match(i, seriesNamesInput(x))
        for (d in append(list(x),list(...)) ) 
          {if (!is.TSdata(d))
@@ -4440,7 +4440,7 @@ tfplot.TSdata <- function(x, ...,
   for (i in select.outputs) 
     {j <-0
      if(mode(i)=="character") i <- match(i, seriesNamesOutput(x))
-     z <- matrix(NA,periodsOutput(x),length(append(list(x),list(...))))
+     z <- matrix(NA,TobsOutput(x),length(append(list(x),list(...))))
      #z <-NULL 
      for (d in append(list(x),list(...)) ) 
        {if (!is.TSdata(d))
@@ -4564,10 +4564,10 @@ frequencyOutput.TSdata <- function(x)
  }
 
 
-periods.TSdata <- function(x, ...) periods(outputData(x))
+Tobs.TSdata <- function(x, ...) Tobs(outputData(x))
 #  (... further arguments, currently disregarded)
-periodsOutput.TSdata <- function(x)  periods(outputData(x))[1]
-periodsInput.TSdata  <- function(x)  periods( inputData(x))[1]
+TobsOutput.TSdata <- function(x)  Tobs(outputData(x))[1]
+TobsInput.TSdata  <- function(x)  Tobs( inputData(x))[1]
 
 tbind.TSdata <- function(x, d2, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
  {if( ! (is.TSdata(x) & is.TSdata(d2)))
@@ -4683,7 +4683,7 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
   # noise.baseline is added to noise. It should be either a scalar, a matrix of
   #   the same dimension as noise (or noise generated by noise.model), or a
   #   vector of length equal to the dimension of the noise process (which will
-  #   be replicated for all periods.)
+  #   be replicated for all Tobs.)
  if(!require("setRNG")) stop("This function requires the setRNG package.")
  if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
  else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }

@@ -46,7 +46,7 @@ l.SS calls a compiled program unless compiled=FALSE. The compiled version is muc
 than the S version.
 
 Output data must be at least as long as sampleT. If sampleT is not supplied it
-is taken to be periods(data).
+is taken to be Tobs(data).
 
 Input data must be at least as long as predictT. predictT must be at least as
 large as sampleT. If predictT is not supplied it

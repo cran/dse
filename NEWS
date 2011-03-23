@@ -4,6 +4,11 @@ Known Bugs
    o	Handling of initial conditions for the state space filter and smoother 
 	still needs work.
 
+Changes in dse version 2011.3-1
+
+   o	Changed periods() and tfperiods() to Tobs() to be consistent with
+   	changes in tframe.
+
 Changes in dse version 2009.12-1
 
    o	fixed reference to ts in error messages (now stats).

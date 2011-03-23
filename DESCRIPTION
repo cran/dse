@@ -13,13 +13,15 @@ Description: Package dse provides tools for multivariate, linear,
         are implemented. An introduction and User's Guide is available
         in a vignette.
 Depends: R (>= 2.5.0), tframe (>= 2007.5-3), setRNG (>= 2004.4-1)
-Version: 2009.12-1
-Date: 2009-12-1
+Version: 2011.3-1
+Date: 2011-03-14
 LazyLoad: yes
 License: GPL-2 | file LICENSE
 Author: Paul Gilbert <pgilbert@bank-banque-canada.ca>
 Maintainer: Paul Gilbert <pgilbert@bank-banque-canada.ca>
 URL: http://www.bank-banque-canada.ca/pgilbert
-Packaged: 2010-12-19 03:02:12 UTC; paul
 Repository: CRAN
-Date/Publication: 2011-01-20 13:07:46
+Repository/R-Forge/Project: tsanalysis
+Repository/R-Forge/Revision: 40
+Date/Publication: 2011-03-23 09:30:21
+Packaged: 2011-03-22 21:50:33 UTC; rforge

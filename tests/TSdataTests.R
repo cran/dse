@@ -20,7 +20,7 @@
    z <- TSdata(output=matrix(rnorm(300), 100,3))
    nseriesOutput(z);	   ok <- nseriesOutput(z) == 3
    nseriesInput(z);	   ok <- ok & nseriesInput(z) == 0
-   periods(outputData(z)); ok <- ok & periods(outputData(z)) == 100
+   Tobs(outputData(z)); ok <- ok & Tobs(outputData(z)) == 100
    start(outputData(z));   ok <- ok & all(start(outputData(z)) == c(1,1))
    end(outputData(z));     ok <- ok & all(end(outputData(z)) == c(100,1))
  if (!ok) {cat("ERROR in this test.") ; all.ok <- FALSE  }
@@ -29,8 +29,8 @@
    z <- TSdata(output=matrix(rnorm(300), 100,3), input=matrix(rnorm(200), 100,2))
    nseriesInput(z);	   ok <- ok & nseriesInput(z) == 2
    nseriesOutput(z);	   ok <- nseriesOutput(z) == 3
-   periods(inputData(z));  ok <- ok & periods(inputData(z)) == 100
-   periods(outputData(z)); ok <- ok & periods(outputData(z)) == 100
+   Tobs(inputData(z));  ok <- ok & Tobs(inputData(z)) == 100
+   Tobs(outputData(z)); ok <- ok & Tobs(outputData(z)) == 100
    start(inputData(z));    ok <- ok & all(start(inputData(z)) == c(1,1))
    start(outputData(z));   ok <- ok & all(start(outputData(z)) == c(1,1))
    end(inputData(z));      ok <- ok & all(end(inputData(z)) == c(100,1))
@@ -41,8 +41,8 @@
    z <- TSdata(output=matrix(rnorm(300), 100,3), input=rnorm(200))
    nseriesInput(z);	   ok <- ok & nseriesInput(z) == 1
    nseriesOutput(z);	   ok <- nseriesOutput(z) == 3
-   periods(inputData(z));  ok <- ok & periods(inputData(z)) == 200
-   periods(outputData(z)); ok <- ok & periods(outputData(z)) == 100
+   Tobs(inputData(z));  ok <- ok & Tobs(inputData(z)) == 200
+   Tobs(outputData(z)); ok <- ok & Tobs(outputData(z)) == 100
    start(inputData(z));    ok <- ok & all(start(inputData(z)) == c(1,1))
    start(outputData(z));   ok <- ok & all(start(outputData(z)) == c(1,1))
    end(inputData(z));      ok <- ok & all(end(inputData(z)) == c(200,1))
@@ -56,10 +56,10 @@
    nseries(outputData(z));   ok <- ok & nseries(outputData(z)) == 3
    nseriesInput(z);	     ok <- ok & nseriesInput(z) == nseries(inputData(z))
    nseriesOutput(z);	     ok <- ok & nseriesOutput(z) == nseries(outputData(z))
-   periods(inputData(z));    ok <- ok & periods(inputData(z)) == 200
-   periods(outputData(z));   ok <- ok & periods(outputData(z)) == 100
-   periodsInput(z);          ok <- ok & periods(inputData(z)) == periodsInput(z)
-   periodsOutput(z);         ok <- ok & periods(outputData(z)) == periodsOutput(z)
+   Tobs(inputData(z));    ok <- ok & Tobs(inputData(z)) == 200
+   Tobs(outputData(z));   ok <- ok & Tobs(outputData(z)) == 100
+   TobsInput(z);          ok <- ok & Tobs(inputData(z)) == TobsInput(z)
+   TobsOutput(z);         ok <- ok & Tobs(outputData(z)) == TobsOutput(z)
    frequency(inputData(z));  ok <- ok & frequency(inputData(z)) == 12
    frequency(outputData(z)); ok <- ok & frequency(outputData(z)) == 12
    frequencyInput(z);        ok <- ok & frequency(inputData(z)) == frequencyInput(z)
@@ -81,10 +81,10 @@
    nseries(outputData(z));   ok <- ok & nseries(outputData(z)) == 3
    nseriesInput(z);	     ok <- ok & nseriesInput(z) == nseries(inputData(z))
    nseriesOutput(z);	     ok <- ok & nseriesOutput(z) == nseries(outputData(z))
-   periods(inputData(z));    ok <- ok & periods(inputData(z)) == 200
-   periods(outputData(z));   ok <- ok & periods(outputData(z)) == 100
-   periodsInput(z);          ok <- ok & periods(inputData(z)) == periodsInput(z)
-   periodsOutput(z);         ok <- ok & periods(outputData(z)) == periodsOutput(z)
+   Tobs(inputData(z));    ok <- ok & Tobs(inputData(z)) == 200
+   Tobs(outputData(z));   ok <- ok & Tobs(outputData(z)) == 100
+   TobsInput(z);          ok <- ok & Tobs(inputData(z)) == TobsInput(z)
+   TobsOutput(z);         ok <- ok & Tobs(outputData(z)) == TobsOutput(z)
    frequency(inputData(z));  ok <- ok & frequency(inputData(z)) == 4
    frequency(outputData(z)); ok <- ok & frequency(outputData(z)) == 4
    frequencyInput(z);        ok <- ok & frequency(inputData(z)) == frequencyInput(z)
