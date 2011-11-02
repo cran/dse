@@ -19,13 +19,11 @@ including multi-variate state-space and \acronym{ARMA} (\acronym{VAR},
 }
 
 \details{
-A \emph{Brief User's Guide} is distributed with the \pkg{dse} bundle in the
-directory  \file{dse/dse/inst/doc/dse-guide.pdf}.
-The package implements an R/S style object oriented approach to time series
+A \emph{Brief User's Guide} is distributed with \pkg{dse} as a vignette.
+The package implements an R/S style object approach to time series
 modeling. This means that different
 model and data representations can be implemented with fairly simple 
 extensions to the package. 
-
 
 The package includes methods for simulating, estimating, and converting 
 among different model representations. These are mainly in \pkg{dse}. 
@@ -36,11 +34,10 @@ evaluating the performance of forecasting models, as well as
 functions for evaluating model estimation techniques.
 
 \tabular{ll}{
-Bundle: \tab dse\cr
-Contains: \tab tframe dse EvalEst\cr
+Package: \tab dse\cr
 Depends: \tab R, setRNG, tframe\cr
 License: \tab free, see LICENSE file for details.\cr
-URL: \tab http://www.bank-banque-canada.ca/pgilbert\cr
+URL: \tab http://tsanalysis.r-forge.r-project.org/\cr
 }
 
 The main objects are:
@@ -106,19 +103,12 @@ available with minimum effort. This software is not a commercial
 product. It is the by-product of ongoing research.
 Error reports, constructive suggestions, and comments are welcomed. 
 }
-
-\author{
-Paul Gilbert <pgilbert@bank-banque-canada.ca>
-
-Maintainer: Paul Gilbert <pgilbert@bank-banque-canada.ca>  
-}
 \references{
     Anderson, B. D. O. and Moore, J. B. (1979) \emph{Optimal Filtering}. 
     Prentice-Hall.   
    
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
-    the equivalence. Working paper 93-4, Bank of Canada. Available at
-    \url{www.bank-banque-canada.ca/pgilbert}
+    the equivalence. Working paper 93-4, Bank of Canada. Available at   \url{http://www.bankofcanada.ca/1993/03/publications/research/working-paper-199/}
 
     Gilbert, P. D. (1995) Combining VAR Estimation and State Space 
     Model Reduction for Simple Good Predictions. \emph{J. of Forecasting: 
