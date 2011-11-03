@@ -34,12 +34,11 @@ citEntry(entry="techreport",
   address =     "Ottawa, Canada",
   type =        "Working Paper",
   number =      "93-4",
-  url =    "http:www.bank-banque-canada.ca/pgilbert/",
+  url =    "http://www.bankofcanada.ca/1993/03/publications/research/working-paper-199/",
   year =         1993,
   textVersion =   paste("Gilbert, P. D. (1993) ", 
        "State Space and ARMA Models: An Overview of the Equivalence ",
-          "Bank of Canada Working Paper 93-4. Ottawa, Canada",
-               "<http://www.bank-banque-canada.ca/pgilbert/>", sep="")
+          "Bank of Canada Working Paper 93-4. Ottawa, Canada", "<http://www.bankofcanada.ca/1993/03/publications/research/working-paper-199/>", sep="")
   )
 
 citEntry(entry="manual",

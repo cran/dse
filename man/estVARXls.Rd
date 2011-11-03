@@ -50,8 +50,7 @@ respect to initial conditions.
 }
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
-    the equivalence. Working paper 93-4, Bank of Canada. Available at
-    \url{www.bank-banque-canada.ca/pgilbert}
+    the equivalence. Working paper 93-4, Bank of Canada. Available at \url{http://www.bankofcanada.ca/1993/03/publications/research/working-paper-199/}
 
     Gilbert, P. D. (1995) Combining VAR Estimation and State Space 
     Model Reduction for Simple Good Predictions. \emph{J. of Forecasting: 
