@@ -1,13 +1,13 @@
-0b3a0d63adcf05923cbcf978fa68e0fa *DESCRIPTION
-ed81859b5443525f22adeca42630cf70 *LICENSE
+3f33404339833ed9ae01d6fbca12bdf7 *DESCRIPTION
+8c2ef3f2ed55a520caa10c020749612d *LICENSE
 35f14465603dcd0bdbbd3402cf9e2700 *NAMESPACE
 5a34483fda5b43b4cd0bbd7062ede0d3 *NEWS
 4df287a614bf8ed9917db39cf74ad3f4 *R/Rfixes.R
 5f245b258353e52e9ea68b9282e5391e *R/dse1.R
 fecbf5224ec280283c18955c13e363c2 *R/dse2.R
-6a700a38d9426b024cf30c35115911f1 *data/eg1.DSE.data.diff.rda
-fca23ca9f18fe46312bfa56f15b3e85c *data/eg1.DSE.data.rda
-5e4a702f1f881971c7329946da16c8a2 *data/egJofF.1dec93.data.rda
+5c4d4ce77f91c63f8630d5a877b1662f *data/eg1.DSE.data.diff.rda
+e8ae9dd5d95b0c18733465a7dfb415fb *data/eg1.DSE.data.rda
+04f85e24efd9c006dd85ba5822e91af9 *data/egJofF.1dec93.data.rda
 c48255fb836214d68bef24c2073ad3b0 *demo/00Index
 f93ef5ce0bcfe6301fff083da8f3824d *demo/BOC.93.4.examples.R
 c8300bb3a260272cabf9446fb22bc201 *demo/JofF95.R
@@ -19,7 +19,7 @@ d07e784fa6347ddffd6fbeadea01c551 *demo/simulate.R
 9eb4b40b7a496722599e67dc5e4bae54 *exec/JofFVAR.s
 555cad4dd804e1b5fab1c96da691bcad *inst/CITATION
 97a064ed923d6a19e73136369106c568 *inst/doc/Guide.Stex
-12a4a95eb0c79667b9c655204317662e *inst/doc/Guide.pdf
+14efbee40f7f6086313aad68d4a46a1c *inst/doc/Guide.pdf
 fb7cbe968c444d99e24186f266cc83e3 *inst/otherdata/1dec93.dat
 1d4fa53c3a826fd96a823f4c4cab01f5 *inst/otherdata/eg1.dat
 329cd6580dad49d9203080476f8ec10f *man/00.dse.Intro.Rd
@@ -156,3 +156,4 @@ b17c4f0b0684794d5a1a50138055482b *tests/estMaxLik.R
 886fb0ab038d1763cf85389bd6bb5849 *tests/estMaxLikwithConstants.R
 11faa976a1d3b6e3314fca03720400a7 *tests/smoother.R
 1d8551397c0f318b58a7729f13bef8ac *tests/trend.R
+97a064ed923d6a19e73136369106c568 *vignettes/Guide.Stex
