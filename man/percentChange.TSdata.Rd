@@ -25,10 +25,10 @@ For an object of class TSestModel the percent change calculation is done
 with \code{estimates$pred} and the result is an object of class TSdata (or a 
 list of objects of class TSdata).
 }
-\details{See \code{\link[tframe]{percentChange}}.}
+\details{See \code{\link[tfplot]{percentChange}}.}
 \seealso{
-\code{\link[tframe]{percentChange}}
-\code{\link[tframe]{ytoypc}}
+\code{\link[tfplot]{percentChange}}
+\code{\link[tfplot]{ytoypc}}
 }
 \examples{
 data("eg1.DSE.data", package="dse")

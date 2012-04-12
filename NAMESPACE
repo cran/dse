@@ -7,6 +7,7 @@ importFrom("stats","frequency")
 importFrom("stats","coef")
 
 import("tframe")
+import("tfplot")
 ##import("setRNG")
 
 export("DSEversion")
