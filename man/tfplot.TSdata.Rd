@@ -35,7 +35,7 @@
        before starting. If this is not TRUE then mar values will have no effect.}
 }
 
-\seealso{ \code{\link[tframe]{tfplot}} }
+\seealso{ \code{\link[tfplot]{tfplot}} }
 
 \concept{DSE}
 \keyword{ts}

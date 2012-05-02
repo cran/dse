@@ -43,7 +43,7 @@
 }
 
 \seealso{
-    \code{\link[tframe]{tfplot}}
+    \code{\link[tfplot]{tfplot}}
     \code{\link[EvalEst]{EstEval}} }
 
 \concept{DSE}

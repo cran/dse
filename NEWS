@@ -4,9 +4,13 @@ Known Bugs
    o	Handling of initial conditions for the state space filter and smoother 
 	still needs work.
 
+Changes in dse version 2012.4-1
+
+   o	Added tfplot to Depends.
+
 Changes in dse version 2011.11-1
 
-   o	updated maintainer email address.
+   o	Updated maintainer email address.
 
    o	Changed package.description() to packageDescription() in DSEversion().
 
