@@ -4,6 +4,11 @@ Known Bugs
    o	Handling of initial conditions for the state space filter and smoother 
 	still needs work.
 
+Changes in dse version 2012.6-1
+
+   o	Function stability modified to return roots and their moduli as an
+   	attribute of the logical result. (Suggestion by Alexander Braumann.)
+
 Changes in dse version 2012.4-1
 
    o	Added tfplot to Depends.

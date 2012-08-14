@@ -21,9 +21,17 @@
     \item{digits}{Printing precision.}
     \item{verbose}{Print roots and there moduli.}
 }
-\value{TRUE or FALSE if the model is stable or not stable.}
-\details{ \code{eps} prevents the indication of a stable model when 
-     the largest root is within rounding error of 1.0.
+\value{\code{TRUE} or \code{FALSE} if the model is stable or not stable.}
+\details{
+The returned value is \code{TRUE} or \code{FALSE}, indicating if the model is
+stable or not. The result also has an attribute \code{roots} which is a matrix
+with the first (complex) column indicating the eigenvalues of the state 
+transition matrix \code{F} for state space models, or the inverse of distinct 
+roots of det(A(L)) for ARMA models, and the second column indicating the moduli
+of the roots.
+
+The argument \code{eps} is used to prevents the indication of a stable model 
+when the largest root is within rounding error of 1.0.
 }
 \section{Side Effects}{
 The eigenvalues of the state transition matrix or the roots of the

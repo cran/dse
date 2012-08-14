@@ -530,29 +530,37 @@ stability.TSmodel <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE)
 
 stability.roots <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE) 
    {#obj <- roots(model, fuzz=fuzz, randomize=FALSE)
-    s <- if (all(Mod(obj) < (1.0 - eps))) TRUE else  FALSE
+    m <- Mod(obj)
+    s <- if (all(m < (1.0 - eps))) TRUE else  FALSE
     if (verbose)
-      {cat("Eigenvalues of F and moduli are:\n")
-       print(cbind(obj,Mod(obj)),digits=digits)
-       if (s) cat("The system is stable.\n")
+      {if (s) cat("The system is stable.\n")
        else   cat("The system is NOT stable.\n")
       }
+    r <- cbind(obj, m)
+    dimnames(r) <- list(NULL, c("Eigenvalues of F","moduli"))
+    attr(s, "roots") <- r
     s
    }
 
 stability.ARMA <- function(obj, fuzz=1e-4, eps=1e-15, digits=8, verbose=TRUE) 
    {z <- roots(obj, fuzz=fuzz, randomize=FALSE)
-    if (is.null(z)) {warning("The model has only a zero root.") ; return(TRUE)}
-    else  s <- if (all(Mod(z) < (1.0 - eps))) TRUE else  FALSE
-    if (verbose)
-      {cat("Distinct roots of det(A(L)) and moduli are:\n")
-       print(cbind(1/z,Mod(1/z)),digits=digits)
-       cat("\nInverse of distinct roots of det(A(L)) and moduli are:\n")
-       print(cbind(z,Mod(z)),digits=digits)
-       if(!is.null(obj$TREND)) cat("Trend not taken into account: ")
-       if (s) cat("The system is stable.\n")
-       else   cat("The system is NOT stable.\n")
+    if (is.null(z))
+      {warning("The model has only a zero root.")
+       return(TRUE)}
+    m <- Mod(z)
+    s <- if (all(m < (1.0 - eps))) TRUE else  FALSE
+    if (verbose) {
+        cat("Distinct roots of det(A(L)) and moduli are:\n")
+        print(cbind(1/z, Mod(1/z)), digits = digits)
+        if (!is.null(obj$TREND)) 
+            cat("Trend not taken into account: ")
+        if (s) 
+            cat("The system is stable.\n")
+        else cat("The system is NOT stable.\n")
       }
+    r <- cbind(z, m)
+    dimnames(r) <- list(NULL, c("Inverse of distinct roots of det(A(L))","moduli"))
+    attr(s, "roots") <- r
     s
    }
 
