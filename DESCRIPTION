@@ -1,5 +1,5 @@
 Package: dse
-Version: 2012.4-1
+Version: 2012.6-1
 Title: Dynamic Systems Estimation (time series package)
 Description: Package dse provides tools for multivariate, linear,
         time-invariant, time series models. It includes ARMA and
@@ -23,6 +23,6 @@ Maintainer: Paul Gilbert <pgilbert.ttv9z@ncf.ca>
 URL: http://tsanalysis.r-forge.r-project.org/
 Repository: CRAN
 Repository/R-Forge/Project: tsanalysis
-Repository/R-Forge/Revision: 106
-Packaged: 2012-04-12 16:25:33 UTC; rforge
-Date/Publication: 2012-05-02 06:27:58
+Repository/R-Forge/Revision: 117
+Packaged: 2012-08-14 18:20:05 UTC; rforge
+Date/Publication: 2012-09-20 06:42:31

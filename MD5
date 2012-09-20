@@ -1,12 +1,12 @@
-029b3e8db5caa0119f7d4eaf82cec615 *DESCRIPTION
+baed598d684ccdf58d8dc3ecd3228cbd *DESCRIPTION
 402d1c20d69f89a76d15ba4a40923479 *NAMESPACE
-5dbf079d7165b6b061fc76907c4cc916 *NEWS
+632f8d1fed97cd9000ff205fded46d7f *NEWS
 4df287a614bf8ed9917db39cf74ad3f4 *R/Rfixes.R
-5f245b258353e52e9ea68b9282e5391e *R/dse1.R
+22d19c0a0c948965862b2d1e82248c48 *R/dse1.R
 fecbf5224ec280283c18955c13e363c2 *R/dse2.R
-dbe3545682fda73f458ab130c6056f29 *data/eg1.DSE.data.diff.rda
-b1867a79626f0212989a8cd55da6c786 *data/eg1.DSE.data.rda
-ee313fea6d210c8d302a9f9f590d4511 *data/egJofF.1dec93.data.rda
+bfe21c520b49bd07ee15518e79aaef2e *data/eg1.DSE.data.diff.rda
+87111e9cc69ce40db11a3c6d58496b98 *data/eg1.DSE.data.rda
+3beb0fb7ad6a6a3e7fa8d50f30a9c7fd *data/egJofF.1dec93.data.rda
 c48255fb836214d68bef24c2073ad3b0 *demo/00Index
 f93ef5ce0bcfe6301fff083da8f3824d *demo/BOC.93.4.examples.R
 c8300bb3a260272cabf9446fb22bc201 *demo/JofF95.R
@@ -17,8 +17,8 @@ f8f6bbb6ea9f5d925ee4ff14d0f8e931 *demo/estimate.R
 d07e784fa6347ddffd6fbeadea01c551 *demo/simulate.R
 9eb4b40b7a496722599e67dc5e4bae54 *exec/JofFVAR.s
 555cad4dd804e1b5fab1c96da691bcad *inst/CITATION
-97a064ed923d6a19e73136369106c568 *inst/doc/Guide.Stex
-4a7b898d6d508ede7a1cbe7ae19c4177 *inst/doc/Guide.pdf
+ce3b15cf159792159cdb7fad914e6a5e *inst/doc/Guide.Stex
+5d50c98d945d4c47c1f6cfe4f8c7d707 *inst/doc/Guide.pdf
 fb7cbe968c444d99e24186f266cc83e3 *inst/otherdata/1dec93.dat
 1d4fa53c3a826fd96a823f4c4cab01f5 *inst/otherdata/eg1.dat
 329cd6580dad49d9203080476f8ec10f *man/00.dse.Intro.Rd
@@ -122,7 +122,7 @@ db95205dbd543baced2b9536a6a4d128 *man/setArrays.Rd
 df645afd0db65cf65afbf0be7944a1df *man/shockDecomposition.Rd
 88bd467bc4e64967d046ef9579b1ccf8 *man/simulate.Rd
 b2220817f149eb7243859c29a4a33ab9 *man/smoother.Rd
-59ad722bbaa7f910b79839abd82f36c0 *man/stability.Rd
+3c7bc2e172dfc32a351cb6dbfac50e20 *man/stability.Rd
 4bd0fff1d776627d0d3e6eb8987a8dd5 *man/state.Rd
 f4deb9010f11e763e59fb8ba4c303591 *man/stripMine.Rd
 d0a9e19436069a992e0f50b5db2d514e *man/sumSqerror.Rd
@@ -155,4 +155,4 @@ b17c4f0b0684794d5a1a50138055482b *tests/estMaxLik.R
 886fb0ab038d1763cf85389bd6bb5849 *tests/estMaxLikwithConstants.R
 11faa976a1d3b6e3314fca03720400a7 *tests/smoother.R
 1d8551397c0f318b58a7729f13bef8ac *tests/trend.R
-97a064ed923d6a19e73136369106c568 *vignettes/Guide.Stex
+ce3b15cf159792159cdb7fad914e6a5e *vignettes/Guide.Stex

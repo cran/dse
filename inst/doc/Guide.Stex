@@ -146,10 +146,8 @@ library("dse")
 \end{Scode}
 
 The code from the vignette that generates this guide can 
-be loaded into an editor with \code{edit(vignette("dse-guide"))}.
+be loaded into an editor with \code{edit(vignette("Guide", package="dse"))}.
 This uses the default editor, which can be changed using \code{options()}.
-Also, it should be possible to view the pdf version of this guide for this 
-package with \code{print(vignette("dse-guide"))}.
 
 Several data sets are included with \pkg{dse} and will be used
 in examples in this guide. The names of the data sets 
