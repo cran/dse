@@ -47,10 +47,16 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
   data("egJofF.1dec93.data", package="dse")   
   if (verbose) { cat("ok\n") }
      
-  if (verbose) cat("Guide part 1 test 1 ... ")
+  if (verbose) cat("Guide part 1 test 1a ... ")
 
   seriesNamesInput(eg1.DSE.data)   <-  "u1"
   seriesNamesOutput(eg1.DSE.data) <-  c("y1","y2","y3")
+  if (! all(c(seriesNamesInput(eg1.DSE.data) == "u1" ,
+              seriesNamesOutput(eg1.DSE.data) == c("y1","y2","y3") )))
+     stop("seriesNamesInput, seriesNamesOutput specification failed.")
+
+  if (verbose) cat("Guide part 1 test 1b ... ")
+
   error <- abs(126943980.50000011921 - sum(outputData(eg1.DSE.data)))
   ok <- 100*fuzz.large > error
   if (!ok) {if (is.na(max.error)) max.error <- error
