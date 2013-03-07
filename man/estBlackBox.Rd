@@ -12,14 +12,23 @@
 }
 \value{A state space model in an object of class TSestModel.}
 \details{
-The function makes a call the most promising procedure currently available.
-These tend to have names like estBlackBox1, estBlackBox2, estBlackBox4.
-This is an active area of ongoing research and so the actual routine called
-will probably change with new versions.
+The function makes a call to \code{estBlackBox4}, also called \code{bft}, 
+which seems the most reliable of functions
+\code{estBlackBox1}, \code{estBlackBox2}, \code{estBlackBox4}.
+My research in this area is no longer active, but the actual routine called
+could change if better methods appear.
+
+To reduce load on the CRAN check servers, the example below uses 
+\code{max.lag=3} rather than the default \code{12} used in Gilbert (1995). 
 }
 \examples{
 data("egJofF.1dec93.data", package="dse")
-goodmodel <- estBlackBox(egJofF.1dec93.data)
+goodmodel <- estBlackBox(egJofF.1dec93.data, max.lag=3)
+}
+\references{
+    Gilbert, P. D. (1995) Combining VAR Estimation and State Space 
+    Model Reduction for Simple Good Predictions. \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling}, \bold{14}, 229-250.
 }
 \concept{DSE}
 \keyword{ts}

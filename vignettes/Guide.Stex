@@ -414,7 +414,7 @@ rm(AR, MA) # these can be removed from the environment as
            #they are no longer needed 
 arma 
 stability(arma) 
-data.arma.sim <- simulate(arma) 
+data.arma.sim <- simulate(arma, start=c(1920,1), freq=1) 
 arma <- l(arma, data.arma.sim) 
 summary(arma) 
 tfplot(data.arma.sim) 
@@ -426,7 +426,11 @@ may not be what you expect. The function \code{l()} evaluates the
 model with the simulated data. Functions generally use default values
 for some arguments. For example, the length of the simulation and
 the covariance of the noise can be specified. The above example uses
-the default values. See the help on \code{simulate} for more details. In
+the default values. If \code{start} and \code{freq}, of some other way to
+determine the time frame is not provided, then it is not set, with the result
+that plots may be for a matrix rather than a time series, that is, points
+instead of line graphs.
+See the help on \code{simulate} for more details. In
 the example above, \code{arma} is initially assigned an object of class \code{TSmodel},
 but it is then re-assigned the value returned by \code{l()}, which
 is an object of class \code{TSestModel}. Also, many functions work with different
@@ -444,7 +448,7 @@ k <- array(c(.5, .3, .2, .4), c(2,2))
 ss <- SS(F=f, H=h, K=k) #F is argument name not variable name
 print(ss)
 stability(ss)
-data.ss.sim <- simulate(ss)
+data.ss.sim <- simulate(ss, start=c(1920,1), freq=1)
 ss <- l(ss, data.ss.sim)
 summary(ss)
 tfplot(ss) 
