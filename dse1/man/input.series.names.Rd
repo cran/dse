@@ -21,26 +21,34 @@
 \title{TSdata Series Names}
 \description{Extract or set names of input or output series in a TSdata object.}
 \usage{
-	input.series.names(data)
-	output.series.names(data)
-	input.series.names(data)  <- names
-	output.series.names(data) <- names
+    input.series.names(x)
+    \method{input.series.names}{TSdata}(x)
+    \method{input.series.names}{TSmodel}(x)
+    \method{input.series.names}{TSestModel}(x)
+
+    output.series.names(x)
+    \method{output.series.names}{TSdata}(x)
+    \method{output.series.names}{TSmodel}(x)
+    \method{output.series.names}{TSestModel}(x)
+
+    input.series.names(x)  <- value
+    output.series.names(x) <- value
 }
 \arguments{
-	\item{data}{Object of class TSdata.}
+    \item{data}{Object of class TSdata.}
 }
 \value{
 The first usages gives a vector of strings with the series names.
 The second usages assigns a vector of strings to be the series names of data.
 }
 \seealso{
-	\code{\link{series.names}}
+    \code{\link{series.names}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data", package="dse1")
 output.series.names(eg1.DSE.data) 
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
 

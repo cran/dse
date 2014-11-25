@@ -5,16 +5,19 @@
 \alias{est.max.like.TSestModel}
 \title{Maximum Likelihood Estimation}
 \description{Maximum likelihood estimation.}
-\usage{est.max.like(Shape, data, 
-	algorithm="optim",
-	algorithm.args=list(method="BFGS", hessian=TRUE)
-	) 
+\usage{
+    est.max.like(obj, ...) 
+    \method{est.max.like}{TSmodel}(obj, data, algorithm="optim",
+	algorithm.args=list(method="BFGS", upper=Inf, lower=-Inf, hessian=TRUE))
+    \method{est.max.like}{TSestModel}(obj, data=TSdata(obj), ...)
+    \method{est.max.like}{TSdata}(obj, model, ...) 
 }
 \arguments{
-	\item{Shape}{An object of class TSestModel, or TSestModel}
-	\item{data}{A TSdata object.}
-	\item{algorithm}{The algorithm ('optim', 'nlm' or 'nlmin') to use for maximization.}
-	\item{algorithm.args}{Arguments for the optimization algorithm.}
+    \item{obj}{An object of class TSmodel, TSdata or TSestModel}
+    \item{data}{A TSdata object.}
+    \item{model}{A TSmodel object.}
+    \item{algorithm}{The algorithm ('optim', 'nlm' or 'nlmin') to use for maximization.}
+    \item{algorithm.args}{Arguments for the optimization algorithm.}
 }
 \value{
 The value returned is an object of class TSestModel with  additional
@@ -54,6 +57,6 @@ yet been implemented.
   est.model
   tfplot(est.model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

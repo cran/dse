@@ -3,11 +3,11 @@
 \title{Shock Decomposition}
 \description{Graphs of the effect of shocks are plotted.}
 \usage{
-	shock.decomposition(model, horizon=30)
+    shock.decomposition(model, horizon=30, shock=rep(1,horizon))
 }
 \arguments{
-	\item{model}{An object of class TSmodel or TSestModel.}
-	\item{horizon}{The number of periods for which to calculate the effect of shocks.}
+    \item{model}{An object of class TSmodel or TSestModel.}
+    \item{horizon}{The number of periods for which to calculate the effect of shocks.}
 }
 \value{None}
 \sideffects{
@@ -21,6 +21,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(eg1.DSE.data.diff)
 shock.decomposition(model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

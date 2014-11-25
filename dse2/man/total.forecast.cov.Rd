@@ -3,12 +3,12 @@
 \title{Sum covariance of forecasts across all series}
 \description{Sum covariance of forecasts across all series.}
 \usage{
-	total.forecast.cov(obj, select=NULL)
+    total.forecast.cov(obj, select=NULL)
 }
 \arguments{
-	\item{obj}{An object  as returned by forecast.cov.}
-	\item{select}{
-	Series to be select for summation. With the default all series are selected.}
+    \item{obj}{An object  as returned by forecast.cov.}
+    \item{select}{
+    Series to be select for summation. With the default all series are selected.}
 }
 \value{
 An object similar to that returned by forecast.cov, with the covariance
@@ -21,6 +21,6 @@ model2 <- est.VARX.ls(eg1.DSE.data.diff)
 z <-  total.forecast.cov(forecast.cov(model1, model2,
                          data=trim.na(eg1.DSE.data.diff)))
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -247,8 +247,8 @@ example.BOC.93.4.paper.tests <- function(example.data, example.raw.data, verbose
    ARMA.model<- l(to.ARMA(SS1.model),sub.sample)
 
 # the model parameters could be displayed at this point by:
-#         display(VAR.model)   
-#         display(SS1.model)   etc.
+#         print(VAR.model)   
+#         print(SS1.model)   etc.
 
    cat("Likelihood of VAR model:                          ")
    print(VAR.model$estimates$like[1], digits=16)

@@ -6,21 +6,21 @@
 \title{Extract Forecast Covariance}
 \description{extract.forecast.cov}
 \usage{
-	extract.forecast.cov(e, n)
+    extract.forecast.cov(e, n)
 }
 \arguments {
-	\item{e}{A forecast.cov object.}
-	\item{n}{A vector on integers.}
+    \item{e}{A forecast.cov object.}
+    \item{n}{A vector on integers.}
 }
 \value{A forecast.cov object.}
 \details{
-	Select a subset of models and their forecast covariances from a
-	larger object.
+    Select a subset of models and their forecast covariances from a
+    larger object.
 }
 \seealso{
-	\code{\link{forecast.cov}}
+    \code{\link{forecast.cov}}
 }
 
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

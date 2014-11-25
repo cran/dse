@@ -8,30 +8,30 @@
 (optionally) a trend.
 }
 \usage{
-	est.VARX.ls(data, subtract.means=F, re.add.means=T, standardize=F, 
-	   unstandardize=T, trend=F, max.lag=NULL,  lag.weight=1.0, warn=T) 
+    est.VARX.ls(data, subtract.means=F, re.add.means=T, standardize=F, 
+     unstandardize=T, max.lag=NULL, trend=F, lag.weight=1.0, warn=T) 
 }
 \arguments{
-	\item{data}{A TSdata object.}
-	\item{subtract.means}{If T subtract the means from the data before estimation.}
-	\item{re.add.means}{
-	If T and subtract.means is T then the mean is added back to the data and 
-	the model is adjusted for the non-zero mean data when returned.}
-	\item{standardize}{
-	If T divide each series by its sample standard 
-	deviation before estimation.
-	Note that the mean is not subtracted unless subtract.means is T.}
-	\item{unstandardize}{
-	If T and standardize is T then the returned 
-	model is adjusted to correspond to the original data.}
-	\item{trend}{If T a trend is estimated.}
-	\item{max.lag}{Number of lags to be used.}
-	\item{lag.weight}{
-	Weight between 0 and 1 to be applied to lagged data. 
-	Lower weights mean lagged data is less important (more noisy).}
-	\item{warn}{
-	If TRUE a warning message is issued when missing data (NA) is
-	detected and the model predictions are reconstructed from the lsfit residuals.}
+    \item{data}{A TSdata object.}
+    \item{subtract.means}{If T subtract the means from the data before estimation.}
+    \item{re.add.means}{
+    If T and subtract.means is T then the mean is added back to the data and 
+    the model is adjusted for the non-zero mean data when returned.}
+    \item{standardize}{
+    If T divide each series by its sample standard 
+    deviation before estimation.
+    Note that the mean is not subtracted unless subtract.means is T.}
+    \item{unstandardize}{
+    If T and standardize is T then the returned 
+    model is adjusted to correspond to the original data.}
+    \item{trend}{If T a trend is estimated.}
+    \item{max.lag}{Number of lags to be used.}
+    \item{lag.weight}{
+    Weight between 0 and 1 to be applied to lagged data. 
+    Lower weights mean lagged data is less important (more noisy).}
+    \item{warn}{
+    If TRUE a warning message is issued when missing data (NA) is
+    detected and the model predictions are reconstructed from the lsfit residuals.}
 }
 \value{A TSestModel object containing a TSmodel object which is a VAR model.}
 \details{
@@ -51,15 +51,15 @@ P.D.Gilbert (1993) State Space and ARMA models: An overview of
 estimation and reduction.
 }
 \seealso{
-	\code{\link{est.SS.from.VARX}}
-	\code{\link[dse2]{est.SS.Mittnik}}
-	\code{\link[dse2]{bft}}
-	\code{\link{est.VARX.ar}}
+    \code{\link{est.SS.from.VARX}}
+    \code{\link[dse2]{est.SS.Mittnik}}
+    \code{\link[dse2]{bft}}
+    \code{\link{est.VARX.ar}}
 }
 \examples{
-	if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-	model <- est.VARX.ls(eg1.DSE.data.diff)
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    model <- est.VARX.ls(eg1.DSE.data.diff)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

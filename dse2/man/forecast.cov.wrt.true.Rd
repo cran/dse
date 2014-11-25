@@ -4,29 +4,29 @@
 
 \title{Compare Forecasts to True Model Output}
 \description{
-	Generate forecasts and compare them against the output of a true model.}
+    Generate forecasts and compare them against the output of a true model.}
 \usage{
-	forecast.cov.wrt.true( models, true.model, 
-           pred.replications=1, simulation.args=NULL, quiet=F, 
-           rng=NULL, Spawn=.SPAWN, 
-           horizons=1:12, discard.before=10, trend=NULL, zero=NULL)
-	is.forecast.cov.wrt.data(obj)
+    forecast.cov.wrt.true( models, true.model, 
+        pred.replications=1, simulation.args=NULL, quiet=F, 
+        rng=NULL, Spawn=.SPAWN, compiled=.DSECOMPILED,
+        horizons=1:12, discard.before=10, trend=NULL, zero=NULL)
+    is.forecast.cov.wrt.data(obj)
 }
 \arguments{
-	\item{models}{A list of objects of class TSmodel.}
-	\item{true.model}{An object of class TSmodel or TSestModel.}
-	\item{discard.before}{
-	An integer indicating the number of points in the
-	beginning of forecasts to discard for calculating covariances.}
-	\item{zero}{If T then forecast.cov is also calculated for a forecast of zero.}
-	\item{trend}{If T then forecast.cov is also calculated for a forecast of a linear trend.}
-	\item{simulation.args}{
-	A list of any arguments which should be passed to simulate
-	in order to simulate the true model.}
-	\item{horizons}{Horizons for which forecast covariance should be calculated.}
-	\item{rng}{If specified then it is used to set RNG.}
-	\item{Spawn}{If T then Splus For loops are used.}
-	\item{quiet}{If T then some messages are not printed.}
+    \item{models}{A list of objects of class TSmodel.}
+    \item{true.model}{An object of class TSmodel or TSestModel.}
+    \item{discard.before}{
+    An integer indicating the number of points in the
+    beginning of forecasts to discard for calculating covariances.}
+    \item{zero}{If T then forecast.cov is also calculated for a forecast of zero.}
+    \item{trend}{If T then forecast.cov is also calculated for a forecast of a linear trend.}
+    \item{simulation.args}{
+    A list of any arguments which should be passed to simulate
+    in order to simulate the true model.}
+    \item{horizons}{Horizons for which forecast covariance should be calculated.}
+    \item{rng}{If specified then it is used to set RNG.}
+    \item{Spawn}{If T then Splus For loops are used.}
+    \item{quiet}{If T then some messages are not printed.}
 }
 \value{
 A list with the forecast covariance for supplied models on samples
@@ -58,6 +58,6 @@ data <- simulate(true.model)
 models <- list(TSmodel(est.VARX.ar(data)),TSmodel(est.VARX.ls(data)))
 z <-  forecast.cov.wrt.true( models, true.model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

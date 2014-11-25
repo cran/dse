@@ -6,11 +6,11 @@
 \title{Combine 2 Forecast Cov Objects}
 \description{Combine 2 forecast.cov type objects.}
 \usage{
-	combine(obj1, obj2)
+    combine(obj1, obj2)
 }
 \arguments{
-	\item{obj1, obj2}{
-	Objects as returned by functions which calculate forecast covariances.}
+    \item{obj1, obj2}{
+    Objects as returned by functions which calculate forecast covariances.}
 }
 \value{
 An object as returned by functions which calculate forecast covariances.
@@ -27,6 +27,6 @@ without re-doing the initial object.
 \code{\link{forecast.cov}}
 }
 \examples{#z <-  combine(obj1, obj2)}
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

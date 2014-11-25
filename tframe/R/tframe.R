@@ -97,14 +97,14 @@ tfplot <- function(obj, ...)  UseMethod("tfplot")
 
 tfplot.default <- function(..., xlab=NULL, ylab=NULL,graphs.per.page=5,
                          start.=NULL, end.=NULL,
-			 series=seq(nseries(list(...)[[1]])) )
+			 series=seq(nseries(list(...)[[1]])), mar=par()$mar )
  {obj <- list(...)
   d <- obj[[1]]
   if (!is.tframed(d)) UseMethod("plot")
   else
     {names <- series.names(d)
      Ngraphs <- min(length(series), graphs.per.page)
-     old.par <- par(mfcol = c(Ngraphs, 1))  # tfplot.TSdata also sets mar
+     old.par <- par(mfcol = c(Ngraphs, 1), mar=mar)  
      on.exit(par(old.par))
      for (i in series)
        {z <- matrix(NA, periods(d), length(obj))
@@ -140,10 +140,12 @@ tfOnePlot <- function(obj, xlab=NULL, ylab=NULL, start.=NULL, end.=NULL, ...)
 tfprint <- function(x, ...)  UseMethod("tfprint")
 
 tfprint.default <- function(x,...)
- {dimnames(x) <- list(format(time(tframe(x))), series.names(x))
-  tframe(x) <- NULL
-  series.names(x) <- NULL
-  print(x, ...)
+ {xx <- x
+  if(1 == nseries(xx)) xx <- matrix(xx, length(xx), 1)
+  dimnames(xx) <- list(format(time(tframe(x))), series.names(x))
+  tframe(xx) <- NULL
+  series.names(xx) <- NULL
+  print(xx, ...)
   invisible(x)
  }
 
@@ -244,7 +246,7 @@ tframed.default <- function(x, tf=NULL, names = NULL)
 ###############################################
 
 
-tfprint.tframe <- function(x, digits=NULL, quote=T, prefix="", ...) 
+tfprint.tframe <- function(x, ...) 
    UseMethod("tfprint.tframe")
 
 tfprint.tframe.default <- function(x, digits=NULL, quote=T, prefix="", ...) 
@@ -253,24 +255,24 @@ tfprint.tframe.default <- function(x, digits=NULL, quote=T, prefix="", ...)
 
 
 
-start.tframe <- function(tf)UseMethod("start.tframe")
-end.tframe <- function(tf)UseMethod("end.tframe")
+start.tframe <- function(x)UseMethod("start.tframe")
+end.tframe <- function(x)UseMethod("end.tframe")
 
 # periods should give the number of data points in the time direction.
-periods.tframe <- function(tf)UseMethod("periods.tframe")
+periods.tframe <- function(x)UseMethod("periods.tframe")
 
 # frequency is less essential and may not always make sense.
-frequency.tframe <- function(tf)UseMethod("frequency.tframe")
+frequency.tframe <- function(x)UseMethod("frequency.tframe")
 
-time.tframe <- function(tf)UseMethod("time.tframe")
+time.tframe <- function(x)UseMethod("time.tframe")
 
-truncate.tframe <- function(tf, start=NULL, end=NULL)
+tftruncate.tframe <- function(x, start=NULL, end=NULL)
     {#NULL means no truncation.
-     UseMethod("truncate.tframe")
+     UseMethod("tftruncate.tframe")
     }
 
-expand.tframe <- function(tf, add.start=0, add.end=0)
-     UseMethod("expand.tframe")
+tfexpand.tframe <- function(x, add.start=0, add.end=0)
+     UseMethod("tfexpand.tframe")
 
 
 
@@ -316,27 +318,27 @@ latest.end.tframe <- function(x, ...)
 
 ################################################
 
-start.tframe.default <- function(tf) {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+start.tframe.default <- function(x) {c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))}
 
-end.tframe.default <- function(tf) {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+end.tframe.default <- function(x) {c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))}
 
-periods.tframe.default <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+periods.tframe.default <- function(x)  {1+round((x[2]-x[1])*x[3])}
 
-frequency.tframe.default <- function(tf) {tf[3]}
+frequency.tframe.default <- function(x) {x[3]}
 
-time.tframe.default <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+time.tframe.default <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
 
-truncate.tframe.default <- function(tf, start=NULL, end=NULL) 
+tftruncate.tframe.default <- function(x, start=NULL, end=NULL) 
     {# like window but uses indexes rather than dates
-     if (!is.null(end))   tf[2] <- tf[1] + (end-1)/tf[3]
-     if (!is.null(start)) tf[1] <- tf[1] + (start-1)/tf[3]
-     tf
+     if (!is.null(end))   x[2] <- x[1] + (end-1)/x[3]
+     if (!is.null(start)) x[1] <- x[1] + (start-1)/x[3]
+     x
     }
 
-expand.tframe.default <- function(tf, add.start=0, add.end=0) 
-    {tf[2] <- tf[2] + add.end/tf[3]
-     tf[1] <- tf[1] - add.start/tf[3]
-     tf
+tfexpand.tframe.default <- function(x, add.start=0, add.end=0) 
+    {x[2] <- x[2] + add.end/x[3]
+     x[1] <- x[1] - add.start/x[3]
+     x
     }
 
 
@@ -403,17 +405,17 @@ tframe.ts <- function(x){classed(tsp(x), c("tstframe", "tframe"))} # constructor
 
 #settf.default works for .ts
 
-start.tframe.tstframe <- function(tf)
-   {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+start.tframe.tstframe <- function(x)
+   {c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))}
 
-end.tframe.tstframe <- function(tf)
-   {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+end.tframe.tstframe <- function(x)
+   {c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))}
 
-periods.tframe.tstframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+periods.tframe.tstframe <- function(x)  {1+round((x[2]-x[1])*x[3])}
 
-frequency.tframe.tstframe <- function(tf) {tf[3]}
+frequency.tframe.tstframe <- function(x) {x[3]}
 
-time.tframe.tstframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+time.tframe.tstframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
 
 
 
@@ -467,22 +469,22 @@ periods.tf <- function(x) {periods(tframe(x))}
 frequency.tf <- function(x) {frequency(tframe(x))}
 time.tf <- function(x) {time(tframe(x))}
 
-start.tframe.tftframe <- function(tf)
-   {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+start.tframe.tftframe <- function(x)
+   {c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))}
 
-end.tframe.tftframe <- function(tf)
-   {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+end.tframe.tftframe <- function(x)
+   {c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))}
 
-periods.tframe.tftframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+periods.tframe.tftframe <- function(x)  {1+round((x[2]-x[1])*x[3])}
 
-frequency.tframe.tftframe <- function(tf) {tf[3]}
+frequency.tframe.tftframe <- function(x) {x[3]}
 
-time.tframe.tftframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+time.tframe.tftframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
 
-tfwindow.tf <- function  (x, start=NULL, end=NULL, warn=T, eps=.Options$ts.eps) 
+tfwindow.tf <- function(x, start.=NULL, end.=NULL, warn=T, eps=.Options$ts.eps) 
   {# this needs work
    tfwindow(ts(x, start=start(x), frequency=frequency(x)),
-             start=start, end=end, warn=warn)
+             start.=start., end.=end., warn=warn)
   }
 
 ###############################################
@@ -592,7 +594,7 @@ if (!exists("lag"))  lag.default <- function(x, ...) {stop("no lag function") }
 
 
 
-splice <- function(obj1, obj2, ...) UseMethod("splice")
+splice <- function(mat1, mat2, ...) UseMethod("splice")
 
 splice.default <- function(mat1, mat2)
 {# splice together 2 time series matrices. If data  is provided in both for
@@ -639,15 +641,16 @@ tsmatrix <- function(x, ...)
  }
 
 
-truncate <- function(x, start=NULL, end=NULL)
+tftruncate <- function(x, start=NULL, end=NULL)
  {# similar to window but start and end specify periods relative to the 
   #   beginning (eg x[start:end] for a vector).
   #   NULL means no truncation.
-  UseMethod("truncate")
+  UseMethod("tftruncate")
  }
 
-truncate.default <- function(x, start=NULL, end=NULL)
-    {tf <- truncate.tframe(tframe(x), start, end)
+
+tftruncate.default <- function(x, start=NULL, end=NULL)
+    {tf <- tftruncate.tframe(tframe(x), start, end)
      if (is.null(start)) start <- 1
      if (is.matrix(x)) 
         {if (is.null(end)) end <- dim(x)[1]
@@ -661,14 +664,14 @@ truncate.default <- function(x, start=NULL, end=NULL)
      z
     }
 
-expand <- function(x, add.start=0, add.end=0)
+tfexpand <- function(x, add.start=0, add.end=0)
  {# expand (a tframe) by add.start periods on the beginning
   # and add.end periods on the end
-  UseMethod("expand")
+  UseMethod("tfexpand")
  }
 
-expand.default <- function(x, start=NULL, end=NULL)
-    {tf <- expand.tframe(tframe(x), start, end)
+tfexpand.default <- function(x, start=NULL, end=NULL)
+    {tf <- tfexpand.tframe(tframe(x), start, end)
      select.series(tbind(x,time(tf)), series=1)
     }
 
@@ -727,15 +730,15 @@ latest.end.index <- function(x, ...)
 
 
 
-trim.na <- function(obj, ...) UseMethod("trim.na") 
+trim.na <- function(x, ...) UseMethod("trim.na") 
 
 trim.na.default <- function(x, start.=T, end.=T)
-{# trim NAs from the ends of a ts matrix.
+{# trim NAs from the ends of a ts matrix or vector.
  # (Observations for all series are dropped in a given period if any 
  #  one contains an NA in that period.)
  # if start.=F then beginning NAs are not trimmed.
  # If end.=F   then ending NAs are not trimmed.
- sample <- ! apply(is.na(x),1, any)
+ sample <- ! if (is.matrix(x)) apply(is.na(x),1, any) else is.na(x)
  if (!any(sample)) warning("data is empty after triming NAs.")
  if (start.) s <-min(time(x)[sample])
  else       s <-start(x)

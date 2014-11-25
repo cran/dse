@@ -18,8 +18,8 @@
 
 \title{DSE Utilities}
 \description{
-	These functions are used by other functions in DSE and are not
-	typically called directly by the user.}
-\keyword{DSE}
+    These functions are used by other functions in DSE and are not
+    typically called directly by the user.}
+%\keyword{DSE}
 \keyword{ts}
 

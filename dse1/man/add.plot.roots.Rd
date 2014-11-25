@@ -6,12 +6,12 @@
 Calculate and plot roots of a model.
 }
 \usage{
-	add.plot.roots(model, fuzz=0)
+    add.plot.roots(v, pch='*', fuzz=0)
 }
 \arguments{
 
-	\item{model}{An object of class TSmodel.}
-	\item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
+    \item{model}{An object of class TSmodel.}
+    \item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
 }
 \sideffects{
 
@@ -24,7 +24,7 @@ The eigenvalues of the state transition matrix or the inverse of the roots of th
 determinant of the AR polynomial are returned invisibly.
 }
 \seealso{
-	\code{\link{plot.roots}}
+    \code{\link{plot.roots}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
@@ -32,6 +32,6 @@ model <- est.VARX.ls(eg1.DSE.data.diff)
 plot.roots(model)
 add.plot.roots(to.SS(model))
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -6,13 +6,16 @@
 
 \title{Calculate Model Reachability Matrix}
 \description{
-	Calculate the singular values of the reachability matrix of a model.
+    Calculate the singular values of the reachability matrix of a model.
 }
 \usage{
-	reachability(model)
+    reachability(model)
+    \method{reachability}{ARMA}(model)
+    \method{reachability}{SS}(model)
+    \method{reachability}{TSestModel}(model)
 }
 \arguments{
-	\item{model}{An object containing TSmodel.}}
+    \item{model}{An object containing TSmodel.}}
 \value{The singular values of the reachability matrix.}
 \details{
 
@@ -30,6 +33,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- to.SS(est.VARX.ls(eg1.DSE.data.diff))
 reachability(model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

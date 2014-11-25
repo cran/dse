@@ -1,3 +1,7 @@
+See 00Intro or 00Intro.dse1 for a general description of this package,
+A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
+See also the related packages syskern tframe dse1 dse2 in the dse bundle
+   and packages curve juice  dsepadi monitor   in the dseplus bundle.
 TSdata.forecast.cov      TS Extractor Specific Methods
 best.TSestModel          Select Best Model
 combine.forecast.cov     Combine 2 Forecast Cov Objects

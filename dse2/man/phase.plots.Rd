@@ -3,12 +3,12 @@
 \title{Calculate Phase Plots}
 \description{Calculate phase plots}
 \usage{
-	phase.plots(data, max.lag=5,diff=F)
+    phase.plots(data, max.lag=5,diff=F)
 }
 \arguments{
-	\item{data}{A matrix, time series matrix, or an object of class TSdata.}
-	\item{max.lag}{The maximum number of shifts to plot}
-	\item{diff}{If T the data is plotted against the difference with lagged values.}
+    \item{data}{A matrix, time series matrix, or an object of class TSdata.}
+    \item{max.lag}{The maximum number of shifts to plot}
+    \item{diff}{If T the data is plotted against the difference with lagged values.}
 }
 \value{None}
 \sideffects{
@@ -24,6 +24,6 @@ A good statistical test would be better!
 if(is.R()) data("egJofF.1dec93.data", package="dse1")
 phase.plots(egJofF.1dec93.data)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

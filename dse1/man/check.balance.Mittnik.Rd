@@ -5,9 +5,9 @@
 Calculate the difference between observability and reachability gramians of the model transformed to Mittnik's form.
 }
 \usage{
-	check.balance.Mittnik(model)}
+    check.balance.Mittnik(model)}
 \arguments{
-	\item{model}{An object of class TSmodel.}
+    \item{model}{An object of class TSmodel.}
 }
 \value{No value is returned.}
 \sideffects{
@@ -20,10 +20,10 @@ Balanced models should have equal observability and reachability gramians.
 \code{\link[dse2]{reduction.Mittnik}}
 }
 \examples{
-	if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-	model <- to.SS(est.VARX.ls(eg1.DSE.data.diff))
-	check.balance.Mittnik(model)
+    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+    model <- to.SS(est.VARX.ls(eg1.DSE.data.diff))
+    check.balance.Mittnik(model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

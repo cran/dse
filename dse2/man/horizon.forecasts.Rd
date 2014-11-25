@@ -12,18 +12,22 @@
 \title{Calculate forecasts at specified horizons}
 \description{Calculate forecasts at specified horizons.}
 \usage{
-	horizon.forecasts(model, data, horizons=1:4, 
-	    discard.before=minimum.startup.lag(model), compiled=.DSECOMPILED)
-	is.horizon.forecasts(obj)
+    is.horizon.forecasts(obj)
+    horizon.forecasts(obj, ...)
+    \method{horizon.forecasts}{TSmodel}(obj, data, horizons=1:4,
+	 discard.before=minimum.startup.lag(obj), compiled=.DSECOMPILED)
+    \method{horizon.forecasts}{TSestModel}(obj, data=NULL, ...)
+    \method{horizon.forecasts}{TSdata}(obj, model, ...)
 }
 \arguments{
-	\item{model}{An object of class TSmodel.}
-	\item{data}{An object of class TSdata} 
-	\item{horizons}{
-	A vector of integers indicating the horizon at which forecasts should be 
-	produced.}
-	\item{discard.before}{Period before which forecasts are not calculated.}
-	\item{compiled}{If T compiled code is called.}
+    \item{obj}{An object of class TSmodel, TSdata, or TSestModel.}
+    \item{model}{An object of class TSmodel.}
+    \item{data}{An object of class TSdata} 
+    \item{horizons}{
+    A vector of integers indicating the horizon at which forecasts should be 
+    produced.}
+    \item{discard.before}{Period before which forecasts are not calculated.}
+    \item{compiled}{If T compiled code is called.}
 }
 \value{
 The result is a list of class horizon.forecasts with elements model (a 
@@ -50,6 +54,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(eg1.DSE.data.diff)
 z <-  horizon.forecasts(model, eg1.DSE.data.diff)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -8,16 +8,16 @@
 \description{Some utilities used by other functions in the tframe library.}
 
 \usage{
-	classed(x, str)
-	tfclass(x)
-	tfclass(x) <- str
-	seqN(N)
+    classed(x, cls)
+    tfclass(x)
+    tfclass(x) <- str
+    seqN(N)
 }
 
 \arguments{
-	\item{x}{An object.}
-	\item{str}{A vector of strings.}
+    \item{x}{An object.}
+    \item{str}{A vector of strings.}
 }
-\keyword{tframe}
-\keyword{ts}
+\keyword{programming}
+\keyword{utilities}
 

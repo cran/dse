@@ -4,14 +4,14 @@
 \description{Convert data to mean zero, standard deviation one. This does not
 remove cross correlations between series.}
 \usage{
-	standardize(ser)}
+    standardize(ser)}
 \arguments{
-	\item{ser}{A vector time matrix.}
+    \item{ser}{A vector time matrix.}
 \value{A time series matrix.}
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- standardize(output.data(eg1.DSE.data.diff))
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

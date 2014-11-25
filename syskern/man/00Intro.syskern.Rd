@@ -1,6 +1,7 @@
-\name{00General.Description}
-\alias{00General.Description}
+\name{00Intro.syskern}
+\alias{00Intro.syskern}
 \title{Syskern}
+\synopsis{}
 \usage{library("syskern")}
 \description{
   A small set of programs to facilitate programming around S/R differences}

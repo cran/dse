@@ -4,9 +4,9 @@
 \title{Specific Methods for parms}
 \description{See the generic function description.}
 \usage{
-	parms(obj)
+    parms(obj)
 }
 \seealso{ \code{\link{parms}} }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -7,13 +7,15 @@
 \title{Time Series Models}
 \description{Construct or extract a "TSmodel" from objects.}
 \usage{
-	TSmodel(obj)
-	is.TSmodel(obj)
+    TSmodel(model, ...)
+    \method{TSmodel}{TSmodel}(model)
+    \method{TSmodel}{TSestModel}(model)
+    is.TSmodel(obj)
 }
 \arguments{
-	\item{obj}{
-	An object containing an object of class TSmodel or a list containing the 
-	information necessary to build an object of class "TSmodel".}
+    \item{obj}{
+    An object containing an object of class TSmodel or a list containing the 
+    information necessary to build an object of class "TSmodel".}
 }
 \details{
 This is a generic method which will extract a "TSmodel" from an object (e.g. a
@@ -43,11 +45,11 @@ these types of models.
 }
 
 \seealso{
-	\code{\link{ARMA}},
-	\code{\link{SS}},
-	\code{\link{TSestModel}},
-	\code{\link{TSdata}}
+    \code{\link{ARMA}},
+    \code{\link{SS}},
+    \code{\link{TSestModel}},
+    \code{\link{TSdata}}
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

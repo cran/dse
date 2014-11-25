@@ -14,23 +14,32 @@
 \title{Number of Series in in Input or Output}
 \description{Number of input or output series in a TSdata object.}
 \usage{
-	input.dimension(x)
-	output.dimension(x)
+    input.dimension(x, ...)
+    \method{input.dimension}{TSdata}(x)
+    \method{input.dimension}{SS}(x)
+    \method{input.dimension}{ARMA}(x)
+    \method{input.dimension}{TSestModel}(x)
+    
+    output.dimension(x, ...)
+    \method{output.dimension}{TSdata}(x)
+    \method{output.dimension}{SS}(x)
+    \method{output.dimension}{ARMA}(x)
+    \method{output.dimension}{TSestModel}(x)
 }
 \arguments{
-	\item{data}{Object of class TSdata, TSmodel or TSestModel.}
+    \item{data}{Object of class TSdata, TSmodel or TSestModel.}
 }
 \value{
-	An integer indicating the number of series.
+    An integer indicating the number of series.
 }
 \seealso{
-	\code{\link{input.series.names}}
-	\code{\link{output.series.names}}
+    \code{\link{input.series.names}}
+    \code{\link{output.series.names}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data", package="dse1")
 output.dimension(eg1.DSE.data) 
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

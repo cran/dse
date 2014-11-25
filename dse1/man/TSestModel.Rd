@@ -7,8 +7,8 @@
 \description{Object containing a time series model, data, and
 estimation information.}
 \usage{
-	TSestModel(...)
-	is.TSestModel(x)
+    TSestModel(model)
+    is.TSestModel(obj)
 }
 
 \details{
@@ -16,19 +16,19 @@ This class of objects contains a time series model (TSmodel),
 data (TSdata), and information obtained by evaluating the model 
 with the data in an element called \code{estimates} containing:
  
-	\item{like}{
-	The negative log likelihood function value (a vector of the total, 
-	constant, the det part, and the cov part)}
-	\item{cov}{The estimated residual covariance.}
-	\item{pred}{
-	The one step ahead predictions (see predictT below). These are 
+    \item{like}{
+    The negative log likelihood function value (a vector of the total, 
+    constant, the det part, and the cov part)}
+    \item{cov}{The estimated residual covariance.}
+    \item{pred}{
+    The one step ahead predictions (see predictT below). These are 
 aligned with output data so that 
 residuals are pred[1:sampleT,] - output[1:sampleT,]}
-	\item{sampleT }{
-	The end of the period (starting from 1) for which output
+    \item{sampleT }{
+    The end of the period (starting from 1) for which output
 is used for calculating one step ahead predictions.}
-	\item{predictT }{
-	The end of the period for which the model is simulated.
+    \item{predictT }{
+    The end of the period for which the model is simulated.
 sampleT must be less than or equal predictT. If predictT is
 greater than sampleT then each step ahead beyond sampleT is
 based on the prediction of the previous step and not 
@@ -36,26 +36,26 @@ corrected by the prediction error.}
 
 The element \code{estimates} may optionally also contain and 
 element \code{filter} which may have
-	\item{state}{
-	The one step ahead (filter) estimate of the state E[z(t)|y(t-1), u(t)].
+    \item{state}{
+    The one step ahead (filter) estimate of the state E[z(t)|y(t-1), u(t)].
    Note: In the case where there is no input u this corresponds to what
    would usually be called the predicted state - not the filtered state.}
-	\item{track}{
-	The estimated state tracking error P(t|t-1). Again note, this corresponds
+    \item{track}{
+    The estimated state tracking error P(t|t-1). Again note, this corresponds
 to the predicted tracking eror not the filtered tracking error.
 This is NULL for innovations models.}
-	\item{smooth}{a list of:}
-	\item{state}{
-	The smoother (two sided filter) estimate of the state E[z(t)| sampleT].}
-	\item{track}{
-	The smoothed estimate of the state tracking error P(t|sampleT). 
-	This is NULL for innovations models.}
+    \item{smooth}{a list of:}
+    \item{state}{
+    The smoother (two sided filter) estimate of the state E[z(t)| sampleT].}
+    \item{track}{
+    The smoothed estimate of the state tracking error P(t|sampleT). 
+    This is NULL for innovations models.}
 }
 
 \seealso{
-	\code{\link{TSmodel}},
-	\code{\link{TSdata}}
+    \code{\link{TSmodel}},
+    \code{\link{TSdata}}
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

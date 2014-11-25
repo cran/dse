@@ -8,16 +8,19 @@
 \title{Multiple Horizon-Step Ahead Forecasts}
 \description{Calculate multiple horizon-step ahead forecasts.}
 \usage{
-	feather.forecasts(model, data, 
-	   from.periods = 10*seq(periods(data)/10), horizon=36, ...)
-	is.feather.forecasts(obj)
+    feather.forecasts(obj, ...)
+    \method{feather.forecasts}{TSestModel}(obj, data=NULL, ...)
+    \method{feather.forecasts}{TSdata}(obj, model, ...)
+    \method{feather.forecasts}{TSmodel}(obj, data, horizon=36,
+             from.periods =NULL, ...)
+    is.feather.forecasts(obj)
 }
 \arguments{
-	\item{model}{An object of class TSmodel.}
-	\item{data}{An object of class TSdata.}
-	\item{from.periods.}{The starting points to use for forecasts}
-	\item{horizon}{The number of periods to forecast.}
-	\item{...}{For a TSmodel additional arguments are passed to l()}
+    \item{model}{An object of class TSmodel.}
+    \item{data}{An object of class TSdata.}
+    \item{from.periods.}{The starting points to use for forecasts}
+    \item{horizon}{The number of periods to forecast.}
+    \item{...}{For a TSmodel additional arguments are passed to l()}
 }
 \value{
 The result is a list of class feather.forecasts with elements \code{model} (a 
@@ -47,6 +50,6 @@ model <- est.VARX.ls(egJofF.1dec93.data)
 pr <- feather.forecasts(model, egJofF.1dec93.data)
 tfplot(pr)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

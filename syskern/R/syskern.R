@@ -40,7 +40,7 @@ if(is.R())
         #    and from S and causes problems the way it is used in DSE.
     syskern.rm <- function(file) unlink(file, recursive = TRUE)
 	
-    synchronize <- function(x){NULL} # perhaps this should do something?
+    synchronize <- function(){NULL} # perhaps this should do something?
     .SPAWN <- FALSE
 
  }

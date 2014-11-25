@@ -57,7 +57,7 @@
 }
 
 \source{
-	\emph{Statistics Canada.}
+	\emph{Statistics Canada,} 
 	\emph{Bank of Canada.}
 }
 
@@ -71,6 +71,4 @@
 \seealso{
 	\code{\link{TSdata}}
 }
-\keyword{DSE}
-\keyword{ts}
 \keyword{datasets}
