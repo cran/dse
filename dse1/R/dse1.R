@@ -3907,10 +3907,10 @@ check.residuals.default <- function(obj, ac=TRUE, pac=TRUE,
            tfOnePlot(cusum[,i], xlab=names[i])
            if (i %% graphs.per.page == ceiling(graphs.per.page/2)) 
                  title(main = "Cusum")
-           if (exists("ksmooth")) 
-                       rd<-ksmooth(resid[,i],bandwidth=var(resid[,i])^0.5)
-           else  if (exists("density"))
+           if (exists("density"))
                        rd <- density(resid[,i],       bw=var(resid[,i])^0.5)
+           else if (exists("ksmooth") & ! is.R()) 
+                       rd<-ksmooth(resid[,i],bandwidth=var(resid[,i])^0.5)
            else
         stop("Neither ksmooth nor density are available to calculate the plot.")
            plot(rd,type="l",xlab=names[i],ylab="")

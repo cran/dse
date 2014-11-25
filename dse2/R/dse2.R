@@ -736,11 +736,11 @@ distribution.MonteCarloSimulations <- function(obj,
    for (i in 1:length(series)) 
     {if (x.sections)
         {for (j in 1:length(periods)) 
-          {if (exists("ksmooth")) plot(ksmooth(data[j,i,], # -mean[j,i],
+          {if (exists("density")) plot(density(data[j,i,]), # -mean[j,i]
+                 type="l",xlab=paste("Period",periods[j]),ylab=names[i])
+           else if (exists("ksmooth") & !is.R()) plot(ksmooth(data[j,i,], # -mean[j,i],
                               bandwidth=var(data[j,i,])^0.5, kernel="parzen"),
                         type="l",xlab=paste("Period",periods[j]),ylab=names[i])
-           else if (exists("density")) plot(density(data[j,i,]), # -mean[j,i]
-                 type="l",xlab=paste("Period",periods[j]),ylab=names[i])
            else
         stop("Neither ksmooth nor density are available to calculate the plot.")
            if ((i == 1) & (j ==length(periods)%/%2))
@@ -913,8 +913,8 @@ distribution.default <- function(obj, bandwidth=0.2, series=NULL, ...)
      }
    par(mfcol=c(ncol(obj),1))
    for ( i in 1:ncol(obj))
-      {if      (exists("ksmooth")) rd <- ksmooth(obj[,i], bandwidth=bandwidth) 
-       else if (exists("density")) rd <- density(obj[,i], bw= bandwidth)
+      {if      (exists("density")) rd <- density(obj[,i], bw= bandwidth)
+       else if (exists("ksmooth") & !is.R()) rd <- ksmooth(obj[,i], bandwidth=bandwidth) 
        else     stop("Neither ksmooth nor density are available.")
        plot(rd, type="l", ylab="density", ylim=c(0, max(rd$y)), xlab=names[i] )
       }
@@ -1062,7 +1062,7 @@ distribution.roots.ee <- function(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
       if(!is.null(select)) r <- r[,select, drop=FALSE]
       par(mfcol=c(dim(r)[2],1))
       for ( i in 1:dim(r)[2])
-         {if      (exists("ksmooth")) rd <- ksmooth(r[,i], bandwidth=bandwidth) 
+         {if      (exists("ksmooth") & !is.R()) rd <- ksmooth(r[,i], bandwidth=bandwidth) 
           else if (exists("density")) rd <- density(r[,i], bw= bandwidth)
           else
         stop("Neither ksmooth nor density are available to calculate the plot.")

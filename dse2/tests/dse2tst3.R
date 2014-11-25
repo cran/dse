@@ -151,9 +151,6 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 16... ")
-# Next seems to cause a problem in Splus when .SPAWN is TRUE although it may
-#  work with default rng (at least it used to) but test.rng is now set
-#  to give same results as in R.
   zz <- forecastCovEstimatorsWRTtrue(mod1, 
          Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, quiet=TRUE, 
          estimation.methods=list(est.VARX.ls=NULL, est.VARX.ar=list(warn=FALSE)), 
@@ -163,11 +160,15 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 17... ")
+# Next seems to cause a problem in Splus when .SPAWN is TRUE above although it may
+#  work with default rng (at least it used to) but test.rng is now set
+#  to give same results as in R.
   ok <- test.equal(zz, forecastCovEstimatorsWRTtrue(mod1, Spawn=FALSE, 
            estimation.methods=list(est.VARX.ls=NULL,est.VARX.ar=list(warn=FALSE)), 
            est.replications=2, pred.replications=2, rng=get.RNG(zz)))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
+  if (is.R()) all.ok <- all.ok & ok 
+  if (is.R()) {if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }} else 
+              cat("dse3 test 17 skipped!\n")
 
   if (graphics)
       {ok <- dse3.graphics.tests(verbose=verbose,  pause=FALSE)

@@ -33,7 +33,6 @@
 	RNGkind(kind=kind, normal.kind=normal.kind)
 	if ( 1==length(seed)) set.seed(seed) 
         else assign(".Random.seed", c(.Random.seed[1], seed), envir=.GlobalEnv)
-	#RNGkind(kind=kind, normal.kind=normal.kind)
 	old
       }
 
@@ -80,10 +79,14 @@ random.number.test <- function()
       # test.valueN <-c( -1.39965726956837644, -0.24025807684466990,
       #          2.34362137305187446, -0.66321208109989371, -0.71183559894654214)
       # values from 1.1.0 (devel) should also work in 1.0.1
-      test.valueU <-c(0.59132864479704950, 0.76406894316060192,
+      test.valueU.R1.6.2 <-c(0.59132864479704950, 0.76406894316060192,
                   0.18576870606880833, 0.81087542344137897, 0.05835627439859235)
-      test.valueN <-c( 0.959409416509782953, 0.046546246156130192,
+      test.valueN.R1.6.2 <-c( 0.959409416509782953, 0.046546246156130192,
             -0.775306427558391964, -0.777761120325662803, -1.363043207314267313)
+      test.valueU <-c(0.6159259434789419, 0.2200001638848335,
+             0.7024894717615098, 0.4869760072324425, 0.2284618646372110)
+      test.valueN <- c(0.2947980960879867, 0.5315740209738240,
+            -0.7439218830522146, -0.9861002105572579, -0.3542773118879623)
      }
   if (!is.R()) 
      {# above should really be if (is.Splus()) but then tests require syskern
@@ -98,15 +101,33 @@ random.number.test <- function()
   on.exit(set.RNG(old.seed))
 
   ok <- TRUE
-  if (1e-14 < max(abs(runif(5)-test.valueU)))
+
+if ( version$major >= 1 && version$minor > 6.2)
+  {if (1e-14 < max(abs(runif(5)-test.valueU)))
     {warning("The default runif number generator has been changed.")
      ok <- FALSE
     }
 
-  set.RNG(kind="default", seed=test.seed, normal.kind="default")
+   set.RNG(kind="default", seed=test.seed, normal.kind="default")
 
-  if (1e-14  < max(abs(rnorm(5)-test.valueN)))
+   if (1e-14  < max(abs(rnorm(5)-test.valueN)))
     {warning("The default rnorm number generator has been changed.")
+     ok <- FALSE
+    }
+  } 
+# As of R 1.7.0 the default generator changed. For R 0.99 to 1.6.2 the
+#   following corresponded to kind="default",normal.kind="default"
+  set.RNG(kind="Marsaglia-Multicarry", seed=test.seed, normal.kind="Kinderman-Ramage")
+
+  if (1e-14 < max(abs(runif(5)-test.valueU.R1.6.2)))
+    {warning("The Marsaglia-Multicarry runif number generator has been changed.")
+     ok <- FALSE
+    }
+
+  set.RNG(kind="Marsaglia-Multicarr", seed=test.seed, normal.kind="Kinderman-Ramage")
+
+  if (1e-14  < max(abs(rnorm(5)-test.valueN.R1.6.2)))
+    {warning("The Kinderman-Ramage rnorm number generator has been changed.")
      ok <- FALSE
     }
 
