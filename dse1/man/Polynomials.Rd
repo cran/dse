@@ -34,6 +34,6 @@
     \code{\link{stability}}
 }
 
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

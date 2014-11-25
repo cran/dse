@@ -44,6 +44,6 @@
 Not to be called by users. See \code{forecastCov}.
 }
 
-\concept{DSE}
+%\keyword{DSE}
 \keyword{internal}
 

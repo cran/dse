@@ -34,6 +34,6 @@ z <-  estimatorsHorizonForecastsWRTdata(eg1.DSE.data.diff,
     estimation.methods=list(estVARXls=list(max.lag=3), 
                 estVARXar=list(max.lag=3)))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

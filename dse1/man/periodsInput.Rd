@@ -84,6 +84,6 @@
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     periodsOutput(eg1.DSE.data.diff)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

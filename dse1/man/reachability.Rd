@@ -33,6 +33,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(estVARXls(eg1.DSE.data.diff))
 reachability(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

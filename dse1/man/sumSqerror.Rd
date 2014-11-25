@@ -25,9 +25,7 @@ weight in error.weights.
 \details{
 This function is primarily for use in parameter optimization,
 which requires that an objective function be specified by a vector
-of parameters.It returns only the sum of the weighted squared 
-errors (eg.for optimization). 
-The sample size is determined by periodsOutput(data).
+of parameters.
 }
 \seealso{
 \code{\link{l}}
@@ -40,6 +38,6 @@ model <- estVARXls(eg1.DSE.data.diff)
 sumSqerror(1e-10 + coef(model), model=TSmodel(model), 
         data=TSdata(model), error.weights=c(1,1,10))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

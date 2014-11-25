@@ -86,7 +86,7 @@ several sub classes.
 \code{\link{TSmodel}},
 \code{\link{TSestModel.object}}
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
 

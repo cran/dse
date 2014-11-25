@@ -26,6 +26,6 @@
 \seealso{
     \code{\link{fixConstants}}
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

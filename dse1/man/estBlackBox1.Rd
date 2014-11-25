@@ -34,6 +34,6 @@ which gives plots of information about the residuals.
 if(is.R()) data("egJofF.1dec93.data", package="dse1")
 goodmodel <- estBlackBox1(egJofF.1dec93.data)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

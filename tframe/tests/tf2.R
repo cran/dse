@@ -1,4 +1,4 @@
- require("stats")
+ require("ts")
  require("tframe")
 
  Sys.info()

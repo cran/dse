@@ -83,6 +83,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- stripMine(eg1.DSE.data.diff, 
     estimation.methods=list(bft=list(max.lag=2, verbose=FALSE)))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

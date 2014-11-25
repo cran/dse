@@ -14,5 +14,5 @@
 \seealso{
     \code{\link{mineStepwise}}
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}

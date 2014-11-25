@@ -21,6 +21,6 @@ will probably change with new versions.
 if(is.R()) data("egJofF.1dec93.data", package="dse1")
 goodmodel <- estBlackBox(egJofF.1dec93.data)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

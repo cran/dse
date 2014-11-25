@@ -43,6 +43,6 @@ If complex.plane is TRUE then all results are plotted on a complex plane and
     \code{\link{EstEval}}
 }
 
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

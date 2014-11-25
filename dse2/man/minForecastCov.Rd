@@ -34,6 +34,6 @@ z <- stripMine(eg1.DSE.data.diff, essential.data=c(1,2),
                    estimation.methods=list(estVARXls=list(max.lag=3)))
 z <-  minForecastCov(z)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

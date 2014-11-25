@@ -12,6 +12,6 @@ remove cross correlations between series.}
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- standardize(outputData(eg1.DSE.data.diff))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

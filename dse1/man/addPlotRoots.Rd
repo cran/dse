@@ -30,6 +30,6 @@ model <- estVARXls(eg1.DSE.data.diff)
 plot(roots(model))
 addPlotRoots(toSS(model))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

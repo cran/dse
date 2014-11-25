@@ -34,6 +34,6 @@
     model <- estVARXls(eg1.DSE.data.diff)
     checkConsistentDimensions(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

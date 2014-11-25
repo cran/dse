@@ -30,6 +30,6 @@
     model <- estVARXls(eg1.DSE.data.diff)
     model <- setTSmodelParameters(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -30,6 +30,6 @@
 \examples{
     residualStats(matrix(rnorm(200), 100,2), NULL) # but typically used for a residual
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

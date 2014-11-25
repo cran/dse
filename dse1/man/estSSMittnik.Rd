@@ -45,6 +45,6 @@ printed and the user is prompted for the state dimension.
     # the choice is difficult in this example. 
     model <- estSSMittnik(egJofF.1dec93.data, n=3)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

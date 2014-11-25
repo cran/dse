@@ -46,7 +46,7 @@ print(model, digits=3, fuzz=0.001, latex=TRUE)
     \code{\link{print}}
     \code{\link{summary}}
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
 

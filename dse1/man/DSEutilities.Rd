@@ -27,5 +27,5 @@
    criteria.table.nheading()
    DSE.ar(data, ...)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{internal}

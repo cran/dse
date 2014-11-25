@@ -27,7 +27,7 @@
     \code{\link{bft}}
     \code{\link{estMaxLik}}
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
 

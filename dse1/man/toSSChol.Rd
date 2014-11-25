@@ -5,14 +5,10 @@
 
 \title{Convert to Non-Innovation State Space Model}
 \description{
-This function may not be working properly.
 
 Convert to a non-innovations state space representation using 
-the given matrix (Om) as the measurement noise covariance. 
-Om would typically be an estimate of the output noise, such as returned 
-in $estimates$cov of l.SS or l.ARMA.
-This assumes that the noise processes in the arbitrary SS representation 
-are white and uncorrelated.
+the given matrix as the measurement noise covariance. 
+This function may not be working properly.
 }
 \usage{
     toSSChol(model, ...)
@@ -44,6 +40,6 @@ decomposition of Om as the coefficient matrix of the output noise.
     model <- estVARXls(eg1.DSE.data.diff)
     model <- toSSChol(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

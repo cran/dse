@@ -6,8 +6,7 @@
 
 \title{Check Balance of a TSmodel}
 \description{
-Calculate the difference between observability and reachability gramians 
-of the model transformed to Mittnik's form.
+Calculate the difference between observability and reachability gramians of the model transformed to Mittnik's form.
 }
 \usage{
     checkBalanceMittnik(model)
@@ -33,6 +32,6 @@ Balanced models should have equal observability and reachability gramians.
     model <- toSS(estVARXls(eg1.DSE.data.diff))
     checkBalanceMittnik(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -33,6 +33,6 @@
     \code{\link{summary}}
 }
 
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

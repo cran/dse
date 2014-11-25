@@ -35,6 +35,6 @@ model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model)
 distribution(z)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

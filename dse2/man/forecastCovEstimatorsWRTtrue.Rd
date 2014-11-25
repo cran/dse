@@ -61,6 +61,6 @@ true.model <- estVARXls(eg1.DSE.data.diff) # just to have a starting model
 z <-  forecastCovEstimatorsWRTtrue(true.model, 
     estimation.methods=list(estVARXls=list(max.lag=4)))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

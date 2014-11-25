@@ -62,6 +62,6 @@
         scale=list(input=rep(2, nseriesInput(eg1.DSE.data.diff)), 
                   output=rep(2,nseriesOutput(eg1.DSE.data.diff))))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -29,7 +29,7 @@ input0[1,]correspond to t=0. These arguments  are not implemented for state
 space models. If not specified initial values are set to zero. }
     \item{noise}{
 Noise can be supplied. Otherwise it will be generated.
-If supplied it should be a list as described below in details.}
+If supplied it should be a list as described below under returned value.}
     \item{SIGMA}{
 The covariance of the noise process. If this is specified then sd is ignored.
 A vector or scalar is treated as a diagonal matrix. For an object of class
@@ -56,93 +56,36 @@ there are some additional elements:
    version - the version of S used (random number generators may vary)
    SIGMA as specified
    sd    as specified
-   noise - the noise details as provided in the argument or as generated.
+   noise - a list of e, w and w0 - the noise processes. w0 is w for t=0 in
+      the state space model and prior lags in ARMA models. For VAR models B has
+      no lags so w0 has no effect.
    state - the state variable for state space models.
 }
 \details{
-A state space or ARMA model (see TSmodel, \link{ARMA}, and \link{SS} for more details)
-is simulated with pseudo
+
+A state space or ARMA model as described in TSmodel is simulated with pseudo
 random noise (The default noise is a normally distributed processes. 
 An object of class TSdata is
 returned. This can be used as input to estimation algorithms. If start and 
 freq are specified, or if input or \code{noise$w} (in that order)
 have time series properties, these are given to the output. 
-
-If \code{noise} is not supplied then random values will be generated
-using other supplied information or defaults. The rng will be set first if 
-it is specified.
-
-The default noise generation will be N(0,I) 
-If Q is not square in a non innovations state space model (i.e. the system
-noise has a dimension less than the state dimension), then it is
-padded with zeros, so generated noise of higher dimension has no
-effect.  If sd is supplied, then w as describe below will be N(0,sqr(sd)).
-sd can be a vector of p elements corresponding to each of the p
-outputs.
-
-If noise is supplied it should
-be a list of the necessary noise processes. For non-innovation form state
-space models the list must have elements w, e, and w0. (w0 is w for t=0 in
-state space model and prior lags in ARMA models.) For innovation form state
-space models and ARMA models with MA components the list must have elements
-w and w0. If w0 is not specied it is set to zero. For ARMA models with no 
-MA components (i.e. VAR models) the list 
-needs only w, and in this case a matrix may be supplied in place of a
-list. w should be a sampleT by p matrix giving the noise for t=1 to sampleT. 
-If noise is specified sampleT will be set to the number of periods in w.
- 
-
 If \code{noise$w0} is a matrix (rather than a vector) for a state space model 
 simulation (as it is for ARMA simulations) then it is set to a
 vector of zeros. This provides compatability with VAR models (ARMA
 models with no lags in B). In general ARMA and SS simulations will
 not produce exactly the same results because it is impossible to
 determine necessary transformation of initial conditions and w0.
-
-Input must be specified for ARMA models with model$C not NULL and
-state space models with model$G not NULL..
-
-In general ARMA and SS simulations will
-not produce exactly the same results because it is impossible to
-determine necessary transformation of initial conditions and w0.
+The rng will be set first if it is specified. 
 }
-
 \seealso{
-  \code{\link[tframe]{makeTSnoise}},
-  \code{\link{TSmodel}},
-  \code{\link{TSdata}},
-  \code{\link{ARMA}},
-  \code{\link{SS}}
-  }
+\code{\link[tframe]{makeTSnoise}},
+\code{\link{TSmodel}},
+\code{\link{TSdata}}
+}
 \examples{
-    mod1 <- ARMA(A=array(c(1,-.25,-.05), c(3,1,1)), B=array(1,c(1,1,1)))
-    AR   <- array(c(1, .5, .3, 0, .2, .1, 0, .2, .05, 1, .5, .3) ,c(3,2,2))
-    VAR  <- ARMA(A=AR, B=diag(1,2))
-    print(VAR)
-    simData <- simulate(VAR)
-
-    C    <- array(c(0.5,0,0,0.2),c(1,2,2))
-    VARX <- ARMA(A=AR, B=diag(1,2), C=C) 
-    simData <- simulate(VARX, sampleT=150, input=matrix(rnorm(300),150,2))
-
-    MA   <- array(c(1, .2, 0, .1, 0, 0, 1, .3), c(2,2,2)) 
-    ARMA  <- ARMA(A=AR, B=MA, C=NULL) 
-    simData <- simulate(ARMA, sampleT=200)
-
-    ARMAX <- ARMA(A=AR, B=MA, C=C) 
-    simData <- simulate(ARMAX, sampleT=150, input=matrix(rnorm(300),150,2))
-
-    if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model <- estVARXls(eg1.DSE.data.diff)
-    simData <- simulate(model)
-
-    ss <- SS(F=array(c(.5, .3, .2, .4), c(2,2)), 
-             H=array(c(1, 0, 0, 1), c(2,2)),
-	     K=array(c(.5, .3, .2, .4), c(2,2)))
-
-    print(ss)
-    simData <- simulate(ss)
-    }
-\concept{DSE}
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+model <- estVARXls(eg1.DSE.data.diff)
+z <- simulate(model)}
+%\keyword{DSE}
 \keyword{ts}
 

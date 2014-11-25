@@ -29,6 +29,6 @@
 
 \seealso{ \code{\link[dsepadi]{sourceInfo}} }
 
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

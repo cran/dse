@@ -1,5 +1,5 @@
-if(!require("stats"))   stop("this test requires stats.")
-if(!require("dse1"))  stop("this test requires dse1.")
+if(!require("mva"))   stop("this test requires mva.")
+if(!require("ts"))    stop("this test requires ts.")
 if(!require("dse2"))  stop("this test requires dse2.")
 if(!require("setRNG"))stop("this test requires setRNG.")
  #x11()
@@ -75,8 +75,6 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
-print(library.dynam())
-print(symbol.For("rmaprj"))
   if (verbose) cat("dse3 test 8a... ")
   z <- horizonForecasts(mod1, data, horizons=c(6,12), discard.before=20)
   error <- max(abs( c(z$horizonForecasts[,100,])  -

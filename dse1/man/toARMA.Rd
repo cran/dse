@@ -8,8 +8,7 @@
 \description{
 Convert a state space model to an ARMA representation. The state is 
 eliminated by a method which uses an equivalence that can be demonstrated
-by the Cayley Hamilton theorem.  It is not very parsimonious.
-
+by the Cayley Hamilton theorem.
 }
 \usage{
     toARMA(model, ...)
@@ -28,10 +27,7 @@ An object of class 'ARMA' 'TSmodel' containing an ARMA model.
 }
 \references{See, for example, 
   M. Aoki(1990)\emph{State Space Modelling of Time Series}. 2d ed. rev. 
-  and enl., Springer-Verlag
-  
-  Aoki and Havenner, Econometric Reviews v.10,No.1, 1991, p13.
-  }
+  and enl., Springer-Verlag}
 \seealso{
 \code{\link{toSS}}
 \code{\link{fixConstants}}
@@ -41,6 +37,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- toSS(estVARXls(eg1.DSE.data.diff))
 model <- toARMA(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

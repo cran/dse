@@ -24,6 +24,6 @@ A good statistical test would be better!
 if(is.R()) data("egJofF.1dec93.data", package="dse1")
 phasePlots(egJofF.1dec93.data)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -6,7 +6,7 @@
     DSEversion()
 }
 \examples{DSEversion()}
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
 

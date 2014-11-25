@@ -7,8 +7,7 @@
   cat("Estimation...\n")
 
   model.eg1.ls <- estVARXls(trimNA(eg1.DSE.data), warn=F)
-  subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12),
-                             warn=FALSE)
+  subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12))
 
   summary(model.eg1.ls)
   model.eg1.ls # or print(model.eg1.ls)

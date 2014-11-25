@@ -13,9 +13,6 @@ If the argument is a TSmodel then the result is an object of
 class 'SS' 'TSmodel' If the argument is a TSestModel then the converted model is
 evaluated with the data an a TSestModel is returned. The TSmodel is an 
 innovations state space representation.
-
-This assumes that the noise processes in the arbitrary SS representation are 
-white and uncorrelated.
 }
 \seealso{
 \code{\link{toSS}},
@@ -34,6 +31,6 @@ model2 <- SS(F=diag(1,3), H=matrix(c(1,0,0,1,0,0),2,3),
 model2 <- toSSinnov(model2)
 summary(model2)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

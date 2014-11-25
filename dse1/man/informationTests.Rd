@@ -24,6 +24,6 @@
     model1 <- estVARXls(eg1.DSE.data.diff)
     model2 <- estVARXar(eg1.DSE.data.diff)
     informationTests(model1, model2)}
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

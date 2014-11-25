@@ -32,6 +32,6 @@ Balanced models should have equal observability and reachability gramians.
     model <- toSS(estVARXls(eg1.DSE.data.diff))
     checkBalance(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

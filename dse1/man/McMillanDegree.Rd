@@ -38,6 +38,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- estVARXls(eg1.DSE.data.diff)
 McMillanDegree(model)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

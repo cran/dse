@@ -37,6 +37,6 @@
 
 \seealso{ \code{\link[tframe]{tfplot}} }
 
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

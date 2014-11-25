@@ -17,6 +17,6 @@
 \examples{
     permute(4)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

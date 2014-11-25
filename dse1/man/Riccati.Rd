@@ -31,7 +31,7 @@
 }
 \note{This procedure has not been tested.}
 
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 \keyword{algebra}
 

@@ -59,6 +59,6 @@ If lty is NULL (default) it is set to
     z <- forecastCov(model, data=eg1.DSE.data.diff)
     tfplot(z)
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

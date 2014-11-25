@@ -55,7 +55,7 @@
 \code{\link{TSestModel.object}}
 \code{\link[dse2]{setTSPADIdata}}
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
 

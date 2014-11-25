@@ -43,6 +43,6 @@
     model <- TSmodel(toSS(estVARXls(eg1.DSE.data.diff)))
     #  z <- acfM(model) not working
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

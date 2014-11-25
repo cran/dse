@@ -549,11 +549,7 @@ MonteCarloSimulations.default <- function (model, simulation.args=NULL,
         if (1 < replications) 
             for (i in 2:replications)
 	      result[, , i] <- do.call("simulate", arglist)
-	# default does not work on array seriesNames(result) <- seriesNames(r)
-        if (length(seriesNames(r)) != dim(result)[2])
-         stop("length of names (",length(seriesNames(r)),
-	      ") does not match number of series(",dim(result)[2],").")
-        attr(result,"seriesNames") <- seriesNames(r)
+	seriesNames(result) <- seriesNames(r)
 	result <- tframed(result, tfr)
 	invisible(classed(list(simulations = result, model = model, 
         rng = rng,  simulation.args = simulation.args, 
@@ -617,12 +613,7 @@ MonteCarloSimulations.TSmodel <- function(model, simulation.args=NULL,
      for (i in 2:replications) 
         result[,,i] <- outputData(do.call("simulate", arglist))
   }
-# default does not work on array seriesNames(result) <- seriesNamesOutput(model)
-if (length(seriesNamesOutput(model)) != dim(result)[2])
- stop("length of names (",length(seriesNamesOutput(model)),
-      ") does not match number of series(",dim(result)[2],").")
-attr(result,"seriesNames") <- seriesNamesOutput(model)
-
+seriesNames(result) <- seriesNamesOutput(model)
 result <- tframed(result, tfr)  # my more general multidimensional ts
 invisible(classed( # constructor MonteCarloSimulations
          list(simulations=result, model=model, rng=rng, simulation.args=simulation.args,
@@ -639,16 +630,6 @@ print.MonteCarloSimulations <- function(x, digits=options()$digits, ...)
  print(x$model)
  invisible(x)
 }
-
-nseriesOutput.MonteCarloSimulations <- function(x)
-   {dim(x$simulations)[2]}
-
-nseriesInput.MonteCarloSimulations <- function(x)
-  {nseriesInput(x$simulation.args$data)}
-
-tframe.MonteCarloSimulations <- function(x) tframe(x$simulations)
-
-periods.MonteCarloSimulations <- function(x) periods(tframe(x))
 
 seriesNamesOutput.MonteCarloSimulations <- function(x)
    {dimnames(x$simulations)[[2]]}
@@ -717,7 +698,6 @@ tfplot.MonteCarloSimulations <- function(x,
    for(i in series) 
         {zz <- (x$simulations)[,i,select.simulations]
          tframe(zz) <- tf.p
-	 seriesNames(zz) <- NULL #otherwise name length does not match in tfwindow.default(zz)
          tfOnePlot(zz,start=start,end=end, ylab=names[i]) #tsplot
          if(i == series[1])  title(main = "Monte Carlo Simulations")
         }
@@ -1629,7 +1609,7 @@ horizonForecastsCompiled.ARMA <- function( obj, data, horizons=1:4,
                       dim(C)[1]-1, ")."))
      }
   TREND <- obj$TREND
-  if (is.null(obj$TREND)) TREND <- matrix(0, TT,p)
+  if (is.null(obj$TREND)) TREND <- rep(0,p)
   is  <- max(m,p)
 
   storage.mode(u)  <- "double"
@@ -2049,7 +2029,7 @@ forecastCovCompiled.ARMA <- function(model, data, horizons=1:12 ,
         warning(paste("Results may be spurious. discard.before should be set higher than the order of C (=", dim(C)[1]-1, ")."))
      }
   TREND <- model$TREND
-  if (is.null(model$TREND)) TREND <- matrix(0,TT,p)
+  if (is.null(model$TREND)) TREND <- rep(0,p)
   storage.mode(cov) <-"double"
   is  <- max(m,p)
   storage.mode(u)  <- "double"

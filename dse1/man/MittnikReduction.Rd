@@ -91,6 +91,6 @@ estSSMittnik.
     model <- toSS(estVARXls(egJofF.1dec93.data))
     newmodel <-MittnikReduction(model, criterion="taic")
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

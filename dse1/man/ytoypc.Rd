@@ -18,6 +18,6 @@ percentChange with lag=frequency(ser).
 if(is.R()) data("eg1.DSE.data", package="dse1")
 z <- ytoypc(outputData(eg1.DSE.data))
 }
-\concept{DSE}
+%\keyword{DSE}
 \keyword{ts}
 
