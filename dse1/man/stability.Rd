@@ -1,6 +1,7 @@
 \name{stability}
 \alias{stability}
 \alias{stability.ARMA}
+\alias{stability.SS}
 \alias{stability.roots}
 \alias{stability.TSmodel}
 \alias{stability.TSestModel}
@@ -8,18 +9,12 @@
 \title{Calculate Stability of a TSmodel}
 \description{Calculate roots and their modulus and indicate stability.}
 \usage{
-    stability(obj, ...)
-    \method{stability}{ARMA}(obj, fuzz=1e-4, digits=8, verbose=T)
-    \method{stability}{roots}(obj, digits=8, verbose=T)
-    \method{stability}{TSmodel}(obj, fuzz=1e-4, ...)
-    \method{stability}{TSestModel}(obj, ...)
-    }
+	stability(model, fuzz=1e-4, digits=8, verbose=T)}
 \arguments{
-    \item{obj}{An object of class TSmodel.}
-    \item{fuzz}{Roots within fuzz are considered equal.}
-    \item{digits}{Printing precision.}
-    \item{verbose}{Print roots and there moduli.}
-    \item{...}{arguments to be passed to other methods.}
+	\item{model}{An object of class TSmodel.}
+	\item{fuzz}{Roots within fuzz are considered equal.}
+	\item{digits}{Printing precision.}
+	\item{verbose}{Print roots and there moduli.}
 }
 \value{True or False if the model is stable or not stable.}
 \sideffects{
@@ -34,6 +29,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(eg1.DSE.data.diff)
 stability(model)
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

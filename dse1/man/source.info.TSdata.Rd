@@ -11,24 +11,14 @@
 \title{tfPADI Specific Methods}
 \description{See the generic function description.}
 \usage{
-    \method{source.info}{TSdata}(obj)
-    \method{source.info}{TSestModel}(obj)
-    
-    \method{sourcedb}{TSdata}(obj)
-    \method{sourcedb}{TSestModel}(obj)
-    
-    \method{sourceserver}{TSdata}(obj)
-    \method{sourceserver}{TSestModel}(obj)
-    
-    \method{identifiers}{TSdata}(obj)
-    \method{identifiers}{TSestModel}(obj)    
-}
-\arguments{
-    \item{obj}{An object of class TSdata or TSestModel.}
+	source.info(x)
+	sourcedb(x)
+	sourceserver(x)
+	identifiers(x)
 }
 
 \seealso{ \code{\link[dsepadi]{source.info}} }
 
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

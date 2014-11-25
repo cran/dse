@@ -3,10 +3,9 @@
 \title{Combine series from two TSdata objects.}
 \description{Combine series from two TSdata objects.}
 \usage{
-    \method{combine}{TSdata}(e1, e2)
-    }
+	combine(e1, e2)}
 \arguments{
-    \item{e1, e2}{TSdata objects.}
+	\item{e1, e2}{TSdata objects.}
 }
 \value{
 An object of class TSdata which includes series from both e1 and e2.
@@ -19,6 +18,6 @@ if(is.R()) {data("eg1.DSE.data.diff", package="dse1")
             data("eg1.DSE.data", package="dse1") }
 new.data.set <- combine(eg1.DSE.data.diff, eg1.DSE.data) 
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

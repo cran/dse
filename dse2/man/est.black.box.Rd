@@ -3,12 +3,12 @@
 \title{Estimate a TSmodel}
 \description{Estimate a TSmodel.}
 \usage{
-    est.black.box(data,...)
+	est.black.box(data,...)
 }
 \arguments{
-    \item{data}{Data in an object of class TSdata.}
-    \item{...}{
-    Optional arguments depent on the function which is eventually called.}
+	\item{data}{Data in an object of class TSdata.}
+	\item{...}{
+	Optional arguments depent on the function which is eventually called.}
 }
 \value{A state space model in an object of class TSestModel.}
 \details{
@@ -21,6 +21,6 @@ will probably change with new versions.
 if(is.R()) data("egJofF.1dec93.data", package="dse1")
 goodmodel <- est.black.box(egJofF.1dec93.data)
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

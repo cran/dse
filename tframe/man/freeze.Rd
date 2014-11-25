@@ -3,17 +3,6 @@
 \alias{freeze.default}
 \title{Get fixed data snapshot}
 \description{Generic method. See specific methods for details.}
-
-\usage{
-    freeze(data, ...)
-    \method{freeze}{default}(data)
-}
-
-\arguments{
-    \item{data}{A data source description.}
-    \item{...}{Additional arguments for specific methods.}
-}
-
 \details{
 This function extracts data from 
 a database (for example using the TS PADI programs are available 
@@ -35,14 +24,13 @@ might be more convenient elsewhere.
 }
 
 \seealso{ 
-    \code{\link[dsepadi]{tfPADIdata}}
-    \code{\link[dsepadi]{tfputpadi}}
-    \code{\link[dse2]{freeze.tfPADIdata}}
-    \code{\link[dsepadi]{freeze.TSPADIdata}}
-    \code{\link[dse2]{TSPADIdata}}
+	\code{\link[dsepadi]{tfPADIdata}}
+	\code{\link[dsepadi]{tfputpadi}}
+	\code{\link[dse2]{freeze.tfPADIdata}}
+	\code{\link[dsepadi]{freeze.TSPADIdata}}
+	\code{\link[dse2]{TSPADIdata}}
 }
-\keyword{programming}
-\keyword{ts}
-\keyword{data}
+\keyword{tframe}
+\keyword{time series data}
 
 

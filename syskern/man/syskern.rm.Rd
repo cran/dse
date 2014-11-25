@@ -2,32 +2,32 @@
 \alias{syskern.rm}
 \alias{file.date.info}
 \alias{date.parsed}
+\alias{synchronize}
 
 \title{Utilities to handle small S/R differences}
 \description{Utilities to handle small S/R differences.}
 
 \usage{
-    date.parsed()
-    syskern.rm(file)
-    file.date.info(file)
+	date.parsed()
+	synchronize()
+	syskern.rm()  # unlink with default recursive=T
+	Sys.getenv()
 }
 
-\arguments{
-    \item{file}{a character string indicating a file name.}
-}
+\arguments{misc.}
 \value{misc.}
 \details{
-    Utilities to handle small S/R differences. 
-    \code{syskern.rm} does unlink with default recursive=T.
+	Utilities to handle small S/R differences. 
 }
 \seealso{
-    \code{\link{set.RNG}}
-    \code{\link{is.S}}
-    \code{\link{file.copy}}
-    \code{\link{Sys.info}}
+	\code{\link{set.RNG}}
+	\code{\link{is.S}}
+	\code{\link{file.copy}}
+	\code{\link{Sys.info}}
 }
 \examples{date.parsed() }
-\keyword{programming}
-\keyword{utilities}
+\keyword{syskern}
+\keyword{OS}
+\keyword{S/R}
 
 

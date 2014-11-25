@@ -1,30 +1,22 @@
-See 00Intro.* in each package for a short general description.
-A Users' Guide is available in dse1/doc/guide.pdf
-  and also at 'http://www.bank-banque-canada.ca/pgilbert'
-See also the bundle dseplus with related
- packages dsepadi monitor juice curve .
-00Intro.tframe           Tframe
+00General.Description    Tframe
 add.date                 Add Periods to a Date
-check.tframeConsistent   Check for a Consistent tframe
 classed                  Tframe Library Utilities
-earliestEnd              Start and End for Objects with Multiple Time
+earliest.end             Start and End for Ragged Multivariate Time
                          Series
+end                      Generic Time Series Parameters
+expand                   Expand a Tframe or Tframed Object.
 freeze                   Get fixed data snapshot
-lag                      Lag
+is.consistent.tframe     Check for a Consistent tframe
+lag                      Misc Generic Replacements
 nseries                  Number of Series
-periods                  Generic Time Series Parameters
 select.series            Extract a Subset of Series
-seqN                     Tframe Library Utilities
-seriesNames              Names of Series in a time series object
+series.names             Names of Series in a tframed object
 splice                   Splice Time Series
 tbind                    Bind Time Series
-test.Equaltframes        Compare Two Time Frames
 test.equal               Compare Two Objects
-tfExpand                 Expand a Tframe or Tframed Object.
-tfplot                   Plot Tframed Objects
-tfprint                  Print Tframed Objects
-tframe                   Extract or Set a tframe
+tfprint                  Print and Plot Tframed Objects
+tframe                   Extract or Set a Tframe
 tframed                  Construct a Tframed Object
 tfwindow                 Truncate a Time Series
+time                     Time
 trim.na                  Trim NAs from Time Series
-tsmatrix                 Create a time series matrix.

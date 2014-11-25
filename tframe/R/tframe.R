@@ -1,5 +1,29 @@
 
-classed <- function(x, cls) {class(x) <- cls; x}
+###########################################################################
+
+#  Internal utilities to limit dependence on class/oldclass
+
+if (is.R())
+  { tfclass    <- .Alias(class)
+   "tfclass<-" <- .Alias(get("class<-"))
+  } else
+if (is.S())
+  { tfclass     <- class
+   "tfclass<-" <- function(x, value){ class(x) <- value ; x }
+  }
+
+#if (is.S5())
+#  { tfclass     <- oldClass
+#   "tfclass<-" <- function(x, value){ oldClass(x) <- value ; x }
+#  }
+
+
+classed <- function(x, cls) {tfclass(x) <- cls; x}
+
+# next should use settf to dispatch on the class method for tf not the 
+#  class for x. Setting the class of x first really messes up it dispatches 
+#   without having the appropriate attributes of the class.
+#tfclassed <- function(x, cls, tf) {  tframe(x) <- tf; tfclass(x) <- cls; x}
 
 ###########################################################################
 
@@ -7,74 +31,62 @@ classed <- function(x, cls) {class(x) <- cls; x}
 #  generic and default are needed more generally than the database interface,
 #  so they are included here.
 
-freeze <- function(data, ...){UseMethod("freeze")} 
- 
-freeze.default <- function(data){
- if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
+###########################################################################
 
-#internal utility
+freeze <- function(data, ...){
+#This function allows for the possiblity of data structures which invoke a
+#    call to a database.  It is called by functions which actually use data
+# eg:    data <- freeze(data)
+# in order to take a snapshot from the database and bring it into a 
+# structure which can be used for calculations.
+    UseMethod("freeze")
+} 
+ 
+freeze.default <- function(data)  
+  {if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
+
+###########################################################################
+
+#  Misc. internal utilities
+
 # Use this with "for (i in seq(length=m) )" as m==0 returns NULL and for does no loops
 seqN <- function(N) {if (0==length(N)) NULL else if (N<=0) NULL else seq(N)}
 
-
-
-# start, end, frequency, time need to be masked from R base so that
-# tframe methods can work on the tframe attribute rather than class(x)
-
-# The .tframe methods are "default" methods for tframes. Other more specific
-#  methods can be defined (see eg start.tstframe for tframes from ts objects). 
-
-start <- function(x, ...) 
- {if(is.Ttframed(x)) start(tframe(x,...)) else UseMethod("start") }
-
-start.tframe <- function(x) c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))
-
-
-end <- function(x, ...) 
- {if(is.Ttframed(x)) end(tframe(x, ...)) else UseMethod("end") }
-
-end.tframe <- function(x) c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))
-
-
-frequency <- function(x, ...) 
- {if(is.Ttframed(x)) frequency(tframe(x, ...)) else UseMethod("frequency") }
-
-frequency.tframe <- function(x) x[3]
-
-
-time <- function(x, ...) 
- {if(is.Ttframed(x)) time(tframe(x,...)) else UseMethod("time") }
-
-time.tframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
-
-
-# periods should give the number of data points in the time direction.
-# for consistency check periods needs to look at the data not the tframe,
-# i.e. the number of (vector) observations.
-
-periods <- function(x) UseMethod("periods")
-
-periods.default <- function(x) {if (is.array(x)) dim(x)[1] else length(x) }
-
-periods.tframe <- function(x) {1+round((x[2]-x[1])*x[3])}
+###########################################################################
 
 
 
-diff <- function(x, ...) 
- {if (is.Ttframed(x)) {
-    tf <- diff(tframe(x),...) 
-    tframe(x) <- NULL
-    x <- diff(x, ...) 
-    return(tframed(x, tf))
-    }
-  else UseMethod("diff") 
+###########################################################################
+
+# tframe classes and methods       <<<<<<<<<<<<
+
+###########################################################################
+        
+
+###############################################
+
+#  generic methods  and defaults <<<<<<<<<<<<
+
+################################################
+
+# start, end, frequency, time and window
+# are already generic functions in S with a default 
+# method which works for vectors and matrices and data with a tsp attribute.
+
+# The functions diff and tsmatrix are not (yet) generic function is S. The
+# existing functions are assigned as defaults and generic ones are defined.
+
+periods <- function(x, ...)
+ {# the length in time of the sequence (number of observations)
+    UseMethod("periods")
  }
 
-diff.tframe <- function (x, lag = 1, differences = 1, ...) 
- {d <- lag * differences
-  tfTruncate(x, start=if(d >= 0) 1+d else NULL, 
-                  end=if(d <  0) periods(x)-d else NULL)
- }
+periods.default <- function(x)
+  {if (is.array(x)) return(dim(x)[1])
+   else return(length(x))
+  }
+
+periods.tsp <- periods.default 
 
 #  tfplot and tfprint below provide generic methods for ploting and printing
 #  tf time series objects. Plot methods will probably to some processing
@@ -82,16 +94,17 @@ diff.tframe <- function (x, lag = 1, differences = 1, ...)
 
 tfplot <- function(obj, ...)  UseMethod("tfplot")
 
+
 tfplot.default <- function(..., xlab=NULL, ylab=NULL,graphs.per.page=5,
                          start.=NULL, end.=NULL,
-			 series=seq(nseries(list(...)[[1]])), mar=par()$mar )
+			 series=seq(nseries(list(...)[[1]])) )
  {obj <- list(...)
   d <- obj[[1]]
   if (!is.tframed(d)) UseMethod("plot")
   else
-    {names <- seriesNames(d)
+    {names <- series.names(d)
      Ngraphs <- min(length(series), graphs.per.page)
-     old.par <- par(mfcol = c(Ngraphs, 1), mar=mar)  
+     old.par <- par(mfcol = c(Ngraphs, 1))  # tfplot.TSdata also sets mar
      on.exit(par(old.par))
      for (i in series)
        {z <- matrix(NA, periods(d), length(obj))
@@ -116,23 +129,21 @@ tfOnePlot <- function(obj, xlab=NULL, ylab=NULL, start.=NULL, end.=NULL, ...)
      if (!is.null(end.))   obj <- tfwindow(obj, end.   = end.)
      tline <- time(obj)
      if(is.null(xlab)) xlab <- ""
-     if(is.null(ylab)) ylab <- paste(seriesNames(obj), collapse="  ")
+     if(is.null(ylab)) ylab <- paste(series.names(obj), collapse="  ")
      matplot(tline, obj, type="l", xlab=xlab, ylab=ylab, ...)
     }
   invisible()
  }
 
-# Note tfprint prints the data. tframePrint  prints the tframe info. 
+# Note tfprint prints the data. tfprint.tframe  prints the tframe info. 
 
 tfprint <- function(x, ...)  UseMethod("tfprint")
 
 tfprint.default <- function(x,...)
- {xx <- x
-  if(1 == nseries(xx)) xx <- matrix(xx, length(xx), 1)
-  dimnames(xx) <- list(format(time(tframe(x))), seriesNames(x))
-  tframe(xx) <- NULL
-  seriesNames(xx) <- NULL
-  print(xx, ...)
+ {dimnames(x) <- list(format(time(tframe(x))), series.names(x))
+  tframe(x) <- NULL
+  series.names(x) <- NULL
+  print(x, ...)
   invisible(x)
  }
 
@@ -140,21 +151,23 @@ tfprint.default <- function(x,...)
 
 tfwindow <- function(x, ...)  UseMethod("tfwindow")
 
-tfwindow.default <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
-  {# With the default warn=TRUE warnings will be issued if no truncation takes
+tfwindow.default <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=T)
+  {# this provides a convenient way to support warn and correct for bugs
+   # in some versions of window().
+   # if (is.null(start.)) start. <- start(x)
+   # if (is.null(end.))   end.   <- end(x)
+   # With the default warn=T warnings will be issued if no truncation takes
    #  place because start or end is outside the range of data.
    if (is.null(start.) && !is.null(tf)) start. <- start(tf)
    if (is.null(end.)   && !is.null(tf)) end.   <- end(tf)
-   # kludge
-   x <- ts(x, start=start(x), end=end(x), frequency=frequency(x))
    if (!warn) 
      {opts <- options(warn = -1)
       on.exit(options(opts))
      }
    y <- window(x, start=start., end=end.)
-   if (is.matrix(x) && !is.matrix(y) ) y <- matrix(y, length(y), ncol(x))
-   y <- tframed(unclass(y), tframe(y))
-   seriesNames(y) <- seriesNames(x)
+   if (is.matrix(x) && !is.matrix(y) )
+      y <- tframed(matrix(y, length(y), ncol(x)), tframe(y))
+   series.names(y) <- series.names(x)
    y
   }
 
@@ -165,61 +178,63 @@ tfwindow.default <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
 ################################################
 is.tframe <- function(tf) inherits(tf, "tframe")
 is.tframed <- function(x) inherits(tframe(x), "tframe")
-# above does not distinguish "true" tframed objects since tframe(x) needs
-# to try very hard to return tframes from ts and old tsp objects.
-is.Ttframed <- function(x) {!is.null(attr(x, "tframe"))}
 
+tframe <- function(x) {UseMethod("tframe") } #extract the tframe
 
-tframe <- function(x) {UseMethod("tframe") }
-
-tframe.default <- function(x){ #extract the tframe
+tframe.default <- function(x){
 	if(is.null(x)) NULL 
-	else if (!is.null(attr(x, "tframe"))) attr(x, "tframe") # extractor
-	else if (!is.null(tsp(x)))    classed(tsp(x), "tframe") # extractor
-	else if(is.vector(x)) classed(c(1,length(x),1), "tframe") # extractor
-	else if(is.matrix(x)) classed(c(1,  nrow(x),1), "tframe") # extractor
-	else if(is.array(x) ) classed(c(1,dim(x)[1],1), "tframe") # extractor
-	else NULL
+	else if (!is.null(attr(x, "tframe"))) attr(x, "tframe") # constructor
+	else if (!is.null(tsp(x)))    classed(tsp(x), "tframe") # constructor
+	else if(is.array(x) && !is.matrix(x)) 
+		classed(tsp(as.ts(seq(dim(x)[1]))), "tframe") # constructor
+	else 	classed(tsp(as.ts(x)), "tframe") # constructor
 }
 
-# using classed(tsp(as.ts(x)), "tframe") in the last line above 
-# makes too many things into tframes (eg lists)
+# Following switches dispatch to class of tf value rather than class of x
+#    except in the case of null assignment.
 
-"tframe<-" <- function(x, value) {UseMethod("tframe<-") }
-
-"tframe<-.default" <- function(x, value) {
-  # It is tempting in the next to try and make a ts if value is from a ts, 
-  #  but that will not work for cases were x does not fit the ts model, so
-  #  that would break  tframe(x) <- tframe(y) 
-  if(is.null(value)) tf <- value 
-  else if(is.tframe(value)) tf <- value 
-  else if (is.numeric(value) && length(value) == 3) tf <- value
-  else if (is.list(value))
- 	{if( is.null(value$start) & is.null(value$end) )
- 	    stop("value must be a tframe or a list of arguments for ts().")
- 	 attr(x, "tframe") <- NULL #Splus 3.3 bug work around
-	 tf <- tframe(do.call("ts", append(list(x), value)))
- 	}
-  # next is checking after the fact, but value may just be start and freq
-  #  which is not enough to know periods
-  attr(x, "tframe") <- tf
-  if((!is.null(value)) && !check.tframeConsistent(tframe(x), x))
-     stop("time frame value in tframe assignment is not consistent with data.")
-  x
-}
-
-# making tframed generic allows tframed.TSdata to specify input and output names
-# but there may be a better way and leave "tframe<-" as the real generic.
-
-tframed <- function(x, tf=NULL, names = NULL){UseMethod("tframed") }
-
-tframed.default <- function(x, tf=NULL, names = NULL){
-  # return x as a tframed object with tframe tf
-  if (!is.null(names))  seriesNames(x) <-  names
-  if (is.null(tf)) tf <- tframe(x) # this generates a default
-  tframe(x) <- tf
-  x
+"tframe<-" <- function(x, value)
+ {if(is.null(value)) UseMethod("tframe<-")
+  else settf(value,x)
  }
+
+"tframe<-.default" <- function(x, value) {tsp(x) <- value; x}
+
+settf <- function(value, x) {UseMethod("settf") }
+
+settf.default <- function(value, x)
+{if (!is.consistent.tframe(value, x))
+    stop("time frame value in tframe assignment is not consistent with data.")
+ # using tsp is a bit dangerous in R as it sets class "ts" which can clobber
+ # other classes. The "pure" idea of tframe is that time frame inheritance
+ # follows from the classes of the tframe attribute and classes of the
+ # object itself are separate. Instead of setting tsp(x) one would
+ #    attr(x, "tframe") <- value
+ # This would require start, end, etc to check is.tframed and then dispatch, and
+ #  that has not been implemented.
+ tsp(x) <- value   
+ x
+}
+
+
+tframed <- function(x, ...) {UseMethod("tframed") }
+
+tframed.default <- function(x, tf=NULL, names = NULL) 
+{# return x as a tframed object with tframe tf
+ # If ts is not a tframe but a list then ts() is attempted. This is not
+ #     really the way tframed is suppose to be used, but makes backward 
+ #     compatability easier.
+    if (!is.null(names))  series.names(x) <-  names
+    if (is.null(tf)) tf <- tframe(x)
+    if (is.tframe(tf)) x <- settf(tf, x)
+    else if (is.list(tf))
+       {if( is.null(tf$start) & is.null(tf$end) )
+           stop("tf must be a tframe or a list of arguments for ts().")
+        x <- do.call("ts", append(list(x), tf))
+       }
+    x
+}
+
 
 
 ###############################################
@@ -229,56 +244,103 @@ tframed.default <- function(x, tf=NULL, names = NULL){
 ###############################################
 
 
-tfprint.tframe <- function(x, ...) UseMethod("tframePrint")
-tframePrint <- function(x, ...) UseMethod("tframePrint")
+tfprint.tframe <- function(x, digits=NULL, quote=T, prefix="", ...) 
+   UseMethod("tfprint.tframe")
 
-tframePrint.default <- function(x, digits=NULL, quote=TRUE, prefix="", ...) 
-  {if (! is.tframe(x)) x <- tframe(x)
-   invisible(print(unclass(x), quote=quote, prefix=prefix, ...)) }
+tfprint.tframe.default <- function(x, digits=NULL, quote=T, prefix="", ...) 
+   invisible(print(unclass(x), quote=quote, prefix=prefix, ...))
+   # digits=digits, seems to cause problems ?
 
 
 
-tfTruncate.tframe <- function(x, start=NULL, end=NULL)
-    {# like window but uses indexes rather than dates 
-     if (!is.null(end))   x[2] <- x[1] + (end-1)/x[3]
-     if (!is.null(start)) x[1] <- x[1] + (start-1)/x[3]
-     x
+start.tframe <- function(tf)UseMethod("start.tframe")
+end.tframe <- function(tf)UseMethod("end.tframe")
+
+# periods should give the number of data points in the time direction.
+periods.tframe <- function(tf)UseMethod("periods.tframe")
+
+# frequency is less essential and may not always make sense.
+frequency.tframe <- function(tf)UseMethod("frequency.tframe")
+
+time.tframe <- function(tf)UseMethod("time.tframe")
+
+truncate.tframe <- function(tf, start=NULL, end=NULL)
+    {#NULL means no truncation.
+     UseMethod("truncate.tframe")
     }
 
+expand.tframe <- function(tf, add.start=0, add.end=0)
+     UseMethod("expand.tframe")
 
 
-tfExpand.tframe <- function(x, add.start=0, add.end=0)
-    {x[2] <- x[2] + add.end/x[3]
-     x[1] <- x[1] - add.start/x[3]
-     x
-    }
 
+is.consistent.tframe <- function(tf, x) UseMethod("is.consistent.tframe")
 
-check.tframeConsistent <- function(tf, x) UseMethod("check.tframeConsistent")
+is.consistent.tframe.default <- function(tf, x)
+   {periods.tframe(tf) == periods(x)}
 
-check.tframeConsistent.default <- function(tf, x) periods(tf) == periods(x)
+test.equal.tframe <- function(tf1, tf2) UseMethod("test.equal.tframe")
 
-test.Equaltframes <- function(tf1, tf2) UseMethod("test.Equaltframes")
-
-test.Equaltframes.default <- function(tf1, tf2) { all(tf1==tf2)}
-
-
+test.equal.tframe.default <- function(tf1, tf2) { all(tf1==tf2)}
 
 # Following could be used to do date comparisons like start() < end()
 
+earliest.start.index.tframe <- function(x, ...)
+    UseMethod("earliest.start.index.tframe")
 
-earliestStart <- function(x, ...)
-    start(append(list(x),list(...))[[earliestStartIndex(x, ...)]])
+earliest.start.tframe <- function(x, ...)
+    append(list(x),list(...))[[earliest.start.index.tframe(x, ...)]]
 
-earliestStartIndex <- function(x, ...) UseMethod("earliestStartIndex")
+earliest.end.index.tframe <- function(x, ...)
+    UseMethod("earliest.end.index.tframe")
 
-earliestStartIndex.default <- function(x, ...)
-  {tf <- list(tframe(x))
-   for (i in list(...)) tf <- append(tf, list(tframe(i)))
-   do.call("earliestStartIndex", tf) #dispatch on 1st element of tf
-  }
+earliest.end.tframe <- function(x, ...)
+    append(list(x),list(...))[[earliest.end.index.tframe(x, ...)]]
 
-earliestStartIndex.tframe <- function(x, ...) 
+latest.start.index.tframe <- function(x, ...)
+    UseMethod("latest.start.index.tframe")
+
+latest.start.tframe <- function(x, ...)
+    append(list(x),list(...))[[latest.start.index.tframe(x, ...)]]
+
+latest.end.index.tframe <- function(x, ...)
+    UseMethod("latest.end.index.tframe")
+
+latest.end.tframe <- function(x, ...)
+    append(list(x),list(...))[[latest.end.index.tframe(x, ...)]]
+
+
+###############################################
+
+#  default .tframe methods   <<<<<<<<<<<<
+
+################################################
+
+start.tframe.default <- function(tf) {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+
+end.tframe.default <- function(tf) {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+
+periods.tframe.default <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+
+frequency.tframe.default <- function(tf) {tf[3]}
+
+time.tframe.default <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+
+truncate.tframe.default <- function(tf, start=NULL, end=NULL) 
+    {# like window but uses indexes rather than dates
+     if (!is.null(end))   tf[2] <- tf[1] + (end-1)/tf[3]
+     if (!is.null(start)) tf[1] <- tf[1] + (start-1)/tf[3]
+     tf
+    }
+
+expand.tframe.default <- function(tf, add.start=0, add.end=0) 
+    {tf[2] <- tf[2] + add.end/tf[3]
+     tf[1] <- tf[1] - add.start/tf[3]
+     tf
+    }
+
+
+earliest.start.index.tframe.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -290,21 +352,7 @@ earliestStartIndex.tframe <- function(x, ...)
      r
     }
 
-
-
-
-earliestEnd <- function(x, ...)
-    end(append(list(x),list(...))[[earliestEndIndex(x, ...)]])
-
-earliestEndIndex <- function(x, ...) UseMethod("earliestEndIndex")
-
-earliestEndIndex.default <- function(x, ...)
-  {tf <- list(tframe(x))
-   for (i in list(...)) tf <- append(tf, list(tframe(i)))
-   do.call("earliestEndIndex", tf) #dispatch on 1st element of tf
-  }
-
-earliestEndIndex.tframe <- function(x, ...) 
+earliest.end.index.tframe.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -316,21 +364,7 @@ earliestEndIndex.tframe <- function(x, ...)
      r
     }
 
-
-
-latestStart <- function(x, ...)
-    start(append(list(x),list(...))[[latestStartIndex(x, ...)]])
-
-latestStartIndex <- function(x, ...) UseMethod("latestStartIndex")
-
-latestStartIndex.default <- function(x, ...)
-  {tf <- list(tframe(x))
-   for (i in list(...)) tf <- append(tf, list(tframe(i)))
-   do.call("latestStartIndex", tf)
-  }
-
-
-latestStartIndex.tframe <- function(x, ...) 
+latest.start.index.tframe.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -342,20 +376,7 @@ latestStartIndex.tframe <- function(x, ...)
      r
     }
 
-
-
-latestEnd <- function(x, ...)
-    end(append(list(x),list(...))[[latestEndIndex(x, ...)]])
-
-latestEndIndex <- function(x, ...) UseMethod("latestEndIndex")
-
-latestEndIndex.default <- function(x, ...)
-  {tf <- list(tframe(x))
-   for (i in list(...)) tf <- append(tf, list(tframe(i)))
-   do.call("latestEndIndex", tf)
-  }
-
-latestEndIndex.tframe <- function(x, ...) 
+latest.end.index.tframe.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -368,16 +389,138 @@ latestEndIndex.tframe <- function(x, ...)
     }
 
 
+###############################################
+
+#   .ts and .tframe.tstframe methods
 
 ###############################################
 
-#   .rts cts and its methods
+#"tframe.tframe<-.ts" <- function(x, value) {tsp(x) <- value; x}
+
+tframe.ts <- function(x){classed(tsp(x), c("tstframe", "tframe"))} # constructor
+
+"tframe<-.ts" <- function(x, value) {tsp(x) <- value; x}
+
+#settf.default works for .ts
+
+start.tframe.tstframe <- function(tf)
+   {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+
+end.tframe.tstframe <- function(tf)
+   {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+
+periods.tframe.tstframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+
+frequency.tframe.tstframe <- function(tf) {tf[3]}
+
+time.tframe.tstframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+
+
 
 ###############################################
+
+#   .tf and .tframe.tftframe methods
+
+# these provide .ts or tsp like methods for more general arrays with time as the
+#   first dimension. It may be possible extend to more general structures.
+
+###############################################
+
+tframe.tf <- function(x) {attr(x, "tf") }
+
+"tframe<-.tf" <- function(x, value)
+  {if (!is.null(value)) return(settf.tftframe(value, x))
+   else 
+     {attr(x, "tf") <- NULL
+      if (!is.null(class(x))) class(x) <- class(x)[! class(x) == "tf"]
+     }
+   x
+  }
+
+#tf <- function(x, tfr=NULL, ...){stop("defunct. Use tframed.")}
+#tf <- function(x, tfr=NULL, ...)
+# {#  tfr should be a tframe or other args are passed to ts.
+#  # the class is set to "tftframe" so objects are interchangable R to S
+#  if (is.null(tfr)) 
+#      {tfr <- tframe(do.call("ts", append(list(seq(periods(x))), list(...))))
+#       cls <- class(tfr)
+#       cls[cls == "tstframe"] <- "tftframe"
+#       class(tfr) <- cls
+#      }
+#  if (!is.tframe(tfr)) stop("tfr must be a tframe")
+#  settf.tftframe(tfr, x)
+# }
+
+
+settf.tftframe <- function(value, x)
+{#class(value) <- c("tftframe", "tframe")
+ if (!is.consistent.tframe(value, x))
+    stop("time frame value in tframe assignment is not consistent with data.")
+ attr(x, "tf") <- value
+ classed(x, "tf")  # constructor (settf.tftframe)
+}
+
+
+start.tf <- function(x) {start(tframe(x))}
+end.tf <- function(x) {end(tframe(x))}
+periods.tf <- function(x) {periods(tframe(x))}
+frequency.tf <- function(x) {frequency(tframe(x))}
+time.tf <- function(x) {time(tframe(x))}
+
+start.tframe.tftframe <- function(tf)
+   {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+
+end.tframe.tftframe <- function(tf)
+   {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+
+periods.tframe.tftframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+
+frequency.tframe.tftframe <- function(tf) {tf[3]}
+
+time.tframe.tftframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+
+tfwindow.tf <- function  (x, start=NULL, end=NULL, warn=T, eps=.Options$ts.eps) 
+  {# this needs work
+   tfwindow(ts(x, start=start(x), frequency=frequency(x)),
+             start=start, end=end, warn=warn)
+  }
+
+###############################################
+
+#   .TSdata methods (for DSE)
+
+###############################################
+
+
+"tframe<-.TSdata" <- function(x, value)
+ {if (0 != input.dimension(x)) tframe( input.data(x)) <- value
+  if (0 !=output.dimension(x)) tframe(output.data(x)) <- value
+  x
+ }
+
+
+
+###############################################
+
+#   .rts and .tframe.rtstframe methods
+
+###############################################
+
+
 
 "tframe<-.rts" <- function(x, value) {rts(x) <- value; x}
-"tframe<-.cts" <- function(x, value) {cts(x) <- value; x}
-"tframe<-.its" <- function(x, value) {its(x) <- value; x}
+"tframe.tframe<-.rts" <- function(value, x)
+{if (!is.consistent.tframe(value, x))
+    stop("time frame value in tframe assignment is not consistent with data.")
+ rts(x) <- value
+ x
+}
+
+###############################################
+
+# add cts its
+
+###############################################
 
 
 ###############################################
@@ -385,19 +528,23 @@ latestEndIndex.tframe <- function(x, ...)
 #  stamped specific methods   <<<<<<<<<<<<
 #  stamped class TS have a date/time stamp associated with each time point
 ################################################
+is.consistent.tframe.stamped <- function(tf, x)
+  {periods(x) == periods(tf)}
 
-#check.tframeConsistent.stamped <- function(tf, x)
-#  {periods(x) == periods(tf)}
-
-test.Equaltframes.stamped <- function(tf1, tf2)
+test.equal.tframe.stamped <- function(tf1, tf2)
   {all(tf1$stamp == tf2$stamp)}
 
-periods.stamped <- function(x) length(tframe(x))
+periods.tframe.stamped <- function(x)length(tframe(x))
+
+
 
 ###############################################
 
-test.equal <- function(obj1, obj2, fuzz = 0) UseMethod("test.equal")
 
+
+test.equal <- function(obj1, obj2, ...) UseMethod("test.equal")
+
+ 
 test.equal.default <- function(obj1, obj2, fuzz=1e-16) 
   {if      (is.null(obj1)) is.null(obj2)
    else if (is.array(obj1)) test.equal.array(obj1, obj2, fuzz=fuzz)
@@ -407,13 +554,13 @@ test.equal.default <- function(obj1, obj2, fuzz=1e-16)
   }
 
 test.equal.array <- function(obj1, obj2, fuzz=1e-16) 
-  {if(!is.array(obj2))                     r <-FALSE
-   else if (any(dim(obj1) != dim(obj2)))   r <- FALSE
+  {if(!is.array(obj2))                     r <-F
+   else if (any(dim(obj1) != dim(obj2)))   r <- F
    else if ("character" == mode(obj1))     r <- all(obj1 == obj2)
    else if ("numeric" == mode(obj1))
               r <- test.equal.numeric(obj1, obj2, fuzz=fuzz)
    else stop(paste("matrix of mode ", mode(obj1), " not testable."))
-   if (is.na(r))  r <- FALSE
+   if (is.na(r))  r <- F
     r
   }
 
@@ -425,7 +572,7 @@ test.equal.numeric <- function(obj1, obj2, fuzz=1e-16)
           {nna <- !is.na(c(obj1))
            r <- fuzz >= max(abs(c(obj1)[nna] - c(obj2)[nna]))
           }
-   if (is.na(r))  r <- FALSE
+   if (is.na(r))  r <- F
    r
   }
 
@@ -438,12 +585,14 @@ test.equal.list <- function(obj1, obj2, fuzz=1e-16)
 
 if (!exists("lag")) lag <- function(x, ...) { UseMethod("lag") }
 
-if (!exists("lag.default"))  lag.default <- function(x, ...) {stop("no lag function") }
+lag.tframe <- function(x,...)UseMethod("lag.tframe") 
+
+if (!exists("lag"))  lag.default <- function(x, ...) {stop("no lag function") }
 
 
 
 
-splice <- function(mat1, mat2, ...) UseMethod("splice")
+splice <- function(obj1, obj2, ...) UseMethod("splice")
 
 splice.default <- function(mat1, mat2)
 {# splice together 2 time series matrices. If data  is provided in both for
@@ -467,8 +616,8 @@ splice.default <- function(mat1, mat2)
  na <- is.na(r1)
  r1[na] <- r2[na] # put mat2 only in na locations of mat1
  dimnames(r1)<-list(round(time(r1),digits=3),dimnames(mat1)[[2]])
- r1 <- tframed(r1, list(start=earliestStart(mat1,mat2), 
-                        end =latestEnd(mat1,mat2), frequency=freq))
+ r1 <- tframed(r1, list(start=earliest.start(mat1,mat2), 
+                        end =latest.end(mat1,mat2), frequency=freq))
  r1
 }
 
@@ -476,13 +625,13 @@ splice.default <- function(mat1, mat2)
 if( !exists("tsmatrix.default"))  
   {if(exists("tsmatrix")) tsmatrix.default <- tsmatrix 
    else tsmatrix.default <- function(x, ...) 
-            {tbind(x, ..., pad.start=FALSE, pad.end=FALSE) }
+            {tbind(x, ..., pad.start=F, pad.end=F) }
   }
 
 tsmatrix <- function(x, ...)
  {# the default tsmatrix messes up because it gets some time info. (from
   #  start or end) but not tsp info.
-  if (is.Ttframed(x)) tbind(x, ..., pad.start=FALSE, pad.end=FALSE)
+  if (is.tframed(x)) tbind(x, ..., pad.start=F, pad.end=F)
   else 
     {#warning("Using tsmatrix which should be defunct. Consider using tbind and tframe methods.")       
      tsmatrix.default(x,  ...)
@@ -490,20 +639,19 @@ tsmatrix <- function(x, ...)
  }
 
 
-tfTruncate <- function(x, start=NULL, end=NULL)
+truncate <- function(x, start=NULL, end=NULL)
  {# similar to window but start and end specify periods relative to the 
   #   beginning (eg x[start:end] for a vector).
   #   NULL means no truncation.
-  UseMethod("tfTruncate")
+  UseMethod("truncate")
  }
 
-
-tfTruncate.default <- function(x, start=NULL, end=NULL)
-    {tf <- tfTruncate(tframe(x), start, end)
+truncate.default <- function(x, start=NULL, end=NULL)
+    {tf <- truncate.tframe(tframe(x), start, end)
      if (is.null(start)) start <- 1
      if (is.matrix(x)) 
         {if (is.null(end)) end <- dim(x)[1]
-         z <- x[start:end,,drop=FALSE]
+         z <- x[start:end,,drop=F]
         }
      else 
         {if (is.null(end)) end <- length(x)
@@ -513,31 +661,87 @@ tfTruncate.default <- function(x, start=NULL, end=NULL)
      z
     }
 
-tfExpand <- function(x, add.start=0, add.end=0)
+expand <- function(x, add.start=0, add.end=0)
  {# expand (a tframe) by add.start periods on the beginning
   # and add.end periods on the end
-  UseMethod("tfExpand")
+  UseMethod("expand")
  }
 
-tfExpand.default <- function(x, add.start=0, add.end=0)
-    {tf <- tfExpand(tframe(x), add.start=add.start, add.end=add.end)
+expand.default <- function(x, start=NULL, end=NULL)
+    {tf <- expand.tframe(tframe(x), start, end)
      select.series(tbind(x,time(tf)), series=1)
     }
 
 
-trim.na <- function(x, start. = TRUE, end. = TRUE) UseMethod("trim.na") 
+earliest.start <- function(x, ...)
+    start(append(list(x),list(...))[[earliest.start.index(x, ...)]])
 
-trim.na.default <- function(x, start. = TRUE, end. = TRUE)
-{# trim NAs from the ends of a ts matrix or vector.
+earliest.start.index <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("earliest.start.index.tframe")
+   else 
+     {tf <- list(tframe(x))
+      for (i in list(...)) tf <- append(tf, list(tframe(i)))
+      r <- do.call("earliest.start.index.tframe", tf)
+     }
+   r
+  }
+
+earliest.end <- function(x, ...)
+    end(append(list(x),list(...))[[earliest.end.index(x, ...)]])
+
+earliest.end.index <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("earliest.end.index.tframe")
+   else 
+     {tf <- list(tframe(x))
+      for (i in list(...)) tf <- append(tf, list(tframe(i)))
+      r <- do.call("earliest.end.index.tframe", tf)
+     }
+   r
+  }
+
+latest.start <- function(x, ...)
+    start(append(list(x),list(...))[[latest.start.index(x, ...)]])
+
+latest.start.index <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("latest.start.index.tframe")
+   else 
+     {tf <- list(tframe(x))
+      for (i in list(...)) tf <- append(tf, list(tframe(i)))
+      r <- do.call("latest.start.index.tframe", tf)
+     }
+   r
+  }
+
+latest.end <- function(x, ...)
+    end(append(list(x),list(...))[[latest.end.index(x, ...)]])
+
+latest.end.index <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("latest.end.index.tframe")
+   else 
+     {tf <- list(tframe(x))
+      for (i in list(...)) tf <- append(tf, list(tframe(i)))
+      r <- do.call("latest.end.index.tframe", tf)
+     }
+   r
+  }
+
+
+
+trim.na <- function(obj, ...) UseMethod("trim.na") 
+
+trim.na.default <- function(x, start.=T, end.=T)
+{# trim NAs from the ends of a ts matrix.
  # (Observations for all series are dropped in a given period if any 
  #  one contains an NA in that period.)
  # if start.=F then beginning NAs are not trimmed.
  # If end.=F   then ending NAs are not trimmed.
- sample <- ! if (is.matrix(x)) apply(is.na(x),1, any) else is.na(x)
+ sample <- ! apply(is.na(x),1, any)
  if (!any(sample)) warning("data is empty after triming NAs.")
- s <- if (start.) min(time(x)[sample]) else start(x)
- e <- if (end.)   max(time(x)[sample]) else end(x)
- tfwindow(x, start.=s, end.=e, warn=FALSE)
+ if (start.) s <-min(time(x)[sample])
+ else       s <-start(x)
+ if (end.)   e <-max(time(x)[sample])
+ else       e <-end(x)
+ tfwindow(x,start=s, end=e, warn=F)
 }
 
 
@@ -554,42 +758,50 @@ nseries.default <- function(x)  {if (is.matrix(x)) ncol(x) else 1}
 
    
 
- seriesNames <- function(x)       UseMethod("seriesNames")
-"seriesNames<-" <- function(x, value)UseMethod("seriesNames<-")
+ series.names <- function(x)       UseMethod("series.names")
+"series.names<-" <- function(x, value)UseMethod("series.names<-")
 
- seriesNames.default <- function(x)
+ series.names.default <- function(x)
    {if (is.null(x)) return(NULL)
-    names <- attr(x, "seriesNames")
+    names <- attr(x, "series.names")
     if (is.null(names)) names <- dimnames(x)[[2]]
     if (is.null(names)) names <- paste("Series", seq(ncol(x)))
     names
    }
 
-"seriesNames<-.default" <- function(x, value){attr(x,"seriesNames")<-value; x}
+"series.names<-.default" <- function(x, value){attr(x,"series.names")<-value; x}
 
 
 
-select.series <- function(x, series=seqN(nseries(x))) UseMethod("select.series")
+select.series <- function(x, ...)  UseMethod("select.series")
 
-select.series.default <- function(x, series=seqN(nseries(x))) {
-  names <- seriesNames(x)
+select.series.default <- function(x, series=seq(ncol(x))) {
+  names <- series.names(x)
   if (is.character(series)) series <- match(names,series, nomatch=0) > 0
   if(all(0==series) | is.null(series)) r <- NULL
   else {
-#    r <- classed(tframed(x[, series, drop = FALSE], tframe(x)), class(x))# reconstructor
-#   tframe assignment cannot guarantee that the object has the right structure
-#   for a class, so above can give a deformed object in the class.
-    r <- tframed(x[, series, drop = FALSE], tframe(x))
-    seriesNames(r) <- names[series]
+    r <- classed(tframed(x[, series, drop = F], tframe(x)), class(x))# reconstructor
+    series.names(r) <- names[series]
     }
   r
   }
 
+# possibly there should be more attempt to preserve attributes in 
+#  select.series but there are problems?:
+#     at <- attributes(x)
+#     atn <- names(at)
+#     atl <- (atn != "dim") & (atn != "dimnames")
+#     atn <- atn[atl]
+#     at[[!atl]] <- NULL
+#     r <- x[,series,drop=F] 
+#     list.add(attributes(r), atn) <- at
+     
 
-tbind <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
-   UseMethod("tbind")
+ 
 
-tbind.default <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
+tbind <- function(x, ..., pad.start=T, pad.end=T, warn=T)  {UseMethod("tbind")}
+
+tbind.default <- function(x, ..., pad.start=T, pad.end=T, warn=T)
  {# this should work for old tsp vectors and matrices
   if (is.null(x)) stop("first argument cannot be NULL.")
   fr <- frequency(x)
@@ -622,10 +834,10 @@ tbind.default <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
         else  aft <- rep(NA, en - (fr %*% end(z)))
         r <- cbind(r, c( before, z, aft) )
        }
-     sn <- c(sn,seriesNames(z))
+     sn <- c(sn,series.names(z))
    }}
   if (!is.null(nm)) dimnames(r) <- list(nm,NULL)
-  if (length(sn) == ncol(r)) seriesNames(r) <- sn
+  if (length(sn) == ncol(r)) series.names(r) <- sn
   r <- tframed(r, list(start=c((st-1)%/%fr[1], 1+(st-1)%%fr[1]), 
                        frequency=fr[1]))
   if (!(pad.start & pad.end)) r <- trim.na(r, start.=!pad.start, end.=!pad.end)

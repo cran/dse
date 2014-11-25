@@ -2,10 +2,7 @@
  Sys.info()
  version.dse()
  if      (is.R()) data("eg1.DSE.data.diff", package="dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
+ if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
 
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
  
@@ -76,8 +73,8 @@ cat("dse1 test 13...\n")
 
   z <- eg1.DSE.data.diff
   ok <- test.equal(z,
-      TSdata(output=output.data(combine(z,z), series=seq(nseriesOutput(z))),
-              input= input.data(combine(z,z), series=seq( nseriesInput(z))))) 
+      TSdata(output=output.data(combine(z,z), series=seq(output.dimension(z))),
+              input= input.data(combine(z,z), series=seq( input.dimension(z))))) 
  
   if (!ok) {all.ok <- F ; cat(ok, "\n")}
 

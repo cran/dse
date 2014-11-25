@@ -1,30 +1,22 @@
 \name{DSECOMPILED}
 \alias{.DSECOMPILED}
-\alias{.DSEDUP}
 \title{Use Compiled or S/R Code}
 \description{
-    Determines if compiled code should be used or not.
-    }
+	Determines if compiled code should be used or not.
+	}
 \usage{
-    .DSECOMPILED <- TRUE
-    .DSECOMPILED <- FALSE
-    .DSEDUP <- TRUE
-    .DSEDUP <- FALSE
+	.DSECOMPILED <- T
+	.DSECOMPILED <- F
 }
 
 \sideffects{
-    Several DSE functions which call compiled fortran or C code will use
-    the equivalent S/R version if the .DSECOMPILED global variable is set 
-    to FALSE. Its main purpose is for debugging. .DSEDUP is passed to
-    fortran calls and in R controls whether R duplicates arguments passed
-    to the fortran code. The safe setting is TRUE. Setting FALSE saves some
-    memory but does not seem to give much speed gain. 
+	Several DSE functions which call compiled fortran or C code will use
+	the equivalent S/R version if this global variable is set to FALSE.
+	Its main purpose is for debugging.
 }
 \examples{
-    .DSECOMPILED <- TRUE
-    .DSEDUP <- TRUE
+	.DSECOMPILED <- T
 }
-%\keyword{DSE}
-\keyword{programming}
-
+\keyword{DSE}
+\keyword{ts}
 

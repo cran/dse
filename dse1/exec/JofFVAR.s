@@ -1,5 +1,5 @@
 #!/bin/csh
-
+#   2000/03/21 14:42:14 
 #   NB   check load.from and  source("1dec93.dat") gives egJofF.1dec93.data 
 
 
@@ -68,7 +68,7 @@ Splus <<eofS
   cat("J of F VAR paper section 2 generating object 1 (10 min/ 7 min /5 min)\n")
   cat("     started ",date.parsed(), "...\n")
 
-  e.ls.mod1 <- EstEval( mod1, replications=100, 
+  e.ls.mod1 <- eval.estimation( mod1, replications=100, 
          seed=c(13,44,1,25,56,0,6,33,22,13,13,0),
          simulation.args=list(sampleT=100, sd=1), 
          estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
@@ -76,7 +76,7 @@ Splus <<eofS
 
   cat("J of F VAR paper section 2 generating object 2 (10 min/ 7 min / 5 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  e.ls.mod2 <- EstEval( mod2, replications=100, 
+  e.ls.mod2 <- eval.estimation( mod2, replications=100, 
          seed=c(13,43,7,57,62,3,30,29,24,54,47,2),
          simulation.args=list(sampleT=100, sd=1), 
          estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
@@ -84,7 +84,7 @@ Splus <<eofS
 
   cat("J of F VAR paper section 2 generating object 3 (15 min/ 8 min / 10 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  e.mod3.VAR.lag12<-EstEval( mod3, replications=100, 
+  e.mod3.VAR.lag12<-eval.estimation( mod3, replications=100, 
          seed=c(37,17,6,24,47,2,62,7,62,2,21,3),
          simulation.args=list(sd=1), 
          estimation="est.VARX.ls", estimation.args=list(max.lag=12), 
@@ -92,7 +92,7 @@ Splus <<eofS
 
   cat("J of F VAR paper section 2 generating object 4 (20 min/ 8 min /10 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  e.mod3.VAR.lag6<-EstEval( mod3, replications=100, 
+  e.mod3.VAR.lag6<-eval.estimation( mod3, replications=100, 
          seed=c(53,41,26,39,10,1,19,25,56,32,28,3),
          simulation.args=list(sd=1), 
          estimation="est.VARX.ls", estimation.args=list(max.lag=6), 
@@ -100,35 +100,35 @@ Splus <<eofS
 
   cat("J of F VAR paper section 2 generating object 5 (10 min/ 2 min /2 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.mod3.VAR.lag12 <- forecastCov.estimatorsWRTtrue(mod3,
+  pc.mod3.VAR.lag12 <- forecast.cov.estimators.wrt.true(mod3,
      seed=c(37,17,6,24,47,2,62,7,62,2,21,3), 
      estimation.methods=list(est.VARX.ls=list(max.lag=12)),
      est.replications=2, pred.replications=10, Spawn=T)
 
   cat("J of F VAR paper section 2 generating object 6 (5 min/ 2 min /2 min)\n")
   cat("     started ",date.parsed(), " ...\n")
-  pc.mod3.VAR.lag6 <- forecastCov.estimatorsWRTtrue(mod3,
+  pc.mod3.VAR.lag6 <- forecast.cov.estimators.wrt.true(mod3,
      seed=c( 53,41,26,39,10,1,19,25,56,32,28,3), 
      estimation.methods=list(est.VARX.ls=list(max.lag=6)),
      est.replications=2, pred.replications=10, Spawn=T)
 
   cat("J of F VAR paper section 3 generating object 1 ( / 2 min /2 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.rd.ls.3lag <- forecastCov.reductionsWRTtrue(mod3,
+  pc.rd.ls.3lag <- forecast.cov.reductions.wrt.true(mod3,
      seed=c(29,55,47,18,33,1,15,15,34,46,13,2),
      estimation.methods=list(est.VARX.ls=list(max.lag=3)),
      est.replications=2, pred.replications=10, Spawn=T)
 
   cat("J of F VAR paper section 3 generating object 2 (4.5 hrs/ 25 min /25 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.rd.ls.12lag <- forecastCov.reductionsWRTtrue(mod3,
+  pc.rd.ls.12lag <- forecast.cov.reductions.wrt.true(mod3,
      seed= c(53,33,11,11,54,3,54,15,33,28,9,2),
      estimation.methods=list(est.VARX.ls=list(max.lag=12)),
       est.replications=2, pred.replications=10, Spawn=T)
 
   cat("J of F VAR paper section 3 generating object 3 (10 min/ 2 min /2 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.ewt7ls.3.12lag <- forecastCov.estimatorsWRTtrue(mod3, 
+  pc.ewt7ls.3.12lag <- forecast.cov.estimators.wrt.true(mod3, 
      seed=c(13,61,61,38,23,1,63,44,34,19,59,2),
      estimation.methods=list(
            est.VARX.ls=list(max.lag=3, lag.weight=.7),
@@ -137,21 +137,21 @@ Splus <<eofS
 
   cat("J of F VAR paper section 3 generating object 4 (2 min/ 2 min /2 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.ewt7ls.mod2.12lag <- forecastCov.estimatorsWRTtrue(mod2,
+  pc.ewt7ls.mod2.12lag <- forecast.cov.estimators.wrt.true(mod2,
       seed=c(37,60,43,61,39,3,4,38,24,48,49,1),
       estimation.methods=list(est.VARX.ls=list(max.lag=12, lag.weight=.7)),
       est.replications=2, pred.replications=10, Spawn=T)
 
   cat("J of F VAR paper section 3 generating object 5 (3 min/ 2 min /2 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.ewt9ls.mod2.12lag <- forecastCov.estimatorsWRTtrue(mod2,
+  pc.ewt9ls.mod2.12lag <- forecast.cov.estimators.wrt.true(mod2,
       seed=c(37,60,43,61,39,3,4,38,24,48,49,1),
       estimation.methods=list(est.VARX.ls=list(max.lag=12, lag.weight=.9)),
       est.replications=2, pred.replications=10, Spawn=T) 
 
   cat("J of F VAR paper section 3 generating object 6 (15 min/ 5 min /5 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  e.ewt7ls.mod2.12lag <- EstEval( mod2, replications=100,
+  e.ewt7ls.mod2.12lag <- eval.estimation( mod2, replications=100,
      seed=c(29,55,47,18,33,1,15,15,34,46,13,2),
      estimation="est.VARX.ls",
      estimation.args=list(max.lag=12, lag.weight=.7),
@@ -160,14 +160,14 @@ Splus <<eofS
   cat("J of F VAR paper section 4 generating object 1 ( / 20 min /20 min)\n")
   cat("     started ",date.parsed(), "...\n")
 
-    pc.rd.ewt7ls.12lag <- forecastCov.reductionsWRTtrue(mod3,
+    pc.rd.ewt7ls.12lag <- forecast.cov.reductions.wrt.true(mod3,
      seed=c(29,16,40,58,14,2,41,2,38,24,56,0),
      estimation.methods=list(est.VARX.ls=list(max.lag=12, lag.weight=.7)),
      est.replications=2, pred.replications=10, Spawn=T, criteria="taic")
 
   cat("J of F VAR paper section 4 generating object 2 (6 min/ 2 min /2 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.ls.mod3.known <-  forecastCov.estimatorsWRTtrue(mod3,
+  pc.ls.mod3.known <-  forecast.cov.estimators.wrt.true(mod3,
      seed=c(29,16,40,58,14,2,41,2,38,24,56,0),
      estimation.methods=list(
            est.VARX.ls=list(max.lag=3),
@@ -192,7 +192,7 @@ Splus <<eofS
   cat("     started ",date.parsed(), "...\n")
   if (do.mle)
     {  cat("(\nThis object has only been computed on a Sparc10\n")
-       pc.mle.mod4.known <-  forecastCov.estimatorsWRTtrue(mod4,  
+       pc.mle.mod4.known <-  forecast.cov.estimators.wrt.true(mod4,  
        seed=c(17,13,42,31,5,3,10,52,17,44,54,3),
        estimation.methods=list(
            est.max.like=list(mod4,max.iter=50, algorithm="dfpMin",
@@ -202,7 +202,7 @@ Splus <<eofS
      # the following "converges", but to an inferior value than above.
      # first estimate iteration  7200+ value  411.893025669975 (conv.)
      # second         iteration  9100+ value  410.890331230053 (conv.)
-       nls.pc.mle.mod4.known <-  forecastCov.estimatorsWRTtrue(mod4,  
+       nls.pc.mle.mod4.known <-  forecast.cov.estimators.wrt.true(mod4,  
        seed=c(17,13,42,31,5,3,10,52,17,44,54,3),
        estimation.methods=list(
            est.max.like=list(mod4,max.iter=10000, algorithm="nlsimplex")), 
@@ -212,7 +212,7 @@ Splus <<eofS
 
   cat("J of F VAR paper section 5 generating object 2 ( / 30 min /30 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.bb4.mod4       <-  forecastCov.estimatorsWRTtrue(mod4,  
+  pc.bb4.mod4       <-  forecast.cov.estimators.wrt.true(mod4,  
     seed=c(17,13,42,31,5,3,10,52,17,44,54,3), 
     estimation.methods=list(
           est.black.box4=list(verbose=F, criterion="taic", max.lag=12)), 
@@ -220,7 +220,7 @@ Splus <<eofS
 
   cat("J of F VAR paper section 5 generating object 3  ( / 30 min /30 min)\n")
   cat("     started ",date.parsed(), "...\n")
-  pc.bb4.mod5       <-  forecastCov.estimatorsWRTtrue(mod5,  
+  pc.bb4.mod5       <-  forecast.cov.estimators.wrt.true(mod5,  
     seed=c(17,13,42,31,5,3,10,52,17,44,54,3), 
     estimation.methods=list(
            est.black.box4=list(verbose=F, criterion="taic", max.lag=12)), 
@@ -243,7 +243,7 @@ load.DSE.large.fortran(from=load.from)
 
    cat("J of F VAR paper section 6 generating object 1 (/ 45 min /45 min)\n")
    cat("     started ",date.parsed(), "...\n")
-   bb4.vs.ls.cov <-out.of.sample.forecastCov.estimatorsWRTdata(egJofF.1dec93.data, 
+   bb4.vs.ls.cov <-out.of.sample.forecast.cov.estimators.wrt.data(egJofF.1dec93.data, 
        zero=T, trend=T, estimation.sample=.75, 
        estimation.methods = list(
            est.black.box4=list(estimation="est.VARX.ls", max.lag=12, verbose=F),
@@ -258,7 +258,7 @@ load.DSE.large.fortran(from=load.from)
 
    cat("J of F VAR paper section 6 generating object 2 ( / 20 min /23 min)\n")
    cat("     started ",date.parsed(), "...\n")
-   bb4.vs.ls.proj <-horizonForecasts(bb4.vs.ls.cov,horizons=c(1,3,6),
+   bb4.vs.ls.proj <-horizon.forecasts(bb4.vs.ls.cov,horizons=c(1,3,6),
                         discard.before=1)
    egJofF.1dec93.data.subset<- egJofF.1dec93.data
    egJofF.1dec93.data.subset\$output <- 
@@ -266,7 +266,7 @@ load.DSE.large.fortran(from=load.from)
    tframe(egJofF.1dec93.data.subset\$output) <- 
            tframe(egJofF.1dec93.data\$output)
 
-   subset.bb4.vs.ls.cov<-out.of.sample.forecastCov.estimatorsWRTdata( 
+   subset.bb4.vs.ls.cov<-out.of.sample.forecast.cov.estimators.wrt.data( 
       egJofF.1dec93.data.subset, zero=T, trend=T, estimation.sample=.75, 
       estimation.methods = list( 
          est.black.box4=list(  estimation="est.VARX.ls", max.lag=12, verbose=F),
@@ -295,34 +295,34 @@ load.DSE.large.fortran(from=load.from)
      plot(roots(e.ls.mod2), complex.plane=F)   # line chart of cum. ave. est. roots
      distribution(roots(e.ls.mod1), bandwidth=.2)  #Exhibit 1
      distribution(roots(e.ls.mod2), bandwidth=.1)  #Exhibit 2
-     tfplot(total.forecastCov(pc.mod3.VAR.lag12), select.trend=F)  #Exhibit 3
-     tfplot(total.forecastCov(pc.mod3.VAR.lag6 ), select.trend=F)  #Exhibit 4
+     tfplot(total.forecast.cov(pc.mod3.VAR.lag12), select.trend=F)  #Exhibit 3
+     tfplot(total.forecast.cov(pc.mod3.VAR.lag6 ), select.trend=F)  #Exhibit 4
      tfplot(pc.mod3.VAR.lag6, select.trend=F, cex=1)                #Exhibit 5
 
-     tfplot(total.forecastCov(pc.rd.ls.3lag), select.trend=F, 
+     tfplot(total.forecast.cov(pc.rd.ls.3lag), select.trend=F, 
                                       lty=c(1,2,rep(3,18)) )     #Exhibit 6
       #legend(6,4.1,c("true", "zero", "sum of squared error"), lty=1:3)
-     tfplot(total.forecastCov(pc.rd.ls.12lag), select.trend=F,
+     tfplot(total.forecast.cov(pc.rd.ls.12lag), select.trend=F,
                                       lty=c(1,2,rep(3,36)) )     #Exhibit 7
-     tfplot(total.forecastCov(pc.ewt7ls.3.12lag),select.trend=F,
+     tfplot(total.forecast.cov(pc.ewt7ls.3.12lag),select.trend=F,
                                       lty=c(1,2,rep(3,18)) )     #Exhibit 8
      tfplot(pc.ewt7ls.mod2.12lag,select.trend=F)                   #Exhibit 9
      tfplot(pc.ewt9ls.mod2.12lag,select.trend=F)                   #Exhibit 10
      distribution(roots(e.ewt7ls.mod2.12lag,
           criterion.args = list(randomize = T)), select= 1)      #Exhibit 11
 
-     tfplot(total.forecastCov(pc.rd.ewt7ls.12lag), select.trend=F,
+     tfplot(total.forecast.cov(pc.rd.ewt7ls.12lag), select.trend=F,
                                       lty=c(1,2,1,rep(3,36)) )   #Exhibit 12
      print(pc.rd.ewt7ls.12lag\$information.criteria[[2]], digits=3)  #Exhibit 13
 
-     tfplot(total.forecastCov(
+     tfplot(total.forecast.cov(
          combine(pc.ls.mod3.known, pc.rd.ewt7ls.12lag)),
          select.trend=F, lty=c(1,2,1,1,rep(3,36)) )              #Exhibit 14
 
-     tfplot(total.forecastCov(combine(pc.bb4.mod4,pc.mle.mod4.known)), 
+     tfplot(total.forecast.cov(combine(pc.bb4.mod4,pc.mle.mod4.known)), 
             select.trend=F, lty=c(1,2,3,4) )   #Exhibit 15
 
-     tfplot(total.forecastCov(pc.bb4.mod5), select.zero=F, select.trend=F,
+     tfplot(total.forecast.cov(pc.bb4.mod5), select.zero=F, select.trend=F,
                                       lty=c(1,2,rep(3,18)) )   #Exhibit 16
 
 #     selected series forecasts starting in June 1989 for  

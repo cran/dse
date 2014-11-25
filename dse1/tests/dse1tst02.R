@@ -2,10 +2,7 @@
  Sys.info()
  version.dse()
  if      (is.R()) data("eg1.DSE.data.diff", package="dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
+ if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
 
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
  

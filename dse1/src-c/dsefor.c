@@ -2016,7 +2016,7 @@ doublereal *aa, *bb, *ww;
     static integer mhoriz;
 
 /*  multiple calls to ARMA for for prediction at given horizons. */
-/*     See S program horizonForecasts.TSmodel */
+/*     See S program horizon.forecasts.TSmodel */
 
 /*  Note: If DSCARD is too small then forecasting starts based on little (or */
 /*          no) data and the results will be spurious. */
@@ -2116,7 +2116,7 @@ doublereal *aa, *bb, *ww;
     static doublereal prderr[1]	/* was [1][1] */;
 
 /*  multiple calls to ARMA for prediction analysis. */
-/*     See S program forecastCov */
+/*     See S program forecast.cov */
 
 /*  Note: If DSCARD is too small then forecasting starts based on little (or */
 /*          no) data and the results will be spurious. */

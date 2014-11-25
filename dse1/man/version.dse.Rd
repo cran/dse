@@ -4,9 +4,8 @@
 \title{Print Version Information}
 \description{Print version information.}
 \usage{
-    version.dse()}
+	version.dse()}
 \examples{version.dse()}
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
-
 

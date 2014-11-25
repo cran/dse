@@ -13,12 +13,13 @@
 \alias{print.test.value}
 \alias{dsescan}
 \alias{read.int}
+\alias{shart.shift}
 \alias{svd.criteria}
 
 \title{DSE Utilities}
 \description{
-    These functions are used by other functions in DSE and are not
-    typically called directly by the user.}
-%\keyword{DSE}
-\keyword{internal}
+	These functions are used by other functions in DSE and are not
+	typically called directly by the user.}
+\keyword{DSE}
+\keyword{ts}
 

@@ -1,79 +1,147 @@
+
+#print.tframe.tstframe <- function(x,digits=NULL, quote = T, prefix = "", ...) 
+#invisible(print(unclass(x), quote = quote))
+
+
+
+#if( !exists("start.default"))  start.default <- start
+#if( !exists("end.default")) end.default <- end
+#if( !exists("frequency.default")) frequency.default <- frequency
+#if( !exists("time.default")) time.default <- time
+
+
+# this fix sent to r-devel  28sept98
+# "tsp<-" <- function(x, value)
+# {if (is.null(value)) 
+#    {attr(x, "tsp") <- value
+#     if(inherits(x,"ts")) class (x) <- NULL
+#     return(x)
+#    }
+#  attr(x, "tsp") <-  value  # previously c(tf[1:2]*tf[3], tf[3])
+#  class (x) <- "ts"
+#  x
+# }
+
+# this fix sent to Martin 30sept98
+# "tsp<-" <- function(x, value)
+# {attr(x, "tsp") <-  value 
+#  if (is.null(value) && inherits(x,"ts")) class(x) <- NULL
+#  else class (x) <- "ts"
+#  x
+# }
+
+
+# "tsp<-" <- function(x, value)
+#   {attr(x, "tsp") <-  value
+#    if (is.null(value)) 
+#      {if(inherits(x,"ts")) tfclass(x) <- tfclass(x)["ts" != tfclass(x)]
+#       return(x)
+#      }
+#    tfclass(x) <- c("ts", tfclass(x))
+#    x
+#   }
+
+# This version sent by Martin  14 Oct 1998.
+# Modified by PG with classed March 9, 1999. 
+
+# in base R 0.65.0
+#"tsp<-" <- function(x, value)
+#{
+#    cl <- class(x)
+#    attr(x,"tsp") <- value
+#    classed(x,
+#        if (is.null(value) && inherits(x,"ts")) cl["ts" != cl] else c("ts",cl))
+#}
+# "tsp<-" moved to Rfixes.hs
+
+# The R version of window.ts does not use optional
+# values for start and end, but rather checks for missing arguments, so 
+#  argument passing may cause problems. Also, warn is not supported and,
+#  sometime in the past I found it necessary to add eps for date comparisons to
+#  work properly in some situations.
+
+#window.ts <- function(x, start=NULL, end=NULL, warn=T, eps=.Options$ts.eps)
+#    {f <- tsp(x)[3]
+#     if (is.null(start)) start <- tsp(x)[1]
+#     if (is.null(end))   end   <- tsp(x)[2]
+#     if (2 == length(start)) start <- start[1] + (start[2]-1)/f
+#     if (2 == length(end))    end  <-   end[1] + (  end[2]-1)/f
+#     if (start < tsp(x)[1])
+#        {start <- tsp(x)[1]
+#         if (warn) warning("Specified start earlier than start of data, start not changed.")
+#        }
+#     if (end > tsp(x)[2])
+ #       {end <- tsp(x)[2]
+#         if (warn) warning("Specified end later than end of data, end not changed.")
+#        }
+#     leave <- (time(x) >= (start-eps)) & (time(x) <= (end+eps))
+#     #Rbug unclass shouldn't be needed in the next line
+#     if (is.matrix(x)) z <- unclass(x)[leave,,drop=F] 
+#     else  z <- x[leave]
+##     tsp(z) <- c(start, end, f)
+#     classed(ts(z, start=start, end=end, frequency=f), tfclass(x))
+#    }
+
+
+# Martin M's version in R 62.3 seems better.
+# matplot <- function(x, y, type ="p", lty=1:3, xlab="x", ylab="y", 
+#               colors=c("black", "blue", "red", "green", "cyan"), ...) 
+#   {# lty only affects type="l"
+#    # if lty is not long enough it is repeated using colors so set lty=1 to
+#    #  make each plot a different colour.
+#    if (!is.matrix(y)) y <- matrix(y, length(y),1)
+#    # vector or column matrix is repeated for each column of y:
+#    if ((is.matrix(x)) && (ncol(x)==1)) x <- c(x) 
+#    if (!is.matrix(x)) x <- matrix(x, length(x), dim(y)[2])
+#    if (!all(dim(x) == dim(y)))
+#        stop("matplot array dimensions do not correspond.")
+#    colors <- c(t(matrix(colors, length(colors), length(lty))))
+#    if (length(colors) < ncol(y)) colors <-(rep(colors, ncol(y)))[seq(ncol(y))]
+#    if (length(lty) < ncol(y)) lty <- (rep(lty, ncol(y)))[seq(ncol(y))]
+#    for (i in 1:ncol(x)) 
+#      {if (i ==1) tfplot.default(x[,i],y[,i],xlim=range(x[!is.na(x)]), 
+#         ylim=range(y[!is.na(y)]),
+#         xlab=xlab, ylab=ylab, type=type, lty=lty[i], col=colors[i], ...)
+#       else lines(x[,i],y[,i], type=type, lty=lty[i], col=colors[i],  ...)
+#      }
+#    invisible()
+#   }
+
+
+
 ###############################################
 
-#   .ts methods (for the object) and .tstframe methods (for the tframe)
+#  tstframe (ts) specific methods   <<<<<<<<<<<<
 
-###############################################
+################################################
 
-tframe.ts <- function(x){classed(tsp(x), c("tstframe", "tframe"))} # extractor
+tframe.tstframe <- function(x)
+ {classed(tsp(x), c("tstframe", "tframe"))}  # constructor
 
-"tframe<-.ts" <- function(x, value) {do.call("ts", append(list(x), value))}
+start.tframe.tstframe <- function(tf) {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
 
-select.series.ts <- function(x, series=seqN(nseries(x))) {
-  names <- seriesNames(x)
-  if (is.character(series)) series <- match(names,series, nomatch=0) > 0
-  if(all(0==series) | is.null(series)) r <- NULL
-  else {
-    r <- x[, series, drop = FALSE]
-    seriesNames(r) <- names[series]
-    }
-  r
-  }
+end.tframe.tstframe <- function(tf) {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
 
-tbind.ts <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
- {# this is used like old tsmatrix should produce a column matrix from a
-  #  single vector
-  for (z in list(...)) {
-    if (!is.null(z)) {
-      if (!is.ts(z)) z <- ts(z,start=start(z),end=end(z),frequency=frequency(z))
-      x <- cbind(x, z)
-      }
-    }
-  if (!is.matrix(x)) x <- ts(matrix(x, length(x),1),
-                      start=start(x), end=end(x), frequency=frequency(x))
-  if (!pad.start | !pad.end)
-     x <- trim.na(x, start. = !pad.start, end. = !pad.end)
-  x
- }
+periods.tframe.tstframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
 
-tfwindow.ts <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
-  {# With the default warn=T warnings will be issued if no truncation takes
-   #  place because start or end is outside the range of data.
-   if (is.null(start.) && !is.null(tf)) start. <- start(tf)
-   if (is.null(end.)   && !is.null(tf)) end.   <- end(tf)
-   if (!warn) 
-     {opts <- options(warn = -1)
-      on.exit(options(opts))
-     }
-   y <- window(x, start=start., end=end.)
-   if (is.matrix(x) && !is.matrix(y) )
-      y <- tframed(matrix(y, length(y), ncol(x)), tframe(y))
-   seriesNames(y) <- seriesNames(x)
-   y
-  }
+frequency.tframe.tstframe <- function(tf) {tf[3]}
 
+time.tframe.tstframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
 
-# The .tstframe methods should work on tframe(ts(whatever))  from ts objects. 
-
-start.tstframe <- function(x) c(floor(x[1]), round(1 + (x[1]%%1)*x[3]))
-end.tstframe   <- function(x) c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))
-periods.tstframe <- function(x)  {1+round((x[2]-x[1])*x[3])}
-frequency.tstframe <- function(x) x[3]
-time.tstframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
-
-tfTruncate.tstframe <- function(x, start=NULL, end=NULL) 
-    {if (!is.null(end))   x[2] <- x[1] + (end-1)/x[3]
-     if (!is.null(start)) x[1] <- x[1] + (start-1)/x[3]
-     x
+truncate.tframe.tstframe <- function(tf, start=NULL, end=NULL) 
+    {if (!is.null(end))   tf[2] <- tf[1] + (end-1)/tf[3]
+     if (!is.null(start)) tf[1] <- tf[1] + (start-1)/tf[3]
+     tf
     }
 
-tfExpand.tstframe <- function(x, add.start=0, add.end=0) 
-    {x[2] <- x[2] + add.end/x[3]
-     x[1] <- x[1] - add.start/x[3]
-     x
+expand.tframe.tstframe <- function(tf, add.start=0, add.end=0) 
+    {tf[2] <- tf[2] + add.end/tf[3]
+     tf[1] <- tf[1] - add.start/tf[3]
+     tf
     }
 
 
-earliestStartIndex.tstframe <- function(x, ...) 
+earliest.start.index.tframe.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -85,7 +153,7 @@ earliestStartIndex.tstframe <- function(x, ...)
      r
     }
 
-earliestEndIndex.tstframe <- function(x, ...) 
+earliest.end.index.tframe.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -97,7 +165,7 @@ earliestEndIndex.tstframe <- function(x, ...)
      r
     }
 
-latestStartIndex.tstframe <- function(x, ...) 
+latest.start.index.tframe.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -109,7 +177,7 @@ latestStartIndex.tstframe <- function(x, ...)
      r
     }
 
-latestEndIndex.tstframe <- function(x, ...) 
+latest.end.index.tframe.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)

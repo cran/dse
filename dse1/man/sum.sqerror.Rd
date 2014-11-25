@@ -6,16 +6,17 @@
 Calculate a weighted sum squared prediction errors for a parameterization.
 }
 \usage{
-    sum.sqerror(coefficients, model=NULL, data=NULL, error.weights=c(1,1,1,1))}
+	sum.sqerror(para, model=NULL, data=NULL, error.weights=c(1,1,1,1))}
 \arguments{
-    \item{coefficients}{A vector of coefficients (parameters).}
-    \item{model}{an object of class TSmodel which gives the structure 
-      of the model for which coefficients are used. \code{coef(model)} should 
-      be the same length as coefficients.}
-    \item{data}{an object of class TSdata which gives the data with 
-       which the model is to be evaluated.}
-    \item{error.weights}{a vector of weights to be applied to the 
-       squared prediction errors.}
+	\item{para}{A vector of parameters.}
+	\item{model}{
+	An object of class TSmodel which gives the structure of the model to which
+para is applied. \code{model$parms} should be the same length as para.}
+	\item{data}{
+An object of class TSdata which gives the data with which the model is
+to be evaluated.}
+	\item{error.weights}{
+A vector of weights to be applied to the squared prediction errors.}
 }
 \value{
 The value of the sum squared errors for a prediction horizon given by the 
@@ -35,9 +36,9 @@ of parameters.
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(eg1.DSE.data.diff)
-sum.sqerror(1e-10 + coef(model), model=TSmodel(model), 
-        data=TSdata(model), error.weights=c(1,1,10))
+sum.sqerror(1e-10+parms(model), model=TSmodel(model), 
+		data=TSdata(model), error.weights=c(1,1,10))
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

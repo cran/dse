@@ -3,11 +3,10 @@
 \title{Calculate the difference of log data}
 \description{Calculate the difference from lag periods prior for log of data.}
 \usage{
-    diff.log(x, lag=1, base = exp(1))}
+	diff.log(series, lag=1, base = 2.71828182845905)}
 \arguments{
-    \item{x}{A time series.}
-    \item{lag}{The difference is calculated relative to lag periods prior.}
-    \item{base}{Base to use when calculating logrithms.}
+	\item{series}{A time series.}
+	\item{lag}{The difference is calculated relative to lag periods prior.}
 }
 \value{
 A time series of the difference relative to lag periods prior for the log of 
@@ -18,6 +17,6 @@ values will result in NAs.
 if(is.R()) data("eg1.DSE.data", package="dse1")
 z <- diff.log(output.data(eg1.DSE.data))
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

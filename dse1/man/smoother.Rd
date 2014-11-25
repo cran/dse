@@ -3,16 +3,16 @@
 \title{Evaluate a smoother with a TSmodel}
 \description{Evaluate a state space model.}
 \usage{
-    smoother(model, data, compiled=.DSECOMPILED))}
+	smoother(model, data, compiled=.DSECOMPILED))}
 \arguments{
-    \item{model}{
-    An object of class `TSestModel' or 'TSmodel' with a model of 
+	\item{model}{
+	An object of class `TSestModel' or 'TSmodel' with a model of 
 class `non.innov' 'SS' 'TSmodel'. If filter informatin is not provided 
 (i.e. in a TSestModel)
 then smoother runs the Kalman filter (l.SS) first.}
-    \item{data}{A TSdata object.}.
-    \item{compiled}{
-    If T the compiled version of the code is used. Otherwise the S version is used.}
+	\item{data}{A TSdata object.}.
+	\item{compiled}{
+	If T the compiled version of the code is used. Otherwise the S version is used.}
 }
 \value{
 An object of class TSestModel with an additional element \code{smooth}. 
@@ -34,9 +34,9 @@ estimate of the state (sometimes called a two sided filter).
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 #smoother requires an non-innovations form model
-model <- TSmodel(to.SSChol(est.VARX.ls(eg1.DSE.data.diff))) 
+model <- TSmodel(to.SS.Chol(est.VARX.ls(eg1.DSE.data.diff))) 
 smoothed.model <- smoother(model, eg1.DSE.data.diff, compiled=F)
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

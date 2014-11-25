@@ -2,41 +2,21 @@
 \alias{distribution}
 \alias{distribution.default}
 \alias{distribution.TSdata}
-\alias{distribution.EstEval}
-\alias{distribution.coef.ee}
+\alias{distribution.estimation.evaluation}
+\alias{distribution.parms.ee}
 \alias{distribution.roots.ee}
 \title{Plot distribution of estimates}
 \description{Plot distribution of estimates.}
 \usage{
-    distribution(obj, ...)
-     \method{distribution}{TSdata}(obj, bandwidth=0.2, 
-             select.inputs = seq(length= nseriesInput(obj)),
-             select.outputs= seq(length=nseriesOutput(obj)))
-     \method{distribution}{default}(obj, bandwidth=0.2, series=NULL)
-     \method{distribution}{EstEval}(obj, ...)
-     \method{distribution}{coef.ee}(obj,  Sort=F, bandwidth=0.2,
-	graphs.per.page=5)
-     \method{distribution}{roots.ee}(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
-        bandwidth=0.2, select=NULL)
+	distribution(obj,  Sort=F, bandwidth=0.2)
 }
 \arguments{
-    \item{obj}{an object as returned by EstEval.} 
-    \item{Sort}{if Sort is true then sort is applied. This helps (a bit)
-       with estimation methods like black.box which may not return parameters
-       of the same length or in the same order.}
-    \item{bandwidth}{passed to \code{density} or \code{ksmooth}.}
-    \item{graphs.per.page}{integer indicating number of graphs to place on a
-       page.}
-    \item{series}{series to be plotted. (passed to select.series)}
-    \item{select.inputs}{series to be plotted. (passed to select.series)}
-    \item{select.outputs}{series to be plotted. (passed to select.series)}
-    \item{...}{arguments to be passed to other methods.}
-    \item{invert}{logical indicating if the inverse of roots should be plotted}
-    \item{mod}{logical indicating if the modulus of roots should be plotted}
-    \item{select}{integer vector indicating roots to be plotted. If select 
-        is not NULL then roots are sorted by magnitude and only the 
-	indicated roots are plotted. For example, select=c(1,2)  will plot only 
-	the two largest roots.}
+	\item{obj}{An object as returned by eval.estimation.} 
+	\item{Sort}{
+	If Sort is true then sort is applied. This helps (a bit)
+	with estimation methods like black.box which may not return parameters
+	of the same length or in the same order.}
+	\item{bandwidth}{Passed to \code{density} or \code{ksmooth}.}
 }
 \value{None}
 \details{
@@ -45,17 +25,17 @@ estimate of the distribution of the estimates. If \code{ksmooth} is not
 available then \code{density} is applied if it is available.
 }
 \seealso{
-\code{\link{EstEval}}
+\code{\link{eval.estimation}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(TSdata(output=output.data(eg1.DSE.data.diff)), max.lag=2)
 # now use this as the true model
-z <-  EstEval(model, 
-    estimation="est.VARX.ls", estimation.args=list(max.lag=2))
+z <-  eval.estimation(model, 
+	estimation="est.VARX.ls", estimation.args=list(max.lag=2))
 distribution(z) 
 tfplot(z)
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

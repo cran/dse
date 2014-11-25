@@ -1,20 +1,19 @@
 \name{print.TSdata}
 \alias{print.TSdata}
+\alias{print.SS}
+\alias{print.ARMA}
+\alias{print.TSestModel}
 
 \title{Print Specific Methods}
 \description{See the generic function description.}
 \usage{
-    \method{print}{TSdata}(x, ...)
-    }
-\arguments{
-    \item{x}{An object of class TSdata.}
-    \item{...}{arguments to be passed to other methods.}
-}
+	print(...)}
+
 \seealso{
-    \code{\link{print}}
-    \code{\link{summary}}
+	\code{\link{print}}
+	\code{\link{summary}}
 }
 
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

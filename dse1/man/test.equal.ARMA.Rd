@@ -8,20 +8,10 @@
 \title{Specific Methods for Testing Equality}
 \description{See the generic function description.}
 \usage{
-    \method{test.equal}{ARMA}(obj1, obj2, fuzz=0)
-    \method{test.equal}{SS}(obj1, obj2, fuzz=0)
-    \method{test.equal}{TSdata}(obj1, obj2, fuzz=1e-16)
-    \method{test.equal}{TSmodel}(obj1, obj2, fuzz=0)
-    \method{test.equal}{TSestModel}(obj1, obj2, fuzz=0)
-    }
-\arguments{
-    \item{obj1}{see generic method.}
-    \item{obj2}{see generic method.}
-    \item{fuzz}{see generic method.}
-}
+	test.equal(obj1, obj2)}
 
 \seealso{ \code{\link{test.equal}} }
 
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

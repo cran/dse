@@ -45,9 +45,9 @@
 
 
 \source{
-	\emph{Statistics Canada,} 
-	\emph{Bank of Canada,}
-	\emph{DRI.}
+	\emph{Statistics Canada}
+	\emph{Bank of Canada}
+	\emph{DRI}
 }
 
 \references{
@@ -59,4 +59,6 @@
 \seealso{
 	\code{\link{TSdata}}
 }
+\keyword{DSE}
+\keyword{ts}
 \keyword{datasets}

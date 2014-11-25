@@ -7,45 +7,39 @@
 \title{Simulate a TSmodel}
 \description{Simulate a model to produce artificial data.}
 \usage{
-    simulate(model, ...)
-    \method{simulate}{ARMA}(model, y0=NULL, input=NULL, input0=NULL,
-        start. = NULL, freq = NULL, sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
-        rng=NULL, noise.model=NULL, compiled=.DSECOMPILED)
-    \method{simulate}{SS}(model, input=NULL, 
-        start. = NULL, freq = NULL,sampleT=100, noise=NULL, sd=1, SIGMA=NULL,
-	rng=NULL, compiled=.DSECOMPILED)
-    \method{simulate}{TSestModel}(model, input=input.data(model),
-			sd=NULL, SIGMA=NULL, ...)
+	simulate(model, input=NULL, input0=NULL,
+	    sampleT=100, start. = NULL, freq = NULL, 
+	    noise=NULL, noise.model=NULL,sd=1, SIGMA=NULL,
+	    rng=NULL, compiled=.DSECOMPILED)
 }
 \arguments{
-      \item{model}{An object of class TSmodel or TSestModel.}
-    \item{input}{Data for the exogenous variable if specified in the model.}
-    \item{sampleT}{The length of the sample to simulate.}
-    \item{start.}{ start. date for resulting data.}
-    \item{freq}{ freq for resulting data.}
-    \item{y0, input0}{
+  	\item{model}{An object of class TSmodel or TSestModel.}
+	\item{input}{Data for the exogenous variable if specified in the model.}
+	\item{sampleT}{The length of the sample to simulate.}
+	\item{start.}{ start. date for resulting data.}
+	\item{freq}{ freq for resulting data.}
+	\item{y0, input0}{
 Lagged values prior to t=1 for y and u, in reverse order so y0[1,] and
 input0[1,]correspond to t=0. These arguments  are not implemented for state 
 space models. If not specified initial values are set to zero. }
-    \item{noise}{
+	\item{noise}{
 Noise can be supplied. Otherwise it will be generated. 
 If supplied it should be a list as described below under returned value.}
-    \item{SIGMA}{
+	\item{SIGMA}{
 The covariance of the noise process. If this is specified then sd is ignored.
 A vector or scalar is treated as a diagonal matrix. For an object of class
 TSestModel, if neither SIGMA nor sd are specified, then SIGMA is set to 
 the estimated covariance (\code{model$estimates$cov}).}
-    \item{sd}{The standard deviation of the noise. This can be a vector.}
-    \item{noise.model}{ 
+	\item{sd}{The standard deviation of the noise. This can be a vector.}
+	\item{noise.model}{ 
 A TSmodel to be used for generating noise (not yet supported by SS methods).}
-    \item{rng}{The random number generator and seed can be specified to 
+	\item{rng}{The random number generator and seed can be specified to 
 regenerate a simulation.}
-    \item{seed}{The seed can be specified to regenerate a simulation. 
+	\item{seed}{The seed can be specified to regenerate a simulation. 
 (rng is better.)}
-    \item{compiled}{
-    Specifies the compiled version of the code should be used (instead of 
-    the S code version).}
-    \item{...}{arguments to be passed to other methods.}
+	\item{compiled}{
+	Specifies the compiled version of the code should be used (instead of 
+	the S code version).}
 }
 
 \value{
@@ -87,6 +81,6 @@ The rng will be set first if it is specified.
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(eg1.DSE.data.diff)
 z <- simulate(model)}
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

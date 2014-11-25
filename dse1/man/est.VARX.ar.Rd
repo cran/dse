@@ -5,26 +5,23 @@
 \title{Estimate a VAR TSmodel}
 \description{Estimate a VAR TSmodel with (optionally) an exogenous input.}
 \usage{
-    est.VARX.ar(data, subtract.means=F,  re.add.means=T, standardize=F, 
-         unstandardize=T, aic=T, max.lag=NULL, method="yule-walker", warn=T)
+	est.VARX.ar(data,subtract.means=F,re.add.means=T, 
+		standardize=F, unstandardize=T, aic=T, max.lag=NULL, 
+		method='yule-walker')
 }
 \arguments{
-    \item{data}{A TSdata object.}
-    \item{subtract.means}{
-        If T subtract the means from the data before estimation.}
-    \item{re.add.means}{
-      If T the model is adjusted for the non-zero mean data when returned. 
-      If subtract.means is also T then the mean is added back to the data.}
-    \item{standardize}{
-      Note that the mean is not subtracted unless subtract.means is T.
-      A VAR model in an object of class TSestModel.}
-    \item{unstandardize}{
-      If T and standardize is T then the returned model is adjusted to 
-      correspond to the original data.}
-    \item{aic}{Passed to function ar.}
-    \item{max.lag}{The maximum number of lags that should be considered.}
-    \item{method}{Passed to function ar.}
-    \item{warn}{If T certain warning message are suppressed.}
+	\item{data}{A TSdata object.}
+	\item{subtract.means}{
+		If T subtract the means from the data before estimation.}
+	\item{re.add.means}{
+	  If T the model is adjusted for the non-zero mean data when returned. 
+	  If subtract.means is also T then the mean is added back to the data.}
+	\item{standardize}{
+	  Note that the mean is not subtracted unless subtract.means is T.
+	  A VAR model in an object of class TSestModel.}
+	\item{unstandardize}{
+	  If T and standardize is T then the returned model is adjusted to 
+	  correspond to the original data.}
 }
 \value{A TSestModel object containing a TSmodel object which is aVAR model.}
 
@@ -46,26 +43,19 @@ Note: ar uses a Yule-Walker approach (uses autocorrelations) so effectively the
   original data.
 }
 \references{
-    Gilbert, P. D. (1993) State space and ARMA models: An overview of
-    the equivalence. Working paper 93-4, Bank of Canada. Available at
-    <www.bank-banque-canada.ca/pgilbert>
-
-    Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" J. of Forecasting: 
-    Special Issue on VAR Modelling. 14:229-250.
+	P.D.Gilbert (1993) State Space and ARMA models: An overview of
+	estimation and reduction.
 }
 \seealso{
-    \code{\link{est.SS.from.VARX}}
-    \code{\link[dse2]{est.SS.Mittnik}}
-    \code{\link[dse2]{bft}}
-    \code{\link{est.VARX.ls}}
-    \code{\link[ts]{ar}}
-    \code{\link{DSE.ar}}
+	\code{\link{est.SS.from.VARX}}
+	\code{\link[dse2]{est.SS.Mittnik}}
+	\code{\link[dse2]{bft}}
+	\code{\link{est.VARX.ls}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ar(eg1.DSE.data.diff)
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

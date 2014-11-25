@@ -12,8 +12,8 @@ function TSdata or can be built according to the description below.
 
 \section{Methods}{
 The \code{TSdata} class of objects has methods for the generic
-functions \code{print, plot, periods, start, end, ..., test.equal, seriesNames,
-seriesNamesInput, seriesNamesOutput}
+functions \code{print, plot, periods, start, end, ..., test.equal, series.names,
+input.series.names, output.series.names}
 Also, the function \code{is.TSdata} is supported.
 }
 
@@ -40,6 +40,6 @@ up an object of class c("TSPADIdata", TSdata").
 \code{\link{TSestModel.object}}
 \code{\link[dsepadi]{TSPADIdata}}
 }
-%\keyword{DSE}
+\keyword{DSE}
 \keyword{ts}
 

@@ -1,9 +1,0 @@
-
-   tfclass     <- class
-   "tfclass<-" <- function(x, value){ class(x) <- value ; x }
-
-#if (is.S5())
-#  { tfclass     <- oldClass
-#   "tfclass<-" <- function(x, value){ oldClass(x) <- value ; x }
-#  }
-
