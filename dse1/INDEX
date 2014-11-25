@@ -1,21 +1,32 @@
-00General.Description    DSE
+See 00Intro or 00Intro.dse1 for a general description of this package,
+A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
+See also the related packages syskern tframe dse1 dse2 in the dse bundle
+   and packages dsepadi curve juice monitor   in the dseplus bundle.
+00Intro.dse1             DSE
+ARMA                     ARMA Model Constructor
+DSE.utilities            DSE Utilities
+DSECOMPILED              Use Compiled or S/R Code
+McMillan.degree          Calculate McMillan Degree
+Polynomials              Polynomial Utilities
+Portmanteau              Calculate Portmanteau statistic
+Riccati                  Riccati Equation
+SS                       State Space Models
+TSdata                   Construct TSdata time series object
+TSdata.object            time series data object
+TSestModel               Estimated Time Series Model
+TSmodel                  Time Series Models
 acf.M                    Calculate Auto-Covariance
 add.plot.roots           Add Model Roots to a plot
-ARMA                     ARMA Model Constructor
 balance.Mittnik          Balance a state space model
-check.balance.Mittnik    Check Balance of a TSmodel
 check.balance            Check Balance of a TSmodel
+check.balanceMittnik     Check Balance of a TSmodel
 check.consistent.dimensions
                          Check Consistent Dimensions
-check.residuals          check residuals of a TSmodel or autocorrelations
-                         of TSdata
+check.residuals          Autocorrelations Diagnostics
+coef.TSmodel             Extract Model Parameters
 combine                  Combine two objects.
 combine.TSdata           Combine series from two TSdata objects.
 diff.log                 Calculate the difference of log data
-display                  Display TSmodel Arrays
-DSE.utilities            DSE Utilities
-dse1.function.tests      dse1.function.tests
-DSECOMPILED              Use Compiled or S/R Code
 eg1.DSE.data             Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data       Eleven Time Series used in Gilbert (1995)
 est.SS.from.VARX         Estimate a state space TSmodel using VAR
@@ -24,14 +35,15 @@ est.VARX.ar              Estimate a VAR TSmodel
 est.VARX.ls              Estimate a VAR TSmodel
 example                  TS Examples
 findg                    Find Equivalence Transformation
-fix.constants            Fix TSmodel Parameters to Constants
+fix.constants            Fix TSmodel Coefficients (Parameters) to
+                         Constants
 fixF                     Set SS Model F Matrix to Constants
 get.RNG                  get the RND and seed from an object
 gmap                     Basis Transformation of a Model.
 help.start.DSE           Start DSE Help in S
+information.tests        Tabulates selection criteria
 information.tests.calculations
                          Calculate selection criteria
-information.tests        Tabulates selection criteria
 input.data               TSdata Series
 input.dimension          Number of Series in in Input or Output
 input.periods            TSdata Periods
@@ -41,18 +53,14 @@ l                        Evaluate a TSmodel
 l.SS                     Evaluate a state space TSmodel
 load.DSE.fortran         Load compiled routines for time series models
 markov.parms             Markov Parameters
-McMillan.degree          Calculate McMillan Degree
 observability            Calculate Model Observability Matrix
-parms                    Extract Model Parameters.
 percent.change           Calculate percent change
-periods.TSdata           Specific Methods for Tframed data
+periods.TSdata           Specific Methods for tframed Data
 plot.roots               Plot Model Roots
-polynomials              Polynomial Utilities
-Portmanteau              Calculate Portmanteau statistic
 print.TSdata             Print Specific Methods
+print.TSestModel         Display TSmodel Arrays
 reachability             Calculate Model Reachability Matrix
 residual.stats           Calculate Residuals Statistics and Likelihood
-Riccati                  Riccati Equation
 roots                    Calculate Model Roots
 scale.TSdata             Scale Methods for TS objects
 series.names.TSdata      Series Names Specific Methods
@@ -61,24 +69,17 @@ set.parameters           Set TSmodel Parameter Information
 simulate                 Simulate a TSmodel
 smoother                 Evaluate a smoother with a TSmodel
 source.info.TSdata       tfPADI Specific Methods
-SS                       State Space Models
 stability                Calculate Stability of a TSmodel
 standardize              standardize data
 sum.sqerror              Calculate sum of squared prediction errors
-summary                  Display Summary Information.
 summary.TSdata           Specific Methods for Summary
 test.equal.ARMA          Specific Methods for Testing Equality
-tfplot                   Time Series Plots
 tfplot.TSdata            Tfplot Specific Methods
+tframed.TSdata           Specific Methods for tframed Data
 to.ARMA                  Convert to an ARMA Model
-to.parsim                Convert to Parsimonious Form
-to.SS.Chol               Convert to Non-Innovation State Space Model
-to.SS.innov              Convert to State Space Innovations Model
-to.SS.Oform              Convert to Oform
 to.SS                    Convert to State Space Model
-TSdata.object            time series data object
-TSdata                   Construct TSdata time series object
-TSestModel               Estimated Time Series Model
-TSmodel                  Time Series Models
+to.SS.innov              Convert to State Space Innovations Model
+to.SSChol                Convert to Non-Innovation State Space Model
+to.SSOform               Convert to Oform
 version.dse              Print Version Information
 ytoypc                   Convert to year to year percent change

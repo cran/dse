@@ -1,5 +1,3 @@
-#   20%E% %U%
-
 # Some notes and hopefully temporary R changes and additions
 
 
@@ -9,4 +7,8 @@
 
 #########################
 
-#  fix for ar in ts library moved to dse1b (DSE.ar)
+#  For multivariate series the array dim from ar does not work very well with 
+#  DSE, but that is considered a "feature" by the maintainer of ts so the
+#  fix for ar in ts library is permanently moved to dse1 and called DSE.ar. 
+
+# There are no other temporary R fixes

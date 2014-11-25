@@ -10,15 +10,17 @@
 Calculate the McMillan degree of an ARMA TSmodel.
 }
 \usage{
-	McMillan.degree(model, fuzz=fuzz, verbose=T, warn=T)
+    McMillan.degree(model,  ...)
+    \method{McMillan.degree}{ARMA}(model, fuzz=fuzz, verbose=T, warn=T)
+    \method{McMillan.degree}{SS}(model, fuzz=1e-4)
+    \method{McMillan.degree}{TSestModel}(model,  ...)
 }
 \arguments{
-\item{ model}{An object of class TSmodel.}
-
-\item{ fuzz}{Roots within fuzz distance are counted as equivalent.}
-\item{ verbose}{If T roots are printed.}
-\item{ warn}
-{If F then warnings about unit roots added for TREND are not printed.}
+    \item{model}{An object of class TSmodel.}
+    \item{fuzz}{Roots within fuzz distance are counted as equivalent.}
+    \item{verbose}{If T roots are printed.}
+    \item{warn}{If F then warnings about unit roots added for TREND are not printed.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{
 A list with elements gross and distinct containing all roots 
@@ -36,6 +38,6 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 model <- est.VARX.ls(eg1.DSE.data.diff)
 McMillan.degree(model)
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

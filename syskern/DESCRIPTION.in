@@ -1,5 +1,4 @@
 Package: syskern
-Title: coding kernel for S/R and OS compatability
-Description: Functions for writing code that 
- is OS and R/S independent.
-Depends:  R (>= 1.0.1)
+Title: Coding Kernel for R/S Differences
+Description: Functions to handle some small R/S differences.
+Depends:  R (>= 1.2.2)

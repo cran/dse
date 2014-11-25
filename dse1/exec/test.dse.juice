@@ -1,9 +1,0 @@
-# Expecting results from  tests
-
-#R --nsize=1M --vsize=6M 
-  require("mva"); require("ts"); require("dse2"); require("juice") # adds dse, tframe, and syskern
- #x11()
- # postscript(file="juice.out.ps",  paper="letter", horizontal=F, onefile=T)
- #           # width=6, height=8, pointsize=10,
-   juice.function.tests( verbose=F, graphics=T)
-

@@ -1,6 +1,5 @@
-/*   2000/03/21 14:42:06 
-*/
-/*  -- translated by f2c (version 19970219).
+
+/*  -- translated by f2c (version 20010224).
    You must link the resulting object file with the libraries:
 	-lf2c -lm   (in that order)
 */
@@ -21,16 +20,14 @@ static integer c__22 = 22;
 
 /*           Copyright 1993, 1994, 1995, 1996  Bank of Canada. */
 /*           Copyright 1996, 1997  Paul Gilbert. */
-/*           Copyright 1998  Bank of Canada. */
+/*           Copyright 1998, 2001  Bank of Canada. */
 /*  Any person using this software has the right to use, */
 /*        reproduce and distribute it. */
-/* The Bank does not warrant the accuracy of the information contained in the
-*/
-/* software. User assumes all liability for any loss or damages, either direct
-*/
+/*  The Bank does not warrant the accuracy of the information contained in the */
+/*  software. User assumes all liability for any loss or damages, either direct */
 /*  or indirect, arising from the use of the software. */
 /* ------------------------------------------------------------------- */
-/* A C code version of this code is also distribute. It has been generated*/
+/*  A C code version of this code is also distribute. It has been generated */
 /*   using the following (extracted from the f2c readme). */
 /* NOTE: You may exercise f2c by sending netlib@netlib.bell-labs.com */
 /*  a message whose first line is "execute f2c" and whose remaining */
@@ -44,14 +41,13 @@ static integer c__22 = 22;
 /*             /opt/SUNWspro/f77 -c -o dsefor.S3.3.Sun5.o dsefor.f */
 /*           or */
 /*               f77.SC3.01.Sun4       -c -o dsefor.S3.3.Sun4.o dsefor.f */
-/*    (Splus 3.3 requires compiler SC3.0.1 not SC3.0 as for Splus 3.1 and 3.2)
-*/
+/*     (Splus 3.3 requires compiler SC3.0.1 not SC3.0 as for Splus 3.1 and 3.2) */
 /*           or  (with Solaris f77  (SunPro) )   for R */
 /*               f77  -G -pic -o dse.so dsefor.f */
 /*   or */
 /*               f77  -G -pic -ansi -o dse.so dsefor.f */
 /*   or */
-/*       f77 -G -pic -ansi -L/home/asd3/opt/SUNWspro.old/lib -lF77 -lM77 -lm*/
+/*        f77 -G -pic -ansi -L/home/asd3/opt/SUNWspro.old/lib -lF77 -lM77 -lm */
 /*               -lc -lucb -o dse.so dsefor.f */
 /*   or */
 /*               f77  -G -pic -fast -o dse.so dsefor.f   bombs */
@@ -69,20 +65,18 @@ static integer c__22 = 22;
 /*                  -O4:    Generate optimized code */
 /*                  -O:     Generate optimized code */
 /*                  Suffix 'so':    Shared object */
-/*          or  (the following seems to be the preferred method for Splus)*/
+/*           or  (the following seems to be the preferred method for Splus) */
 /*               splus COMPILE dsefor.f */
 /*                 and then mv dsefor.o to dsefor.Sunx.o */
 
-/*  The pararameter IS=xxx controls the maximum size of the state in KF models
-.*/
+/*   The pararameter IS=xxx controls the maximum size of the state in KF models. */
 /*   A larger state makes S take more memory. */
 /* Compile with: f77 -c -o dsefor.Sun4.large.o dsefor.f */
 /*           or */
 /*               f77 -c -o dsefor.Sun5.large.o dsefor.f */
 
 
-/*       1         2         3         4         5         6         712      
- 8*/
+/*        1         2         3         4         5         6         712       8 */
 /* Subroutine */ int error_(str, l, is, n, str_len)
 char *str;
 integer *l, *is, *n;
@@ -122,8 +116,7 @@ doublereal *r__;
 integer *n;
 ftnlen str_len;
 {
-/*  STR is a string of length L and R is an double real vector of length N
- */
+/*  STR is a string of length L and R is an double real vector of length N */
 /*      CALL DBLEPR(STR,L, R, N) */
 /*      WRITE(STR,R) */
     /* Parameter adjustments */
@@ -139,7 +132,7 @@ ftnlen str_len;
 doublereal *y, *z__;
 integer *m, *n, *p, *nsmpl;
 doublereal *u, *w, *e, *f, *g, *h__, *fk, *q, *r__;
-logical *gain;
+integer *gain;
 {
     /* System generated locals */
     integer z_dim1, z_offset, y_dim1, y_offset, u_dim1, u_offset, w_dim1, 
@@ -159,37 +152,37 @@ logical *gain;
 
     /* Parameter adjustments */
     q_dim1 = *n;
-    q_offset = q_dim1 + 1;
+    q_offset = 1 + q_dim1 * 1;
     q -= q_offset;
     g_dim1 = *n;
-    g_offset = g_dim1 + 1;
+    g_offset = 1 + g_dim1 * 1;
     g -= g_offset;
     f_dim1 = *n;
-    f_offset = f_dim1 + 1;
+    f_offset = 1 + f_dim1 * 1;
     f -= f_offset;
     r_dim1 = *p;
-    r_offset = r_dim1 + 1;
+    r_offset = 1 + r_dim1 * 1;
     r__ -= r_offset;
     fk_dim1 = *n;
-    fk_offset = fk_dim1 + 1;
+    fk_offset = 1 + fk_dim1 * 1;
     fk -= fk_offset;
     h_dim1 = *p;
-    h_offset = h_dim1 + 1;
+    h_offset = 1 + h_dim1 * 1;
     h__ -= h_offset;
     e_dim1 = *nsmpl;
-    e_offset = e_dim1 + 1;
+    e_offset = 1 + e_dim1 * 1;
     e -= e_offset;
     w_dim1 = *nsmpl;
-    w_offset = w_dim1 + 1;
+    w_offset = 1 + w_dim1 * 1;
     w -= w_offset;
     u_dim1 = *nsmpl;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     z_dim1 = *nsmpl;
-    z_offset = z_dim1 + 1;
+    z_offset = 1 + z_dim1 * 1;
     z__ -= z_offset;
     y_dim1 = *nsmpl;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
 
     /* Function Body */
@@ -216,7 +209,7 @@ logical *gain;
 		}
 	    }
 	}
-	if (*gain) {
+	if (*gain == 1) {
 	    i__2 = *n;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 		i__3 = *p;
@@ -247,7 +240,7 @@ logical *gain;
 			z_dim1];
 	    }
 	}
-	if (*gain) {
+	if (*gain == 1) {
 	    i__3 = *p;
 	    for (i__ = 1; i__ <= i__3; ++i__) {
 /* L2014: */
@@ -310,52 +303,52 @@ doublereal *f, *g, *h__, *rr, *a, *d__, *l, *pt1, *zt;
     /* Parameter adjustments */
     --zt;
     pt1_dim1 = *n;
-    pt1_offset = pt1_dim1 + 1;
+    pt1_offset = 1 + pt1_dim1 * 1;
     pt1 -= pt1_offset;
     l_dim1 = *n;
-    l_offset = l_dim1 + 1;
+    l_offset = 1 + l_dim1 * 1;
     l -= l_offset;
     d_dim1 = *n;
-    d_offset = d_dim1 + 1;
+    d_offset = 1 + d_dim1 * 1;
     d__ -= d_offset;
     a_dim1 = *n;
-    a_offset = a_dim1 + 1;
+    a_offset = 1 + a_dim1 * 1;
     a -= a_offset;
     f_dim1 = *n;
-    f_offset = f_dim1 + 1;
+    f_offset = 1 + f_dim1 * 1;
     f -= f_offset;
     g_dim1 = *n;
-    g_offset = g_dim1 + 1;
+    g_offset = 1 + g_dim1 * 1;
     g -= g_offset;
     rr_dim1 = *p;
-    rr_offset = rr_dim1 + 1;
+    rr_offset = 1 + rr_dim1 * 1;
     rr -= rr_offset;
     h_dim1 = *p;
-    h_offset = h_dim1 + 1;
+    h_offset = 1 + h_dim1 * 1;
     h__ -= h_offset;
     y_dim1 = *nsmpl;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nsmpl;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     trkerr_dim1 = *nsmpl;
     trkerr_dim2 = *n;
-    trkerr_offset = trkerr_dim1 * (trkerr_dim2 + 1) + 1;
+    trkerr_offset = 1 + trkerr_dim1 * (1 + trkerr_dim2 * 1);
     trkerr -= trkerr_offset;
     z_dim1 = *nsmpl;
-    z_offset = z_dim1 + 1;
+    z_offset = 1 + z_dim1 * 1;
     z__ -= z_offset;
 
     /* Function Body */
     if (is < *n) {
-	error_("ERROR: state dimension cannot exceed ", &c__48, &is, &c__1, 
-		37L);
+	error_("ERROR: state dimension cannot exceed ", &c__48, &is, &c__1, (
+		ftnlen)37);
 	return 0;
     }
     if (is < *p) {
 	error_("ERROR: output dimensions cannot exceed ", &c__48, &is, &c__1, 
-		39L);
+		(ftnlen)39);
 	return 0;
     }
 
@@ -421,8 +414,7 @@ doublereal *f, *g, *h__, *rr, *a, *d__, *l, *pt1, *zt;
 /*      IF (IT.EQ.NSMPL-1) THEN */
 /*         CALL DBPRDB('K in L ',7,L,IS*IS) */
 /*      ENDIF */
-/*  E(z(t)|y(t),u(t+1) ZT = z(t|t) = Z(t|t-1) + K*(y-H*Z(t|t-1) - G*u(
-t) */
+/*  E(z(t)|y(t),u(t+1) ZT = z(t|t) = Z(t|t-1) + K*(y-H*Z(t|t-1) - G*u(t) */
 	i__3 = *p;
 	for (i__ = 1; i__ <= i__3; ++i__) {
 	    a[i__ + a_dim1] = y[it + i__ * y_dim1];
@@ -453,8 +445,7 @@ t) */
 		zt[i__] += l[i__ + k * l_dim1] * a[k + a_dim1];
 	    }
 	}
-/*                                  P(t|t) = P(t|t-1) - K*H*P(t|t-1) 
-*/
+/*                                  P(t|t) = P(t|t-1) - K*H*P(t|t-1) */
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    i__3 = *n;
@@ -531,10 +522,8 @@ t) */
 		}
 	    }
 	}
-/*                         L now contains J and A now contains P(t|t).
- */
-/*            smoothed state sm[t] = ZT + J*(sm[t+1] - F*ZT - G*u(t+1)
-) */
+/*                         L now contains J and A now contains P(t|t). */
+/*            smoothed state sm[t] = ZT + J*(sm[t+1] - F*ZT - G*u(t+1)) */
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    d__[i__ + d_dim1] = z__[it + 1 + i__ * z_dim1];
@@ -565,10 +554,8 @@ t) */
 			d_dim1];
 	    }
 	}
-/*  smoothed tracking error strk[t]= P[t|t] + J*(strk[t+1]-trk[t+1])*J
-' */
-/*     L contains J and A contains P(t|t) and PT1 contains trk[t+1]. 
-*/
+/*  smoothed tracking error strk[t]= P[t|t] + J*(strk[t+1]-trk[t+1])*J' */
+/*     L contains J and A contains P(t|t) and PT1 contains trk[t+1]. */
 	i__3 = *n;
 	for (i__ = 1; i__ <= i__3; ++i__) {
 	    i__1 = *n;
@@ -628,7 +615,7 @@ integer *hperr;
 doublereal *prderr, *errwt;
 integer *m, *n, *p, *nsmpl, *npred, *nacc;
 doublereal *u, *y, *f, *g, *h__, *fk, *q, *r__;
-logical *gain;
+integer *gain;
 doublereal *z0, *p0;
 integer *ith;
 doublereal *parm;
@@ -646,7 +633,7 @@ integer *an, *in, *jn;
     static integer i__, j;
     static doublereal state[1]	/* was [1][1] */;
     extern /* Subroutine */ int kf_();
-    static logical lstate, ltkerr;
+    static integer lstate, ltkerr;
     static doublereal trkerr[1]	/* was [1][1][1] */;
 
 
@@ -668,38 +655,38 @@ integer *an, *in, *jn;
     /* Parameter adjustments */
     --errwt;
     p0_dim1 = *n;
-    p0_offset = p0_dim1 + 1;
+    p0_offset = 1 + p0_dim1 * 1;
     p0 -= p0_offset;
     --z0;
     q_dim1 = *n;
-    q_offset = q_dim1 + 1;
+    q_offset = 1 + q_dim1 * 1;
     q -= q_offset;
     g_dim1 = *n;
-    g_offset = g_dim1 + 1;
+    g_offset = 1 + g_dim1 * 1;
     g -= g_offset;
     f_dim1 = *n;
-    f_offset = f_dim1 + 1;
+    f_offset = 1 + f_dim1 * 1;
     f -= f_offset;
     r_dim1 = *p;
-    r_offset = r_dim1 + 1;
+    r_offset = 1 + r_dim1 * 1;
     r__ -= r_offset;
     fk_dim1 = *n;
-    fk_offset = fk_dim1 + 1;
+    fk_offset = 1 + fk_dim1 * 1;
     fk -= fk_offset;
     h_dim1 = *p;
-    h_offset = h_dim1 + 1;
+    h_offset = 1 + h_dim1 * 1;
     h__ -= h_offset;
     prderr_dim1 = *nsmpl;
-    prderr_offset = prderr_dim1 + 1;
+    prderr_offset = 1 + prderr_dim1 * 1;
     prderr -= prderr_offset;
     ey_dim1 = *npred;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     --jp;
     --ip;
@@ -711,8 +698,8 @@ integer *an, *in, *jn;
     --const__;
 
     /* Function Body */
-    lstate = FALSE_;
-    ltkerr = FALSE_;
+    lstate = 0;
+    ltkerr = 0;
     i__1 = *n;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__2 = *n;
@@ -828,7 +815,7 @@ integer *dscard, *horiz, *nho;
 doublereal *ey;
 integer *m, *n, *p, *nacc;
 doublereal *u, *y, *f, *g, *h__, *fk, *q, *r__;
-logical *gain;
+integer *gain;
 doublereal *z0, *p0;
 {
     /* System generated locals */
@@ -841,11 +828,9 @@ doublereal *z0, *p0;
     static integer i__, j, hperr;
     static doublereal state[1]	/* was [1][1] */, errwt[1];
     extern /* Subroutine */ int kf_();
-    static integer ho, it;
-    static logical lstate;
+    static integer ho, it, lstate;
     static doublereal prderr[1]	/* was [1][1] */;
-    static logical ltkerr;
-    static integer mhoriz;
+    static integer ltkerr, mhoriz;
     static doublereal trkerr[1]	/* was [1][1][1] */;
 
 /*  multiple calls to KF for prediction at given horizons. */
@@ -857,44 +842,44 @@ doublereal *z0, *p0;
     /* Parameter adjustments */
     --horiz;
     p0_dim1 = *n;
-    p0_offset = p0_dim1 + 1;
+    p0_offset = 1 + p0_dim1 * 1;
     p0 -= p0_offset;
     --z0;
     q_dim1 = *n;
-    q_offset = q_dim1 + 1;
+    q_offset = 1 + q_dim1 * 1;
     q -= q_offset;
     g_dim1 = *n;
-    g_offset = g_dim1 + 1;
+    g_offset = 1 + g_dim1 * 1;
     g -= g_offset;
     f_dim1 = *n;
-    f_offset = f_dim1 + 1;
+    f_offset = 1 + f_dim1 * 1;
     f -= f_offset;
     r_dim1 = *p;
-    r_offset = r_dim1 + 1;
+    r_offset = 1 + r_dim1 * 1;
     r__ -= r_offset;
     fk_dim1 = *n;
-    fk_offset = fk_dim1 + 1;
+    fk_offset = 1 + fk_dim1 * 1;
     fk -= fk_offset;
     h_dim1 = *p;
-    h_offset = h_dim1 + 1;
+    h_offset = 1 + h_dim1 * 1;
     h__ -= h_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     ey_dim1 = *nacc;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     proj_dim1 = *nho;
     proj_dim2 = *nacc;
-    proj_offset = proj_dim1 * (proj_dim2 + 1) + 1;
+    proj_offset = 1 + proj_dim1 * (1 + proj_dim2 * 1);
     proj -= proj_offset;
 
     /* Function Body */
-    lstate = FALSE_;
-    ltkerr = FALSE_;
+    lstate = 0;
+    ltkerr = 0;
     hperr = 0;
     mhoriz = horiz[1];
     i__1 = *nho;
@@ -936,7 +921,7 @@ integer *dscard, *horiz, *nh, *nt;
 doublereal *ey;
 integer *m, *n, *p, *npred, *nacc;
 doublereal *u, *y, *f, *g, *h__, *fk, *q, *r__;
-logical *gain;
+integer *gain;
 doublereal *z0, *p0;
 {
     /* System generated locals */
@@ -951,10 +936,9 @@ doublereal *z0, *p0;
     static integer hi;
     static doublereal mf;
     extern /* Subroutine */ int kf_();
-    static integer it;
-    static logical lstate;
+    static integer it, lstate;
     static doublereal prderr[1]	/* was [1][1] */;
-    static logical ltkerr;
+    static integer ltkerr;
     static doublereal trkerr[1]	/* was [1][1][1] */;
 
 /*  multiple calls to KF for prediction evaluation. */
@@ -971,44 +955,44 @@ doublereal *z0, *p0;
     --nt;
     --horiz;
     p0_dim1 = *n;
-    p0_offset = p0_dim1 + 1;
+    p0_offset = 1 + p0_dim1 * 1;
     p0 -= p0_offset;
     --z0;
     q_dim1 = *n;
-    q_offset = q_dim1 + 1;
+    q_offset = 1 + q_dim1 * 1;
     q -= q_offset;
     g_dim1 = *n;
-    g_offset = g_dim1 + 1;
+    g_offset = 1 + g_dim1 * 1;
     g -= g_offset;
     f_dim1 = *n;
-    f_offset = f_dim1 + 1;
+    f_offset = 1 + f_dim1 * 1;
     f -= f_offset;
     r_dim1 = *p;
-    r_offset = r_dim1 + 1;
+    r_offset = 1 + r_dim1 * 1;
     r__ -= r_offset;
     fk_dim1 = *n;
-    fk_offset = fk_dim1 + 1;
+    fk_offset = 1 + fk_dim1 * 1;
     fk -= fk_offset;
     h_dim1 = *p;
-    h_offset = h_dim1 + 1;
+    h_offset = 1 + h_dim1 * 1;
     h__ -= h_offset;
     cov_dim1 = *nh;
     cov_dim2 = *p;
-    cov_offset = cov_dim1 * (cov_dim2 + 1) + 1;
+    cov_offset = 1 + cov_dim1 * (1 + cov_dim2 * 1);
     cov -= cov_offset;
     ey_dim1 = *npred;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
 
     /* Function Body */
-    lstate = FALSE_;
-    ltkerr = FALSE_;
+    lstate = 0;
+    ltkerr = 0;
     hperr = 0;
     i__1 = *nh;
     for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1072,13 +1056,13 @@ doublereal *z0, *p0;
 doublereal *ey;
 integer *hperr;
 doublereal *prderr, *errwt;
-logical *lstate;
+integer *lstate;
 doublereal *state;
-logical *ltkerr;
+integer *ltkerr;
 doublereal *trkerr;
 integer *m, *n, *p, *nsmpl, *npred, *nacc;
 doublereal *u, *y, *f, *g, *h__, *fk, *q, *r__;
-logical *gain;
+integer *gain;
 doublereal *z0, *p0;
 {
     /* System generated locals */
@@ -1093,7 +1077,7 @@ doublereal *z0, *p0;
     static doublereal a[10000]	/* was [100][100] */;
     static integer i__, j, k;
     static doublereal z__[100], detom;
-    static logical lperr;
+    static integer lperr;
     extern /* Subroutine */ int error_();
     static doublereal aa[10000]	/* was [100][100] */;
     static integer it;
@@ -1129,18 +1113,15 @@ doublereal *z0, *p0;
 /*   Z0  is the initial state (often set to zero). */
 /*   P0  is the initial state tracking error (often set to I and */
 /*   totally ignored in innovations models). */
-/*  PP is  the one step ahead est. cov matrix of the state estimation erro
-r.*/
+/*   PP is  the one step ahead est. cov matrix of the state estimation error. */
 /*   TRKERR is the history of PP at each period. */
 /*   It is returned only for non-innovations models (GAIN=FALSE) and */
 /*     then only if LTKERR is TRUE. */
-/*  EY is the output prediction. EY is used to store WW during computation
-!*/
+/*   EY is the output prediction. EY is used to store WW during computation! */
 /*   The prediction error at each period is WW (innovations) = Y - EY. */
 /*     If HPERR is equal or greater than one then weighted prediction */
 /*     errors are calculated up to the horizon indicated */
-/*     by HPERR. The weights taken from ERRWT are applied to the squared 
-*/
+/*     by HPERR. The weights taken from ERRWT are applied to the squared */
 /*     error at each period ahead. */
 /*   If HPERR is zero and LSTATE and LTKERR are false then ERRWT, */
 /*    PRDERR, STATE, and TRKERR are not referenced, */
@@ -1161,7 +1142,7 @@ r.*/
 /*      CALL DBPR('NPRED  ',6, NPRED,1) */
 /*      CALL DBPR('NACC  ',6, NACC,1) */
 /*      CALL DBPRDB('R  ',3,R,9) */
-/*      IF ( GAIN) THEN */
+/*      IF (GAIN.EQ.1) THEN */
 /*         CALL DBPR('GAIN is T',9, 1,0) */
 /*      ELSE */
 /*         CALL DBPR('GAIN is F',9, 1,0) */
@@ -1171,64 +1152,64 @@ r.*/
     /* Parameter adjustments */
     --errwt;
     p0_dim1 = *n;
-    p0_offset = p0_dim1 + 1;
+    p0_offset = 1 + p0_dim1 * 1;
     p0 -= p0_offset;
     --z0;
     q_dim1 = *n;
-    q_offset = q_dim1 + 1;
+    q_offset = 1 + q_dim1 * 1;
     q -= q_offset;
     g_dim1 = *n;
-    g_offset = g_dim1 + 1;
+    g_offset = 1 + g_dim1 * 1;
     g -= g_offset;
     f_dim1 = *n;
-    f_offset = f_dim1 + 1;
+    f_offset = 1 + f_dim1 * 1;
     f -= f_offset;
     r_dim1 = *p;
-    r_offset = r_dim1 + 1;
+    r_offset = 1 + r_dim1 * 1;
     r__ -= r_offset;
     fk_dim1 = *n;
-    fk_offset = fk_dim1 + 1;
+    fk_offset = 1 + fk_dim1 * 1;
     fk -= fk_offset;
     h_dim1 = *p;
-    h_offset = h_dim1 + 1;
+    h_offset = 1 + h_dim1 * 1;
     h__ -= h_offset;
     prderr_dim1 = *nsmpl;
-    prderr_offset = prderr_dim1 + 1;
+    prderr_offset = 1 + prderr_dim1 * 1;
     prderr -= prderr_offset;
     trkerr_dim1 = *npred;
     trkerr_dim2 = *n;
-    trkerr_offset = trkerr_dim1 * (trkerr_dim2 + 1) + 1;
+    trkerr_offset = 1 + trkerr_dim1 * (1 + trkerr_dim2 * 1);
     trkerr -= trkerr_offset;
     state_dim1 = *npred;
-    state_offset = state_dim1 + 1;
+    state_offset = 1 + state_dim1 * 1;
     state -= state_offset;
     ey_dim1 = *npred;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
 
     /* Function Body */
     if (100 < *n) {
 	error_("ERROR: state dimension cannot exceed ", &c__48, &c__100, &
-		c__1, 37L);
+		c__1, (ftnlen)37);
 	return 0;
     }
     if (100 < *p) {
 	error_("ERROR: output dimensions cannot exceed ", &c__48, &c__100, &
-		c__1, 39L);
+		c__1, (ftnlen)39);
 	return 0;
     }
-    lperr = FALSE_;
+    lperr = 0;
     if (*hperr > 0) {
 	i__1 = *hperr;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (errwt[i__] > (float)0.) {
-		lperr = TRUE_;
+		lperr = 1;
 	    }
 /* L500: */
 	}
@@ -1247,7 +1228,7 @@ r.*/
 	zz[i__ - 1] = z0[i__];
     }
 
-    if (! (*gain)) {
+    if (*gain != 1) {
 /*        initial tracking error. */
 	i__1 = *n;
 	for (i__ = 1; i__ <= i__1; ++i__) {
@@ -1292,7 +1273,7 @@ r.*/
 
     i__2 = *nsmpl;
     for (it = 1; it <= i__2; ++it) {
-	if (! (*gain)) {
+	if (*gain != 1) {
 
 
 /*   Kalman gain  FK = F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR') */
@@ -1443,7 +1424,7 @@ r.*/
 /*      IF (IT.EQ.1) THEN */
 /*         CALL DBPRDB('PP  ',4,PP,IS*IS) */
 /*      ENDIF */
-	    if (*ltkerr) {
+	    if (*ltkerr == 1) {
 		i__1 = *n;
 		for (i__ = 1; i__ <= i__1; ++i__) {
 		    i__4 = *n;
@@ -1490,7 +1471,7 @@ r.*/
 /* L24: */
 	    zz[i__ - 1] = z__[i__ - 1];
 	}
-	if (*lstate) {
+	if (*lstate == 1) {
 	    i__1 = *n;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 /* L25: */
@@ -1502,8 +1483,7 @@ r.*/
 
 /*  innovations  WW(t)=y(t)-H*z(t|t-1)) */
 
-/*   EY stores history of predition error WW to reconstruct prediction
-s */
+/*   EY stores history of predition error WW to reconstruct predictions */
 	i__1 = *p;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    ww[i__ - 1] = y[it + i__ * y_dim1];
@@ -1520,7 +1500,7 @@ s */
 	}
 /*      CALL DBPRDB('WW ',3,WW,P) */
 /*   Return weighted prediction error */
-	if (lperr) {
+	if (lperr == 1) {
 	    i__4 = *p;
 	    for (i__ = 1; i__ <= i__4; ++i__) {
 /* L401: */
@@ -1589,8 +1569,7 @@ s */
 			}
 /*                 IF (IT.GT.97) THEN */
 /*                    CALL DBPR('K     ',6, K,1) */
-/*                    CALL DBPRDB('PRDERR ',8,PRDERR,N
-SMPL*P) */
+/*                    CALL DBPRDB('PRDERR ',8,PRDERR,NSMPL*P) */
 /*                 ENDIF */
 		    }
 /* L400: */
@@ -1637,8 +1616,7 @@ SMPL*P) */
 		    }
 		}
 	    }
-/*  use prediction error from last sample point (i.e. for first pr
-ediction)*/
+/*   use prediction error from last sample point (i.e. for first prediction) */
 	    if (it == *nsmpl + 1) {
 		i__2 = *n;
 		for (i__ = 1; i__ <= i__2; ++i__) {
@@ -1649,7 +1627,7 @@ ediction)*/
 		    }
 		}
 	    }
-	    if (*lstate) {
+	    if (*lstate == 1) {
 		i__3 = *n;
 		for (i__ = 1; i__ <= i__3; ++i__) {
 /* L2005: */
@@ -1680,8 +1658,7 @@ ediction)*/
 
 
 
-/*       1         2         3         4         5         6         7        
- 8*/
+/*        1         2         3         4         5         6         7         8 */
 /* Subroutine */ int simrma_(y, y0, m, p, ia, ib, ic, nsmpl, u, u0, w, w0, a, 
 	b, c__, trend)
 doublereal *y, *y0;
@@ -1697,8 +1674,7 @@ doublereal *u, *u0, *w, *w0, *a, *b, *c__, *trend;
     /* Local variables */
     static integer i__, j, l, it;
 
-/*     Simulate an ARMA model. See documentation in ARMA and in the S vers
-ion.*/
+/*      Simulate an ARMA model. See documentation in ARMA and in the S version. */
 /*       CALL DBPRDB('inSIMARMA ',7, 1,1) */
 /*       CALL DBPR('M     ',6, M,1) */
 /*       CALL DBPRDB('A     ',6, A,(IA*P*P)) */
@@ -1710,33 +1686,33 @@ ion.*/
     --trend;
     a_dim1 = *ia;
     a_dim2 = *p;
-    a_offset = a_dim1 * (a_dim2 + 1) + 1;
+    a_offset = 1 + a_dim1 * (1 + a_dim2 * 1);
     a -= a_offset;
     y0_dim1 = *ia;
-    y0_offset = y0_dim1 + 1;
+    y0_offset = 1 + y0_dim1 * 1;
     y0 -= y0_offset;
     b_dim1 = *ib;
     b_dim2 = *p;
-    b_offset = b_dim1 * (b_dim2 + 1) + 1;
+    b_offset = 1 + b_dim1 * (1 + b_dim2 * 1);
     b -= b_offset;
     w0_dim1 = *ib;
-    w0_offset = w0_dim1 + 1;
+    w0_offset = 1 + w0_dim1 * 1;
     w0 -= w0_offset;
     c_dim1 = *ic;
     c_dim2 = *p;
-    c_offset = c_dim1 * (c_dim2 + 1) + 1;
+    c_offset = 1 + c_dim1 * (1 + c_dim2 * 1);
     c__ -= c_offset;
     u0_dim1 = *ic;
-    u0_offset = u0_dim1 + 1;
+    u0_offset = 1 + u0_dim1 * 1;
     u0 -= u0_offset;
     w_dim1 = *nsmpl;
-    w_offset = w_dim1 + 1;
+    w_offset = 1 + w_dim1 * 1;
     w -= w_offset;
     u_dim1 = *nsmpl;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     y_dim1 = *nsmpl;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
 
     /* Function Body */
@@ -1821,8 +1797,7 @@ ion.*/
 				     * c_dim1] * u0[l - it + j * u0_dim1];
 			}
 		    }
-/*         IF (IT.LE.5) CALL DBPRDB('stepa ',6, Y(IT,3),1)
- */
+/*         IF (IT.LE.5) CALL DBPRDB('stepa ',6, Y(IT,3),1) */
 		} else {
 		    i__4 = *p;
 		    for (i__ = 1; i__ <= i__4; ++i__) {
@@ -1833,8 +1808,7 @@ ion.*/
 				     * c_dim1] * u[it + 1 - l + j * u_dim1];
 			}
 		    }
-/*           IF (IT.LE.5) CALL DBPRDB('stepb ',6, Y(IT,3),
-1) */
+/*           IF (IT.LE.5) CALL DBPRDB('stepb ',6, Y(IT,3),1) */
 		}
 /* L25: */
 	    }
@@ -1871,11 +1845,9 @@ doublereal *aa, *bb, *ww;
     static integer i__, j, l;
 
 
-/* Put parameters into arrays (as in S function set.arrays) and call ARMA 
-*/
+/* Put parameters into arrays (as in S function set.arrays) and call ARMA */
 
-/* It is assummed that M,P,IA,IB, and IC - the dimensions of the parameter
-*/
+/*  It is assummed that M,P,IA,IB, and IC - the dimensions of the parameter */
 /*    arrays - are given. Trying to calculate these causes problems. */
 
 
@@ -1888,27 +1860,27 @@ doublereal *aa, *bb, *ww;
     --trend;
     a_dim1 = *ia;
     a_dim2 = *p;
-    a_offset = a_dim1 * (a_dim2 + 1) + 1;
+    a_offset = 1 + a_dim1 * (1 + a_dim2 * 1);
     a -= a_offset;
     b_dim1 = *ib;
     b_dim2 = *p;
-    b_offset = b_dim1 * (b_dim2 + 1) + 1;
+    b_offset = 1 + b_dim1 * (1 + b_dim2 * 1);
     b -= b_offset;
     c_dim1 = *ic;
     c_dim2 = *p;
-    c_offset = c_dim1 * (c_dim2 + 1) + 1;
+    c_offset = 1 + c_dim1 * (1 + c_dim2 * 1);
     c__ -= c_offset;
     prderr_dim1 = *nsmpl;
-    prderr_offset = prderr_dim1 + 1;
+    prderr_offset = 1 + prderr_dim1 * 1;
     prderr -= prderr_offset;
     ey_dim1 = *npred;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     --jp;
     --ip;
@@ -1922,10 +1894,10 @@ doublereal *aa, *bb, *ww;
     --const__;
     --ww;
     bb_dim1 = *is;
-    bb_offset = bb_dim1 + 1;
+    bb_offset = 1 + bb_dim1 * 1;
     bb -= bb_offset;
     aa_dim1 = *is;
-    aa_offset = aa_dim1 + 1;
+    aa_offset = 1 + aa_dim1 * 1;
     aa -= aa_offset;
 
     /* Function Body */
@@ -2044,45 +2016,44 @@ doublereal *aa, *bb, *ww;
     static integer mhoriz;
 
 /*  multiple calls to ARMA for for prediction at given horizons. */
-/*     See S program horizon.forecasts.TSmodel */
+/*     See S program horizonForecasts.TSmodel */
 
-/* Note: If DSCARD is too small then forecasting starts based on little (o
-r*/
+/*  Note: If DSCARD is too small then forecasting starts based on little (or */
 /*          no) data and the results will be spurious. */
     /* Parameter adjustments */
     --horiz;
     --trend;
     a_dim1 = *ia;
     a_dim2 = *p;
-    a_offset = a_dim1 * (a_dim2 + 1) + 1;
+    a_offset = 1 + a_dim1 * (1 + a_dim2 * 1);
     a -= a_offset;
     b_dim1 = *ib;
     b_dim2 = *p;
-    b_offset = b_dim1 * (b_dim2 + 1) + 1;
+    b_offset = 1 + b_dim1 * (1 + b_dim2 * 1);
     b -= b_offset;
     c_dim1 = *ic;
     c_dim2 = *p;
-    c_offset = c_dim1 * (c_dim2 + 1) + 1;
+    c_offset = 1 + c_dim1 * (1 + c_dim2 * 1);
     c__ -= c_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     ey_dim1 = *nacc;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     proj_dim1 = *nho;
     proj_dim2 = *nacc;
-    proj_offset = proj_dim1 * (proj_dim2 + 1) + 1;
+    proj_offset = 1 + proj_dim1 * (1 + proj_dim2 * 1);
     proj -= proj_offset;
     --ww;
     bb_dim1 = *is;
-    bb_offset = bb_dim1 + 1;
+    bb_offset = 1 + bb_dim1 * 1;
     bb -= bb_offset;
     aa_dim1 = *is;
-    aa_offset = aa_dim1 + 1;
+    aa_offset = 1 + aa_dim1 * 1;
     aa -= aa_offset;
 
     /* Function Body */
@@ -2145,10 +2116,9 @@ doublereal *aa, *bb, *ww;
     static doublereal prderr[1]	/* was [1][1] */;
 
 /*  multiple calls to ARMA for prediction analysis. */
-/*     See S program forecast.cov */
+/*     See S program forecastCov */
 
-/* Note: If DSCARD is too small then forecasting starts based on little (o
-r*/
+/*  Note: If DSCARD is too small then forecasting starts based on little (or */
 /*          no) data and the results will be spurious. */
 
 /*        CALL DBPR('NPRED ',6, NPRED,1) */
@@ -2160,35 +2130,35 @@ r*/
     --trend;
     cov_dim1 = *nh;
     cov_dim2 = *p;
-    cov_offset = cov_dim1 * (cov_dim2 + 1) + 1;
+    cov_offset = 1 + cov_dim1 * (1 + cov_dim2 * 1);
     cov -= cov_offset;
     a_dim1 = *ia;
     a_dim2 = *p;
-    a_offset = a_dim1 * (a_dim2 + 1) + 1;
+    a_offset = 1 + a_dim1 * (1 + a_dim2 * 1);
     a -= a_offset;
     b_dim1 = *ib;
     b_dim2 = *p;
-    b_offset = b_dim1 * (b_dim2 + 1) + 1;
+    b_offset = 1 + b_dim1 * (1 + b_dim2 * 1);
     b -= b_offset;
     c_dim1 = *ic;
     c_dim2 = *p;
-    c_offset = c_dim1 * (c_dim2 + 1) + 1;
+    c_offset = 1 + c_dim1 * (1 + c_dim2 * 1);
     c__ -= c_offset;
     ey_dim1 = *npred;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     --ww;
     bb_dim1 = *is;
-    bb_offset = bb_dim1 + 1;
+    bb_offset = 1 + bb_dim1 * 1;
     bb -= bb_offset;
     aa_dim1 = *is;
-    aa_offset = aa_dim1 + 1;
+    aa_offset = 1 + aa_dim1 * 1;
     aa -= aa_offset;
 
     /* Function Body */
@@ -2270,13 +2240,11 @@ doublereal *aa, *bb, *ww;
     /* Local variables */
     static integer i__, j, k, l;
     static doublereal detom;
-    static logical lperr;
-    static integer it;
+    static integer lperr, it;
     extern /* Subroutine */ int invers_();
 
 /* sampleT is the length of data which should be used for estimation. */
-/*Calculate the one-step ahead predictions, and likelihood value for the m
-odel:*/
+/* Calculate the one-step ahead predictions, and likelihood value for the model: */
 
 /*       A(L)y(t) =  B(L)w(t) + C(L)u(t)  + TREND */
 
@@ -2298,12 +2266,10 @@ odel:*/
 /*   Weighted prediction errors are returned in PRDERR. */
 /*     If HPERR is equal or greater than one then weighted prediction */
 /*     errors are calculated up to the horizon indicated */
-/*     by HPERR. The weights taken from ERRWT are applied to the squared 
-*/
+/*     by HPERR. The weights taken from ERRWT are applied to the squared */
 /*     error at each period ahead. */
 /*   If HPERR is zero or all elements of ERRWT are zero then */
-/*  LPERR is set false then PRDERR is not referenced, so ARMA can be calle
-d*/
+/*   LPERR is set false then PRDERR is not referenced, so ARMA can be called */
 /*    with dummy arguments as in GEND. */
 
 /*    NSTART is not properly implemented and must be set to 1. */
@@ -2329,43 +2295,43 @@ d*/
     --trend;
     a_dim1 = *ia;
     a_dim2 = *p;
-    a_offset = a_dim1 * (a_dim2 + 1) + 1;
+    a_offset = 1 + a_dim1 * (1 + a_dim2 * 1);
     a -= a_offset;
     b_dim1 = *ib;
     b_dim2 = *p;
-    b_offset = b_dim1 * (b_dim2 + 1) + 1;
+    b_offset = 1 + b_dim1 * (1 + b_dim2 * 1);
     b -= b_offset;
     c_dim1 = *ic;
     c_dim2 = *p;
-    c_offset = c_dim1 * (c_dim2 + 1) + 1;
+    c_offset = 1 + c_dim1 * (1 + c_dim2 * 1);
     c__ -= c_offset;
     prderr_dim1 = *nsmpl;
-    prderr_offset = prderr_dim1 + 1;
+    prderr_offset = 1 + prderr_dim1 * 1;
     prderr -= prderr_offset;
     ey_dim1 = *npred;
-    ey_offset = ey_dim1 + 1;
+    ey_offset = 1 + ey_dim1 * 1;
     ey -= ey_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     --ww;
     bb_dim1 = *is;
-    bb_offset = bb_dim1 + 1;
+    bb_offset = 1 + bb_dim1 * 1;
     bb -= bb_offset;
     aa_dim1 = *is;
-    aa_offset = aa_dim1 + 1;
+    aa_offset = 1 + aa_dim1 * 1;
     aa -= aa_offset;
 
     /* Function Body */
-    lperr = FALSE_;
+    lperr = 0;
     if (*hperr > 0) {
 	i__1 = *hperr;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 	    if (errwt[i__] > (float)0.) {
-		lperr = TRUE_;
+		lperr = 1;
 	    }
 /* L500: */
 	}
@@ -2546,15 +2512,14 @@ d*/
 /*         CALL DBPRDB('ww  ',4, WW,P) */
 /*      ENDIF */
 
-/*   EY stores history of predition error WW to reconstruct prediction
-s */
+/*   EY stores history of predition error WW to reconstruct predictions */
 	i__1 = *p;
 	for (i__ = 1; i__ <= i__1; ++i__) {
 /* L10: */
 	    ey[it + i__ * ey_dim1] = ww[i__];
 	}
 /*   Return weighted prediction error */
-	if (lperr) {
+	if (lperr == 1) {
 	    i__1 = *p;
 	    for (i__ = 1; i__ <= i__1; ++i__) {
 /* L410: */
@@ -2625,8 +2590,7 @@ s */
 /* L4024: */
 			}
 /*              correction for WW by B0. */
-/*     NB this has not been well tested and models wit
-h B0 != I may not work !!*/
+/*      NB this has not been well tested and models with B0 != I may not work !! */
 			i__2 = *p;
 			for (i__ = 1; i__ <= i__2; ++i__) {
 			    i__5 = *p;
@@ -2646,8 +2610,7 @@ h B0 != I may not work !!*/
 			}
 /*                 IF (IT.GT.97) THEN */
 /*                    CALL DBPR('K     ',6, K,1) */
-/*                    CALL DBPRDB('PRDERR ',8,PRDERR,N
-SMPL*P) */
+/*                    CALL DBPRDB('PRDERR ',8,PRDERR,NSMPL*P) */
 /*                 ENDIF */
 		    }
 /* L400: */
@@ -2684,8 +2647,7 @@ SMPL*P) */
 /*    Start multi-step prediction loop */
 
     if (*nsmpl < *npred) {
-/* B(1,,) now needs to be filled in as I (storage was previously use f
-or B0).*/
+/*  B(1,,) now needs to be filled in as I (storage was previously use for B0). */
 	i__5 = *p;
 	for (i__ = 1; i__ <= i__5; ++i__) {
 	    i__4 = *p;
@@ -2890,10 +2852,10 @@ doublereal *err;
     --horiz;
     cov_dim1 = *nh;
     cov_dim2 = *p;
-    cov_offset = cov_dim1 * (cov_dim2 + 1) + 1;
+    cov_offset = 1 + cov_dim1 * (1 + cov_dim2 * 1);
     cov -= cov_offset;
     err_dim1 = *npred;
-    err_offset = err_dim1 + 1;
+    err_offset = 1 + err_dim1 * 1;
     err -= err_offset;
 
     /* Function Body */
@@ -2968,7 +2930,7 @@ doublereal *det;
 /*     the  routine  and  the inverse takes its place. */
     /* Parameter adjustments */
     a_dim1 = *is;
-    a_offset = a_dim1 + 1;
+    a_offset = 1 + a_dim1 * 1;
     a -= a_offset;
 
     /* Function Body */
@@ -3070,7 +3032,7 @@ L900:
 /* Subroutine */ int gend_(d__, fc, ith, x0, delta0, n, nd, f0, rd, haprox, 
 	hdiag, daprox, x, delta, f1, f2, m, p, nsmpl, nacc, u, y, ap, ip, jp, 
 	ict, const__, an, in, jn, lp, ln, ia, ib, ic, a, b, c__, ns, z0, p0, 
-	f, g, h__, fk, r__, q, gain)
+	f, g, h__, fk, q, r__, gain)
 doublereal *d__;
 integer *fc, *ith;
 doublereal *x0, *delta0;
@@ -3085,8 +3047,8 @@ doublereal *const__;
 integer *an, *in, *jn, *lp, *ln, *ia, *ib, *ic;
 doublereal *a, *b, *c__;
 integer *ns;
-doublereal *z0, *p0, *f, *g, *h__, *fk, *r__, *q;
-logical *gain;
+doublereal *z0, *p0, *f, *g, *h__, *fk, *q, *r__;
+integer *gain;
 {
     /* System generated locals */
     integer d_dim1, d_offset, daprox_dim1, daprox_offset, hdiag_dim1, 
@@ -3141,8 +3103,7 @@ logical *gain;
 /*  parameters passed directly to ARMAp and/or KFp: */
 
 
-/*     F, Q, and R are used for scratch space in the call to ARMAP instead
- of:*/
+/*      F, Q, and R are used for scratch space in the call to ARMAP instead of: */
 /*      DOUBLE PRECISION AA(IS,IS), BB(IS,IS), WW(IS) */
 /*        this could cause some problems ... some checks are made. */
 /*       Z0(NS) is used for TREND(P) in ARMA models */
@@ -3164,26 +3125,26 @@ logical *gain;
     --f2;
     --f1;
     hdiag_dim1 = *n;
-    hdiag_offset = hdiag_dim1 + 1;
+    hdiag_offset = 1 + hdiag_dim1 * 1;
     hdiag -= hdiag_offset;
     --f0;
     d_dim1 = *n;
-    d_offset = d_dim1 + 1;
+    d_offset = 1 + d_dim1 * 1;
     d__ -= d_offset;
     daprox_dim1 = *n;
-    daprox_offset = daprox_dim1 + 1;
+    daprox_offset = 1 + daprox_dim1 * 1;
     daprox -= daprox_offset;
     haprox_dim1 = *n;
-    haprox_offset = haprox_dim1 + 1;
+    haprox_offset = 1 + haprox_dim1 * 1;
     haprox -= haprox_offset;
     r_dim1 = *p;
-    r_offset = r_dim1 + 1;
+    r_offset = 1 + r_dim1 * 1;
     r__ -= r_offset;
     y_dim1 = *nacc;
-    y_offset = y_dim1 + 1;
+    y_offset = 1 + y_dim1 * 1;
     y -= y_offset;
     u_dim1 = *nacc;
-    u_offset = u_dim1 + 1;
+    u_offset = 1 + u_dim1 * 1;
     u -= u_offset;
     --ln;
     --jn;
@@ -3192,47 +3153,47 @@ logical *gain;
     --const__;
     a_dim1 = *ia;
     a_dim2 = *p;
-    a_offset = a_dim1 * (a_dim2 + 1) + 1;
+    a_offset = 1 + a_dim1 * (1 + a_dim2 * 1);
     a -= a_offset;
     b_dim1 = *ib;
     b_dim2 = *p;
-    b_offset = b_dim1 * (b_dim2 + 1) + 1;
+    b_offset = 1 + b_dim1 * (1 + b_dim2 * 1);
     b -= b_offset;
     c_dim1 = *ic;
     c_dim2 = *p;
-    c_offset = c_dim1 * (c_dim2 + 1) + 1;
+    c_offset = 1 + c_dim1 * (1 + c_dim2 * 1);
     c__ -= c_offset;
     q_dim1 = *ns;
-    q_offset = q_dim1 + 1;
+    q_offset = 1 + q_dim1 * 1;
     q -= q_offset;
     fk_dim1 = *ns;
-    fk_offset = fk_dim1 + 1;
+    fk_offset = 1 + fk_dim1 * 1;
     fk -= fk_offset;
     h_dim1 = *p;
-    h_offset = h_dim1 + 1;
+    h_offset = 1 + h_dim1 * 1;
     h__ -= h_offset;
     g_dim1 = *ns;
-    g_offset = g_dim1 + 1;
+    g_offset = 1 + g_dim1 * 1;
     g -= g_offset;
     f_dim1 = *ns;
-    f_offset = f_dim1 + 1;
+    f_offset = 1 + f_dim1 * 1;
     f -= f_offset;
     p0_dim1 = *ns;
-    p0_offset = p0_dim1 + 1;
+    p0_offset = 1 + p0_dim1 * 1;
     p0 -= p0_offset;
     --z0;
 
     /* Function Body */
-    dbpr_("starting gend N=", &c__16, n, &c__1, 16L);
-    dbpr_("            ITH=", &c__16, ith, &c__1, 16L);
-    dbpr_("             ND=", &c__16, nd, &c__1, 16L);
+    dbpr_("starting gend N=", &c__16, n, &c__1, (ftnlen)16);
+    dbpr_("            ITH=", &c__16, ith, &c__1, (ftnlen)16);
+    dbpr_("             ND=", &c__16, nd, &c__1, (ftnlen)16);
     if (*ns < max(*m,*p)) {
 	error_("warning: scratch (NS too small) in GEND.", &c__40, ns, &c__1, 
-		40L);
+		(ftnlen)40);
     }
     if (*ns < *p * *p) {
-	error_("warning: scratch (P too big) in GEND.", &c__37, ns, &c__1, 
-		37L);
+	error_("warning: scratch (P too big) in GEND.", &c__37, ns, &c__1, (
+		ftnlen)37);
     }
     hperr = 0;
     v = (float)2.;
@@ -3264,10 +3225,8 @@ logical *gain;
 	}
 /*                                 successively reduce DELTA */
 
-/* This could be done without both X and X0 by adding and then subtrac
-ting*/
-/*   DELTA, but accumulated round off error seems to affect the result
-. */
+/*  This could be done without both X and X0 by adding and then subtracting */
+/*   DELTA, but accumulated round off error seems to affect the result. */
 	i__2 = *rd;
 	for (k = 1; k <= i__2; ++k) {
 	    x[i__] = x0[i__] + delta[i__];
@@ -3357,13 +3316,13 @@ ting*/
 
 /*                  2nd derivative  - do lower half of hessian only */
     up = *ith;
-    dbpr_("2nd deriv. UP=\n", &c__16, &up, &c__1, 15L);
+    dbpr_("2nd deriv. UP=\n", &c__16, &up, &c__1, (ftnlen)15);
     i__1 = *ith;
     for (i__ = 1; i__ <= i__1; ++i__) {
 	i__3 = i__;
 	for (j = 1; j <= i__3; ++j) {
 	    ++up;
-	    dbpr_("      UP=\n", &c__11, &up, &c__1, 10L);
+	    dbpr_("      UP=\n", &c__11, &up, &c__1, (ftnlen)10);
 	    if (i__ == j) {
 		i__2 = *n;
 		for (ii = 1; ii <= i__2; ++ii) {
@@ -3390,8 +3349,8 @@ ting*/
 				1], &ip[1], &jp[1], ict, &const__[1], &an[1], 
 				&in[1], &jn[1]);
 		    } else if (*fc == 1) {
-			dbpr_("calling armap.F1..K=\n", &c__22, &k, &c__1, 
-				21L);
+			dbpr_("calling armap.F1..K=\n", &c__22, &k, &c__1, (
+				ftnlen)21);
 			armap_(&f1[1], &hperr, prderr, errwt, m, p, ia, ib, 
 				ic, nsmpl, nsmpl, nacc, &u[u_offset], &y[
 				y_offset], &a[a_offset], &b[b_offset], &c__[

@@ -33,7 +33,7 @@ classed <- function(x, cls) {tfclass(x) <- cls; x}
 
 ###########################################################################
 
-freeze <- function (data, ...) {
+freeze <- function(data, ...){
 #This function allows for the possiblity of data structures which invoke a
 #    call to a database.  It is called by functions which actually use data
 # eg:    data <- freeze(data)
@@ -73,10 +73,7 @@ seqN <- function(N) {if (0==length(N)) NULL else if (N<=0) NULL else seq(N)}
 # are already generic functions in S with a default 
 # method which works for vectors and matrices and data with a tsp attribute.
 
-# The functions diff and tsmatrix are not (yet) generic function is S. The
-# existing functions are assigned as defaults and generic ones are defined.
-
-periods <- function(x, ...)
+periods <- function(x)
  {# the length in time of the sequence (number of observations)
     UseMethod("periods")
  }
@@ -94,9 +91,36 @@ periods.tsp <- periods.default
 
 tfplot <- function(obj, ...)  UseMethod("tfplot")
 
-tfplot.default <- function(obj, xlab=NULL, ylab=NULL,
-                           start.=NULL, end.=NULL, ...)
- {if (!is.tframed(obj)) UseMethod("tfplot")
+
+tfplot.default <- function(..., xlab=NULL, ylab=NULL,graphs.per.page=5,
+                         start.=NULL, end.=NULL,
+			 series=seq(nseries(list(...)[[1]])), mar=par()$mar )
+ {obj <- list(...)
+  d <- obj[[1]]
+  if (!is.tframed(d)) UseMethod("plot")
+  else
+    {names <- series.names(d)
+     Ngraphs <- min(length(series), graphs.per.page)
+     old.par <- par(mfcol = c(Ngraphs, 1), mar=mar)  
+     on.exit(par(old.par))
+     for (i in series)
+       {z <- matrix(NA, periods(d), length(obj))
+        j <- 0
+        for (d in obj)
+    	  {if (!is.matrix(d)) d <- tframed(as.matrix(d), tframe(d))
+	   if(mode(i)=="character") i <- match(i, names)
+	   j <- j + 1
+	   z[,j] <- select.series(d, series=i)
+	  }
+	 tfOnePlot(tframed(z, tframe(d), names=names[i]),
+	           xlab=xlab, ylab=ylab, start.=start., end.=end.)
+	}
+    }
+  invisible()
+ }
+ 
+tfOnePlot <- function(obj, xlab=NULL, ylab=NULL, start.=NULL, end.=NULL, ...)
+ {if (!is.tframed(obj)) UseMethod("plot")
   else
     {if (!is.null(start.)) obj <- tfwindow(obj, start. = start.)
      if (!is.null(end.))   obj <- tfwindow(obj, end.   = end.)
@@ -108,15 +132,17 @@ tfplot.default <- function(obj, xlab=NULL, ylab=NULL,
   invisible()
  }
 
-# Note tfprint prints the data. tfprint.tframe  prints the tframe info. 
+# Note tfprint prints the data. tframePrint  prints the tframe info. 
 
 tfprint <- function(x, ...)  UseMethod("tfprint")
 
 tfprint.default <- function(x,...)
- {dimnames(x) <- list(format(time(tframe(x))), series.names(x))
-  tframe(x) <- NULL
-  series.names(x) <- NULL
-  print(x, ...)
+ {xx <- x
+  if(1 == nseries(xx)) xx <- matrix(xx, length(xx), 1)
+  dimnames(xx) <- list(format(time(tframe(x))), series.names(x))
+  tframe(xx) <- NULL
+  series.names(xx) <- NULL
+  print(xx, ...)
   invisible(x)
  }
 
@@ -124,13 +150,15 @@ tfprint.default <- function(x,...)
 
 tfwindow <- function(x, ...)  UseMethod("tfwindow")
 
-tfwindow.default <- function(x, start.=NULL, end.=NULL, warn=T)
+tfwindow.default <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=T)
   {# this provides a convenient way to support warn and correct for bugs
    # in some versions of window().
    # if (is.null(start.)) start. <- start(x)
    # if (is.null(end.))   end.   <- end(x)
    # With the default warn=T warnings will be issued if no truncation takes
    #  place because start or end is outside the range of data.
+   if (is.null(start.) && !is.null(tf)) start. <- start(tf)
+   if (is.null(end.)   && !is.null(tf)) end.   <- end(tf)
    if (!warn) 
      {opts <- options(warn = -1)
       on.exit(options(opts))
@@ -148,7 +176,7 @@ tfwindow.default <- function(x, start.=NULL, end.=NULL, warn=T)
 
 ################################################
 is.tframe <- function(tf) inherits(tf, "tframe")
-is.tframed <- function (x) inherits(tframe(x), "tframe")
+is.tframed <- function(x) inherits(tframe(x), "tframe")
 
 tframe <- function(x) {UseMethod("tframe") } #extract the tframe
 
@@ -174,7 +202,7 @@ tframe.default <- function(x){
 settf <- function(value, x) {UseMethod("settf") }
 
 settf.default <- function(value, x)
-{if (!is.consistent.tframe(value, x))
+{if (!check.tframeConsistent(value, x))
     stop("time frame value in tframe assignment is not consistent with data.")
  # using tsp is a bit dangerous in R as it sets class "ts" which can clobber
  # other classes. The "pure" idea of tframe is that time frame inheritance
@@ -188,9 +216,9 @@ settf.default <- function(value, x)
 }
 
 
-tframed  <- function (x, ...) {UseMethod("tframed") }
+tframed <- function(x, ...) {UseMethod("tframed") }
 
-tframed.default  <- function (x, tf=NULL, names = NULL) 
+tframed.default <- function(x, tf=NULL, names = NULL) 
 {# return x as a tframed object with tframe tf
  # If ts is not a tframe but a list then ts() is attempted. This is not
  #     really the way tframed is suppose to be used, but makes backward 
@@ -215,70 +243,103 @@ tframed.default  <- function (x, tf=NULL, names = NULL)
 ###############################################
 
 
-tfprint.tframe <- function(x, digits=NULL, quote=T, prefix="", ...) 
-   UseMethod("tfprint.tframe")
+tfprint.tframe <- function(x, ...) UseMethod("tframePrint")
+tframePrint <- function(x, ...) UseMethod("tframePrint")
 
-tfprint.tframe.default <- function(x, digits=NULL, quote=T, prefix="", ...) 
-   invisible(print(unclass(x), quote=quote, prefix=prefix, ...))
-   # digits=digits, seems to cause problems ?
+tframePrint.default <- function(x, digits=NULL, quote=T, prefix="", ...) 
+  {if (! is.tframe(x)) x <- tframe(x)
+   invisible(print(unclass(x), quote=quote, prefix=prefix, ...)) }
 
 
+start.tframe <- function(x)UseMethod("tframeStart")
+tframeStart <- function(x)UseMethod("tframeStart")
 
-start.tframe <- function(tf)UseMethod("start.tframe")
-end.tframe <- function(tf)UseMethod("end.tframe")
+tframeStart.default <- function(x)
+  {if (! is.tframe(x)) x <- tframe(x)
+   c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))}
+
+
+end.tframe <- function(x)UseMethod("tframeEnd")
+tframeEnd <- function(x)UseMethod("tframeEnd")
+
+tframeEnd.default <- function(x)
+  {if (! is.tframe(x)) x <- tframe(x)
+   c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))}
+
 
 # periods should give the number of data points in the time direction.
-periods.tframe <- function(tf)UseMethod("periods.tframe")
+periods.tframe <- function(x)UseMethod("tframePeriods")
+tframePeriods <- function(x)UseMethod("tframePeriods")
+
+tframePeriods.default <- function(x)
+  {if (! is.tframe(x)) x <- tframe(x)
+   1+round((x[2]-x[1])*x[3])}
+
 
 # frequency is less essential and may not always make sense.
-frequency.tframe <- function(tf)UseMethod("frequency.tframe")
+frequency.tframe <- function(x)UseMethod("tframeFrequency")
+tframeFrequency <- function(x)UseMethod("tframeFrequency")
 
-time.tframe <- function(tf)UseMethod("time.tframe")
-
-truncate.tframe <- function(tf, start=NULL, end=NULL)
-    {#NULL means no truncation.
-     UseMethod("truncate.tframe")
-    }
-
-expand.tframe <- function(tf, add.start=0, add.end=0)
-     UseMethod("expand.tframe")
+tframeFrequency.default <- function(x)
+  {if (! is.tframe(x)) x <- tframe(x)
+   x[3]}
 
 
+time.tframe <- function(x)UseMethod("tframeTime")
+tframeTime <- function(x)UseMethod("tframeTime")
 
-is.consistent.tframe <- function(tf, x) UseMethod("is.consistent.tframe")
+tframeTime.default <- function(x)
+  {if (! is.tframe(x)) x <- tframe(x)
+   x[1] + (seq(periods(x))-1)/x[3]}
 
-is.consistent.tframe.default <- function(tf, x)
-   {periods.tframe(tf) == periods(x)}
 
-test.equal.tframe <- function(tf1, tf2) UseMethod("test.equal.tframe")
+tftruncate.tframe <- function(x, start=NULL, end=NULL)
+   UseMethod("tframeTruncate")
 
-test.equal.tframe.default <- function(tf1, tf2) { all(tf1==tf2)}
+
+tframeTruncate <- function(x, start=NULL, end=NULL) UseMethod("tframeTruncate")
+   #NULL means no truncation. 
+
+tfexpand.tframe <- function(x, add.start=0, add.end=0) UseMethod("tframeExpand")
+
+tframeExpand <- function(x, add.start=0, add.end=0)
+ UseMethod("tframeExpand")
+
+
+check.tframeConsistent <- function(tf, x) UseMethod("check.tframeConsistent")
+
+check.tframeConsistent.default <- function(tf, x)
+   {tframePeriods(tf) == periods(x)}
+
+test.Equaltframes <- function(tf1, tf2) UseMethod("test.Equaltframes")
+
+test.Equaltframes.default <- function(tf1, tf2) { all(tf1==tf2)}
 
 # Following could be used to do date comparisons like start() < end()
 
-earliest.start.index.tframe <- function(x, ...)
-    UseMethod("earliest.start.index.tframe")
+tframeEarliestStartIndex <- function(x, ...)
+    UseMethod("tframeEarliestStartIndex")
 
-earliest.start.tframe <- function(x, ...)
-    append(list(x),list(...))[[earliest.start.index.tframe(x, ...)]]
+earliest.tframeStart <- function(x, ...)
+    append(list(x),list(...))[[tframeEarliestStartIndex(x, ...)]]
 
-earliest.end.index.tframe <- function(x, ...)
-    UseMethod("earliest.end.index.tframe")
+tframeEarliestEndIndex <- function(x, ...)
+    UseMethod("tframeEarliestEndIndex")
 
-earliest.end.tframe <- function(x, ...)
-    append(list(x),list(...))[[earliest.end.index.tframe(x, ...)]]
+earliest.tframeEnd <- function(x, ...)
+    append(list(x),list(...))[[tframeEarliestEndIndex(x, ...)]]
 
-latest.start.index.tframe <- function(x, ...)
-    UseMethod("latest.start.index.tframe")
+tframeLatestStartIndex <- function(x, ...)
+    UseMethod("tframeLatestStartIndex")
 
-latest.start.tframe <- function(x, ...)
-    append(list(x),list(...))[[latest.start.index.tframe(x, ...)]]
+latest.tframeStart <- function(x, ...)
+    append(list(x),list(...))[[tframeLatestStartIndex(x, ...)]]
 
-latest.end.index.tframe <- function(x, ...)
-    UseMethod("latest.end.index.tframe")
+tframeLatestEndIndex <- function(x, ...)
+    UseMethod("tframeLatestEndIndex")
 
-latest.end.tframe <- function(x, ...)
-    append(list(x),list(...))[[latest.end.index.tframe(x, ...)]]
+latest.tframeEnd <- function(x, ...)
+    append(list(x),list(...))[[tframeLatestEndIndex(x, ...)]]
 
 
 ###############################################
@@ -287,31 +348,22 @@ latest.end.tframe <- function(x, ...)
 
 ################################################
 
-start.tframe.default <- function(tf) {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
 
-end.tframe.default <- function(tf) {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
-
-periods.tframe.default <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
-
-frequency.tframe.default <- function(tf) {tf[3]}
-
-time.tframe.default <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
-
-truncate.tframe.default <- function(tf, start=NULL, end=NULL) 
+tframeTruncate.default <- function(x, start=NULL, end=NULL) 
     {# like window but uses indexes rather than dates
-     if (!is.null(end))   tf[2] <- tf[1] + (end-1)/tf[3]
-     if (!is.null(start)) tf[1] <- tf[1] + (start-1)/tf[3]
-     tf
+     if (!is.null(end))   x[2] <- x[1] + (end-1)/x[3]
+     if (!is.null(start)) x[1] <- x[1] + (start-1)/x[3]
+     x
     }
 
-expand.tframe.default <- function(tf, add.start=0, add.end=0) 
-    {tf[2] <- tf[2] + add.end/tf[3]
-     tf[1] <- tf[1] - add.start/tf[3]
-     tf
+tframeExpand.default <- function(x, add.start=0, add.end=0) 
+    {x[2] <- x[2] + add.end/x[3]
+     x[1] <- x[1] - add.start/x[3]
+     x
     }
 
 
-earliest.start.index.tframe.default <- function(x, ...) 
+tframeEarliestStartIndex.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -323,7 +375,7 @@ earliest.start.index.tframe.default <- function(x, ...)
      r
     }
 
-earliest.end.index.tframe.default <- function(x, ...) 
+tframeEarliestEndIndex.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -335,7 +387,7 @@ earliest.end.index.tframe.default <- function(x, ...)
      r
     }
 
-latest.start.index.tframe.default <- function(x, ...) 
+tframeLatestStartIndex.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -347,7 +399,7 @@ latest.start.index.tframe.default <- function(x, ...)
      r
     }
 
-latest.end.index.tframe.default <- function(x, ...) 
+tframeLatestEndIndex.default <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -366,25 +418,25 @@ latest.end.index.tframe.default <- function(x, ...)
 
 ###############################################
 
-#"tframe.tframe<-.ts"  <- function(x, value) {tsp(x) <- value; x}
+#"tframe.tframe<-.ts" <- function(x, value) {tsp(x) <- value; x}
 
 tframe.ts <- function(x){classed(tsp(x), c("tstframe", "tframe"))} # constructor
 
-"tframe<-.ts"      <- function(x, value) {tsp(x) <- value; x}
+"tframe<-.ts" <- function(x, value) {tsp(x) <- value; x}
 
 #settf.default works for .ts
 
-start.tframe.tstframe <- function(tf)
-   {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+tframeStart.tstframe <- function(x)
+   {c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))}
 
-end.tframe.tstframe <- function(tf)
-   {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+tframeEnd.tstframe <- function(x)
+   {c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))}
 
-periods.tframe.tstframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+tframePeriods.tstframe <- function(x)  {1+round((x[2]-x[1])*x[3])}
 
-frequency.tframe.tstframe <- function(tf) {tf[3]}
+tframeFrequency.tstframe <- function(x) {x[3]}
 
-time.tframe.tstframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+tframeTime.tstframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
 
 
 
@@ -425,7 +477,7 @@ tframe.tf <- function(x) {attr(x, "tf") }
 
 settf.tftframe <- function(value, x)
 {#class(value) <- c("tftframe", "tframe")
- if (!is.consistent.tframe(value, x))
+ if (!check.tframeConsistent(value, x))
     stop("time frame value in tframe assignment is not consistent with data.")
  attr(x, "tf") <- value
  classed(x, "tf")  # constructor (settf.tftframe)
@@ -433,27 +485,27 @@ settf.tftframe <- function(value, x)
 
 
 start.tf <- function(x) {start(tframe(x))}
-end.tf   <- function(x) {end(tframe(x))}
+end.tf <- function(x) {end(tframe(x))}
 periods.tf <- function(x) {periods(tframe(x))}
 frequency.tf <- function(x) {frequency(tframe(x))}
-time.tf  <- function(x) {time(tframe(x))}
+time.tf <- function(x) {time(tframe(x))}
 
-start.tframe.tftframe <- function(tf)
-   {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+tframeStart.tftframe <- function(x)
+   {c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))}
 
-end.tframe.tftframe <- function(tf)
-   {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+tframeEnd.tftframe <- function(x)
+   {c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))}
 
-periods.tframe.tftframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+tframePeriods.tftframe <- function(x)  {1+round((x[2]-x[1])*x[3])}
 
-frequency.tframe.tftframe <- function(tf) {tf[3]}
+tframeFrequency.tftframe <- function(x) {x[3]}
 
-time.tframe.tftframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+tframeTime.tftframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
 
-tfwindow.tf <- function  (x, start=NULL, end=NULL, warn=T, eps=.Options$ts.eps) 
+tfwindow.tf <- function(x, start.=NULL, end.=NULL, warn=T, eps=.Options$ts.eps) 
   {# this needs work
    tfwindow(ts(x, start=start(x), frequency=frequency(x)),
-             start=start, end=end, warn=warn)
+             start.=start., end.=end., warn=warn)
   }
 
 ###############################################
@@ -479,9 +531,9 @@ tfwindow.tf <- function  (x, start=NULL, end=NULL, warn=T, eps=.Options$ts.eps)
 
 
 
-"tframe<-.rts"     <- function(x, value) {rts(x) <- value; x}
+"tframe<-.rts" <- function(x, value) {rts(x) <- value; x}
 "tframe.tframe<-.rts" <- function(value, x)
-{if (!is.consistent.tframe(value, x))
+{if (!check.tframeConsistent(value, x))
     stop("time frame value in tframe assignment is not consistent with data.")
  rts(x) <- value
  x
@@ -499,13 +551,13 @@ tfwindow.tf <- function  (x, start=NULL, end=NULL, warn=T, eps=.Options$ts.eps)
 #  stamped specific methods   <<<<<<<<<<<<
 #  stamped class TS have a date/time stamp associated with each time point
 ################################################
-is.consistent.tframe.stamped <- function(tf, x)
+check.tframeConsistent.stamped <- function(tf, x)
   {periods(x) == periods(tf)}
 
-test.equal.tframe.stamped <- function(tf1, tf2)
+test.Equaltframes.stamped <- function(tf1, tf2)
   {all(tf1$stamp == tf2$stamp)}
 
-periods.tframe.stamped <- function(x)length(tframe(x))
+tframePeriods.stamped <- function(x)length(tframe(x))
 
 
 
@@ -513,10 +565,10 @@ periods.tframe.stamped <- function(x)length(tframe(x))
 
 
 
-test.equal <- function(obj1, obj2, ...) UseMethod("test.equal")
+test.equal <- function(obj1, obj2, fuzz = 0) UseMethod("test.equal")
 
  
-test.equal.default <- function (obj1, obj2, fuzz=1e-16) 
+test.equal.default <- function(obj1, obj2, fuzz=1e-16) 
   {if      (is.null(obj1)) is.null(obj2)
    else if (is.array(obj1)) test.equal.array(obj1, obj2, fuzz=fuzz)
    else if (is.numeric(obj1)) test.equal.numeric(obj1, obj2, fuzz=fuzz)
@@ -524,30 +576,30 @@ test.equal.default <- function (obj1, obj2, fuzz=1e-16)
    else is.logical(all.equal(obj1, obj2, tolerance=fuzz))
   }
 
-test.equal.array <- function (obj1, obj2, fuzz=1e-16) 
-  {if(!is.array(obj2))                     r <-F
-   else if (any(dim(obj1) != dim(obj2)))   r <- F
+test.equal.array <- function(obj1, obj2, fuzz=1e-16) 
+  {if(!is.array(obj2))                     r <-FALSE
+   else if (any(dim(obj1) != dim(obj2)))   r <- FALSE
    else if ("character" == mode(obj1))     r <- all(obj1 == obj2)
    else if ("numeric" == mode(obj1))
               r <- test.equal.numeric(obj1, obj2, fuzz=fuzz)
    else stop(paste("matrix of mode ", mode(obj1), " not testable."))
-   if (is.na(r))  r <- F
+   if (is.na(r))  r <- FALSE
     r
   }
 
 test.equal.matrix <- test.equal.array
 
-test.equal.numeric <- function (obj1, obj2, fuzz=1e-16) 
+test.equal.numeric <- function(obj1, obj2, fuzz=1e-16) 
   {r <- all(is.infinite(obj1) == is.infinite(obj2))
    if (r) 
           {nna <- !is.na(c(obj1))
            r <- fuzz >= max(abs(c(obj1)[nna] - c(obj2)[nna]))
           }
-   if (is.na(r))  r <- F
+   if (is.na(r))  r <- FALSE
    r
   }
 
-test.equal.list <- function (obj1, obj2, fuzz=1e-16) 
+test.equal.list <- function(obj1, obj2, fuzz=1e-16) 
   {r <- length(obj1) == length(obj2)
    if (r) for (i in seq(length(obj1)))
         {if(r) r <- test.equal(obj1[[i]], obj2[[i]], fuzz=fuzz) }
@@ -556,14 +608,12 @@ test.equal.list <- function (obj1, obj2, fuzz=1e-16)
 
 if (!exists("lag")) lag <- function(x, ...) { UseMethod("lag") }
 
-lag.tframe <- function(x,...)UseMethod("lag.tframe") 
-
-if (!exists("lag"))  lag.default <- function(x, ...) {stop("no lag function") }
+if (!exists("lag.default"))  lag.default <- function(x, ...) {stop("no lag function") }
 
 
 
 
-splice <- function(obj1, obj2, ...) UseMethod("splice")
+splice <- function(mat1, mat2, ...) UseMethod("splice")
 
 splice.default <- function(mat1, mat2)
 {# splice together 2 time series matrices. If data  is provided in both for
@@ -610,15 +660,16 @@ tsmatrix <- function(x, ...)
  }
 
 
-truncate <- function(x, start=NULL, end=NULL)
+tftruncate <- function(x, start=NULL, end=NULL)
  {# similar to window but start and end specify periods relative to the 
   #   beginning (eg x[start:end] for a vector).
   #   NULL means no truncation.
-  UseMethod("truncate")
+  UseMethod("tftruncate")
  }
 
-truncate.default <- function(x, start=NULL, end=NULL)
-    {tf <- truncate.tframe(tframe(x), start, end)
+
+tftruncate.default <- function(x, start=NULL, end=NULL)
+    {tf <- tframeTruncate(tframe(x), start, end)
      if (is.null(start)) start <- 1
      if (is.matrix(x)) 
         {if (is.null(end)) end <- dim(x)[1]
@@ -632,81 +683,81 @@ truncate.default <- function(x, start=NULL, end=NULL)
      z
     }
 
-expand <- function(x, add.start=0, add.end=0)
+tfexpand <- function(x, add.start=0, add.end=0)
  {# expand (a tframe) by add.start periods on the beginning
   # and add.end periods on the end
-  UseMethod("expand")
+  UseMethod("tfexpand")
  }
 
-expand.default <- function(x, start=NULL, end=NULL)
-    {tf <- expand.tframe(tframe(x), start, end)
+tfexpand.default <- function(x, add.start=0, add.end=0)
+    {tf <- tframeExpand(tframe(x), add.start=add.start, add.end=add.end)
      select.series(tbind(x,time(tf)), series=1)
     }
 
 
 earliest.start <- function(x, ...)
-    start(append(list(x),list(...))[[earliest.start.index(x, ...)]])
+    start(append(list(x),list(...))[[earliest.startIndex(x, ...)]])
 
-earliest.start.index <- function(x, ...)
-  {if (is.tframe(x)) UseMethod("earliest.start.index.tframe")
+earliest.startIndex <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("tframeEarliestStartIndex")
    else 
      {tf <- list(tframe(x))
       for (i in list(...)) tf <- append(tf, list(tframe(i)))
-      r <- do.call("earliest.start.index.tframe", tf)
+      r <- do.call("tframeEarliestStartIndex", tf)
      }
    r
   }
 
 earliest.end <- function(x, ...)
-    end(append(list(x),list(...))[[earliest.end.index(x, ...)]])
+    end(append(list(x),list(...))[[earliest.endIndex(x, ...)]])
 
-earliest.end.index <- function(x, ...)
-  {if (is.tframe(x)) UseMethod("earliest.end.index.tframe")
+earliest.endIndex <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("tframeEarliestEndIndex")
    else 
      {tf <- list(tframe(x))
       for (i in list(...)) tf <- append(tf, list(tframe(i)))
-      r <- do.call("earliest.end.index.tframe", tf)
+      r <- do.call("tframeEarliestEndIndex", tf)
      }
    r
   }
 
 latest.start <- function(x, ...)
-    start(append(list(x),list(...))[[latest.start.index(x, ...)]])
+    start(append(list(x),list(...))[[latest.startIndex(x, ...)]])
 
-latest.start.index <- function(x, ...)
-  {if (is.tframe(x)) UseMethod("latest.start.index.tframe")
+latest.startIndex <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("tframeLatestStartIndex")
    else 
      {tf <- list(tframe(x))
       for (i in list(...)) tf <- append(tf, list(tframe(i)))
-      r <- do.call("latest.start.index.tframe", tf)
+      r <- do.call("tframeLatestStartIndex", tf)
      }
    r
   }
 
 latest.end <- function(x, ...)
-    end(append(list(x),list(...))[[latest.end.index(x, ...)]])
+    end(append(list(x),list(...))[[latest.endIndex(x, ...)]])
 
-latest.end.index <- function(x, ...)
-  {if (is.tframe(x)) UseMethod("latest.end.index.tframe")
+latest.endIndex <- function(x, ...)
+  {if (is.tframe(x)) UseMethod("tframeLatestEndIndex")
    else 
      {tf <- list(tframe(x))
       for (i in list(...)) tf <- append(tf, list(tframe(i)))
-      r <- do.call("latest.end.index.tframe", tf)
+      r <- do.call("tframeLatestEndIndex", tf)
      }
    r
   }
 
 
 
-trim.na <- function(obj, ...) UseMethod("trim.na") 
+trim.na <- function(x, start. = TRUE, end. = TRUE) UseMethod("trim.na") 
 
-trim.na.default <- function(x, start.=T, end.=T)
-{# trim NAs from the ends of a ts matrix.
+trim.na.default <- function(x, start. = TRUE, end. = TRUE)
+{# trim NAs from the ends of a ts matrix or vector.
  # (Observations for all series are dropped in a given period if any 
  #  one contains an NA in that period.)
  # if start.=F then beginning NAs are not trimmed.
  # If end.=F   then ending NAs are not trimmed.
- sample <- ! apply(is.na(x),1, any)
+ sample <- ! if (is.matrix(x)) apply(is.na(x),1, any) else is.na(x)
  if (!any(sample)) warning("data is empty after triming NAs.")
  if (start.) s <-min(time(x)[sample])
  else       s <-start(x)
@@ -724,8 +775,8 @@ trim.na.default <- function(x, start.=T, end.=T)
 
 
 
-nseries <- function (x) {UseMethod("nseries")} 
-nseries.default <- function(x)  {ncol(x)} 
+nseries <- function(x) {UseMethod("nseries")} 
+nseries.default <- function(x)  {if (is.matrix(x)) ncol(x) else 1} 
 
    
 
@@ -744,9 +795,9 @@ nseries.default <- function(x)  {ncol(x)}
 
 
 
-select.series <- function(x, ...)  UseMethod("select.series")
+select.series <- function(x, series=seqN(nseries(x))) UseMethod("select.series")
 
-select.series.default <- function(x, series=seq(ncol(x))) {
+select.series.default <- function(x, series=seqN(nseries(x))) {
   names <- series.names(x)
   if (is.character(series)) series <- match(names,series, nomatch=0) > 0
   if(all(0==series) | is.null(series)) r <- NULL
@@ -827,126 +878,4 @@ add.date <- function(date, periods, freq)
   {if (is.null(periods)) periods <- 0
    c(date[1]+(date[2]+periods-1)%/%freq, 1+(date[2]+periods-1)%%freq)
   }
-
-
-###############################################
-
-#             tests   <<<<<<<<<<<<
-
-################################################
-
-
-
-
-tframe.function.tests <- function( verbose=T, synopsis=T)
-{# A short set of tests of the tframe class methods. 
-
-  all.ok <-  T
-  if (synopsis & !verbose) cat("All tframe tests ...")
-  if (verbose) cat("tframe test 1 ... ")
-  tspvector <- tframed(1:100, list(start=c(1981,3), frequency=4))
-  data <- matrix(rnorm(300),100,3)
-  tframe(data) <- tframe(tspvector)
-  ok <- is.tframed(data)
-  all.ok <- ok
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-
-  if (verbose) cat("tframe test 2 ... ")
-  ok <- test.equal(tframe(data), tframe(data))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 3 ... ")
-  ok <- all(c(1981,3) == start(tspvector))
-  ok <- ok & all(c(1981,3) == start(data))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 4 ... ")
-  ok <- all(end(data) == end(tspvector))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 5 ... ")
-  ok <- periods(data) == periods(tspvector)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 6 ... ")
-  ok <- frequency(data) == frequency(tspvector)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 7 ... ")
-  z <- tframed(data, list(start=c(1961,2), frequency=12) )
-  ok <- is.tframed(z)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 8 ... ")
-  z <- data[10:90,]
-  tframe(z) <- truncate.tframe(tframe(data), start=10, end=90)
-  ok <- is.tframed(z)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 9 ... ")
-  z <- truncate(data, start=10, end=90)
-  ok <- is.tframed(z)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 10... ")
-  data <- tframed(matrix(rnorm(300),100,3), list(start=c(1961,1), frequency=12))
-  z <- tfwindow(data, start=c(1963,2))
-  zz <-data
-  zz  <- tfwindow(zz, start=c(1963,2))
-  zzz <- tfwindow(data, start=c(1963,2))
-  tframe(zzz) <- tframe(z)
-  zzz <- tframed(zzz, tframe(zzz))
-  ok <- is.tframed(z) & is.tframed(zz) &  all(z==zz) & all(z==zzz)
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 11... ")
-  ok <- all( time(data) == time( tframed(data, tframe(data))))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 12... ")
-  z <- tsmatrix(1:10, 11:20)
-  ok <-  all(start(z) ==1) & all( z== matrix(1:20, 10,2)) 
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 13... ")
-  data <- tframed(matrix(rnorm(300),100,3), list(start=c(1961,1), frequency=12))
-  z <- tfwindow(data, start=c(1963,2), end=c(1969,1))
-  ok <-      all(start(data)== earliest.start(data, z))
-  ok <- ok & all(    end(z) == earliest.end  (data, z))
-  ok <- ok & all(start(z)   == latest.start  (data, z))
-  ok <- ok & all( end(data) == latest.end   (data, z))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if (verbose) cat("tframe test 14... ")
-  data <- tframed(matrix(rnorm(300),100,3), list(start=c(1961,1), frequency=12))
-  z <- tfwindow(data, start=c(1963,2), end=c(1969,1))
-  ok <- test.equal(data, splice(z, data))
-  ok <- ok & test.equal(tframe(data), tframe(splice(z, data)))
-  all.ok <- all.ok & ok 
-  if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
-
-  if(!exists.graphics.device()) open.graphics.device()
-
-# dev.ask(T)
-# plot(data)
- tfplot(data)
-
-  if (synopsis) 
-    {if (verbose) cat("All tframe tests completed")
-     if (all.ok) cat(" OK\n") else cat(", some FAILED!\n") }
-  invisible(all.ok)
-}
 

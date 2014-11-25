@@ -1,8 +1,0 @@
-
-#R  --nsize=1M --vsize=10M --no-save --quiet <<eofR
-  require("ts"); require("monitor"); require("Xtra"); require("padi")
- # x11(display=getenv("DISPLAY")) #elim. creating postscript
-  guide.example.tests.part3(verbose=F, graphics=T)  
-  GDP.monitoring.model.function.tests()
-  warning(" skipping Macklem.wealth.model.function.tests (fails using attach)")
-#  Macklem.wealth.model.function.tests() 

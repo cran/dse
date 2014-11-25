@@ -8,22 +8,28 @@
 \title{Forecast Multiple Steps Ahead}
 \description{Calculate forecasts multiple steps ahead.}
 \usage{
-	forecast(model, data,  horizon=36, percent=100, 
-		conditioning.inputs=NULL, conditioning.inputs.forecasts=NULL)
-	is.forecast.cov(x)
+    is.forecastCov(obj)
+    forecast(obj, ...)
+    \method{forecast}{TSmodel}(obj, data,  horizon=36,
+       conditioning.inputs=NULL, 
+       conditioning.inputs.forecasts=NULL, percent=NULL)
+    \method{forecast}{TSestModel}(obj, ...)
+    \method{forecast}{TSdata}(obj, model, ...)
 }
 \arguments{
-\item{ model}{An object of class TSmodel.}
-\item{ data}{An object of class TSdata.}
-\item{ conditioning.inputs}
-{A time series matrix or list of time series matrices to use as input variables.}
-\item{ conditioning.inputs.forecasts}
-{A time series matrix or list of time series matrices to append to input
+    \item{obj}{An object of a class for which a specific method is available.}
+    \item{model}{An object of class TSmodel.}
+    \item{data}{An object of class TSdata.}
+    \item{conditioning.inputs}{
+    A time series matrix or list of time series matrices to use as input variables.}
+    \item{conditioning.inputs.forecasts}{
+    A time series matrix or list of time series matrices to append to input
 variables for the forecast periods.}
-\item{ horizon }
-{The number of periods to forecast.}
-\item{ percent}
-{A vector indication percentages of the last input to use for forecast periods.}
+    \item{horizon }{The number of periods to forecast.}
+    \item{percent}{
+    A vector indication percentages of the last input to use for 
+    forecast periods.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
 The result is an object of class forecast which is a list with 
@@ -66,16 +72,16 @@ give results for conditioning.input.forecasts 10 percent above and below
 the last value of input.
 }
 \seealso{
-\code{\link{feather.forecasts}},
-\code{\link{horizon.forecasts}}
+\code{\link{featherForecasts}},
+\code{\link{horizonForecasts}}
 }
 \examples{
-	if(is.R()) data("egJofF.1dec93.data", package="dse1")
-	model <- est.VARX.ls(window(egJofF.1dec93.data, end=c(1985,12)))
-	pr <- forecast(model, conditioning.inputs=input.data(egJofF.1dec93.data))
-	#tfplot(pr) Rbug 0.90.1
-	is.forecast(pr)
+    if(is.R()) data("egJofF.1dec93.data", package="dse1")
+    model <- est.VARX.ls(window(egJofF.1dec93.data, end=c(1985,12)))
+    pr <- forecast(model, conditioning.inputs=input.data(egJofF.1dec93.data))
+    #tfplot(pr) Rbug 0.90.1
+    is.forecast(pr)
 } 
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

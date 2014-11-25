@@ -1,23 +1,30 @@
-00General.Description    Tframe
+See 00Intro or 00Intro.dse1 for a general description of this package,
+A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
+See also the related packages syskern tframe dse1 dse2 in the dse bundle
+   and packages dsepadi curve juice monitor   in the dseplus bundle.
+00Intro.tframe           Tframe
 add.date                 Add Periods to a Date
+check.tframeConsistent   Check for a Consistent tframe
 classed                  Tframe Library Utilities
-earliest.end             Start and End for Ragged Multivariate Time
+earliest.end             Start and End for Objects with Multiple Time
                          Series
-end                      Generic Time Series Parameters
-expand                   Expand a Tframe or Tframed Object.
 freeze                   Get fixed data snapshot
-is.consistent.tframe     Check for a Consistent tframe
-lag                      Misc Generic Replacements
+lag                      Lag
 nseries                  Number of Series
 select.series            Extract a Subset of Series
-series.names             Names of Series in a tframed object
+seqN                     Tframe Library Utilities
+series.names             Names of Series in a time series object
 splice                   Splice Time Series
 tbind                    Bind Time Series
+test.Equaltframes        Compare Two Time Frames
 test.equal               Compare Two Objects
-tfprint                  Print and Plot Tframed Objects
-tframe.function.tests    tframe.function.tests
+tfexpand                 Expand a Tframe or Tframed Object.
+tfplot                   Plot Tframed Objects
+tfprint                  Print Tframed Objects
 tframe                   Extract or Set a Tframe
+tframeStart              Generic Time Series Parameters
+tframeTime               Tframe time
 tframed                  Construct a Tframed Object
 tfwindow                 Truncate a Time Series
-time                     Time
 trim.na                  Trim NAs from Time Series
+tsmatrix                 Create a time series matrix.

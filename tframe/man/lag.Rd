@@ -1,21 +1,26 @@
 \name{lag}
 \alias{lag}
-\alias{lag.tframe}
-\alias{tsmatrix}
-\alias{tsmatrix.default}
-
-\title{Misc Generic Replacements}
-\description{
-	These functions replace functions in S or R with generics if necessary.}
+\alias{lag.default}
+\title{Lag}
+\description{lag a tframed object.}
 \usage{
-	lag(x)
-	tsmatrix(,x,y,z)
+    lag(x, ...)
+    \method{lag}{default}(x, ...)
 }
-
+\arguments{
+    \item{x}{a tframed object.}
+    \item{...}{arguments passed to other methods.}
+}
 \details{
-	The default for the generic is set to the original function. See the S/R
-	documentation for the original.
+    See documentation for the generic (from library ts in R).
 }
-
-\keyword{tframe}
+\seealso{
+    \code{\link{lag}}
+    \code{\link{lag.default}}
+}
+\keyword{programming}
+\keyword{utilities}
 \keyword{ts}
+\keyword{chron}
+
+

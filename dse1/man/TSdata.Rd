@@ -8,26 +8,39 @@
 
 \title{Construct TSdata time series object}
 \description{
-	Constructor for generating or extracting a "TSdata" object 
-	containing data for use by TSmodels.
+    Constructor for generating or extracting a "TSdata" object 
+    containing data for use by TSmodels.
 }
 \usage{
-	TSdata(input=NULL, output=NULL, ...)
-	is.TSdata(data)
-	as.TSdata(data)
+    TSdata(data, ...)
+    \method{TSdata}{default}(data, input=NULL, output=NULL, ...)
+    \method{TSdata}{TSdata}(data, ...)
+    \method{TSdata}{TSestModel}(data, ...)
+    is.TSdata(obj)
+    as.TSdata(d)
+}
+\arguments{
+    \item{data}{object of class TSdata, TSestModel, matrix, list with input
+       and output matrices, or another object for which a constructor or 
+       TSdata extraction method has been defined.}
+    \item{input}{a matrix of time series data.}
+    \item{output}{a matrix of time series data.}
+    \item{...}{arguments to be passed to other methods.}
+    \item{obj}{an object.}
+    \item{d}{an object from which a TSdata object can be extracted. See below.}
 }
 \details{
-	Generic method to construct or extract a TSdata object. The default 
-	method constructs a TSdata object. Specific methods extract the TSdata
-	from other objects (which must contain TSdata).
-	The function \code{is.TSdata(data)} returns TRUE is data inherits 
-	from "TSdata" and FALSE otherwise.
+    Generic method to construct or extract a TSdata object. The default 
+    method constructs a TSdata object. Specific methods extract the TSdata
+    from other objects (which must contain TSdata).
+    The function \code{is.TSdata(data)} returns TRUE is data inherits 
+    from "TSdata" and FALSE otherwise.
 
-	The function \code{as.TSdata} uses the elements input and output 
-	directly and
-	strips away other class information and parts of the object (and does 
-	not make use of input.data(data) or output.data(data) which may 
-	do something special for certain classes.
+    The function \code{as.TSdata} uses the elements input and output 
+    directly and
+    strips away other class information and parts of the object (and does 
+    not make use of input.data(data) or output.data(data) which may 
+    do something special for certain classes.
 }
 \seealso{
 \code{\link{TSdata.object}},
@@ -37,8 +50,6 @@
 \code{\link{TSestModel.object}}
 \code{\link[dse2]{set.TSPADIdata}}
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
-
-
 

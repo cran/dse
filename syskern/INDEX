@@ -1,9 +1,10 @@
-00General.Description    Syskern
-global.assign            Utilities to handle small S/R differences
-is.S                     S/R Version Information
-is.unix                  Determine the Operating System
-set.RNG                  Set the random number generator
+See 00Intro or 00Intro.dse1 for a general description of this package,
+A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
+See also the related packages syskern tframe dse1 dse2 in the dse bundle
+   and packages dsepadi curve juice monitor   in the dseplus bundle.
+00Intro.syskern          Syskern
 SPAWN                    Global variable
-system.call              Operating system requests
-system.info              Get information about the system
-whoami                   Operating System Information
+Sys.mail                 Send Mail
+is.S                     S/R Version Information
+set.RNG                  Set the random number generator
+syskern.rm               Utilities to handle small S/R differences

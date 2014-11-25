@@ -1,12 +1,12 @@
 \name{reduced.models.Mittnik}
-\alias{reduced.modeles.Mittnik}
+\alias{reduced.models.Mittnik}
 \title{Reduced Models via Mittnik SVD balancing}
 \description{Reduced Models via Mittnik SVD balancing.}
 \usage{
-	reduced.models.Mittnik(largeModel)
+    reduced.models.Mittnik(largeModel)
 }
 \arguments{
-\item{ largeModel}{An SS TSmodel.}
+    \item{largeModel}{An SS TSmodel.}
 }
 \value{A list of state space TSmodels with smaller state dimensions.}
 \details{
@@ -20,8 +20,8 @@ does not result in smaller models which are balanced.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-z <-  reduced.models.Mittnik(to.SS(est.VARX.ls(eg1.DSE.data.diff)))
+    z <-  reduced.models.Mittnik(to.SS(est.VARX.ls(eg1.DSE.data.diff))) 
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

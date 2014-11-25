@@ -8,12 +8,17 @@
 \title{Series Names Specific Methods}
 \description{See the generic function description.}
 \usage{
-	series.names(...)
-	series.names(...) <- names
+    \method{series.names}{TSdata}(x)
+    \method{series.names}{TSestModel}(x)
+    
+    series.names(data) <- names
+}
+\arguments{
+    \item{x}{an object from which series names can be extracted.}
 }
 
 \seealso{ \code{\link{series.names}} }
 
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}
 

@@ -1,0 +1,7 @@
+simulate		Show simulate methods for ARMA and state space models
+estimate		Show some estimation methods for ARMA and state 
+			space models 
+forecast		Show some forecast methods for ARMA and state 
+			space models
+EstEval			Show some methods evaluating estimation algorithms
+			for ARMA and state space models

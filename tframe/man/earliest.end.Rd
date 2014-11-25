@@ -1,75 +1,99 @@
 \name{earliest.end}
 \alias{earliest.end}
-\alias{earliest.end.index}
-\alias{earliest.end.index.tframe}
-\alias{earliest.end.index.tframe.default}
-\alias{earliest.end.index.tframe.tstframe}
-\alias{earliest.end.tframe}
+\alias{earliest.endIndex}
+\alias{tframeEarliestEndIndex}
+\alias{tframeEarliestEndIndex.default}
+\alias{tframeEarliestEndIndex.tstframe}
+\alias{earliest.tframeEnd}
 \alias{earliest.start}
-\alias{earliest.start.index}
-\alias{earliest.start.index.tframe}
-\alias{earliest.start.index.tframe.default}
-\alias{earliest.start.index.tframe.tstframe}
-\alias{earliest.start.tframe}
+\alias{earliest.startIndex}
+\alias{tframeEarliestStartIndex}
+\alias{tframeEarliestStartIndex.default}
+\alias{tframeEarliestStartIndex.tstframe}
+\alias{earliest.tframeStart}
 \alias{latest.end}
-\alias{latest.end.index}
-\alias{latest.end.index.tframe}
-\alias{latest.end.index.tframe.default}
-\alias{latest.end.index.tframe.tstframe}
-\alias{latest.end.tframe}
+\alias{latest.endIndex}
+\alias{tframeLatestEndIndex}
+\alias{tframeLatestEndIndex.default}
+\alias{tframeLatestEndIndex.tstframe}
+\alias{latest.tframeEnd}
 \alias{latest.start}
-\alias{latest.start.index}
-\alias{latest.start.index.tframe}
-\alias{latest.start.index.tframe.default}
-\alias{latest.start.index.tframe.tstframe}
-\alias{latest.start.tframe}
+\alias{latest.startIndex}
+\alias{tframeLatestStartIndex}
+\alias{tframeLatestStartIndex.default}
+\alias{tframeLatestStartIndex.tstframe}
+\alias{latest.tframeStart}
 
-\title{Start and End for Ragged Multivariate Time Series}
-\description{Return start or end date (or index of the point) for multivariate
-	time series that do not have the same time window. NAs which pad some
-	series to make a matrix are not counted.
+\title{Start and End for Objects with Multiple Time Series}
+\description{Return start or end date (or index of the object) from multiple
+    time series objects.
 }
 
 \usage{
-	earliest.end(x)
-	earliest.end.index(x)
-	earliest.start(x)
-	earliest.start.index(x)
-	latest.end(x)
-	latest.end.index(x)
-	latest.start(x)
-	latest.start.index(x)
+    earliest.end(x, ...)
+    earliest.tframeEnd(x, ...)
+    earliest.endIndex(x, ...)
+    tframeEarliestEndIndex(x, ...)
+    \method{tframeEarliestEndIndex}{default}(x, ...)
+    \method{tframeEarliestEndIndex}{tstframe}(x, ...)
+
+    earliest.start(x, ...)
+    earliest.tframeStart(x, ...)
+    earliest.startIndex(x, ...)
+    tframeEarliestStartIndex(x, ...)
+    \method{tframeEarliestStartIndex}{default}(x, ...)
+    \method{tframeEarliestStartIndex}{tstframe}(x, ...)
+
+    latest.end(x, ...)
+    latest.tframeEnd(x, ...)
+    latest.endIndex(x, ...)
+    tframeLatestEndIndex(x, ...)
+    \method{tframeLatestEndIndex}{default}(x, ...)
+    \method{tframeLatestEndIndex}{tstframe}(x, ...)
+
+    latest.start(x, ...)
+    latest.tframeStart(x, ...)
+    latest.startIndex(x, ...)
+    tframeLatestStartIndex(x, ...)
+    \method{tframeLatestStartIndex}{default}(x, ...)
+    \method{tframeLatestStartIndex}{tstframe}(x, ...)
+
 }
 
 \arguments{
-	\item{x}{A tframe or tframed object.}
+    \item{x}{A tframe or tframed object.}
+    \item{...}{Additional tframe or tframed objects.}
 }
 \value{A date or index.}
 \details{
-	Individual series in multivariate time series do not always start 
-	and end at the
-	same period. For example, in order to store series in a matrix, 
-	individual series are padded with NA. These functions discount 
-	the NAs and calculate the start
-	and end of data in each series, then return a result by 
-	comparing across series. Thus, latest.start returns the start date of
-	the series which starts latest and latest.start.index returns the 
-	corresponding index (row position in the matrix). The index functions
-	should be considered lower level access to the data structure and should
-	typically be avoided. 
+    These functions calculate the start
+    and end of each object in the argument and return a result by 
+    comparing across objects. Thus, latest.start returns the start date of
+    the object which starts latest and latest.startIndex returns the 
+    corresponding index of the object in the argument list. 
 }
 \seealso{
-	\code{\link{tframe}}
-	\code{\link{tfwindow}}
-	\code{\link{truncate}}
+    \code{\link{tframe}}
+    \code{\link{tfwindow}}
+    \code{\link{tftruncate}}
+    \code{\link{trim.na}}
 }
 
 \examples{
-	z <- tbind(ts(rnorm(100), start=c(1982,1), frequency=12),
-		   ts(rnorm(100), start=c(1986,1), frequency=12))
-	earliest.end(z)
-	latest.start(z)
-	latest.start.index(z)
+    t1<-ts(c(1,2,3,4,5), start=c(1991,1))
+    t2<-ts(c(2,3,4,5,6,7,8), start=c(1992,1))
+    t3<-ts(c(NA,2,3,4,5), start=c(1991,1))
+
+    latest.start(t1,t2,t3)  # 1992 1 corresponding to the starting date of 
+                            # the object which starts latest (t2)
+    latest.start(t1,t3)     # both start in 1991 1 (NAs count as data)
+    latest.start(tbind(t1,t2,t3)) # tbind gives a single object starting in 1991 1
+    latest.start(t2, tbind(t1,t2,t3))
+
+    latest.startIndex(t1,t2,t3)  # position of t2 in the argument list
 }
-\keyword{tframe}
+\keyword{programming}
+\keyword{utilities}
 \keyword{ts}
+\keyword{chron}
+

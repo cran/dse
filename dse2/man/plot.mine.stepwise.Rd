@@ -3,15 +3,15 @@
 \title{Plot Mine Stepwise Object}
 \description{plot.mine.stepwise}
 \usage{
-	plot.mine.stepwise(x)
+    plot.mine.stepwise(x)
 }
-\arguments {
-	\item{x}{Object returned by mine.stepwise.}
+\arguments{
+    \item{x}{Object returned by mine.stepwise.}
 }
 \value{None}
 \sideffects{A plot}
 \seealso{
-	\code{\link{mine.stepwise}}
+    \code{\link{mine.stepwise}}
 }
-\keyword{DSE}
+%\keyword{DSE}
 \keyword{ts}

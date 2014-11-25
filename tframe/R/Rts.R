@@ -118,30 +118,30 @@
 tframe.tstframe <- function(x)
  {classed(tsp(x), c("tstframe", "tframe"))}  # constructor
 
-start.tframe.tstframe <- function(tf) {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
+tframeStart.tstframe <- function(tf) {c(floor(tf[1]), round(1 +(tf[1]%%1)*tf[3]))}
 
-end.tframe.tstframe <- function(tf) {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
+tframeEnd.tstframe <- function(tf) {c(floor(tf[2]), round(1 + (tf[2]%%1)*tf[3]))}
 
-periods.tframe.tstframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
+tframePeriods.tstframe <- function(tf)  {1+round((tf[2]-tf[1])*tf[3])}
 
-frequency.tframe.tstframe <- function(tf) {tf[3]}
+tframeFrequency.tstframe <- function(tf) {tf[3]}
 
-time.tframe.tstframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
+tframeTime.tstframe <- function(tf) {tf[1] + (seq(periods(tf))-1)/tf[3]}
 
-truncate.tframe.tstframe <- function(tf, start=NULL, end=NULL) 
-    {if (!is.null(end))   tf[2] <- tf[1] + (end-1)/tf[3]
-     if (!is.null(start)) tf[1] <- tf[1] + (start-1)/tf[3]
-     tf
+tframeTruncate.tstframe <- function(x, start=NULL, end=NULL) 
+    {if (!is.null(end))   x[2] <- x[1] + (end-1)/x[3]
+     if (!is.null(start)) x[1] <- x[1] + (start-1)/x[3]
+     x
     }
 
-expand.tframe.tstframe <- function(tf, add.start=0, add.end=0) 
-    {tf[2] <- tf[2] + add.end/tf[3]
-     tf[1] <- tf[1] - add.start/tf[3]
-     tf
+tframeExpand.tstframe <- function(x, add.start=0, add.end=0) 
+    {x[2] <- x[2] + add.end/x[3]
+     x[1] <- x[1] - add.start/x[3]
+     x
     }
 
 
-earliest.start.index.tframe.tstframe <- function(x, ...) 
+tframeEarliestStartIndex.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -153,7 +153,7 @@ earliest.start.index.tframe.tstframe <- function(x, ...)
      r
     }
 
-earliest.end.index.tframe.tstframe <- function(x, ...) 
+tframeEarliestEndIndex.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -165,7 +165,7 @@ earliest.end.index.tframe.tstframe <- function(x, ...)
      r
     }
 
-latest.start.index.tframe.tstframe <- function(x, ...) 
+tframeLatestStartIndex.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
@@ -177,7 +177,7 @@ latest.start.index.tframe.tstframe <- function(x, ...)
      r
     }
 
-latest.end.index.tframe.tstframe <- function(x, ...) 
+tframeLatestEndIndex.tstframe <- function(x, ...) 
     {r <- 1
      fr <- frequency(x)
      args <- list(x, ...)
