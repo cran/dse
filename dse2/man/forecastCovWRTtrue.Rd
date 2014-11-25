@@ -1,16 +1,16 @@
-\name{forecastCov.wrt.true}
-\alias{forecastCov.wrt.true}
-\alias{is.forecastCov.wrt.data}
+\name{forecastCovWRTtrue}
+\alias{forecastCovWRTtrue}
+\alias{is.forecastCovWRTdata}
 
 \title{Compare Forecasts to True Model Output}
 \description{
     Generate forecasts and compare them against the output of a true model.}
 \usage{
-    forecastCov.wrt.true(models, true.model, 
+    forecastCovWRTtrue(models, true.model, 
         pred.replications=1, simulation.args=NULL, quiet=F, 
         rng=NULL, Spawn=.SPAWN, compiled=.DSECOMPILED,
         horizons=1:12, discard.before=10, trend=NULL, zero=NULL)
-    is.forecastCov.wrt.data(obj)
+    is.forecastCovWRTdata(obj)
 }
 \arguments{
     \item{models}{A list of objects of class TSmodel.}
@@ -61,7 +61,7 @@ if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 true.model <- est.VARX.ls(eg1.DSE.data.diff) # A starting model TSestModel
 data <- simulate(true.model)
 models <- list(TSmodel(est.VARX.ar(data)),TSmodel(est.VARX.ls(data)))
-z <-  forecastCov.wrt.true( models, true.model)
+z <-  forecastCovWRTtrue( models, true.model)
 }
 %\keyword{DSE}
 \keyword{ts}

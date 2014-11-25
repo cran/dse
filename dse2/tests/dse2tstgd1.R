@@ -73,8 +73,8 @@ guide.example.tests.part1 <- function( verbose=T, synopsis=T, fuzz.small=1e-14,
                                          list(start=c(1961,3), frequency=12)),
               output=tframed(data[,2:4,drop=F], 
                                          list(start=c(1961,3), frequency=12)))
-  input.series.names(data)   <-  "u1"
-  output.series.names(data) <-  c("y1","y2","y3")
+  seriesNamesInput(data)   <-  "u1"
+  seriesNamesOutput(data) <-  c("y1","y2","y3")
   error <- abs(126943980.50000011921 - sum(output.data(data)))
   ok <- 100*fuzz.large > error
   if (!ok) {if (is.na(max.error)) max.error <- error

@@ -1,13 +1,16 @@
 \name{tbind}
 \alias{tbind}
 \alias{tbind.default}
+\alias{tbind.ts}
+
 \title{Bind Time Series}
 \description{
 Bind together (in non-time dimension) two time series objects. 
 }
 \usage{
-    tbind(x, ..., pad.start=T, pad.end=T, warn=T)
-    \method{tbind}{default}(x, ..., pad.start=T, pad.end=T, warn=T)
+    tbind(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
+    \method{tbind}{default}(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
+    \method{tbind}{ts}(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
     }
 \arguments{
     \item{x}{A time series object.}

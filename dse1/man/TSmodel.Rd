@@ -7,14 +7,13 @@
 \title{Time Series Models}
 \description{Construct or extract a "TSmodel" from objects.}
 \usage{
-    TSmodel(model, ...)
-    \method{TSmodel}{TSmodel}(model)
-    \method{TSmodel}{TSestModel}(model)
+    TSmodel(obj, ...)
+    \method{TSmodel}{TSmodel}(obj)
+    \method{TSmodel}{TSestModel}(obj)
     is.TSmodel(obj)
 }
 \arguments{
-    \item{obj}{An object.}    
-    \item{model}{
+    \item{obj}{ 
       An object containing an object of class TSmodel or a list containing the 
       information necessary to build an object of class "TSmodel".}
     \item{...}{arguments to be passed to other methods.}
@@ -28,8 +27,8 @@ This class of objects is returned by estimation methods or can be built
 according to the description for specific sub-classes (eg "ARMA", "SS").
 
 The \code{TSmodel} class of objects has methods for the generic functions
-\code{print, test.equal, series.names, input.series.names,
-output.series.names, l, roots, stability,  
+\code{print, test.equal, seriesNames, seriesNamesInput,
+seriesNamesOutput, l, roots, stability,  
 forecast, featherForecasts, horizonForecasts,
 simulate, MonteCarloSimulations}
 

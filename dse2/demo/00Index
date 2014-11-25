@@ -1,7 +1,5 @@
-simulate		Show simulate methods for ARMA and state space models
-estimate		Show some estimation methods for ARMA and state 
-			space models 
-forecast		Show some forecast methods for ARMA and state 
-			space models
-EstEval			Show some methods evaluating estimation algorithms
-			for ARMA and state space models
+est.black.box		Show a black box estimation method 
+forecast		Forecast methods for ARMA and state space models
+EstEval			Show some methods for evaluating estimation algorithms
+JofF95			Show example of estimation and Mittnik reduction as 
+			described in Gilbert (1995) J.of Forecasting.

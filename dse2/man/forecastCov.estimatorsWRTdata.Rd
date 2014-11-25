@@ -3,7 +3,8 @@
 \alias{is.forecastCov.estimatorsWRTdata}
 
 \title{Calculate Forecast Cov of Estimators WRT Data}
-\description{forecast covariance of estimated models wrt given sample}
+\description{forecast covariance of estimated models with respect to a
+ given sample}
 \usage{
     forecastCov.estimatorsWRTdata(data, estimation.sample=NULL, 
                        compiled=.DSECOMPILED, discard.before=10,

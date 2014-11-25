@@ -8,8 +8,8 @@
 \usage{
     \method{tfplot}{TSdata}(..., start. = NULL, end. = NULL, Title = "", 
         reset.screen=TRUE,
-        select.inputs = seq(length= input.dimension(data)),
-        select.outputs= seq(length=output.dimension(data)),
+        select.inputs = seq(length= nseriesInput(data)),
+        select.outputs= seq(length=nseriesOutput(data)),
 	mar=par()$mar, 
         graphs.per.page=5, ylab=NULL)
     \method{tfplot}{TSestModel}(..., start.=NULL,end.=NULL,Title=NULL, 

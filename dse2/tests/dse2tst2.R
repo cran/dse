@@ -11,8 +11,11 @@
 
 dse2.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.large=1e-8, graphics=T)
 {max.error <- NA
- if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
- else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+ if (is.R()) data("eg1.DSE.data.diff", package="dse1")
+ if (is.S()) 
+   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
+    }
 
  if (synopsis & !verbose) cat("All dse2 tests ...") 
  if (verbose) cat("dse2 test 0 ... ")
@@ -121,8 +124,11 @@ dse2.graphics.tests <- function(verbose=T, synopsis=T)
 {# graphics tests do not do any value comparisons
   if (synopsis & !verbose) cat("dse2 graphics tests ...")
   
-  if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
-  else if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+ if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
+ if (is.S()) 
+   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
+    }
 
   if (verbose) cat("  dse2 graphics test 1 ...")
 

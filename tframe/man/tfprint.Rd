@@ -14,7 +14,7 @@
     tframePrint(x, ...)
     \method{tfprint}{default}(x, ...)
     \method{tfprint}{tframe}(x, ...)
-    \method{tframePrint}{default}(x, digits=NULL, quote=T, prefix="", ...)
+    \method{tframePrint}{default}(x, digits=NULL, quote=TRUE, prefix="", ...)
 }
 
 \arguments{

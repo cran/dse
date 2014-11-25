@@ -10,8 +10,8 @@
 \usage{
     distribution(obj, ...)
      \method{distribution}{TSdata}(obj, bandwidth=0.2, 
-             select.inputs = seq(length= input.dimension(obj)),
-             select.outputs= seq(length=output.dimension(obj)))
+             select.inputs = seq(length= nseriesInput(obj)),
+             select.outputs= seq(length=nseriesOutput(obj)))
      \method{distribution}{default}(obj, bandwidth=0.2, series=NULL)
      \method{distribution}{EstEval}(obj, ...)
      \method{distribution}{coef.ee}(obj,  Sort=F, bandwidth=0.2,

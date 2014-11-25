@@ -23,7 +23,7 @@ model in observability form (more or less).
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- est.VARX.ls(eg1.DSE.data.diff)
-    model <- to.SSOform(model)
+%    model <- to.SSOform(model)
 }
 %\keyword{DSE}
 \keyword{ts}

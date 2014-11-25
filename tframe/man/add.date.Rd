@@ -16,7 +16,7 @@
 \value{A two element date.}
 
 \seealso{
-    \code{\link{tfexpand}}
+    \code{\link{tfExpand}}
 }
 \examples{
     add.date(c(1998,1), 20, 12)

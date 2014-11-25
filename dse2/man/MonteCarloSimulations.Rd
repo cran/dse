@@ -55,7 +55,7 @@ of the distribution of the simulations at specified periods.
 \code{\link{simulate}}
 \code{\link{EstEval}}
 \code{\link{distribution}}
-\code{\link{forecastCov.wrt.true}}
+\code{\link{forecastCovWRTtrue}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

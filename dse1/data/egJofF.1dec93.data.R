@@ -853,6 +853,6 @@ egJofF.1dec93.data <- list(
     )
 
 class(egJofF.1dec93.data) <- "TSdata"
-attr(egJofF.1dec93.data$input,  "series.names") <- "R90"
-attr(egJofF.1dec93.data$output, "series.names") <- c("CPI", "GDP", "M1", "RL", "TSE300", "employment", "PFX", "commod.price index", "US ind.prod.",  "US CPI")
+attr(egJofF.1dec93.data$input,  "seriesNames") <- "R90"
+attr(egJofF.1dec93.data$output, "seriesNames") <- c("CPI", "GDP", "M1", "RL", "TSE300", "employment", "PFX", "commod.price index", "US ind.prod.",  "US CPI")
 

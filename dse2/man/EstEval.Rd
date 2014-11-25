@@ -48,7 +48,7 @@ If criterion = 'roots' then criterion.args= list(verbose=F) is advised.
 \code{\link{simulate}}
 \code{\link{MonteCarloSimulations}}
 \code{\link{distribution}}
-\code{\link{forecastCov.wrt.true}}
+\code{\link{forecastCovWRTtrue}}
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
