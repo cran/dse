@@ -1,17 +1,18 @@
 \name{tfplot.TSdata.ee}
-\alias{tfplot.TSmodel.ee}
-\alias{tfplot.TSestModel.ee}
+\alias{tfplot.TSmodelEstEval}
+\alias{tfplot.TSestModelEstEval}
 \alias{tfplot.featherForecasts}
 \alias{tfplot.forecast}
+\alias{tfplot.EstEval}
 \alias{tfplot.horizonForecasts}
-\alias{tfplot.multi.model.horizonForecasts}
+\alias{tfplot.multiModelHorizonForecasts}
 
 \title{Specific Methods for tfplot}
 \description{See the generic function description.}
 \usage{
-    \method{tfplot}{TSmodel.ee}(x, graph.args=NULL,
+    \method{tfplot}{TSmodelEstEval}(x, graph.args=NULL,
                        criterion ="coef", criterion.args=NULL)
-    \method{tfplot}{TSestModel.ee}(x, graph.args=NULL,
+    \method{tfplot}{TSestModelEstEval}(x, graph.args=NULL,
                        criterion ="coef", criterion.args=NULL)
     \method{tfplot}{featherForecasts}(x, start.=NULL, end.=NULL, 
         series=seq(nseries(x)), 
@@ -23,12 +24,17 @@
 	Title="Predictions (dotted) and actual data (solid)",
         ylab = seriesNamesOutput(x$data), 
 	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
+    \method{tfplot}{EstEval}(x, start.=NULL, end.=NULL,
+        series = seq(length=nseriesOutput(x$truth)),
+	Title="Predictions (dotted) and actual data (solid)",
+        ylab = seriesNamesOutput(x$truth), 
+	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
     \method{tfplot}{horizonForecasts}(x, start.=NULL, end.=NULL,
          series=seq(length=nseriesOutput(x$data)),
 	 Title="Predictions (dotted) and actual data (solid)", 
 	 ylab=seriesNamesOutput(x$data), 
 	 graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
-    \method{tfplot}{multi.model.horizonForecasts}(x, start.=NULL, end.=NULL,
+    \method{tfplot}{multiModelHorizonForecasts}(x, start.=NULL, end.=NULL,
          series=NULL)
 }
 \arguments{

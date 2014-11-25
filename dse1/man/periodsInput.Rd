@@ -73,10 +73,10 @@
 \value{Depends.}
 \details{
     Apply a method to the input or output data so, for example,
-    periodsInput(x) in theory does periods(input.data(x)), which 
+    periodsInput(x) in theory does periods(inputData(x)), which 
     returns the number of periods in input data. The actual implementation
-    may not do periods(input.data(x)). For example, with TSPADIdata 
-    input.data(x) requires a database retrieval which may be fairly slow,
+    may not do periods(inputData(x)). For example, with TSPADIdata 
+    inputData(x) requires a database retrieval which may be fairly slow,
     while the number of periods may be available much more quickly.
 }
 

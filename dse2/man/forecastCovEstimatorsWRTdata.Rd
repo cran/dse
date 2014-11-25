@@ -14,7 +14,7 @@
 }
 \arguments{
     \item{data}{an object of class TSdata.}
-    \item{estimation.methods}{a list as used by estimate.models.}
+    \item{estimation.methods}{a list as used by estimateModels.}
     \item{discard.before}{
        an integer indicating the number of points in the
        beginning of forecasts to discard for calculating covariances.}
@@ -38,18 +38,18 @@ elements contain information in the arguments.
 }
 \details{
 Calculate the forecasts cov of models estimated from data with estimation
-methods indicated by estimation.methods  (see estimate.models).
+methods indicated by estimation.methods  (see estimateModels).
 estimation.sample is an integer indicating the number of points in the
 sample to use for estimation. If it is NULL the whole sample is used.
 }
 \seealso{
-\code{\link{out.of.sample.forecastCovEstimatorsWRTdata}},
-\code{\link{estimate.models}}
+\code{\link{outOfSample.forecastCovEstimatorsWRTdata}},
+\code{\link{estimateModels}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 z <- forecastCovEstimatorsWRTdata(eg1.DSE.data.diff, 
-    estimation.methods=list(est.VARX.ls=list(max.lag=4)))
+    estimation.methods=list(estVARXls=list(max.lag=4)))
 }
 %\keyword{DSE}
 \keyword{ts}

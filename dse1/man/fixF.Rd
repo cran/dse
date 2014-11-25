@@ -20,11 +20,11 @@
 
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model <- to.SS(est.VARX.ls(eg1.DSE.data.diff))
+    model <- toSS(estVARXls(eg1.DSE.data.diff))
     model <- fixF(model)
 }
 \seealso{
-    \code{\link{fix.constants}}
+    \code{\link{fixConstants}}
 }
 %\keyword{DSE}
 \keyword{ts}

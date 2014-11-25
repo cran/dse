@@ -6,7 +6,7 @@ if(!require("setRNG"))stop("this test requires setRNG.")
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
    Sys.info()
-   version.dse()
+   DSEversion()
    random.number.test() 
 
 
@@ -20,14 +20,14 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
 # The seed is not important for most of these tests, but AIC eliminates all
 #  parameters occassionally in some model selection tests.
  test.rng <- list(kind="Wichmann-Hill", normal.kind="Box-Muller", seed=c(979,1479,1542))
-# set.RNG(test.rng)
+# setRNG(test.rng)
 
   if (synopsis & !verbose) cat("All dse3 tests ...")
   if (verbose) cat("dse3 test 0 ... ")
   data <- eg1.DSE.data.diff
-  input.data(data) <- NULL
-  mod1 <- TSmodel(est.VARX.ls(data))
-  mod2 <- TSmodel(est.VARX.ar(data, re.add.means=FALSE, warn=FALSE))
+  inputData(data) <- NULL
+  mod1 <- TSmodel(estVARXls(data))
+  mod2 <- TSmodel(estVARXar(data, re.add.means=FALSE, warn=FALSE))
   ok <- is.TSmodel(mod1)
   all.ok <- ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
@@ -39,13 +39,13 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 2 ... ")
-  ok <- test.equal(z, MonteCarloSimulations(mod1, replications=5,
-                                     rng=get.RNG(z), quiet=TRUE))
+  ok <- testEqual(z, MonteCarloSimulations(mod1, replications=5,
+                                     rng=getRNG(z), quiet=TRUE))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 3 ... ")
-  z <- EstEval(mod1, replications=3,  estimation="est.VARX.ls",
+  z <- EstEval(mod1, replications=3,  estimation="estVARXls",
             estimation.args=NULL, criterion="TSmodel", quiet=TRUE)
   ok <- is.EstEval(z)
   all.ok <- all.ok & ok 
@@ -87,7 +87,7 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 8b... ")
-  z <- horizonForecasts(l(to.SS(mod1), data),
+  z <- horizonForecasts(l(toSS(mod1), data),
                          horizons=c(6,12), discard.before=20)
   error <- max(abs( c(z$horizonForecasts[,100,]) -
  c(0.0048425425521641824594, 0.0031489473295282844646, 0.0037730234730729995257,
@@ -107,7 +107,7 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 10... ")
-  ok <- test.equal(zz, forecastCov(zzz$model, 
+  ok <- testEqual(zz, forecastCov(zzz$model, 
              data=zzz$data, discard.before=50, horizons=1:4))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
@@ -121,17 +121,17 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 12... ")
-  zzz <-forecastCov(to.SS(mod1),to.SS(mod2), data=data, 
+  zzz <-forecastCov(toSS(mod1),toSS(mod2), data=data, 
                  discard.before=30, zero=TRUE, trend=TRUE)
 
-  ok <- test.equal(zz,zzz)
+  ok <- testEqual(zz,zzz)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 13... ")
-  zz <-out.of.sample.forecastCovEstimatorsWRTdata(data,
-               estimation.methods = list(est.VARX.ar= list(max.lag=2, warn=FALSE), 
-                                         est.VARX.ls= list(max.lag=2)))
+  zz <-outOfSample.forecastCovEstimatorsWRTdata(data,
+               estimation.methods = list(estVARXar= list(max.lag=2, warn=FALSE), 
+                                         estVARXls= list(max.lag=2)))
   ok <- is.forecastCov(zz)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
@@ -144,16 +144,16 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 15... ")
-  ok <- test.equal(zz, forecastCovWRTtrue(list(mod1,mod2),mod1, 
+  ok <- testEqual(zz, forecastCovWRTtrue(list(mod1,mod2),mod1, 
           pred.replications=2, Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,
-	  quiet=TRUE, trend=NULL, zero=TRUE, rng=get.RNG(zz)))
+	  quiet=TRUE, trend=NULL, zero=TRUE, rng=getRNG(zz)))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 16... ")
   zz <- forecastCovEstimatorsWRTtrue(mod1, 
          Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, quiet=TRUE, 
-         estimation.methods=list(est.VARX.ls=NULL, est.VARX.ar=list(warn=FALSE)), 
+         estimation.methods=list(estVARXls=NULL, estVARXar=list(warn=FALSE)), 
          est.replications=2, pred.replications=2, rng=test.rng)
   ok <- is.forecastCov(zz)
   all.ok <- all.ok & ok 
@@ -163,9 +163,9 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
 # Next seems to cause a problem in Splus when .SPAWN is TRUE above although it may
 #  work with default rng (at least it used to) but test.rng is now set
 #  to give same results as in R.
-  ok <- test.equal(zz, forecastCovEstimatorsWRTtrue(mod1, Spawn=FALSE, 
-           estimation.methods=list(est.VARX.ls=NULL,est.VARX.ar=list(warn=FALSE)), 
-           est.replications=2, pred.replications=2, rng=get.RNG(zz)))
+  ok <- testEqual(zz, forecastCovEstimatorsWRTtrue(mod1, Spawn=FALSE, 
+           estimation.methods=list(estVARXls=NULL,estVARXar=list(warn=FALSE)), 
+           est.replications=2, pred.replications=2, rng=getRNG(zz)))
   if (is.R()) all.ok <- all.ok & ok 
   if (is.R()) {if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }} else 
               cat("dse3 test 17 skipped!\n")
@@ -208,12 +208,12 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
  test.rng <- list(kind="Wichmann-Hill", normal.kind="Box-Muller", seed=c(979,1479,1542))
 
   data <- eg1.DSE.data.diff
-  input.data(data) <- NULL
-  output.data(data) <- output.data(data, series=1)  # [,1,drop=FALSE]
-  mod1 <- TSmodel(est.VARX.ls(data,max.lag=3))
-  mod2 <- TSmodel(est.VARX.ar(data,max.lag=3, aic=FALSE, warn=FALSE))
+  inputData(data) <- NULL
+  outputData(data) <- outputData(data, series=1)  # [,1,drop=FALSE]
+  mod1 <- TSmodel(estVARXls(data,max.lag=3))
+  mod2 <- TSmodel(estVARXar(data,max.lag=3, aic=FALSE, warn=FALSE))
 
-  z <- EstEval(mod1, replications=10,  estimation="est.VARX.ls",
+  z <- EstEval(mod1, replications=10,  estimation="estVARXls",
             estimation.args=list(max.lag=3), criterion="TSmodel", quiet=TRUE)
   distribution(coef(z)) 
   if (verbose) cat("ok\n")
@@ -240,12 +240,12 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
   if (verbose) cat("  dse3 graphics test 6 ...")
 
   data <- eg1.DSE.data.diff
-  input.data(data) <- NULL
+  inputData(data) <- NULL
 # next causes Error ... all lags eliminated by AIC order selection.
-#  output.data(data) <- output.data(data, series=1)  # [,1,drop=FALSE]
-  zz <-out.of.sample.forecastCovEstimatorsWRTdata(data,
-               estimation.methods = list(est.VARX.ar=list(max.lag=2,warn=FALSE),
-                                         est.VARX.ls=list(max.lag=2))) 
+#  outputData(data) <- outputData(data, series=1)  # [,1,drop=FALSE]
+  zz <-outOfSample.forecastCovEstimatorsWRTdata(data,
+               estimation.methods = list(estVARXar=list(max.lag=2,warn=FALSE),
+                                         estVARXls=list(max.lag=2))) 
   tfplot(zz, series=c(1))
   if (verbose) cat("ok\n")
 
@@ -260,8 +260,8 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
   if (verbose) cat("  dse3 graphics test 8 ...")
   zz <- forecastCovEstimatorsWRTtrue(mod1, 
          Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,  rng=test.rng,
-         estimation.methods=list(est.VARX.ls=NULL,est.VARX.ls=list(max.lag=2)), 
-#        estimation.methods=list(est.VARX.ls=NULL,est.VARX.ar=NULL), 
+         estimation.methods=list(estVARXls=NULL,estVARXls=list(max.lag=2)), 
+#        estimation.methods=list(estVARXls=NULL,estVARXar=NULL), 
          est.replications=2, pred.replications=2, quiet=TRUE)
   tfplot(zz, select.cov=c(1))
   if (verbose) cat("ok\n")

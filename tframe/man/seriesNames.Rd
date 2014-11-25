@@ -12,12 +12,13 @@
     \method{seriesNames}{default}(x)
 
     seriesNames(x) <- value 
-%    \method{seriesNames<-}{default}(x) <- value
-%    \method{seriesNames<-}{ts}(x) <- value
+    \method{seriesNames}{default}(x) <- value
+    \method{seriesNames}{ts}(x) <- value
 }
 \arguments{
     \item{x}{a time series object.}
     \item{data}{a time series object.}
+    \item{value}{names to be given to time series.}
 }
 \value{
 The first usage returns a vector of strings with the series names. 

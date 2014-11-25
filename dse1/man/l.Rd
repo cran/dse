@@ -29,7 +29,7 @@ ARMA form and calls l.SS or l.ARMA.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- to.SS(TSmodel(est.VARX.ls(eg1.DSE.data.diff)))
+model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
 evalutated.model <- l(model, eg1.DSE.data.diff)
 }
 %\keyword{DSE}

@@ -41,7 +41,7 @@ based on the same generated sample.
 criterion can be { 'coef', 'roots', 'TSmodel', 'TSestModel'}
 With the default (coef) or with TSmodel the other criteria can be reconstructed
 (when the estimation method finds a known form for the model - which
-is not always the case, for example with est.black.box methods).
+is not always the case, for example with estBlackBox methods).
 If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
 }
 \seealso{
@@ -52,11 +52,11 @@ If criterion = 'roots' then criterion.args= list(verbose=FALSE) is advised.
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model <- est.VARX.ls(TSdata(output=output.data(eg1.DSE.data.diff)))
+    model <- estVARXls(TSdata(output=outputData(eg1.DSE.data.diff)))
     z <-  EstEval(model, 
-       estimation="est.VARX.ls", estimation.args=list(max.lag=2))
+       estimation="estVARXls", estimation.args=list(max.lag=2))
     zz <-  EstEval(model, 
-       estimation="est.VARX.ls", estimation.args=list(max.lag=2),
+       estimation="estVARXls", estimation.args=list(max.lag=2),
        simulation.args=list(sampleT=50, sd=1.5))
     is.EstEval(z)
 }

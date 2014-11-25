@@ -109,13 +109,13 @@ tfplot.default <- function(x, ..., start.=NULL, end.=NULL, tf=NULL,
      names <- seriesNames(x)
      Ngraphs <- min(length(series), graphs.per.page)
      if(reset.screen) {
-        old.par <- par(mfcol = c(Ngraphs, 1), mar=mar)  
+        old.par <- par(mfcol = c(Ngraphs, 1), mar=mar, no.readonly=TRUE)  
         on.exit(par(old.par)) }
 #     tf <- tframe(tfwindow(x, start.=start., end.=end.))
 # would be nice if this could expand tf (tfwindow only truncates - need a
 # replacement that expands too.)
      tf <- tfwindow(tfspan, start. = start., end. = end., warn = FALSE)
-     if (! is.tframe(tf)) browser()
+     if (! is.tframe(tf)) stop("tfplot.default internal error") #browser()
      for (i in series)
        {z <-  matrix(NA, periods(tf), 1+length(others))
         j <- 0
@@ -124,11 +124,12 @@ tfplot.default <- function(x, ..., start.=NULL, end.=NULL, tf=NULL,
 	   if (!is.matrix(d)) d <- tframed(as.matrix(d), tf)
 	   if(mode(i)=="character") i <- match(i, names)
 	   j <- j + 1
-	   #z[,j] <- select.series(d, series=i)
+	   #z[,j] <- selectSeries(d, series=i)
 	   # tbind in the next will pad d if necessary  to fit tf
-	   z[,j] <- select.series(tbind(d,time(tf)), series=i)
+	   z[,j] <- selectSeries(tbind(d,time(tf)), series=i)
 	  }
 	 tfOnePlot(tframed(z, tf), xlab=xlab, ylab=ylab[i])
+         if(!is.null(Title) && (i==1)) title(main = Title)
 	}
     }
   invisible()
@@ -232,7 +233,7 @@ tframe.default <- function(x){ #extract the tframe
   # next is checking after the fact, but value may just be start and freq
   #  which is not enough to know periods
   attr(x, "tframe") <- tf
-  if((!is.null(value)) && !check.tframeConsistent(tframe(x), x))
+  if((!is.null(value)) && !checktframeConsistent(tframe(x), x))
      stop("time frame value in tframe assignment is not consistent with data.")
   x
 }
@@ -283,13 +284,13 @@ tfExpand.tframe <- function(x, add.start=0, add.end=0)
     }
 
 
-check.tframeConsistent <- function(tf, x) UseMethod("check.tframeConsistent")
+checktframeConsistent <- function(tf, x) UseMethod("checktframeConsistent")
 
-check.tframeConsistent.default <- function(tf, x) periods(tf) == periods(x)
+checktframeConsistent.default <- function(tf, x) periods(tf) == periods(x)
 
-test.Equaltframes <- function(tf1, tf2) UseMethod("test.Equaltframes")
+testEqualtframes <- function(tf1, tf2) UseMethod("testEqualtframes")
 
-test.Equaltframes.default <- function(tf1, tf2) { all(tf1==tf2)}
+testEqualtframes.default <- function(tf1, tf2) { all(tf1==tf2)}
 
 
 
@@ -404,7 +405,7 @@ latestEndIndex.tframe <- function(x, ...)
 
 ###############################################
 
-"tframe<-.rts" <- function(x, value) {rts(x) <- value; x}
+"tframe<-.rts" <- function(x, value){rts(x) <- value; x}
 "tframe<-.cts" <- function(x, value) {cts(x) <- value; x}
 "tframe<-.its" <- function(x, value) {its(x) <- value; x}
 
@@ -415,40 +416,40 @@ latestEndIndex.tframe <- function(x, ...)
 #  stamped class TS have a date/time stamp associated with each time point
 ################################################
 
-#check.tframeConsistent.stamped <- function(tf, x)
+#checktframeConsistent.stamped <- function(tf, x)
 #  {periods(x) == periods(tf)}
 
-test.Equaltframes.stamped <- function(tf1, tf2)
+testEqualtframes.stamped <- function(tf1, tf2)
   {all(tf1$stamp == tf2$stamp)}
 
 periods.stamped <- function(x) length(tframe(x))
 
 ###############################################
 
-test.equal <- function(obj1, obj2, fuzz = 0) UseMethod("test.equal")
+testEqual <- function(obj1, obj2, fuzz = 0) UseMethod("testEqual")
 
-test.equal.default <- function(obj1, obj2, fuzz=1e-16) 
+testEqual.default <- function(obj1, obj2, fuzz=1e-16) 
   {if      (is.null(obj1)) is.null(obj2)
-   else if (is.array(obj1)) test.equal.array(obj1, obj2, fuzz=fuzz)
-   else if (is.numeric(obj1)) test.equal.numeric(obj1, obj2, fuzz=fuzz)
-   else if (is.list(obj1)) test.equal.list(obj1, obj2, fuzz=fuzz)
+   else if (is.array(obj1)) testEqual.array(obj1, obj2, fuzz=fuzz)
+   else if (is.numeric(obj1)) testEqual.numeric(obj1, obj2, fuzz=fuzz)
+   else if (is.list(obj1)) testEqual.list(obj1, obj2, fuzz=fuzz)
    else is.logical(all.equal(obj1, obj2, tolerance=fuzz))
   }
 
-test.equal.array <- function(obj1, obj2, fuzz=1e-16) 
+testEqual.array <- function(obj1, obj2, fuzz=1e-16) 
   {if(!is.array(obj2))                     r <-FALSE
    else if (any(dim(obj1) != dim(obj2)))   r <- FALSE
    else if ("character" == mode(obj1))     r <- all(obj1 == obj2)
    else if ("numeric" == mode(obj1))
-              r <- test.equal.numeric(obj1, obj2, fuzz=fuzz)
+              r <- testEqual.numeric(obj1, obj2, fuzz=fuzz)
    else stop(paste("matrix of mode ", mode(obj1), " not testable."))
    if (is.na(r))  r <- FALSE
     r
   }
 
-test.equal.matrix <- test.equal.array
+testEqual.matrix <- testEqual.array
 
-test.equal.numeric <- function(obj1, obj2, fuzz=1e-16) 
+testEqual.numeric <- function(obj1, obj2, fuzz=1e-16) 
   {r <- all(is.infinite(obj1) == is.infinite(obj2))
    if (r) 
           {nna <- !is.na(c(obj1))
@@ -458,10 +459,10 @@ test.equal.numeric <- function(obj1, obj2, fuzz=1e-16)
    r
   }
 
-test.equal.list <- function(obj1, obj2, fuzz=1e-16) 
+testEqual.list <- function(obj1, obj2, fuzz=1e-16) 
   {r <- length(obj1) == length(obj2)
    if (r) for (i in seq(length(obj1)))
-        {if(r) r <- test.equal(obj1[[i]], obj2[[i]], fuzz=fuzz) }
+        {if(r) r <- testEqual(obj1[[i]], obj2[[i]], fuzz=fuzz) }
    r
   }
 
@@ -547,13 +548,13 @@ tfExpand <- function(x, add.start=0, add.end=0) UseMethod("tfExpand")
 
 tfExpand.default <- function(x, add.start=0, add.end=0)
     {tf <- tfExpand(tframe(x), add.start=add.start, add.end=add.end)
-     select.series(tbind(x,time(tf)), series=1)
+     selectSeries(tbind(x,time(tf)), series=1)
     }
 
 
-trim.na <- function(x, start. = TRUE, end. = TRUE) UseMethod("trim.na") 
+trimNA <- function(x, start. = TRUE, end. = TRUE) UseMethod("trimNA") 
 
-trim.na.default <- function(x, start. = TRUE, end. = TRUE)
+trimNA.default <- function(x, start. = TRUE, end. = TRUE)
 {# trim NAs from the ends of a ts matrix or vector.
  # (Observations for all series are dropped in a given period if any 
  #  one contains an NA in that period.)
@@ -595,9 +596,9 @@ nseries.default <- function(x)  {if (is.matrix(x)) ncol(x) else 1}
 
 
 
-select.series <- function(x, series=seqN(nseries(x))) UseMethod("select.series")
+selectSeries <- function(x, series=seqN(nseries(x))) UseMethod("selectSeries")
 
-select.series.default <- function(x, series=seqN(nseries(x))) {
+selectSeries.default <- function(x, series=seqN(nseries(x))) {
   names <- seriesNames(x)
   if (is.character(series)) series <- match(names,series, nomatch=0) > 0
   if(all(0==series) | is.null(series)) r <- NULL
@@ -654,7 +655,7 @@ tbind.default <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
   if (length(sn) == ncol(r)) seriesNames(r) <- sn
   r <- tframed(r, list(start=c((st-1)%/%fr[1], 1+(st-1)%%fr[1]), 
                        frequency=fr[1]))
-  if (!(pad.start & pad.end)) r <- trim.na(r, start.=!pad.start, end.=!pad.end)
+  if (!(pad.start & pad.end)) r <- trimNA(r, start.=!pad.start, end.=!pad.end)
   if (is.null(r)) warning("intersection is NULL")
   r
  }
@@ -666,7 +667,7 @@ tbind.default <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
 
 ############################################################################
 
-add.date <- function(date, periods, freq)
+addDate <- function(date, periods, freq)
   {if (is.null(periods)) periods <- 0
    c(date[1]+(date[2]+periods-1)%/%freq, 1+(date[2]+periods-1)%%freq)
   }
@@ -688,8 +689,8 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
   #   vector of length equal to the dimension of the noise process (which will
   #   be replicated for all periods.)
  if(!require("setRNG")) stop("This function requires the setRNG package.")
- if(is.null(rng)) rng <- set.RNG() # returns setting so don't skip if NULL
- else        {old.rng <- set.RNG(rng);  on.exit(set.RNG(old.rng))  }
+ if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
+ else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
 
   if ( (!is.null(noise)) & (!is.null(noise.model)) )
     stop("noise and noise.model cannot both be specified.")
@@ -704,7 +705,7 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
  if (!is.null(noise.model))
    {if(!require("dse1"))
        stop("Generating noise with a TSmodel requires the dse1 package.")
-    noise <- output.data(simulate(noise.model, sampleT=sampleT+lags))
+    noise <- outputData(simulate(noise.model, sampleT=sampleT+lags))
     noise <- list(w0=noise[1:lags,,drop=FALSE], w=noise[lags+seq(sampleT),,drop=FALSE])
    }
   if (is.null(noise))
@@ -745,7 +746,7 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
          }
        else noise$w <-tframed(noise$w, list(start=start, frequency=frequency))
        if (is.tframed(noise.baseline) &&
-           test.equal(tframe(noise.baseline),tframe(noise$w)))
+           testEqual(tframe(noise.baseline),tframe(noise$w)))
            {warning("tframe of noise set to tframe of noise.baseline.")
             tframe(noise$w )<-tframe(noise.baseline)
             if(!all(dimnames(noise$w)[[2]] == dimnames(noise.baseline)[[2]]))

@@ -63,7 +63,7 @@
     \code{\link{tframe}}
     \code{\link{tfwindow}}
     \code{\link{tfTruncate}}
-    \code{\link{trim.na}}
+    \code{\link{trimNA}}
 }
 
 \examples{

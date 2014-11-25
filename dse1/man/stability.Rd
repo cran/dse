@@ -26,11 +26,11 @@ The eigenvalues of the state transition matrix or the roots of the
 determinant of the AR polynomial are printed if verbose is T.
 }
 \seealso{
-\code{\link{McMillan.degree}}
+\code{\link{McMillanDegree}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 stability(model)
 }
 %\keyword{DSE}

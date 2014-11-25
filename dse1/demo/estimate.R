@@ -6,7 +6,7 @@
 
   cat("Estimation...\n")
 
-  model.eg1.ls <- est.VARX.ls(trim.na(eg1.DSE.data), warn=F)
+  model.eg1.ls <- estVARXls(trimNA(eg1.DSE.data), warn=F)
   subsample.data <- tfwindow(eg1.DSE.data,start=c(1972,1),end=c(1992,12))
 
   summary(model.eg1.ls)
@@ -15,12 +15,12 @@
   tfplot(model.eg1.ls)
   tfplot(model.eg1.ls, start.=c(1990,1))
 
-  check.residuals(model.eg1.ls, plot.=F, pac=T)
+  checkResiduals(model.eg1.ls, plot.=F, pac=T)
 
 
-  model.eg1.ss <- est.SS.from.VARX(trim.na(eg1.DSE.data)) 
+  model.eg1.ss <- estSSfromVARX(trimNA(eg1.DSE.data)) 
   summary(model.eg1.ss)
   model.eg1.ss # or print(model.eg1.ss)
  
-  information.tests(model.eg1.ls, model.eg1.ss)
+  informationTests(model.eg1.ls, model.eg1.ss)
  

@@ -8,7 +8,7 @@
 \arguments{
     \item{model}{
     An object of class `TSestModel' or 'TSmodel' with a model of 
-class `non.innov' 'SS' 'TSmodel'. If filter informatin is not provided 
+class `nonInnov' 'SS' 'TSmodel'. If filter informatin is not provided 
 (i.e. in a TSestModel)
 then smoother runs the Kalman filter (l.SS) first.}
     \item{data}{A TSdata object.}.
@@ -35,7 +35,7 @@ estimate of the state (sometimes called a two sided filter).
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 #smoother requires an non-innovations form model
-model <- TSmodel(to.SSChol(est.VARX.ls(eg1.DSE.data.diff))) 
+model <- TSmodel(toSSChol(estVARXls(eg1.DSE.data.diff))) 
 smoothed.model <- smoother(model, eg1.DSE.data.diff, compiled=FALSE)
 }
 %\keyword{DSE}

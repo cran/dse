@@ -16,7 +16,7 @@
 }
 \arguments{
     \item{true.model}{An object of class TSmodel.}
-    \item{estimation.methods}{A list as used by estimate.models.}
+    \item{estimation.methods}{A list as used by estimateModels.}
     \item{simulation.args}{an arguments to be passed to simulate.}
     \item{est.replications}{An arguments to be passed to simulate.}
     \item{pred.replications}{An arguments to be passed to simulate.}
@@ -42,16 +42,16 @@ The returned results has element
    \code{forecastCov} a list of the same length as estimation.methods with each
      element containing covariances averaged over estimation replications 
      and simulation replications.
-   \code{estimated.models} a list of length est.replications, with each elements as
-     returned by estimate.models, thus each element has \code{multi.model} as a
+   \code{estimatedModels} a list of length est.replications, with each elements as
+     returned by estimateModels, thus each element has \code{multi.model} as a
      subelement containing models for different estimation techniques.  
-     So, eg. \code{estimated.models[[2]]$multi.model[[1]]}  in the result will
+     So, eg. \code{estimatedModels[[2]]$multi.model[[1]]}  in the result will
      be the model from the first estimation technique in the second replication.
 }
 \details{
 Calculate the forecasts cov of models estimated from simulations of 
   true.model with estimation methods indicated by estimation.methods (see 
-       estimate.models). 
+       estimateModels). 
 This function makes multiple calls to forecastCovWRTtrue.
 }
 \seealso{
@@ -60,9 +60,9 @@ This function makes multiple calls to forecastCovWRTtrue.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-true.model <- est.VARX.ls(eg1.DSE.data.diff) # just to have a starting model
+true.model <- estVARXls(eg1.DSE.data.diff) # just to have a starting model
 z <-  forecastCovEstimatorsWRTtrue(true.model, 
-    estimation.methods=list(est.VARX.ls=list(max.lag=4)))
+    estimation.methods=list(estVARXls=list(max.lag=4)))
 }
 %\keyword{DSE}
 \keyword{ts}

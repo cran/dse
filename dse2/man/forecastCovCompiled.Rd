@@ -3,24 +3,24 @@
 \alias{forecastCovCompiled.ARMA}
 \alias{forecastCovCompiled.SS}
 \alias{forecastCovCompiled.innov}
-\alias{forecastCovCompiled.non.innov}
+\alias{forecastCovCompiled.nonInnov}
 \alias{forecastCovSingle.TSmodel}
 
 \title{Forecast covariance for different models - internal}
 \description{See forecastCov.}
 \usage{
     forecastCovCompiled(model, data, horizons = 1:12,
-         discard.before=minimum.startup.lag(model))
+         discard.before=minimumStartupLag(model))
     \method{forecastCovCompiled}{ARMA}(model, data, horizons = 1:12,
-         discard.before=minimum.startup.lag(model))
+         discard.before=minimumStartupLag(model))
     \method{forecastCovCompiled}{SS}(model, data, horizons = 1:12,
-         discard.before=minimum.startup.lag(model))
+         discard.before=minimumStartupLag(model))
     \method{forecastCovCompiled}{innov}(model, data, horizons = 1:12,
-         discard.before=minimum.startup.lag(model))
-    \method{forecastCovCompiled}{non.innov}(model, data, horizons = 1:12,
-         discard.before=minimum.startup.lag(model))
+         discard.before=minimumStartupLag(model))
+    \method{forecastCovCompiled}{nonInnov}(model, data, horizons = 1:12,
+         discard.before=minimumStartupLag(model))
      forecastCovSingle.TSmodel( model, data=NULL, horizons=1:12, 
-          discard.before=minimum.startup.lag(model), compiled=.DSECOMPILED)
+          discard.before=minimumStartupLag(model), compiled=.DSECOMPILED)
 }
 \arguments{
     \item{obj}{TSdata or one or more TSmodels or TSestModels}

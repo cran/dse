@@ -1,16 +1,16 @@
 \name{TSdata.forecastCov}
 \alias{TSdata.forecastCov}
-\alias{TSestModel.coef.ee}
+\alias{TSestModel.coefEstEval}
 \alias{TSmodel.forecastCov}
-\alias{TSmodel.coef.ee}
+\alias{TSmodel.coefEstEval}
 
 \title{TS Extractor Specific Methods}
 \description{See the generic function description.}
 \usage{
     \method{TSdata}{forecastCov}(obj)
-    \method{TSestModel}{coef.ee}(obj)
+    \method{TSestModel}{coefEstEval}(obj)
     \method{TSmodel}{forecastCov}(obj, select=1)
-    \method{TSmodel}{coef.ee}(obj)
+    \method{TSmodel}{coefEstEval}(obj)
 }
 \arguments{
     \item{obj}{an object from which to extract the TSdata, TSmodel, or

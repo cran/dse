@@ -6,7 +6,7 @@ if(!require("setRNG"))stop("this test requires setRNG.")
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
    Sys.info()
-   version.dse()
+   DSEversion()
    
 
 #######################################################################
@@ -21,7 +21,7 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
 {# test examples in Brief User's guide
  # NOTE: it was necessary to reduce fuzz from 1e-14 because of differences
  # in the results between Splus 3.2 and Splus 3.3 (C libraries were changed).
- # Differences affected lsfit (used in est.VARX.ls) among other things.
+ # Differences affected lsfit (used in estVARXls) among other things.
 
 
   # If no device is active then write to postscript file 
@@ -62,7 +62,7 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
 
   seriesNamesInput(eg1.DSE.data)   <-  "u1"
   seriesNamesOutput(eg1.DSE.data) <-  c("y1","y2","y3")
-  error <- abs(126943980.50000011921 - sum(output.data(eg1.DSE.data)))
+  error <- abs(126943980.50000011921 - sum(outputData(eg1.DSE.data)))
   ok <- 100*fuzz.large > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -70,8 +70,8 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
   if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
 
   if (verbose) cat("Guide part 1 test 2 ... ")
-  model1 <- est.VARX.ls(eg1.DSE.data, warn=FALSE)
-  model2 <- est.SS.Mittnik(eg1.DSE.data, n=14)
+  model1 <- estVARXls(eg1.DSE.data, warn=FALSE)
+  model2 <- estSSMittnik(eg1.DSE.data, n=14)
 #  summary(model1)
 #  summary(model2)
 #  print(model1)
@@ -143,8 +143,8 @@ guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("Guide part 1 test 7 ... ")
-  ss.from.arma <- l(to.SS(arma), data.arma.sim)
-  arma.from.ss <- l(to.ARMA(ss), data.ss.sim)
+  ss.from.arma <- l(toSS(arma), data.arma.sim)
+  arma.from.ss <- l(toARMA(ss), data.ss.sim)
 #  summary(ss.from.arma)
 #  summary(arma)
 #  summary(arma.from.ss)

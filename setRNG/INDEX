@@ -6,5 +6,5 @@ A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
 See also the bundle dseplus with related packages.
 00Intro.setRNG          setRNG
-get.RNG                 get the RND and seed from an object
-set.RNG                 Set the random number generator
+getRNG                  get the RND and seed from an object
+setRNG                  Set the random number generator

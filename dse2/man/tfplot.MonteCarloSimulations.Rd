@@ -34,7 +34,7 @@ Output graphics can be paused between pages by setting par(ask=TRUE).
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 z <-  MonteCarloSimulations(model)
 tfplot(z)
 }

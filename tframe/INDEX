@@ -6,24 +6,23 @@ A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
 See also the bundle dseplus with related packages.
 00Intro.tframe          Tframe
-add.date                Add Periods to a Date
-check.tframeConsistent
-                        Check for a Consistent tframe
+addDate                 Add Periods to a Date
+checktframeConsistent   Check for a Consistent tframe
 earliestEnd             Start and End for Objects with Multiple Time
                         Series
 freeze                  Get fixed data snapshot
 nseries                 Number of Series
 periods                 Generic Time Series Parameters
-select.series           Extract a Subset of Series
+selectSeries            Extract a Subset of Series
 seriesNames             Names of Series in a time series object
 splice                  Splice Time Series
 tbind                   Bind Time Series
-test.equal              Compare Two Objects
-test.Equaltframes       Compare Two Time Frames
+testEqual               Compare Two Objects
+testEqualtframes        Compare Two Time Frames
 tfExpand                Expand a Tframe or Tframed Object.
 tfplot                  Plot Tframed Objects
 tfprint                 Print Tframed Objects
 tframed                 Construct a Tframed Object
 tframe                  Extract or Set a tframe
 tfwindow                Truncate a Time Series
-trim.na                 Trim NAs from Time Series
+trimNA                  Trim NAs from Time Series

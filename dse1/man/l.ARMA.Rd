@@ -3,7 +3,7 @@
 \title{Evaluate an ARMA TSmodel}
 \description{Evaluate an ARMA TSmodel.}
 \usage{
-l.ARMA(obj1, obj2, sampleT=NULL, predictT=NULL,result=NULL,
+    \method{l}{ARMA}(obj1, obj2, sampleT=NULL, predictT=NULL,result=NULL,
        error.weights=0,  compiled=.DSECOMPILED, warn=TRUE, 
        return.debug.info=FALSE, ...)
 }
@@ -54,7 +54,7 @@ error at each period ahead.
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model <- TSmodel(est.VARX.ls(eg1.DSE.data.diff))
+    model <- TSmodel(estVARXls(eg1.DSE.data.diff))
     evalutated.model <- l.ARMA(model,eg1.DSE.data.diff)
 }
 %\keyword{DSE}

@@ -3,8 +3,8 @@
 \alias{distribution.default}
 \alias{distribution.TSdata}
 \alias{distribution.EstEval}
-\alias{distribution.coef.ee}
-\alias{distribution.roots.ee}
+\alias{distribution.coefEstEval}
+\alias{distribution.rootsEstEval}
 \title{Plot distribution of estimates}
 \description{Plot distribution of estimates.}
 \usage{
@@ -14,9 +14,9 @@
              select.outputs= seq(length=nseriesOutput(obj)), ...)
      \method{distribution}{default}(obj, bandwidth=0.2, series=NULL, ...)
      \method{distribution}{EstEval}(obj, ...)
-     \method{distribution}{coef.ee}(obj,  Sort=FALSE, bandwidth=0.2,
+     \method{distribution}{coefEstEval}(obj,  Sort=FALSE, bandwidth=0.2,
 	graphs.per.page=5, ...)
-     \method{distribution}{roots.ee}(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
+     \method{distribution}{rootsEstEval}(obj, mod=TRUE, invert=FALSE, Sort=FALSE,
         bandwidth=0.2, select=NULL, ...)
 }
 \arguments{
@@ -27,9 +27,9 @@
     \item{bandwidth}{passed to \code{density} or \code{ksmooth}.}
     \item{graphs.per.page}{integer indicating number of graphs to place on a
        page.}
-    \item{series}{series to be plotted. (passed to select.series)}
-    \item{select.inputs}{series to be plotted. (passed to select.series)}
-    \item{select.outputs}{series to be plotted. (passed to select.series)}
+    \item{series}{series to be plotted. (passed to selectSeries)}
+    \item{select.inputs}{series to be plotted. (passed to selectSeries)}
+    \item{select.outputs}{series to be plotted. (passed to selectSeries)}
     \item{...}{arguments passed to other methods.}
     \item{invert}{logical indicating if the inverse of roots should be plotted}
     \item{mod}{logical indicating if the modulus of roots should be plotted}
@@ -49,10 +49,10 @@ available then \code{density} is applied if it is available.
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(TSdata(output=output.data(eg1.DSE.data.diff)), max.lag=2)
+model <- estVARXls(TSdata(output=outputData(eg1.DSE.data.diff)), max.lag=2)
 # now use this as the true model
 z <-  EstEval(model, 
-    estimation="est.VARX.ls", estimation.args=list(max.lag=2))
+    estimation="estVARXls", estimation.args=list(max.lag=2))
 distribution(z) 
 tfplot(z)
 }

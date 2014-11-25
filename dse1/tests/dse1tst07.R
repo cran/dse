@@ -1,6 +1,6 @@
  require("dse1")
  Sys.info()
- version.dse()
+ DSEversion()
  
 fuzz.small <- 1e-14
 fuzz.large <- 1e-10

@@ -1,6 +1,6 @@
  require("dse1")
  Sys.info()
- version.dse()
+ DSEversion()
  data("eg1.DSE.data.diff", package="dse1") 
 
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
@@ -13,17 +13,17 @@ all.ok <- TRUE
 
 test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Muller")
 
-  VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
+  VARmodel  <-  estVARXar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
 
-  SSmodel  <- to.SS(VARmodel)
+  SSmodel  <- toSS(VARmodel)
 
 cat("dse1 test 9 ...\n")
-  z  <- simulate(SSmodel, input=input.data(eg1.DSE.data.diff)) 
-  ok <- test.equal(z,simulate(SSmodel, rng=get.RNG(z), 
-                      input=input.data(eg1.DSE.data.diff)))
+  z  <- simulate(SSmodel, input=inputData(eg1.DSE.data.diff)) 
+  ok <- testEqual(z,simulate(SSmodel, rng=getRNG(z), 
+                      input=inputData(eg1.DSE.data.diff)))
   if (!ok) {all.ok <- FALSE ; cat(ok, "\n")}
 
-  ok <- test.equal(summary(z)$estimates,
+  ok <- testEqual(summary(z)$estimates,
                    summary(z)$estimates, fuzz=fuzz.small)
   if (!ok) {all.ok <- FALSE ; cat(ok, "\n")}
 
@@ -71,9 +71,9 @@ cat("dse1 test 12...\n")
 cat("dse1 test 13...\n")
 
   z <- eg1.DSE.data.diff
-  ok <- test.equal(z,
-      TSdata(output=output.data(combine(z,z), series=seq(nseriesOutput(z))),
-              input= input.data(combine(z,z), series=seq( nseriesInput(z))))) 
+  ok <- testEqual(z,
+      TSdata(output=outputData(combine(z,z), series=seq(nseriesOutput(z))),
+              input= inputData(combine(z,z), series=seq( nseriesInput(z))))) 
  
   if (!ok) {all.ok <- FALSE ; cat(ok, "\n")}
 

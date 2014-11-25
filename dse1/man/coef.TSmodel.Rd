@@ -13,16 +13,17 @@
     \method{coef}{TSmodel}(object, ...)
     \method{coef}{TSestModel}(object, ...)
     coef(object) <- value
-    \method{coef<-}{default}(object) <- value
+    \method{coef}{default}(object) <- value
     }
 \arguments{
     \item{object}{An object of class TSmodel or TSestModel.}
+    \item{value}{value to be assigned to object.}
     \item{...}{(further arguments, currently disregarded).}
     }
 \value{A vector of parameter values.}
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model <- est.VARX.ls(eg1.DSE.data.diff)
+    model <- estVARXls(eg1.DSE.data.diff)
     coef(model)
     coef(model) <- 0.1 + coef(model)
 }

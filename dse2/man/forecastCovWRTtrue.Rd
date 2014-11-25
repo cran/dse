@@ -59,9 +59,9 @@ in simulation.args
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-true.model <- est.VARX.ls(eg1.DSE.data.diff) # A starting model TSestModel
+true.model <- estVARXls(eg1.DSE.data.diff) # A starting model TSestModel
 data <- simulate(true.model)
-models <- list(TSmodel(est.VARX.ar(data)),TSmodel(est.VARX.ls(data)))
+models <- list(TSmodel(estVARXar(data)),TSmodel(estVARXls(data)))
 z <-  forecastCovWRTtrue( models, true.model)
 }
 %\keyword{DSE}

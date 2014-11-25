@@ -1,5 +1,5 @@
 
-version.dse <- function() 
+DSEversion <- function() 
   {if (!is.R()) return("version cannot be determined.") else
    z <- c("setRNG", "syskern", "tframe", "dse1","dse2", "dsepadi","monitor", 
           "juice", "curve", "CDNmoney", "dfa", "padi", "dseNN")
@@ -123,10 +123,10 @@ if (is.R())
 #        -data interface functions
 
 #   Of special note in the internal utilities are two programs,
-#   set.arrays and set.parameters which take a model list and
+#   setArrays and setTSmodelParameters which take a model list and
 #   update the representation and parameter information respectively. 
-#   i.e. set.arrays uses the parameter information and ensures that the 
-#    array representation is consistent while set.parameters uses the 
+#   i.e. setArrays uses the parameter information and ensures that the 
+#    array representation is consistent while setTSmodelParameters uses the 
 #    arrays and ensures that the parameter vector is consistent.
 
 #############################################################################
@@ -178,7 +178,7 @@ print.SS <- function(x, digits=options()$digits, latex=FALSE, ...)
      printM("F", x$F, digits, latex)
      if(!is.null(x$G)) printM("G", x$G, digits, latex)
      printM("H", x$H, digits, latex)
-     if ( is.non.innov.SS(x)) 
+     if ( is.nonInnov.SS(x)) 
        {printM("Q", x$Q, digits, latex)
         printM("R", x$R, digits, latex)
        }
@@ -270,7 +270,7 @@ print.ARMA <- function(x, digits=options()$digits, latex=FALSE, L=TRUE, fuzz=1e-
  
 summary.TSestModel <- function(object, ...)
   {#  (... further arguments, currently disregarded)
-   residual <- object$estimates$pred[,,drop=FALSE] - output.data(object)[,,drop=FALSE]
+   residual <- object$estimates$pred[,,drop=FALSE] - outputData(object)[,,drop=FALSE]
    sampleT <- nrow(residual)
    p <- ncol(residual)	
    Om <- t(residual) %*% residual/sampleT
@@ -408,7 +408,7 @@ tfplot.TSestModel <- function(x, ..., start.=NULL,end.=NULL,
   else Ngraphs <- Ngraphs+length(select.inputs)  # NULL is zero
   Ngraphs <- min(Ngraphs, graphs.per.page)
   if(reset.screen) {
-     old.par <- par(mfcol = c(Ngraphs, 1), mar = mar)
+     old.par <- par(mfcol = c(Ngraphs, 1), mar = mar, no.readonly=TRUE)
      on.exit(par(old.par)) }
   names <-seriesNamesOutput(model)
   if (m!=0) names <-c(seriesNamesInput(model), names)
@@ -417,21 +417,21 @@ tfplot.TSestModel <- function(x, ..., start.=NULL,end.=NULL,
     {for (i in select.inputs) 
       {z <-NULL 
        for (model in append(list(x),list(...)) )
-           z<-tbind(z,input.data(model, series=i))
-       tframe(z) <-tframe(input.data(model))
+           z<-tbind(z,inputData(model, series=i))
+       tframe(z) <-tframe(inputData(model))
        if (is.null(start.)) start.<-start(z)
        if (is.null(end.))   end.  <-end(z)
        tfOnePlot(tfwindow(z,start=start.,end=end., warn=FALSE),ylab=names[i]) # tsplot
        if(i==1) title(main = Title)
     } }
   for (i in select.outputs ) 
-    {z <-c(output.data(model, series=i),
+    {z <-c(outputData(model, series=i),
            rep(NA,periods(model$estimates$pred)-periods(TSdata(model))))
      for (model in append(list(x),list(...))){
          if (! is.TSestModel(model)) 
 	    stop("Argument in ... to be plotted is not a TSestModel object.")
          z<-cbind(z,model$estimates$pred[,i,drop=FALSE])}
-     tframe(z) <- tframe(output.data(model))
+     tframe(z) <- tframe(outputData(model))
      if (is.null(start.)) start.<-start(z)
      if (is.null(end.))   end.  <-end(z)
      tfOnePlot(tfwindow(z,start=start.,end=end., warn=FALSE),ylab=names[m+i]) # tsplot
@@ -442,12 +442,12 @@ tfplot.TSestModel <- function(x, ..., start.=NULL,end.=NULL,
     
 
 
-test.equal.TSestModel <- function(obj1, obj2, fuzz=0) # this could be better
-  { test.equal.TSmodel( obj1$model, obj2$model, fuzz=fuzz) &
-        test.equal.TSdata(obj1$data, obj2$data, fuzz=fuzz)
+testEqual.TSestModel <- function(obj1, obj2, fuzz=0) # this could be better
+  { testEqual.TSmodel( obj1$model, obj2$model, fuzz=fuzz) &
+        testEqual.TSdata(obj1$data, obj2$data, fuzz=fuzz)
   }
 
-test.equal.TSmodel <- function(obj1, obj2, fuzz=0)
+testEqual.TSmodel <- function(obj1, obj2, fuzz=0)
 {# return T if models are identical (excluding description)
   r       <- all(dseclass(obj1) == dseclass(obj2))
   if (r) r <-length(coef(obj1)) == length(coef(obj2))
@@ -467,13 +467,13 @@ test.equal.TSmodel <- function(obj1, obj2, fuzz=0)
   if (r) r <-length(obj1$const.j) == length(obj2$const.j)
   if (r) r <-all(obj1$const.j  ==     obj2$const.j)
   if (r)
-    {if (is.ARMA(obj1))    r <-test.equal.ARMA(obj1,obj2, fuzz=fuzz)
-     else if (is.SS(obj1)) r <-test.equal.SS(obj1,obj2, fuzz=fuzz)
+    {if (is.ARMA(obj1))    r <-testEqual.ARMA(obj1,obj2, fuzz=fuzz)
+     else if (is.SS(obj1)) r <-testEqual.SS(obj1,obj2, fuzz=fuzz)
     }
   r
 }
 
-test.equal.ARMA <- function(obj1, obj2, fuzz=0)
+testEqual.ARMA <- function(obj1, obj2, fuzz=0)
 {    r <-length(obj1$l) == length(obj2$l)
      if (r) r <-all(obj1$l  ==     obj2$l)
      if (r) r <-length(obj1$const.l) == length(obj2$const.l)
@@ -491,7 +491,7 @@ test.equal.ARMA <- function(obj1, obj2, fuzz=0)
   r
 }
 
-test.equal.SS <- function(obj1,obj2, fuzz=0)
+testEqual.SS <- function(obj1,obj2, fuzz=0)
 {    r <-length(obj1$F) == length(obj2$F)
      if (r) r <-all(fuzz >= abs(obj1$F   -     obj2$F))
      if (r) 
@@ -526,12 +526,12 @@ test.equal.SS <- function(obj1,obj2, fuzz=0)
 }
 
 
-McMillan.degree <- function(model,  ...) UseMethod("McMillan.degree")
+McMillanDegree <- function(model,  ...) UseMethod("McMillanDegree")
 
-McMillan.degree.TSestModel <- function(model, ...)
- {McMillan.degree(TSmodel(model),...) }
+McMillanDegree.TSestModel <- function(model, ...)
+ {McMillanDegree(TSmodel(model),...) }
 
-McMillan.degree.ARMA <- function(model, fuzz=1e-4, verbose=TRUE, warn=TRUE, ...)
+McMillanDegree.ARMA <- function(model, fuzz=1e-4, verbose=TRUE, warn=TRUE, ...)
  {#  (... further arguments, currently disregarded)
     z  <- roots(model, warn=warn)
     gross <- length(z)
@@ -550,7 +550,7 @@ McMillan.degree.ARMA <- function(model, fuzz=1e-4, verbose=TRUE, warn=TRUE, ...)
     invisible(deg)
  }
 
-McMillan.degree.SS <- function(model, fuzz=1e-4, ...)
+McMillanDegree.SS <- function(model, fuzz=1e-4, ...)
  {#  (... further arguments, currently disregarded)
    cat("state dimension = ",dim(model$F)[1],"/n")
    invisible()
@@ -610,7 +610,7 @@ roots.SS <- function(obj, fuzz=0, randomize=FALSE, ...)
 roots.ARMA <- function(obj, fuzz=0, randomize=FALSE, warn=TRUE, by.poly=FALSE, ...) 
 {#  (... further arguments, currently disregarded)
     if(by.poly) z <- 1/polyroot.det(obj$A)
-    else        z <- roots(to.SS(obj))
+    else        z <- roots(toSS(obj))
     if (fuzz!=0)
       {zz <- outer(z,z,FUN="-")  # find distinct roots within fuzz
        z <- z[ !apply((outer(1:length(z),1:length(z),FUN="<")
@@ -646,7 +646,7 @@ plot.roots <- function(x, pch='*', fuzz=0, ...)
 }
 
 
-add.plot.roots <- function(v, pch='*', fuzz=0)
+addPlotRoots <- function(v, pch='*', fuzz=0)
 {if (is.TSmodel(v))    v <- roots(v, fuzz=fuzz)
  if (is.TSestModel(v)) v <- roots(v, fuzz=fuzz)
  points(Re(v),Im(v), pch=pch)
@@ -730,12 +730,12 @@ reachability.ARMA <- function(model){
 }
 
 
-check.balance <- function(model) UseMethod("check.balance") 
+checkBalance <- function(model) UseMethod("checkBalance") 
  # calculate the difference between observability and reachability gramians 
 
-check.balance.TSestModel <- function(model){check.balance(TSmodel(model))}
+checkBalance.TSestModel <- function(model){checkBalance(TSmodel(model))}
 
-check.balance.SS <- function(model){ 
+checkBalance.SS <- function(model){ 
 FF<-    model$F
 O <-    model$H
 HFn <- O
@@ -759,20 +759,20 @@ cat("maximum off-diagonal element of C: ", max(abs(C-diag(diag(C)))),"\n")
 cat("maximum off-diagonal element of O: ", max(abs(O-diag(diag(O)))),"\n")
 invisible()
 }
-check.balance.ARMA <- function(model){ 
+checkBalance.ARMA <- function(model){ 
   cat("not applicable to ARMA models\n")
   invisible()
 }
 
 
-check.balanceMittnik <- function(model) UseMethod("check.balanceMittnik")
+checkBalanceMittnik <- function(model) UseMethod("checkBalanceMittnik")
  # calculate the difference between observability and controllability
  #   gramians with model transformed a la Mittnik 
 
-check.balanceMittnik.TSestModel <- function(model)
-   check.balanceMittnik(TSmodel(model))
+checkBalanceMittnik.TSestModel <- function(model)
+   checkBalanceMittnik(TSmodel(model))
 
-check.balanceMittnik.SS <- function(model){ 
+checkBalanceMittnik.SS <- function(model){ 
 FF<-    model$F - model$K %*% model$H
 O <-    model$H
 HFn <- O
@@ -796,7 +796,7 @@ cat("maximum off-diagonal element of C: ", max(abs(C-diag(diag(C)))),"\n")
 cat("maximum off-diagonal element of O: ", max(abs(O-diag(diag(O)))),"\n")
 invisible()
 }
-check.balanceMittnik.ARMA <- function(model){ 
+checkBalanceMittnik.ARMA <- function(model){ 
   cat("not applicable to ARMA models\n")
   invisible()
 }
@@ -808,13 +808,13 @@ check.balanceMittnik.ARMA <- function(model){
 
 ############################################################
 
-to.SS <- function(model, ...) UseMethod("to.SS")
-to.SS.TSestModel <- function(model, ...) 
-	{l(to.SS(TSmodel(model), ...),TSdata(model))}
-to.SS.SS <- function(model, ...) {model}
+toSS <- function(model, ...) UseMethod("toSS")
+toSS.TSestModel <- function(model, ...) 
+	{l(toSS(TSmodel(model), ...),TSdata(model))}
+toSS.SS <- function(model, ...) {model}
  #  (... further arguments, currently disregarded)
  
-to.SS.ARMA <- function(model,...)
+toSS.ARMA <- function(model,...)
 {# convert an ARMA (or VAR) to a SS (innovations) representation
     if (is.null(model$A)) a<-0
     else a <- dim(model$A)[1] - 1  #order of polynomial arrays
@@ -822,39 +822,39 @@ to.SS.ARMA <- function(model,...)
     else b <- dim(model$B)[1] - 1
     if (is.null(model$C)) cc<-0
     else cc<- dim(model$C)[1] - 1
-    if ((b<=a) & (cc<=(a-1))) model <- to.SSaugment(model)
-    else  model <-to.SSnested(model,...) #  (otherwise best working method) 
+    if ((b<=a) & (cc<=(a-1))) model <- toSSaugment(model)
+    else  model <-toSSnested(model,...) #  (otherwise best working method) 
                   # A better approach would be an algorithm like Guidorzi's. 
  model
 }
 
 
-to.SSnested <- function(model, ...) UseMethod("to.SSnested")
-to.SSnested.TSestModel <- function(model, ...) to.SSnested(TSmodel(model), ...)
+toSSnested <- function(model, ...) UseMethod("toSSnested")
+toSSnested.TSestModel <- function(model, ...) toSSnested(TSmodel(model), ...)
 
-to.SSnested.SS <- function(model, n=NULL, Aoki=FALSE, ...)
+toSSnested.SS <- function(model, n=NULL, Aoki=FALSE, ...)
 { #  (... further arguments, currently disregarded)
  # convert to a nested-balanced state space model by svd  a la Mittnik (or Aoki)
   if (is.null(n)) n <-ncol(model$F)  
   if (Aoki) return(Aoki.balance(model, n=n))
-  else      return(balance.Mittnik(model, n=n)) 
+  else      return(balanceMittnik(model, n=n)) 
 }
 
-to.SSnested.ARMA <- function(model, n=NULL, Aoki=FALSE, ...)
+toSSnested.ARMA <- function(model, n=NULL, Aoki=FALSE, ...)
 { #  (... further arguments, currently disregarded)
  # convert to a nested-balanced state space model by svd  a la Mittnik (or Aoki)
-  if (is.null(n)) n <- McMillan.degree.calculation(model)$distinct
+  if (is.null(n)) n <- McMillanDegree.calculation(model)$distinct
   if (Aoki) return(Aoki.balance(model, n=n))
-  else      return(balance.Mittnik(model, n=n)) 
+  else      return(balanceMittnik(model, n=n)) 
 }
 
 
-to.SSaugment <- function(model, ...) UseMethod("to.SSaugment")
-to.SSaugment.TSestModel <- function(model, ...)
-   l(to.SSaugment(TSmodel(model), ...), TSdata(model))
+toSSaugment <- function(model, ...) UseMethod("toSSaugment")
+toSSaugment.TSestModel <- function(model, ...)
+   l(toSSaugment(TSmodel(model), ...), TSdata(model))
 
 
-to.SSaugment.ARMA <- function(model, fuzz=1e-14, ...) 
+toSSaugment.ARMA <- function(model, fuzz=1e-14, ...) 
 { #  (... further arguments, currently disregarded)
   # convert by augmentation - state dimension may not be minimal
   # First sets A[1,,] = B[1,,] = I if that is not already the case.
@@ -938,7 +938,7 @@ gmap <- function(g, model)
    model$H <-model$H %*% g
    if (!is.null(model$z0)) model$z0 <-c(inv.g %*%model$z0)
    if (is.innov.SS(model)) model$K <-inv.g %*% model$K
-   if (is.non.innov.SS(model)) 
+   if (is.nonInnov.SS(model)) 
       {model$Q <-inv.g %*% model$Q
        model$R <-model$R
       }       
@@ -951,7 +951,7 @@ gmap <- function(g, model)
 	for(l in 1:dim(model$C)[1]) model$C[l,  ,  ] <- g %*% model$C[l, ,]
 	if(!is.null(model$TREND))   model$TREND      <- g %*%  model$TREND
        }
- set.parameters(model)
+ setTSmodelParameters(model)
 }
 
 
@@ -994,7 +994,7 @@ findg <- function(model1,model2, minf=nlmin)
 }
 
 
-fix.constants <- function(model, fuzz=1e-5, constants=NULL)
+fixConstants <- function(model, fuzz=1e-5, constants=NULL)
 {# If constants is NULL then
  # any parameters within fuzz of 0.0 or 1.0 are set to exactly 0.0 or 1.0.
  # if constants is not NULL then it should be a list with logical (T/F) arrays
@@ -1002,7 +1002,7 @@ fix.constants <- function(model, fuzz=1e-5, constants=NULL)
  # (not == 0 or 1) which are to be treated as constant.
  
   if (is.TSestModel(model)) model <- TSmodel(model)
-  if  (!is.TSmodel(model)) stop("fix.constants expecting a TSmodel.")
+  if  (!is.TSmodel(model)) stop("fixConstants expecting a TSmodel.")
   if (is.null(constants))
     {p <-abs(coef(model) - 1.0) < fuzz
      model$const <- c(model$const,rep(1.0,sum(p)))
@@ -1016,22 +1016,22 @@ fix.constants <- function(model, fuzz=1e-5, constants=NULL)
      model$i <- model$i[p]
      model$j <- model$j[p]
      if(is.ARMA(model)) model$l <- model$l[p]
-     return(set.arrays(model))
+     return(setArrays(model))
     }
   else
-    return(set.parameters(TSmodel(append(model,constants))))
+    return(setTSmodelParameters(TSmodel(append(model,constants))))
 }
 
 
-to.SS.innov <- function(model, ...)
+toSSinnov <- function(model, ...)
 {#  (... further arguments, currently disregarded)
  # convert to an equivalent state space innovations representation
 # This assumes that the noise processes in the arbitrary SS representation are 
 #   white and uncorrelated.
  if (is.TSestModel(model)) model <- TSmodel(model)
- if  (!is.TSmodel(model)) stop("to.SS.innov expecting a TSmodel.")
- if (!is.SS(model))  model <- to.SS(model)
- if ( is.non.innov.SS(model)) 
+ if  (!is.TSmodel(model)) stop("toSSinnov expecting a TSmodel.")
+ if (!is.SS(model))  model <- toSS(model)
+ if ( is.nonInnov.SS(model)) 
    {model$K <- model$Q %*% solve(model$R)
     model$R <- NULL
     model$Q <- NULL
@@ -1041,20 +1041,20 @@ to.SS.innov <- function(model, ...)
 
 
 
-to.SSOform <- function(model) UseMethod("to.SSOform")
+toSSOform <- function(model) UseMethod("toSSOform")
 
-to.SSOform.TSestModel <- function(model) 
-  {l(to.SSOform(TSmodel(model)), TSdata(model))
+toSSOform.TSestModel <- function(model) 
+  {l(toSSOform(TSmodel(model)), TSdata(model))
   }
 
-to.SSOform.TSmodel <- function(model)
+toSSOform.TSmodel <- function(model)
 {# convert to a SS innovations representation with a minimum number 
 # of parameters by converting as much of H as possible to I matrix.
 # Any remaining reductions are done by converting part of ?? to I.
 # It seems there should remain n(m+2p) free parameters in F,G,H,K, and Om is 
 #  determined implicitly by the residual.
- if (!is.SS(model))       model <- to.SS(model)
- if (!is.innov.SS(model)) model <- to.SS.innov(model)
+ if (!is.SS(model))       model <- toSS(model)
+ if (!is.innov.SS(model)) model <- toSSinnov(model)
  n <- dim(model$H)[2]
  p <- nseriesOutput(model)
  if (p >= n) 
@@ -1076,7 +1076,7 @@ to.SSOform.TSmodel <- function(model)
  if(!is.null(model$G)) model$G <- ginv %*% model$G
  model$H <- model$H %*% g
  model$K <- ginv %*% model$K  
- fix.constants(set.parameters(model))
+ fixConstants(setTSmodelParameters(model))
 }
 
 
@@ -1086,8 +1086,8 @@ fixF <- function(model)
  # not be a very good way to do it.
   if (is.TSestModel(model)) model <- TSmodel(model)
   if  (!is.TSmodel(model)) stop("fixF expecting a TSmodel.")
-  if (!is.SS(model))         model <- to.SS(model)
-  if ( is.non.innov.SS(model))  model <- to.SS.innov(model)
+  if (!is.SS(model))         model <- toSS(model)
+  if ( is.nonInnov.SS(model))  model <- toSSinnov(model)
   p <-model$location == "f"
   model$const <- c(model$const, coef(model)[p])
   model$const.location <- c(model$const.location,model$location[p])
@@ -1104,49 +1104,49 @@ fixF <- function(model)
   n <- dim(model$F)[1]
   p <- dim(model$H)[1]
   cat("Theoretical parameter space dimension: ",n*(m+2*p),"\n")
-  set.arrays(model)
+  setArrays(model)
 }
 
 
-to.SSChol <- function(model, ...) UseMethod("to.SSChol")
+toSSChol <- function(model, ...) UseMethod("toSSChol")
 
-to.SSChol.TSestModel <- function(model, Om=NULL, ...) 
+toSSChol.TSestModel <- function(model, Om=NULL, ...) 
   { #  (... further arguments, currently disregarded)
    if(is.null(Om)) Om <-model$estimates$cov
-   l(to.SSChol(TSmodel(model), Om=Om), TSdata(model))
+   l(toSSChol(TSmodel(model), Om=Om), TSdata(model))
   }
 
-to.SSChol.TSmodel <- function(model, Om=diag(1,nseriesOutput(model)), ...)
+toSSChol.TSmodel <- function(model, Om=diag(1,nseriesOutput(model)), ...)
 { #  (... further arguments, currently disregarded)
- # convert to a  non.innovations SS  representation using a Cholesky 
+ # convert to a  nonInnovations SS  representation using a Cholesky 
 #  decomposition of Om (the cov of the output noise). 
 # Om should be an estimate of the output noise, such as returned 
 #  in $estimates$cov of l.SS or l.ARMA.
 # This assumes that the noise processes in the arbitrary SS representation 
 # are white and uncorrelated.
- if (!is.SS(model))  model <- to.SS(model)
+ if (!is.SS(model))  model <- toSS(model)
  if (is.innov.SS(model)) 
    {model$R <-t(chol(Om) )  # Om = RR'
     model$Q <- model$K %*% model$R
     model$K <- NULL
    }  
- classed(model, c( "non.innov","SS","TSmodel" ) )  # bypass constructor
+ classed(model, c( "nonInnov","SS","TSmodel" ) )  # bypass constructor
 }
 
 
-to.ARMA <- function(model, ...) UseMethod("to.ARMA")
+toARMA <- function(model, ...) UseMethod("toARMA")
 
-to.ARMA.TSestModel <- function(model, ...) 
-	l(to.ARMA(TSmodel(model), ...), TSdata(model))
+toARMA.TSestModel <- function(model, ...) 
+	l(toARMA(TSmodel(model), ...), TSdata(model))
 
-to.ARMA.ARMA <- function(model, ...) model
+toARMA.ARMA <- function(model, ...) model
 
-to.ARMA.SS <- function(model, fuzz=1e-10, ...)
+toARMA.SS <- function(model, fuzz=1e-10, ...)
 { #  (... further arguments, currently disregarded)
   # convert to an ARMA representation by Cayley Hamilton 
   #  (not very parsimonious)
   #ref. Aoki and Havenner, Econometric Reviews v.10,No.1, 1991, p13.
-    if (is.non.innov.SS(model)) model <- to.SS.innov(model)
+    if (is.nonInnov.SS(model)) model <- toSSinnov(model)
     FF<-model$F
     G <-model$G
     H <-model$H
@@ -1161,7 +1161,7 @@ to.ARMA.SS <- function(model, fuzz=1e-10, ...)
     A <- array(NA,c(1+n,p,p))
     A[1,,] <-diag(1,p)
     for (i in 1:n) A[i+1,,] <- diag(-poly[i],p)
-    if(any(is.na(A))) stop("error in calculation of A in to.ARMA.")
+    if(any(is.na(A))) stop("error in calculation of A in toARMA.")
 
 #                                       i
 #            Fn [i,,] corresponds to   F    
@@ -1182,7 +1182,7 @@ to.ARMA.SS <- function(model, fuzz=1e-10, ...)
        {B[i+1, , ] <- HFnK[i+1, , ]
         for (j in 1:i) B[i+1, , ] <- B[i+1, , ] - poly[j] *  HFnK[i+1-j, , ]
        }
-    if(any(is.na(B))) stop("error in calculation of B in to.ARMA.")
+    if(any(is.na(B))) stop("error in calculation of B in toARMA.")
 
     if (m == 0) C <- NULL
     else
@@ -1195,9 +1195,9 @@ to.ARMA.SS <- function(model, fuzz=1e-10, ...)
          {C[i,,] <- HFnG[i,,]
           for (j in 1:(i-1)) C[i,,] <- C[i,,]-poly[j]*HFnG[i-j,,]
          }
-       if(any(is.na(C))) stop("error in calculation of C in to.ARMA.")
+       if(any(is.na(C))) stop("error in calculation of C in toARMA.")
       }
- fix.constants(ARMA(A=A,B=B,C=C, input.names =  seriesNamesInput(model),
+ fixConstants(ARMA(A=A,B=B,C=C, input.names =  seriesNamesInput(model),
                   output.names = seriesNamesOutput(model)), fuzz=fuzz)
 }
 
@@ -1214,12 +1214,12 @@ to.ARMA.SS <- function(model, fuzz=1e-10, ...)
 
 ############################################################
 
-acf.M <- function(obj, ...) 
+acfM <- function(obj, ...) 
 # calculate a matrix with partitions [M0|...|Mi|...|Ml] giving the cov,
 #  including the exogenous series and return as first block row of Hankel.
-UseMethod("acf.M")
+UseMethod("acfM")
 
-acf.M.TSdata <- function(obj, lag=round(6*log(periods(obj))), 
+acfM.TSdata <- function(obj, lag=round(6*log(periods(obj))), 
            type ="covariance", sub.mean=TRUE, ...)
 {#  (... further arguments, currently disregarded)
  #Estimate auto covariances from data and return as first block row of Hankel.
@@ -1232,10 +1232,10 @@ acf.M.TSdata <- function(obj, lag=round(6*log(periods(obj))),
  #     for Aoki's technique.  This will reverse the order of y and u!!!!
  # if type == "correlation" the result is scaled to give autocorrelations.
   data <- freeze(obj)
-  p <- ncol(output.data(data))
+  p <- ncol(outputData(data))
   m <- nseriesInput(data)
   if (is.null(m)) m <-0
-  d <- cbind(output.data(data),input.data(data))
+  d <- cbind(outputData(data),inputData(data))
   sampleT <-periods(data)
   if (sub.mean) d <- d- t(matrix(apply(d,2,mean),dim(d)[2],sampleT))
 #  if (type == "correlation") d <- d %*% diag(1/diag(t(d)%*%d/sampleT)^.5)
@@ -1254,9 +1254,9 @@ acf.M.TSdata <- function(obj, lag=round(6*log(periods(obj))),
   M
 }
 
-acf.M.TSestModel <- function(obj, ...) acf.M(TSmodel(obj), ...)
+acfM.TSestModel <- function(obj, ...) acfM(TSmodel(obj), ...)
 
-acf.M.TSmodel <- function(obj, lag=NULL, type ="covariance", Psi=NULL, ...)
+acfM.TSmodel <- function(obj, lag=NULL, type ="covariance", Psi=NULL, ...)
 {#  (... further arguments, currently disregarded)
  # Construct a matrix with partitions [M0|...|Mi] giving the theoretical cov calculated from 
  #  the model, including the exogenous parameters and return as first block row of Hankel.
@@ -1270,7 +1270,7 @@ acf.M.TSmodel <- function(obj, lag=NULL, type ="covariance", Psi=NULL, ...)
  #     for Aoki's technique.  This will reverse the order of y and u!!!!
  # if type == "correlation" the result is scaled to give autocorrelations.
  
-if (!is.SS(model)) model <- to.SS(obj) else model <- obj
+if (!is.SS(model)) model <- toSS(obj) else model <- obj
 if(is.null(Psi)) Psi <- diag(1,dim(model$H)[1])
 if(is.null(lag)) lag <- 3*dim(model$F)[1]
 cat (" Warning: Cov generation has not been tested(and doesn't work).\n")
@@ -1369,9 +1369,9 @@ Riccati <- function(A, B, fuzz=1e-10, iterative=FALSE)
 }
 
 
-markov.parms <- function(model, blocks=NULL) 
+markovParms <- function(model, blocks=NULL) 
 {if (is.TSestModel(model)) model <- TSmodel(model)
- if  (!is.TSmodel(model)) stop("markov.parms expecting a TSmodel.")
+ if  (!is.TSmodel(model)) stop("markovParms expecting a TSmodel.")
  if ( is.ARMA(model))
   #  M ={ Mi }={ Ci-1|Bi| -Ai}, i=2,...,k. k=max(a,b,cc). Assumes I=A[1,,]=B[1,,]
   {A <- model$A
@@ -1429,7 +1429,7 @@ else if ( is.SS(model))
         stopp <- (i>3) & ( max(abs(FnGK)) < 1e-15)
        }
   }
-else stop("markov.parms requires an ARMA or SS model.")
+else stop("markovParms requires an ARMA or SS model.")
 M       
 }
 
@@ -1679,21 +1679,21 @@ nseriesOutput.ARMA <- function(x){dim(x$A)[2] }
 nseriesOutput.TSestModel <- function(x){nseriesOutput(x$data)}
 
 
-check.consistent.dimensions <- function(obj1, obj2=NULL)
+checkConsistentDimensions <- function(obj1, obj2=NULL)
    # check data & model dimensions
-   UseMethod("check.consistent.dimensions")
+   UseMethod("checkConsistentDimensions")
    
-check.consistent.dimensions.TSdata <- function(obj1, obj2=NULL)
+checkConsistentDimensions.TSdata <- function(obj1, obj2=NULL)
   {if(is.null(obj2))
      stop("A TSmodel must be supplied as the second argument to this method.")
-   check.consistent.dimensions(obj2, obj1) #(data,model) -> (model, data)
+   checkConsistentDimensions(obj2, obj1) #(data,model) -> (model, data)
    }
-check.consistent.dimensions.TSestModel <- function(obj1, obj2=NULL)
+checkConsistentDimensions.TSestModel <- function(obj1, obj2=NULL)
    {if(is.null(obj2)) obj2 <- obj1$data
-    check.consistent.dimensions(obj1$model, obj2)
+    checkConsistentDimensions(obj1$model, obj2)
    }
 
-check.consistent.dimensions.SS <- function(obj1, obj2=NULL) # (model, data)
+checkConsistentDimensions.SS <- function(obj1, obj2=NULL) # (model, data)
  {m <-dim(obj1$G)[2]
   n <-dim(obj1$F)[1]
   p <-dim(obj1$H)[1]
@@ -1722,7 +1722,7 @@ check.consistent.dimensions.SS <- function(obj1, obj2=NULL) # (model, data)
   return(TRUE)
  }
 
-check.consistent.dimensions.ARMA <- function(obj1, obj2=NULL) #(model, data)
+checkConsistentDimensions.ARMA <- function(obj1, obj2=NULL) #(model, data)
  {p <-dim(obj1$A)[2]
   if (p!= dim(obj1$A)[3]) stop("Model A array dim 2 and 3 should be equal.")
   if (p!= dim(obj1$B)[2]) stop("Model B array dim inconsistent with array A.")
@@ -1745,7 +1745,7 @@ check.consistent.dimensions.ARMA <- function(obj1, obj2=NULL) #(model, data)
   return(TRUE)
  }
 
-check.consistent.dimensions.default <- function(obj1, obj2=NULL)
+checkConsistentDimensions.default <- function(obj1, obj2=NULL)
    {stop(paste("No method for obj1ect of class ", dseclass(obj1), "\n"))}
 
 
@@ -1783,8 +1783,8 @@ ARMA <- function(A=NULL, B=NULL, C=NULL, TREND=NULL, description=NULL,
      {if(!is.null( input.names))  seriesNamesInput(model) <- input.names
       if(!is.null(output.names)) seriesNamesOutput(model) <- output.names
      }
-   check.consistent.dimensions(model)
-   set.parameters(model)
+   checkConsistentDimensions(model)
+   setTSmodelParameters(model)
   }
 
 
@@ -1805,15 +1805,15 @@ SS <- function(F.=NULL, G=NULL, H=NULL, K=NULL, Q=NULL, R=NULL, z0=NULL, P0=NULL
    model <- list(F=F., G=G, H=H, K=K, Q=Q, R=R, z0=z0, P0=P0,
                  description=description)
    if (!is.null(model$K)) dseclass(model) <- c("innov","SS","TSmodel" ) else
-   if (!is.null(model$Q)) dseclass(model) <- c( "non.innov","SS","TSmodel") # constructor
+   if (!is.null(model$Q)) dseclass(model) <- c( "nonInnov","SS","TSmodel") # constructor
    else stop("specified stucture is not correct for SS model.")
    if(!is.null(names)) seriesNames(model) <- names
    else
      {if(!is.null( input.names))  seriesNamesInput(model) <-  input.names
       if(!is.null(output.names)) seriesNamesOutput(model) <- output.names
      }
-   check.consistent.dimensions(model)
-   set.parameters(model)
+   checkConsistentDimensions(model)
+   setTSmodelParameters(model)
   }
 
 
@@ -1834,18 +1834,19 @@ is.TSmodel <- function(obj){inherits(obj,"TSmodel")}
 is.TSestModel <- function(obj){inherits(obj,"TSestModel")}
 is.SS <- function(obj){inherits(obj,"SS")}
 is.innov.SS <- function(obj){inherits(obj,"SS")& inherits(obj,"innov")}
-is.non.innov.SS <- function(obj){inherits(obj,"SS")&inherits(obj,"non.innov")}
+is.nonInnov.SS <- function(obj){inherits(obj,"SS")&inherits(obj,"nonInnov")}
 is.ARMA <- function(obj){inherits(obj,"ARMA")}
 
-set.parameters <- function(model)  
-  { # complete parameter info. based on representation info. 
-   set.parameters.TSmodel(TSmodel(model))
-  }
+# complete parameter info. based on representation info. 
 
-set.parameters.TSmodel <- function(model)  
-   UseMethod("set.parameters.TSmodel")
+setTSmodelParameters <- function(model)  
+   UseMethod("setTSmodelParameters")
 
-set.parameters.TSmodel.SS <- function(model) { 
+setTSmodelParameters.default <- function(model)  
+  setTSmodelParameters(TSmodel(model))
+
+
+setTSmodelParameters.SS <- function(model) { 
 
  locateSS <- function(A,Ac,a,I,J,plist)# local function for locating parameters
   {indicate <-  (A==1.0)                # constants
@@ -1893,7 +1894,7 @@ set.parameters.TSmodel.SS <- function(model) {
     if (is.innov.SS(model)) 
       {plist <- locateSS(model$K,model$const.K,"K",n,p,plist)
        # note const.H, etc are logical arrays (if not NULL) to indicate
-       #      parameters which are to remain fixed, so that set.parameters
+       #      parameters which are to remain fixed, so that setTSmodelParameters
        #       knows to put them in const. This feature has not been used much.
       }
     else
@@ -1904,9 +1905,9 @@ set.parameters.TSmodel.SS <- function(model) {
 #    list.add(model, names(plist) ) <- plist
     model[ names(plist) ] <- plist
     model
-} #end set.parameters.SS
+}
 
-set.parameters.TSmodel.ARMA <- function  (model) { 
+setTSmodelParameters.ARMA <- function  (model) { 
 
  locateARMA <- function(A,a,I,J,L,plist){ # local function for locating parameters
   ind <- function(x, i) # equivalent of row and col for higher dim arrays.
@@ -1969,18 +1970,18 @@ set.parameters.TSmodel.ARMA <- function  (model) {
 #       list.add(model, names(plist) ) <- plist
        model[ names(plist) ] <- plist
        model
-} #end set.parameters.ARMA
+}
 
 
-set.arrays <- function(model, coefficients=NULL)  
+setArrays <- function(model, coefficients=NULL)  
   # complete representaion info. based on parameter info.  
-  UseMethod("set.arrays")
+  UseMethod("setArrays")
    
-set.arrays.TSestModel <- function(model, coefficients=NULL)  
- set.arrays(TSmodel(model), coefficients=coefficients) 
+setArrays.TSestModel <- function(model, coefficients=NULL)  
+ setArrays(TSmodel(model), coefficients=coefficients) 
     
-set.arrays.SS <- function(model, coefficients=NULL){
-	# N.B. Dimension and class (innov/ non.innov) info. is assumed accurate
+setArrays.SS <- function(model, coefficients=NULL){
+	# N.B. Dimension and class (innov/ nonInnov) info. is assumed accurate
     if (is.null(coefficients)) coefficients   <- coef(model)
     a.pos  <- model$location
     i.pos  <- model$i
@@ -2053,9 +2054,9 @@ set.arrays.SS <- function(model, coefficients=NULL){
     if(!is.null(model$z0)) model$z0<-z
     if(!is.null(model$P0)) model$P0<-P
     model 
-} #end set.arrays.SS
+} #end setArrays.SS
 
-set.arrays.ARMA <- function(model, coefficients=NULL) { 
+setArrays.ARMA <- function(model, coefficients=NULL) { 
 	# N.B. Dimension and class info. is assumed accurate
        if (is.null(coefficients)) coefficients   <- coef(model)
        a.pos  <- model$location
@@ -2103,7 +2104,7 @@ set.arrays.ARMA <- function(model, coefficients=NULL) {
       if(all(TREND==0)) model$TREND <- NULL
       else              model$TREND <-TREND
       model 
-} #end set.arrays.ARMA
+} #end setArrays.ARMA
 
 
 ############################################################
@@ -2140,7 +2141,7 @@ printTestValue <- function(x, digits=16)
 
 simulate <- function(model, ...)UseMethod("simulate")
 
-simulate.TSestModel <- function(model, input=input.data(model),
+simulate.TSestModel <- function(model, input=inputData(model),
 			sd=NULL, SIGMA=NULL, ...)
   {if (is.null(sd) & is.null(SIGMA)) SIGMA <- model$estimates$cov
    simulate(TSmodel(model), input=input, sd=sd, SIGMA=SIGMA, ...)
@@ -2163,7 +2164,7 @@ simulate.SS <- function(model, input=NULL,
 #  see also the description in l.SS
 # input=u must be specified if the matrix model$G is not NULL.
 # If noise is NULL then an normal noise will be generated.
-# This will be N(0,I) in the  non.innovation case (but Q and R 
+# This will be N(0,I) in the  nonInnovation case (but Q and R 
 # allow for arbitrary noise). If Q is not square (i.e. the system
 # noise has a dimension less than the state dimension) then it is
 # padded with zeros, so generated noise of higher dimension has no
@@ -2173,7 +2174,7 @@ simulate.SS <- function(model, input=NULL,
 # If noise is 
 # specified it should be a list with elements $w0, $w and $e.
 # $w0 is the noise at time zero (a p-vector of w(0) for innovations
-# models and an n-vector of e(0) for  non.innovations models).
+# models and an n-vector of e(0) for  nonInnovations models).
 # If $w0 is a matrix (as for ARMA simulations) then it is set to a
 # vector of zeros. This provides compatability with VAR models (ARMA
 # models with no lags in B). In general ARMA and SS simulations will
@@ -2182,7 +2183,7 @@ simulate.SS <- function(model, input=NULL,
 # $w should be a sampleT by p matrix giving the output or 
 # innovations noise or t=1 to sampleT. 
 # For innovations models$e should be NULL.
-# For  non.innovations models $e should be a sampleT by n matrix 
+# For  nonInnovations models $e should be a sampleT by n matrix 
 # giving the system noise for t=1 to sampleT.
 # sampleT will be dim($w)[1] if noise is specified.
 
@@ -2208,8 +2209,8 @@ if (!is.SS(model)) stop("simulate.SS expecting an SS TSmodel.")
     R <-    model$R
    }
  
- if(is.null(rng)) rng <- set.RNG() # returns setting so don't skip if NULL
- else        {old.rng <- set.RNG(rng);  on.exit(set.RNG(old.rng))  }
+ if(is.null(rng)) rng <- setRNG() # returns setting so don't skip if NULL
+ else        {old.rng <- setRNG(rng);  on.exit(setRNG(old.rng))  }
  
 
 set.ts <- TRUE             
@@ -2309,7 +2310,8 @@ else set.ts <-  FALSE
                          as.double(K), 
                          as.double(Q),      
                          as.double(R),    
-                         as.integer(is.innov.SS(model)), DUP=.DSEDUP
+                         as.integer(is.innov.SS(model)), DUP=.DSEDUP,
+			 PACKAGE="dse1"
 			 )[c("y","state")]
     y <- r$y
     state <- r$state
@@ -2432,7 +2434,9 @@ if (is.null(sampleT)) sampleT<-noise$sampleT
                          as.double(A),
                          as.double(B),   
                          as.double(C),
-                         as.double(TREND), DUP=.DSEDUP) [["y"]]
+                         as.double(TREND), DUP=.DSEDUP,
+			 PACKAGE="dse1"
+			 ) [["y"]]
 
     if (m==0) 
       {input  <- NULL
@@ -2510,7 +2514,7 @@ if (is.null(sampleT)) sampleT<-noise$sampleT
 #    c(const+like1+like2, const, like1,like2)
 #  }
 
-residual.stats <- function(pred, data, sampleT=nrow(pred), warn=TRUE)
+residualStats <- function(pred, data, sampleT=nrow(pred), warn=TRUE)
 {  # pred and data should be matrices (model prediction and output data).
    # sampleT allows for the possibility that a sub-sample of data 
    #   was used for estimation.
@@ -2549,7 +2553,7 @@ residual.stats <- function(pred, data, sampleT=nrow(pred), warn=TRUE)
 
 
 
-sum.sqerror <- function(coefficients, model=NULL, data=NULL, error.weights=NULL) 
+sumSqerror <- function(coefficients, model=NULL, data=NULL, error.weights=NULL) 
 { #  this returns only the sum of the weighted squared errors (eg.for optimization).
 #  If model, data or error.weights are not supplied the program looks for
 #    a global variable named Obj.Func.ARGS with corresponding elements.
@@ -2557,7 +2561,7 @@ sum.sqerror <- function(coefficients, model=NULL, data=NULL, error.weights=NULL)
  if ( is.null(model)) stop("model missing") # model <- Obj.Func.ARGS$model
  if ( is.null(data))  stop("data missing") # data  <- Obj.Func.ARGS$data
  if ( is.null(error.weights)) stop("error.weights missing") #error.weights <- Obj.Func.ARGS$error.weights 
- sum(l(set.arrays(model,coefficients=coefficients), data,
+ sum(l(setArrays(model,coefficients=coefficients), data,
        result="weighted.sqerror",error.weights=error.weights))
 }
 
@@ -2592,7 +2596,7 @@ model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
 if (!is.ARMA(model)) stop("l.ARMA expecting an ARMA TSmodel.")
 
 dat <- freeze(obj2)
-if(!check.consistent.dimensions(model,dat)) stop("dimension error")
+if(!checkConsistentDimensions(model,dat)) stop("dimension error")
 if (is.null(sampleT))  sampleT  <- periodsOutput(dat)
 if (is.null(predictT)) predictT <- sampleT
 if (sampleT > predictT) stop("sampleT cannot exceed predictT.")
@@ -2600,12 +2604,12 @@ if (sampleT > periodsOutput(dat)) stop("sampleT cannot exceed length of data.")
 if (0 != nseriesInput(dat))
   {if (periodsInput(dat) < predictT)
       stop("input data must be at least as long as requested prediction.")
-   if (any(is.na(input.data(dat)))) stop("input data cannot contain NAs.")
+   if (any(is.na(inputData(dat)))) stop("input data cannot contain NAs.")
   }
-if (any(is.na(output.data(dat)))) stop("output data cannot contain NAs.")
+if (any(is.na(outputData(dat)))) stop("output data cannot contain NAs.")
 
-u <- input.data(dat)
-y <- output.data(dat)
+u <- inputData(dat)
+y <- outputData(dat)
 A<-    model$A
 B <-   model$B
 C <-   model$C
@@ -2660,7 +2664,9 @@ if (compiled)
                          as.double(matrix(0,is,is)),  # scratch array
                          as.double(matrix(0,is,is)),  # scratch array
                          as.double(rep(0,is)),         # scratch array
-                         DUP=.DSEDUP) [c("pred", "weighted.sqerror")]
+                         DUP=.DSEDUP,
+			 PACKAGE="dse1"
+			 ) [c("pred", "weighted.sqerror")]
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
   }
 else   # start S version
@@ -2742,11 +2748,11 @@ else   # start S version
    r<-list(pred=pred,   weighted.sqerror=wt.err)
   } # end of S version
 
-tf <- tfTruncate(tframe(output.data(dat)), end=predictT)
+tf <- tfTruncate(tframe(outputData(dat)), end=predictT)
 tframe(r$pred) <- tf
 if (! is.null(r$weighted.sqerror))  tframe(r$weighted.sqerror) <- tf
 if((!is.null(result)) && (result == "pred")) return(r$pred)
-r <- append(residual.stats(r$pred, y, sampleT, warn=warn), 
+r <- append(residualStats(r$pred, y, sampleT, warn=warn), 
         list(error.weights=error.weights, weighted.sqerror=r$weighted.sqerror))
 
 if (return.debug.info) 
@@ -2758,7 +2764,7 @@ if (return.debug.info)
 if ( is.null(result)) return(classed( # TSestModel constructor (l.ARMA)
               list(estimates=r, data=dat, model=model), "TSestModel"))
 else 
-   {if (result =="like") return(r$like[1]) # neg.log.like. from residual.stats
+   {if (result =="like") return(r$like[1]) # neg.log.like. from residualStats
     else { return(r[[result]]) }
    }
 stop("should never get to here in l.ARMA.")
@@ -2827,7 +2833,7 @@ model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
 if (!is.SS(model)) stop("l.SS expecting an SS TSmodel.")
 
 data <- freeze(obj2)
-if(!check.consistent.dimensions(model, data)) stop("dimension error.\n")
+if(!checkConsistentDimensions(model, data)) stop("dimension error.\n")
 if (is.null(sampleT))  sampleT  <- periodsOutput(data)
 if (is.null(predictT)) predictT <- sampleT
 if (sampleT > predictT) stop("sampleT cannot exceed predictT.\n")
@@ -2836,9 +2842,9 @@ if (sampleT > periodsOutput(data))
 if (0 != nseriesInput(data))
   {if (periodsInput(data) < predictT)
       stop("input data must be at least as long as requested prediction.\n")
-   if (any(is.na(input.data(data)))) stop("input data cannot contain NAs.\n")
+   if (any(is.na(inputData(data)))) stop("input data cannot contain NAs.\n")
   }
-if (any(is.na(output.data(data)))) stop("output data cannot contain NAs.\n")
+if (any(is.na(outputData(data)))) stop("output data cannot contain NAs.\n")
 
 gain <- is.innov.SS(model)
 if (gain & return.track) 
@@ -2856,7 +2862,7 @@ if (is.null(model$G))
 else
   {m <- dim(model$G)[2]
    G <-model$G
-   u <- input.data(data)
+   u <- inputData(data)
   } 
 if (gain)            # K or Q,R can be NUll in model, which messes up compiled
    {K <-    model$K
@@ -2898,7 +2904,7 @@ if (compiled)
                   predictT=as.integer(predictT), 
                   as.integer(periodsOutput(data)),  
                   as.double(u), 
-                  as.double(output.data(data)),  
+                  as.double(outputData(data)),  
                   as.double(FF),   
                   as.double(G),   
                   as.double(H),  
@@ -2908,11 +2914,13 @@ if (compiled)
                   as.integer(gain),
                   as.double(z),
                   as.double(P), 
-		  DUP=.DSEDUP) [c("pred","state","track","weighted.sqerror")]
+		  DUP=.DSEDUP,
+		  PACKAGE="dse1"
+		  ) [c("pred","state","track","weighted.sqerror")]
    if (all(0==error.weights)) r$weighted.sqerror <- NULL
   }
 else                  #  S version
-  {y <- output.data(data)
+  {y <- outputData(data)
    vt    <-  rep(0,p)     # initial prediction error
    pred  <- matrix(0,predictT,p) 
    wt.err <- NULL
@@ -2969,7 +2977,7 @@ else                  #  S version
    r<- list(pred=pred, state=state, track=track, weighted.sqerror=wt.err) 
   }   # end of S version
 
-tf <- tfTruncate(tframe(output.data(data)), end=predictT)
+tf <- tfTruncate(tframe(outputData(data)), end=predictT)
 tframe(r$pred) <- tf
 if (! is.null(r$weighted.sqerror))  tframe(r$weighted.sqerror) <- tf
 
@@ -2986,7 +2994,7 @@ if (return.state | return.track)
      }
   }
 if((!is.null(result)) && (result == "pred")) return(r$pred)
-r <- append(residual.stats(r$pred, output.data(data), sampleT, warn=warn), 
+r <- append(residualStats(r$pred, outputData(data), sampleT, warn=warn), 
         list(error.weights=error.weights, weighted.sqerror=r$weighted.sqerror))
 
 if (return.debug.info) 
@@ -2998,7 +3006,7 @@ if ( is.null(result))
     return( classed(r, "TSestModel")) # constructor (l.SS)
    }
 else 
-   {if (result =="like") return(r$like[1]) # neg.log.like. from residual.stats
+   {if (result =="like") return(r$like[1]) # neg.log.like. from residualStats
     else { return(r[[result]]) }
    }
 "should never get to here in l.SS"
@@ -3026,7 +3034,7 @@ smoother <- function(model, data, compiled=.DSECOMPILED){
     estimates <- model$estimates
     model     <- TSmodel(model)
    }
- if  (!is.non.innov.SS(model)) stop("smoother expecting an non.innov.SS TSmodel.")
+ if  (!is.nonInnov.SS(model)) stop("smoother expecting an nonInnov.SS TSmodel.")
  if  (is.null(filter$state) |  is.null(filter$track)) 
    {filter <- l(model,data, return.state=TRUE,return.track=TRUE)
     estimates <- filter$estimates
@@ -3040,7 +3048,7 @@ smoother <- function(model, data, compiled=.DSECOMPILED){
 else
   {m <- dim(model$G)[2]
    G <-model$G
-   u <- input.data(data)
+   u <- inputData(data)
   } 
 sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
  QQ <- model$Q %*% t(model$Q)           
@@ -3051,7 +3059,7 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
                          state=filter$state,     # state, 
                          track=filter$track,     #trackerror
                          as.double(u),           # input
-                         as.double(output.data(data)), # output
+                         as.double(outputData(data)), # output
                          as.integer(n),                #n
                          as.integer(m),                #m
                          as.integer(dim(model$H)[1]),  #p 
@@ -3065,7 +3073,9 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
                          as.double(matrix(0,n,n)),   # scratch array
                          as.double(matrix(0,n,n)),   # scratch array
                          as.double(rep(0,n)),         # scratch array
-                         DUP=.DSEDUP) [c("state","track")]
+                         DUP=.DSEDUP,
+			 PACKAGE="dse1"
+			 ) [c("state","track")]
    }
  else   # S version
    {FF<-  model$F
@@ -3081,7 +3091,7 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
       {K <- filter$track[Time,,] %*% t(H) %*% 
               solve(H %*% filter$track[Time,,] %*% t(H) + RR) #(A5)
        zt <- filter$state[Time,] + K %*% 
-       		(output.data(data)[Time,] - H %*% filter$state[Time,]) #(A6)
+       		(outputData(data)[Time,] - H %*% filter$state[Time,]) #(A6)
        if (m!=0) zt <- zt - G %*% u[Time+1,]
        P <- filter$track[Time,,] - K %*% H %*% filter$track[Time,,]  #P(t|t)  (A7)
        P <- (P+t(P))/2 #force symmetry to avoid rounding problems
@@ -3096,8 +3106,8 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
      r <- list(state=sm, track=tr) 
     }  # end S version
  
-  state <- tframed(r$state, list(start=start(output.data(data)),
-              frequency= frequency(output.data(data))), 
+  state <- tframed(r$state, list(start=start(outputData(data)),
+              frequency= frequency(outputData(data))), 
               names=dimnames(filter$state)[[2]]) 
   r <-(list(estimates=estimates, data=data, model=model, 
             filter=filter, smooth=list(state=state, track=r$track) ) )
@@ -3114,12 +3124,12 @@ sampleT  <-min(nrow(u), nrow(filter$state), dim(filter$track)[1])
 ############################################################
 
 
-est.VARX.ls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
+estVARXls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
    standardize=FALSE, unstandardize=TRUE, max.lag=NULL, 
    trend=FALSE, lag.weight=1.0, warn=TRUE) 
 {# Estimate VAR model with exogenous variable using lsfit(). 
  # Returns a TSestModel.
- # This is very similar to estimating Markov parameters (see est.SS.Mittnik).
+ # This is very similar to estimating Markov parameters (see estSSMittnik).
  # Residuals,etc, are calculated by evaluating the estimated model with ARMA.
  # Data should be of class TSdata.
  # lag.weight is an exponential weight applied to lags. It should be in (0,1].
@@ -3128,31 +3138,31 @@ est.VARX.ls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
    names <- seriesNames(data)
    m <-  nseriesInput(data)
    p <- nseriesOutput(data)
-   missing.data <- any(is.na(output.data(data)))
+   missing.data <- any(is.na(outputData(data)))
    if (0 != m) { # ensure same time window
-	input.data(data) <- tfwindow(input.data(data),
+	inputData(data) <- tfwindow(inputData(data),
               start.=startOutput(data), end.=endOutput(data), warn=FALSE)
-	output.data(data) <- tfwindow(output.data(data),
+	outputData(data) <- tfwindow(outputData(data),
               start.=startInput(data), end.=endInput(data), warn=FALSE)
-	missing.data <- any(missing.data, is.na(input.data(data)))
+	missing.data <- any(missing.data, is.na(inputData(data)))
    }
    N <- periodsOutput(data)
    if (standardize)
-     {svd.cov <- La.svd(var(output.data(data)))
+     {svd.cov <- La.svd(var(outputData(data)))
       scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
       data <- scale(data, scale=list(output=scalefac))
      }
    if (subtract.means)
     {if(m!=0)
-       {input.means<-apply(input.data(data),2, mean)
-        input.data(data)<-input.data(data)-t(matrix( input.means, m,N))
+       {input.means<-apply(inputData(data),2, mean)
+        inputData(data)<-inputData(data)-t(matrix( input.means, m,N))
        }
-     output.means <- apply(output.data(data),2, mean)
-     output.data(data)  <- output.data(data) - t(matrix(output.means, p,N))
+     output.means <- apply(outputData(data),2, mean)
+     outputData(data)  <- outputData(data) - t(matrix(output.means, p,N))
     }
       # shift input to give feedthrough in one period
-   if (m != 0) {z <- cbind(input.data(data)[2:N,],output.data(data)[1:(N-1),])}
-   else z <- output.data(data)
+   if (m != 0) {z <- cbind(inputData(data)[2:N,],outputData(data)[1:(N-1),])}
+   else z <- outputData(data)
 
  # The matrix Past is blocks of data:
  #  [in | out-1 | in-1 | out-2 | ... | in-max.lag | out-max.lag-1 ]
@@ -3161,7 +3171,7 @@ est.VARX.ls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
    Past <- matrix(NA,N-max.lag,(p+m)*(max.lag))
    for (i in 0:(max.lag-1)) 
       Past[,(1+(m+p)*i):((m+p)*(1+i))] <-z[(max.lag-i):(N-1-i),] /(lag.weight^i)
-   fit <- lsfit(Past,output.data(data)[(max.lag+1):N,,drop=FALSE],intercept=trend)
+   fit <- lsfit(Past,outputData(data)[(max.lag+1):N,,drop=FALSE],intercept=trend)
    if(missing.data)
      fit.res <-TSdata(output=fit$residual) #used only in the case of missing data for scaling
    M <- t(fit$coef)
@@ -3178,16 +3188,16 @@ est.VARX.ls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
      }
    if (subtract.means & re.add.means)
     {if(m!=0) 
-       {input.data(data)<-input.data(data) + t(matrix( input.means, m,N))
+       {inputData(data)<-inputData(data) + t(matrix( input.means, m,N))
         Past<-Past +
            t(matrix(c(input.means,output.means),(p+m)*(max.lag),N-max.lag))
        }
      else
         Past <-Past+t(matrix(output.means, (p+m)*(max.lag),N-max.lag))
-     output.data(data)  <- output.data(data) + t(matrix(output.means, p,N))
+     outputData(data)  <- outputData(data) + t(matrix(output.means, p,N))
      # and correct estimation for non-zero mean:
-     M<-M+est.VARX.mean.correction(Past, 
-                       output.data(data)[(max.lag+1):N,,drop=FALSE],M, warn=warn)
+     M<-M+estVARXmean.correction(Past, 
+                       outputData(data)[(max.lag+1):N,,drop=FALSE],M, warn=warn)
     }
    A <- array(NA, c(1 + max.lag, p, p))
    A[1,,] <-diag(1, p)
@@ -3195,14 +3205,14 @@ est.VARX.ls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
           A[2+i,,] <-  -M[,(m+1+(m+p)*i):(m+p+(m+p)*i),drop=FALSE] %*% 
                                  diag(lag.weight^i,p)
    if (m==0) C <- NULL   # no exog. variable
-   else               # NB. there is an implicit shift in input.data(data)
+   else               # NB. there is an implicit shift in inputData(data)
       {C <-array(NA,c(max.lag,p,m))
        for (i in 0:(max.lag-1)) 
          C[1+i,,] <- M[,(1+(m+p)*i):(m+(m+p)*i),drop=FALSE]  %*% 
                                  diag(lag.weight^i,m)
       }
    B <- array(diag(1,p),c(1,p,p))
-   model <-ARMA( description="model estimated by est.VARX.ls",
+   model <-ARMA( description="model estimated by estVARXls",
               A=A,B=B,C=C,TREND=TREND)
    seriesNames(model) <- seriesNames(data)
 
@@ -3223,13 +3233,13 @@ est.VARX.ls <- function(data, subtract.means=FALSE, re.add.means=TRUE,
 
 fake.TSestModel.missing.data <- function(model,data, residual, max.lag)
   {pred <- rbind(matrix(NA,max.lag,nseriesOutput(data)),residual) + 
-                                                           output.data(data)
-   r <- list(estimates = residual.stats(pred, output.data(data), warn=warn),
+                                                           outputData(data)
+   r <- list(estimates = residualStats(pred, outputData(data), warn=warn),
                data = data, model = model)
    classed(r, "TSestModel") # fake missing data constructor
   }
 
-est.VARX.mean.correction <- function(X, y, bbar,
+estVARXmean.correction <- function(X, y, bbar,
                      fuzz=sqrt(.Machine$double.eps), warn=TRUE)
 {# correction for model estimated with means subtracted
  Xbar <- t(array(apply(X, 2, mean), rev(dim(X))))
@@ -3247,7 +3257,7 @@ est.VARX.mean.correction <- function(X, y, bbar,
 }
 
 
-est.VARX.ar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
+estVARXar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
       standardize=FALSE, unstandardize=TRUE, aic=TRUE, max.lag=NULL, 
       method="yule-walker", warn=TRUE) 
 {
@@ -3256,37 +3266,37 @@ est.VARX.ar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
    p <- nseriesOutput(data)
    N <- periodsOutput(data)
    if (standardize)
-     {svd.cov <- La.svd(var(output.data(data)))
+     {svd.cov <- La.svd(var(outputData(data)))
       scalefac <- svd.cov$u %*% diag(1/svd.cov$d^.5, ncol=p)
       data <- scale(data, scale=list(output=scalefac))
      }
-   if(m!=0) input.means<-apply(input.data(data),2, mean)
-   output.means <- apply(output.data(data),2, mean)
+   if(m!=0) input.means<-apply(inputData(data),2, mean)
+   output.means <- apply(outputData(data),2, mean)
    if (subtract.means)
-    {if(m!=0) input.data(data)<-input.data(data)-t(matrix( input.means, m,N))
-     output.data(data)  <- output.data(data) - t(matrix(output.means, p,N))
+    {if(m!=0) inputData(data)<-inputData(data)-t(matrix( input.means, m,N))
+     outputData(data)  <- outputData(data) - t(matrix(output.means, p,N))
     }
-   if (m==0)  zdata <- output.data(data)  # no exog. variable
-   else       zdata <- cbind(input.data(data),output.data(data))
-         # NB. there is an implicit shift in input.data(data) in the line above
+   if (m==0)  zdata <- outputData(data)  # no exog. variable
+   else       zdata <- cbind(inputData(data),outputData(data))
+         # NB. there is an implicit shift in inputData(data) in the line above
          #   because ar estimates lag parameters,
          # so C[1,,] is for one lag in u.
    if (is.null(max.lag))  AC<- DSE.ar(zdata, aic=aic, method=method)
    else                   AC<- DSE.ar(zdata, aic=aic, method=method, order.max=max.lag)
    if (re.add.means)
      {if (subtract.means)
-        {if(m!=0) input.data(data)<-input.data(data) + t(matrix( input.means, m,N))
-         output.data(data)  <- output.data(data) + t(matrix(output.means, p,N))
+        {if(m!=0) inputData(data)<-inputData(data) + t(matrix( input.means, m,N))
+         outputData(data)  <- outputData(data) + t(matrix(output.means, p,N))
         }
       # and correct estimation for non-zero mean:
       max.lag <- AC$order
       if (max.lag==0) stop("all lags eliminated by AIC order selection.")
-      if (m==0)  zdata <- output.data(data)  # no exog. variable
-      else       zdata <- cbind(input.data(data),output.data(data))
+      if (m==0)  zdata <- outputData(data)  # no exog. variable
+      else       zdata <- cbind(inputData(data),outputData(data))
       Past <- matrix(NA,N-max.lag,(p+m)*(max.lag))
       for (i in 0:(max.lag-1)) 
          Past[,(1+(m+p)*i):((m+p)*(1+i))] <-zdata[(max.lag-i):(N-1-i),]
-      M <-est.VARX.mean.correction(Past, zdata[(max.lag+1):N,,drop=FALSE],
+      M <-estVARXmean.correction(Past, zdata[(max.lag+1):N,,drop=FALSE],
                   matrix(aperm(AC$ar, c(2,3,1)),m+p,(m+p)*max.lag), warn=warn)
       AC$ar<-AC$ar + aperm(array(M,c(m+p,m+p,max.lag)), c(3,1,2))
      }
@@ -3306,7 +3316,7 @@ est.VARX.ar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
      }
    B <- array(diag(1,p),c(1,p,p))
    model <-ARMA(
-            description="model estimated by est.VARX.ar",
+            description="model estimated by estVARXar",
             A=A,B=B,C=C, 
             names = seriesNames(data) )
  
@@ -3318,12 +3328,12 @@ est.VARX.ar <- function(data, subtract.means=FALSE,  re.add.means=TRUE,
    l(model, data, warn=warn)
 }
 
-est.SS.from.VARX <- function(data, warn=TRUE, ...){
+estSSfromVARX <- function(data, warn=TRUE, ...){
 	# estimate a VARX model and convert to state space
 	#  estimate a nested-balanced state space model by svd a la Mittnik from
 	#   least squares estimate of VAR coefficents.
-	model <-est.VARX.ls(data, warn=warn, ...)
-	l(to.SS(model$model), model$data, warn=warn)
+	model <-estVARXls(data, warn=warn, ...)
+	l(toSS(model$model), model$data, warn=warn)
 }
 
 
@@ -3335,8 +3345,8 @@ est.SS.from.VARX <- function(data, warn=TRUE, ...){
 ############################################################################
 
 
-est.wt.variables <- function(data, variable.weights,
-                        estimation="est.VARX.ls", estimation.args=NULL)
+estWtVariables <- function(data, variable.weights,
+                        estimation="estVARXls", estimation.args=NULL)
 { if (is.matrix(variable.weights))
     {if (any(La.svd(variable.weights)$d == 0))  
        stop("variable.weights transformation must be non singular.")
@@ -3352,31 +3362,31 @@ est.wt.variables <- function(data, variable.weights,
            freeze(scale(data, scale=list(output=inv.wts)))), estimation.args))
  model <-scale(TSmodel(scaled.model), scale=list(output=variable.weights))
  model$description <- 
-    paste("model estimated by est.wt.variables with", estimation)
+    paste("model estimated by estWtVariables with", estimation)
  l(model, data)
 }
 
-est.max.like <- function(obj1, obj2=NULL, ...) UseMethod("est.max.like")
+estMaxLik <- function(obj1, obj2=NULL, ...) UseMethod("estMaxLik")
 
-est.max.like.TSestModel <- function(obj1, obj2=TSdata(obj1), ...) {
-	 # if obj1 is result from a previous est.max.like then the gradient
+estMaxLik.TSestModel <- function(obj1, obj2=TSdata(obj1), ...) {
+	 # if obj1 is result from a previous estMaxLik then the gradient
 	 # hessian and other information should be extracted, but
-	 est.max.like(TSmodel(obj1), obj2, ...) }
+	 estMaxLik(TSmodel(obj1), obj2, ...) }
 
-est.max.like.TSdata <- function(obj1, obj2, ...) 
-	 est.max.like(TSmodel(obj2), obj1, ...) 
+estMaxLik.TSdata <- function(obj1, obj2, ...) 
+	 estMaxLik(TSmodel(obj2), obj1, ...) 
 
-est.max.like.TSmodel <- function(obj1, obj2, 
+estMaxLik.TSmodel <- function(obj1, obj2, 
 	algorithm="optim",
 	algorithm.args=list(method="BFGS", upper=Inf, lower=-Inf, hessian=TRUE),
 	...)
 {# maximum likelihood estimation
  # "nml" algorithm.args=list(hessian=T, iterlim=20, 
- #     dfunc=numerical.grad, line.search="nlm",ftol=1e-5, gtol=1e-3,)
+ #     dfunc=gradNumerical, line.search="nlm",ftol=1e-5, gtol=1e-3,)
  Shape <- obj1
  data <- freeze(obj2)
  func.like <- function(coefficients, Shape,data)
-      {l(set.arrays(Shape, coefficients=coefficients), data, result="like") }
+      {l(setArrays(Shape, coefficients=coefficients), data, result="like") }
 
  if (algorithm=="optim")
     {results <- optim(coef(Shape), func.like, method=algorithm.args$method,
@@ -3384,7 +3394,7 @@ est.max.like.TSmodel <- function(obj1, obj2,
 	lower=algorithm.args$lower, upper=algorithm.args$upper,
 	control=algorithm.args$control, hessian=algorithm.args$hessian,
 	Shape, data) 
-     emodel <- l(set.arrays(Shape, coefficients=results$par),data)
+     emodel <- l(setArrays(Shape, coefficients=results$par),data)
      emodel$est$algorithm <- algorithm
      emodel$est$results <- results
      emodel$est$converged <- results$converged
@@ -3396,7 +3406,7 @@ est.max.like.TSmodel <- function(obj1, obj2,
    {warning("This has not been tested recently (and there have been changes which may affect it.")
     results <-nlm(func.like, coef(Shape), hessian=algorithm.args$hessian, 
     	iterlim=algorithm.args$iterlim)
-    emodel <- l(set.arrays(Shape, coefficients=results$estimate),data)
+    emodel <- l(setArrays(Shape, coefficients=results$estimate),data)
     emodel$est$algorithm <- algorithm
     emodel$est$results <- results
     emodel$est$converged <- results$code <= 2
@@ -3408,7 +3418,7 @@ est.max.like.TSmodel <- function(obj1, obj2,
    {warning("This has not been tested recently (and there have been changes which may affect it.")
      results <-nlmin(func.like, coef(Shape), max.iter=algorithm.args$max.iter, 
      	max.fcal=5*algorithm.args$max.iter, ckfc=0.01)
-     emodel <- l(set.arrays(Shape, coefficients=results$parms),data)
+     emodel <- l(setArrays(Shape, coefficients=results$parms),data)
      emodel$est$algorithm <- algorithm
      emodel$est$results <- results
      emodel$est$converged <- results$converged
@@ -3424,7 +3434,7 @@ est.max.like.TSmodel <- function(obj1, obj2,
 	max.iter=algorithm.args$max.iter, 
 	ftol=algorithm.args$ftol, gtol=algorithm.args$gtol, 
 	line.search=algorithm.args$line.search) 
-     emodel <- l(set.arrays(Shape, coefficients=results$parms),data)
+     emodel <- l(setArrays(Shape, coefficients=results$parms),data)
      emodel$est$algorithm <- algorithm
      emodel$est$results <- results
      emodel$est$converged <- results$converged
@@ -3437,38 +3447,38 @@ est.max.like.TSmodel <- function(obj1, obj2,
 }    
 
 
-est.black.box <- function(data,...)
+estBlackBox <- function(data,...)
 {# call current best black box technique.
-  est.black.box4(data, ...)
+  estBlackBox4(data, ...)
 }
 
 
-est.black.box1 <- function(data,estimation="est.VARX.ls", 
-     reduction="reduction.Mittnik", criterion="taic", trend=FALSE, 
+estBlackBox1 <- function(data,estimation="estVARXls", 
+     reduction="MittnikReduction", criterion="taic", trend=FALSE, 
      subtract.means=FALSE, verbose=TRUE, max.lag=6)
-{if ((estimation!="est.VARX.ls") && (trend) )
-     {cat("Trend estimation only support with est.VARX.ls.\n")
-      cat("Proceeding using est.VARX.ls.\n")
-      estimation<-"est.VARX.ls"
+{if ((estimation!="estVARXls") && (trend) )
+     {cat("Trend estimation only support with estVARXls.\n")
+      cat("Proceeding using estVARXls.\n")
+      estimation<-"estVARXls"
      }
 
- if(estimation=="est.VARX.ls")
-     model <- est.VARX.ls(data,trend=trend, subtract.means=subtract.means, 
+ if(estimation=="estVARXls")
+     model <- estVARXls(data,trend=trend, subtract.means=subtract.means, 
                           max.lag=max.lag)
- else if(estimation=="est.VARX.ar")
-     model <- est.VARX.ar(data, subtract.means=subtract.means, max.lag=max.lag)
- else if(estimation=="est.VARX.ls")
-     model <- est.VARX.ls(data,trend=trend, subtract.means=subtract.means, 
+ else if(estimation=="estVARXar")
+     model <- estVARXar(data, subtract.means=subtract.means, max.lag=max.lag)
+ else if(estimation=="estVARXls")
+     model <- estVARXls(data,trend=trend, subtract.means=subtract.means, 
                         max.lag=max.lag)
- else if(estimation=="est.SS.Mittnik")
-     model <- est.SS.Mittnik(data,max.lag=max.lag, 
+ else if(estimation=="estSSMittnik")
+     model <- estSSMittnik(data,max.lag=max.lag, 
                              subtract.means=subtract.means, normalize=FALSE)
  else
    stop("estimation technique not supported.")
  if (verbose) 
    cat("First VAR model,              lags= ", dim(model$model$A)[1]-1,
        ", -log likelihood = ", model$estimates$like[1], "\n")
- model <- l(to.SS(model),data)
+ model <- l(toSS(model),data)
  n <- dim(model$model$F)[1]
  if (verbose) cat("Equivalent    state space model, n= ", n,
                   ", -log likelihood = ", model$estimates$like[1], "\n")
@@ -3480,33 +3490,33 @@ est.black.box1 <- function(data,estimation="est.VARX.ls",
        cat("Final reduced state space model, n= ", dim(model$model$F)[1],
            ", -log likelihood = ", model$estimates$like[1], "\n")
    }
-  if (verbose &&  dev.cur() != 1 ) check.residuals(model)
+  if (verbose &&  dev.cur() != 1 ) checkResiduals(model)
  model
 }
 
 
-est.SS.Mittnik <- function(data, max.lag=6, n=NULL, 
+estSSMittnik <- function(data, max.lag=6, n=NULL, 
     subtract.means=FALSE, normalize=FALSE)
 { data <- freeze(data)
-  m <- ncol(input.data(data))
+  m <- ncol(inputData(data))
   if(is.null(m))  m <- 0
-  p <- ncol(output.data(data))
-  N <- nrow(output.data(data))
+  p <- ncol(outputData(data))
+  N <- nrow(outputData(data))
   if (subtract.means)
-    {if(m!=0)input.data(data)<-input.data(data)-t(matrix(apply(input.data(data),2, mean), m,N))
-     output.data(data)<- output.data(data) - t(matrix(apply(output.data(data),2, mean), p,N))
+    {if(m!=0)inputData(data)<-inputData(data)-t(matrix(apply(inputData(data),2, mean), m,N))
+     outputData(data)<- outputData(data) - t(matrix(apply(outputData(data),2, mean), p,N))
     }
   if (normalize)
-    {svd.cov <- La.svd(var(output.data(data)))
-     output.data(data) <- output.data(data) %*% svd.cov$u %*% diag(1/svd.cov$d^.5)
+    {svd.cov <- La.svd(var(outputData(data)))
+     outputData(data) <- outputData(data) %*% svd.cov$u %*% diag(1/svd.cov$d^.5)
     }
       # shift input to give feedthrough in one period
-  if (m != 0) {z <- cbind(input.data(data)[2:N,],output.data(data)[1:(N-1),])}
-  else z <- output.data(data)
+  if (m != 0) {z <- cbind(inputData(data)[2:N,],outputData(data)[1:(N-1),])}
+  else z <- outputData(data)
   Past <- matrix(NA,N-1-max.lag,(p+m)*(1+max.lag))
   for (i in 0:max.lag) 
     Past[,(1+(m+p)*i):((m+p)*(1+i))] <-z[(1+max.lag-i):(N-1-i),]
-  M <- t(lsfit(Past,output.data(data)[(max.lag+2):N,],intercept=FALSE)$coef)
+  M <- t(lsfit(Past,outputData(data)[(max.lag+2):N,],intercept=FALSE)$coef)
   if (normalize && (m!=0))  # correct exogenous blocks for normalization
     {Tinv <- diag(svd.cov$d^.5)%*%svd.cov$u
      for (i in 0:max.lag) 
@@ -3514,7 +3524,7 @@ est.SS.Mittnik <- function(data, max.lag=6, n=NULL,
     }
   if (p==1) M <-matrix(M,1,length(M))
 #  browser()
-  model <-balance.Mittnik.svd( M, m=m, n=n )$model
+  model <-SVDbalanceMittnik( M, m=m, n=n )$model
   z <-"nested-balanced model from least sq. estimates of markov parameters a la Mittnik"
   if(subtract.means) z <-paste(z," - means subtracted")
   if(normalize)      z <-paste(z," - outputs normalized")
@@ -3524,29 +3534,29 @@ est.SS.Mittnik <- function(data, max.lag=6, n=NULL,
 }
 
 
-reduction.Mittnik <- function(model, data=NULL, criterion=NULL, 
+MittnikReduction <- function(model, data=NULL, criterion=NULL, 
       verbose=TRUE,warn=TRUE)
 {if (is.TSestModel(model)) 
     {if (is.null(data)) data <-TSdata(model)
      model <- TSmodel(model)
     }
-  if(!is.TSmodel(model)) stop("reduction.Mittnik expecting a TSmodel.")
+  if(!is.TSmodel(model)) stop("MittnikReduction expecting a TSmodel.")
   if(is.null(data))
     stop("Reduction requires data to calculate criteria (balancing does not).")
   nMax <- if(is.SS(model)) dim(model$F)[2] else NULL
-  reduction.Mittnik.from.Hankel( markov.parms(model), nMax=nMax, data=data, 
+  MittnikReduction.from.Hankel( markovParms(model), nMax=nMax, data=data, 
         criterion=criterion, verbose=verbose, warn=warn)
 }
 
-reduction.Mittnik.from.Hankel <- function(M, data=NULL, nMax=NULL, 
+MittnikReduction.from.Hankel <- function(M, data=NULL, nMax=NULL, 
    criterion=NULL, verbose=TRUE, warn=TRUE, 
    Spawn=if (exists(".SPAWN")) .SPAWN else FALSE)
-{ # See the documentation for reduction.Mittnik.
+{ # See the documentation for MittnikReduction.
 
    data <- freeze(data)
-   m <-ncol(input.data(data))      # dim of input series
+   m <-ncol(inputData(data))      # dim of input series
    if(is.null(m))m<-0
-   z <-balance.Mittnik.svd(M, m, nMax)
+   z <-SVDbalanceMittnik(M, m, nMax)
    largeModel <- z$model
    svd.crit    <-z$crit
    n <- dim(largeModel$F)[1]
@@ -3559,7 +3569,7 @@ reduction.Mittnik.from.Hankel <- function(M, data=NULL, nMax=NULL,
          else     z <-NULL
          z <-SS(F=largeModel$F[1:i,1:i,drop=FALSE],G=z,
                   H=largeModel$H[,1:i,drop=FALSE],K= largeModel$K[1:i,,drop=FALSE])
-         z <-information.tests.calculations(l(z,data, warn=warn))
+         z <-informationTestsCalculations(l(z,data, warn=warn))
          values <-rbind(values, z)
          if (verbose) cat(".")
         }
@@ -3572,7 +3582,7 @@ reduction.Mittnik.from.Hankel <- function(M, data=NULL, nMax=NULL,
             z <-SS(F=largeModel$F[1:forloop.i,1:forloop.i,drop=FALSE],G=z,
                      H=largeModel$H[  , 1:forloop.i, drop=FALSE],
                      K=largeModel$K[1:forloop.i,,drop=FALSE])
-            information.tests.calculations(l(z,data, warn=warn))
+            informationTestsCalculations(l(z,data, warn=warn))
            }
        assign("balance.forloop", forloop, where=1)
        assign("forloop.n", n,   where=1 )
@@ -3623,18 +3633,18 @@ reduction.Mittnik.from.Hankel <- function(M, data=NULL, nMax=NULL,
 
 ############################################################
 
-balance.Mittnik <- function(model, n=NULL){
+balanceMittnik <- function(model, n=NULL){
   if (is.TSestModel(model)) model <- TSmodel(model)
-  if  (!is.TSmodel(model)) stop("balance.Mittnik expecting a TSmodel.")
+  if  (!is.TSmodel(model)) stop("balanceMittnik expecting a TSmodel.")
   m <- nseriesInput(model)
-  newmodel <- balance.Mittnik.svd(markov.parms(model), m, n)$model
+  newmodel <- SVDbalanceMittnik(markovParms(model), m, n)$model
   newmodel$description <- paste(model$description,"converted to", newmodel$description)
   seriesNames(newmodel)  <-  seriesNames(model)
   newmodel
 }
 
 
-balance.Mittnik.svd <- function(M, m, n=NULL)
+SVDbalanceMittnik <- function(M, m, n=NULL)
 {#                   # Form k block Hankel Matrix from M.
    p <- nrow(M)     # dim of endo. series
    r <- m + p       # each sub-matrix is p x r   (= p x (m+p) )
@@ -3685,10 +3695,10 @@ balance.Mittnik.svd <- function(M, m, n=NULL)
 }
 
 
-reduced.models.Mittnik <- function(largeModel)
+MittnikReducedModels <- function(largeModel)
 {# Return a list of models with all smaller state dimesions.
-  largeModel <- TSmodel(to.SS(largeModel))
-  largeModel <- balance.Mittnik(largeModel, n=dim(largeModel$F)[1])
+  largeModel <- TSmodel(toSS(largeModel))
+  largeModel <- balanceMittnik(largeModel, n=dim(largeModel$F)[1])
   r <- vector("list", dim(largeModel$F)[1])
   for (j in 1:length(r))
     r[[j]] <- SS(F=largeModel$F[1:j,1:j,drop=FALSE],
@@ -3704,30 +3714,30 @@ reduced.models.Mittnik <- function(largeModel)
 #
 ############################################################################
 
-est.black.box2 <- function(data, estimation="est.VARX.ls", 
+estBlackBox2 <- function(data, estimation="estVARXls", 
           lag.weight=.9, 
-          reduction="reduction.Mittnik", 
+          reduction="MittnikReduction", 
           criterion="taic", 
           trend=FALSE, 
           subtract.means=FALSE,  re.add.means=TRUE, 
           standardize=FALSE, verbose=TRUE, max.lag=12)
-{if ((estimation!="est.VARX.ls") && (trend) )
-     {cat("Trend estimation only support with est.VARX.ls.\n")
-      cat("Proceeding using est.VARX.ls.\n")
-      estimation<-"est.VARX.ls"
+{if ((estimation!="estVARXls") && (trend) )
+     {cat("Trend estimation only support with estVARXls.\n")
+      cat("Proceeding using estVARXls.\n")
+      estimation<-"estVARXls"
      }
 
- if(estimation=="est.VARX.ls")
-     model <- est.VARX.ls(data,trend=trend, subtract.means=subtract.means, 
+ if(estimation=="estVARXls")
+     model <- estVARXls(data,trend=trend, subtract.means=subtract.means, 
                          re.add.means=re.add.means, max.lag=max.lag, 
                          standardize=standardize, lag.weight=lag.weight)
- # else if(estimation=="est.VARX.ar")
- #     model <-est.VARX.ar(data, subtract.means=subtract.means, max.lag=max.lag)
+ # else if(estimation=="estVARXar")
+ #     model <-estVARXar(data, subtract.means=subtract.means, max.lag=max.lag)
  else
-    stop("Only est.VARX.ls estimation technique is supported to date.\n")
+    stop("Only estVARXls estimation technique is supported to date.\n")
  if (verbose) cat("First VAR model,              lags= ", 
           dim(model$model$A)[1]-1, ", -log likelihood = ", model$estimates$like[1], "\n")
- model <- l(to.SS(model),model$data) # data is standardized if standardize=T in estimation
+ model <- l(toSS(model),model$data) # data is standardized if standardize=T in estimation
  n <- dim(model$model$F)[1]
  if (verbose) cat("Equivalent    state space model, n= ", 
                   n, ", -log likelihood = ", model$estimates$like[1], "\n")
@@ -3738,12 +3748,12 @@ est.black.box2 <- function(data, estimation="est.VARX.ls",
     if (verbose) cat("Final reduced state space model, n= ",
               dim(model$model$F)[1], ", -log likelihood = ", model$estimates$like[1], "\n")
    }
-  if (verbose &&  dev.cur() != 1 ) check.residuals(model)
+  if (verbose &&  dev.cur() != 1 ) checkResiduals(model)
  model
 }
 
 
-best.TSestModel <- function(models, sample.start=10, sample.end=NULL,
+bestTSestModel <- function(models, sample.start=10, sample.end=NULL,
     criterion="aic", verbose=TRUE)
 {# return the best model from ... according to criterion
   #  models should be a list of TSestModel's.
@@ -3753,7 +3763,7 @@ best.TSestModel <- function(models, sample.start=10, sample.end=NULL,
   #  taic might be a better default selection criteria but it is not available for ARMA models.
   values <- NULL
   for (lst in models ) 
-    {z <- information.tests.calculations(lst, sample.start=sample.start, 
+    {z <- informationTestsCalculations(lst, sample.start=sample.start, 
                   sample.end=sample.end)
      values <-rbind(values,z)
     }
@@ -3769,32 +3779,32 @@ best.TSestModel <- function(models, sample.start=10, sample.end=NULL,
 }
 
 
-est.black.box3 <- function(data, estimation="est.VARX.ls", 
+estBlackBox3 <- function(data, estimation="estVARXls", 
        lag.weight=1.0, 
-       reduction="reduction.Mittnik", 
+       reduction="MittnikReduction", 
        criterion="aic", 
        trend=FALSE, subtract.means=FALSE,  re.add.means=TRUE, 
        standardize=FALSE, verbose=TRUE, max.lag=12, sample.start=10)
   #  taic might be a better default selection criteria but it is not available for ARMA models.
-{if ((estimation!="est.VARX.ls") && (trend) )
-     {cat("Trend estimation only support with est.VARX.ls.\n")
-      cat("Proceeding using est.VARX.ls.\n")
-      estimation<-"est.VARX.ls"
+{if ((estimation!="estVARXls") && (trend) )
+     {cat("Trend estimation only support with estVARXls.\n")
+      cat("Proceeding using estVARXls.\n")
+      estimation<-"estVARXls"
      }
  models <- vector("list", max.lag)
  for (i in 1:max.lag)
-   {if(estimation=="est.VARX.ls")
-      models[[i]] <- est.VARX.ls(data,trend=trend, 
+   {if(estimation=="estVARXls")
+      models[[i]] <- estVARXls(data,trend=trend, 
                           subtract.means=subtract.means,
                           re.add.means=re.add.means, max.lag=i, 
                           standardize=standardize, lag.weight=lag.weight)
     else
-      stop("Only est.VARX.ls estimation technique is supported to date.\n")
+      stop("Only estVARXls estimation technique is supported to date.\n")
    }
- model <- best.TSestModel(models, criterion=criterion, sample.start=sample.start, verbose=verbose)
+ model <- bestTSestModel(models, criterion=criterion, sample.start=sample.start, verbose=verbose)
  if (verbose) cat("Selected VAR model,              lags= ", 
           dim(model$model$A)[1]-1, ", -log likelihood = ", model$estimates$like[1], "\n")
- model <- l(to.SS(model),model$data) # data is standardized if standardize=T in estimation
+ model <- l(toSS(model),model$data) # data is standardized if standardize=T in estimation
  n <- dim(model$model$F)[1]
  if (verbose) cat("Equivalent    state space model,    n= ", 
                   n, ", -log likelihood = ", model$estimates$like[1], "\n")
@@ -3805,36 +3815,36 @@ est.black.box3 <- function(data, estimation="est.VARX.ls",
     if (verbose) cat("Final reduced state space model, n= ",
               dim(model$model$F)[1], ", -log likelihood = ", model$estimates$like[1], "\n")
    }
-  if (verbose &&  dev.cur() != 1 ) check.residuals(model)
+  if (verbose &&  dev.cur() != 1 ) checkResiduals(model)
  model
 }
 
 
-bft <- function(data, ...) est.black.box4(data, ...)
+bft <- function(data, ...) estBlackBox4(data, ...)
 
-est.black.box4 <- function(data, estimation="est.VARX.ls", 
+estBlackBox4 <- function(data, estimation="estVARXls", 
                 lag.weight=1.0,  variable.weights=1, 
-                reduction="reduction.Mittnik", 
+                reduction="MittnikReduction", 
                 criterion="taic", 
                 trend=FALSE, subtract.means=FALSE,  re.add.means=TRUE, 
                 standardize=FALSE, verbose=TRUE, max.lag=12, 
 		sample.start=10, warn=TRUE)
-{if ((estimation!="est.VARX.ls") && (trend) )
-     {cat("Trend estimation only support with est.VARX.ls.\n")
-      cat("Proceeding using est.VARX.ls.\n")
-      estimation<-"est.VARX.ls"
+{if ((estimation!="estVARXls") && (trend) )
+     {cat("Trend estimation only support with estVARXls.\n")
+      cat("Proceeding using estVARXls.\n")
+      estimation<-"estVARXls"
      }
  models <- vector("list", max.lag)
  for (i in 1:max.lag)
-   {if(estimation=="est.VARX.ls")
-      {model<- est.VARX.ls(data,trend=trend, 
+   {if(estimation=="estVARXls")
+      {model<- estVARXls(data,trend=trend, 
                           subtract.means=subtract.means,
                           re.add.means=re.add.means, max.lag=i, 
                           standardize=standardize, lag.weight=lag.weight,
                           warn=warn)
       }
-    else if(estimation=="est.wt.variables")
-      {model<- est.wt.variables(data, variable.weights,
+    else if(estimation=="estWtVariables")
+      {model<- estWtVariables(data, variable.weights,
                         estimation.args=list(trend=trend, 
                           subtract.means=subtract.means,
                           re.add.means=re.add.means, max.lag=i, 
@@ -3845,7 +3855,7 @@ est.black.box4 <- function(data, estimation="est.VARX.ls",
       stop("Estimation technique not yet is supported.\n")
     if (verbose) cat("Estimated  VAR   model       -log likelihood = ", 
         model$estimates$like[1],", lags= ",  dim(model$model$A)[1]-1,"\n")
-    model <- l(to.SS(model),model$data,warn=warn) # data is standardized if standardize=T in estimation
+    model <- l(toSS(model),model$data,warn=warn) # data is standardized if standardize=T in estimation
     n <- dim(model$model$F)[1]
     if (verbose) cat("Equivalent state space model -log likelihood = ", 
                model$estimates$like[1], ",   n = ", n, "\n")
@@ -3860,12 +3870,12 @@ est.black.box4 <- function(data, estimation="est.VARX.ls",
       }
      models[[i]] <- model
    }
- model <- best.TSestModel(models, criterion=criterion, sample.start=sample.start, verbose=verbose)
- if (verbose &&  dev.cur() != 1 ) check.residuals(model)
+ model <- bestTSestModel(models, criterion=criterion, sample.start=sample.start, verbose=verbose)
+ if (verbose &&  dev.cur() != 1 ) checkResiduals(model)
  model
 }
 
-#  z<-est.black.box4(eg.data,  max.lag=3 ) 
+#  z<-estBlackBox4(eg.data,  max.lag=3 ) 
 
 
 
@@ -3895,16 +3905,16 @@ Portmanteau <- function(res){
 }
 
 
-check.residuals <- function(obj, ...)  UseMethod("check.residuals")
-# autocorrelations <- function(obj, ...) UseMethod("check.residuals")
+checkResiduals <- function(obj, ...)  UseMethod("checkResiduals")
+# autocorrelations <- function(obj, ...) UseMethod("checkResiduals")
 
-check.residuals.TSestModel <- function(obj, ...){
-   invisible(check.residuals(obj$estimates$pred - output.data(obj), ...))}
+checkResiduals.TSestModel <- function(obj, ...){
+   invisible(checkResiduals(obj$estimates$pred - outputData(obj), ...))}
 
-check.residuals.TSdata <- function(obj, ...){
-	invisible(check.residuals(output.data(obj), ...)) }
+checkResiduals.TSdata <- function(obj, ...){
+	invisible(checkResiduals(outputData(obj), ...)) }
 
-check.residuals.default <- function(obj, ac=TRUE, pac=TRUE,
+checkResiduals.default <- function(obj, ac=TRUE, pac=TRUE,
      select=seq(nseries(obj)), drop=NULL, plot.=TRUE, 
      graphs.per.page=5, verbose=FALSE, ...)
 {#  (... further arguments, currently disregarded)
@@ -3912,7 +3922,7 @@ check.residuals.default <- function(obj, ac=TRUE, pac=TRUE,
  # If drop is not null it should be a vector of the row indices of residuals
  #  which are not to be used. Typically this can be used to get rid
  #  of bad initial conditions (eg. drop=seq(10) ) or outliers.
-  resid <- select.series(obj, series=select)
+  resid <- selectSeries(obj, series=select)
   if (!is.null(drop))  resid <- resid[-drop,, drop=FALSE]
   mn<-apply(resid,2,mean)
   acr <-NULL
@@ -3930,7 +3940,8 @@ check.residuals.default <- function(obj, ac=TRUE, pac=TRUE,
   if(plot. &&  dev.cur() != 1 ) 
     {graphs.per.page <- min(p, graphs.per.page)
      names <- seriesNames(resid)
-     old.par <-par(mfcol = c(3, graphs.per.page), mar = c(5.1, 4.1,3.1, 0.1) ) #c(5,4.1,5,0.1) c(2.1, 4.1,3.1, 0.1)
+     old.par <-par(mfcol = c(3, graphs.per.page),
+           mar = c(5.1, 4.1,3.1, 0.1), no.readonly=TRUE ) #c(5,4.1,5,0.1) c(2.1, 4.1,3.1, 0.1)
      on.exit(par(old.par))
      for (i in 1:p) 
           {tfOnePlot(resid[,i], xlab=names[i])
@@ -3960,18 +3971,19 @@ check.residuals.default <- function(obj, ac=TRUE, pac=TRUE,
        }
      if (pac)
        {#par(mfrow = c(1, 1), mar = c(2.1, 4.1,3.1, 0.1), oma=c(0,0,5,0) )
-        if(is.R()) pacr <- 
-	  pacf(as.ts(resid), plot=TRUE, mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
-	else   pacr <-
-           acf(as.ts(resid), plot=TRUE, type= "partial",
+        #if(is.R()) pacr <- 
+	#  pacf(as.ts(resid), plot=TRUE, mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
+	#else   
+	pacr <- acf(as.ts(resid), plot=TRUE, type= "partial",
 	           mar=c(3,3,2,0.8), oma=c(1,1.2,4,1))$acf
         mtext("Partial Autocorrelations", side=3, outer=TRUE, cex=1.5, line=3)
        }
     }
   else 
     {if (ac)  acr  <- acf(as.ts(resid), plot=FALSE)$acf
-     if (pac) pacr <- if (is.R()) pacf(as.ts(resid), plot=FALSE)$acf
-                          else    acf(as.ts(resid), plot=FALSE, type= "partial")$acf
+     #if (pac) pacr <- if (is.R()) pacf(as.ts(resid), plot=FALSE)$acf
+     #                     else    
+     if (pac)	  pacr <- acf(as.ts(resid), plot=FALSE, type= "partial")$acf
     }
   if (ac & verbose)
     {cat("residual auto-correlations:\n")
@@ -3996,7 +4008,7 @@ check.residuals.default <- function(obj, ac=TRUE, pac=TRUE,
                  cusum=cusum, skewness=skewness, kurtosis=kurtosis))
 }
 
-information.tests <- function(..., sample.start=1,sample.end=NULL,
+informationTests <- function(..., sample.start=1,sample.end=NULL,
 		 Print=TRUE, warn=TRUE){
  # print model selection criteria
      #  for models statistics ..., where ... are the names of the
@@ -4006,7 +4018,7 @@ information.tests <- function(..., sample.start=1,sample.end=NULL,
   values <- NULL
   options(width=100)
   for (lst in list(...) ) 
-    {z <-information.tests.calculations(lst,
+    {z <-informationTestsCalculations(lst,
     		 sample.start=sample.start,sample.end=sample.end, warn=warn)
      values <-rbind(values, z)
      if (Print)
@@ -4025,14 +4037,14 @@ information.tests <- function(..., sample.start=1,sample.end=NULL,
 }
 
 
-information.tests.calculations <- function # return model selection criteria
+informationTestsCalculations <- function # return model selection criteria
      (lst, sample.start=1,sample.end=NULL, warn=TRUE){
-   resid <- lst$estimates$pred-output.data(lst$data)
+   resid <- lst$estimates$pred-outputData(lst$data)
     # the following line is just to work around a bug with old style time series
-   if (ncol(output.data(lst$data))==1) dim(resid) <- dim(output.data(lst$data))
+   if (ncol(outputData(lst$data))==1) dim(resid) <- dim(outputData(lst$data))
    if (is.null(sample.end)) sample.end <- nrow(resid)
    resid <- resid[sample.start:sample.end,,drop=FALSE]
-   ml <-   residual.stats(resid, NULL, warn=warn)$like[1] # neg.log(likelihood)
+   ml <-   residualStats(resid, NULL, warn=warn)$like[1] # neg.log(likelihood)
 # previously   ml <-   L(resid)[1]     # neg. log( likelihood ).
    n  <-  length(coef(lst$model))      # No. of parameters.
    # nt is theorical dimension of parameter space    n(m+2p)
@@ -4098,10 +4110,10 @@ svd.criteria <- function(sv){
 
 tfwindow.TSdata <- function(x, start=NULL, end=NULL, tf=NULL, warn=TRUE)
 {# window a TSdata object
-  if (0 != nseriesInput(x))  input.data(x) <- 
-      tfwindow(input.data(x), start=start, end=end, tf=tf, warn=warn)
-  if (0 != nseriesOutput(x)) output.data(x) <- 
-      tfwindow(output.data(x), start=start, end=end, tf=tf, warn=warn)
+  if (0 != nseriesInput(x))  inputData(x) <- 
+      tfwindow(inputData(x), start=start, end=end, tf=tf, warn=warn)
+  if (0 != nseriesOutput(x)) outputData(x) <- 
+      tfwindow(outputData(x), start=start, end=end, tf=tf, warn=warn)
   x
 }
 
@@ -4116,15 +4128,15 @@ combine.default <- function(e1,e2){list(e1,e2)}
 
 combine.TSdata <- function(e1,e2)
 {# make a new TSdata object with the two objects
- output.data(e1) <- tbind(output.data(e1),output.data(e2)) 
+ outputData(e1) <- tbind(outputData(e1),outputData(e2)) 
  if ((0 != (nseriesInput(e1))) & (0 != (nseriesInput(e2))))
-       input.data(e1) <- tbind(input.data(e1),input.data(e2)) 
- else  {if (0 != (nseriesInput(e2)))  input.data(e1) <-input.data(e2)  }
+       inputData(e1) <- tbind(inputData(e1),inputData(e2)) 
+ else  {if (0 != (nseriesInput(e2)))  inputData(e1) <-inputData(e2)  }
  e1
 }
 
 
-trim.na.TSdata <- function(x, start.=TRUE, end.=TRUE)
+trimNA.TSdata <- function(x, start.=TRUE, end.=TRUE)
 {# trim NAs from the ends of TSdata.
  # (Observations for all series are dropped if any one contains an NA.)
  # if start.=F then beginning NAs are not trimmed.
@@ -4133,24 +4145,24 @@ trim.na.TSdata <- function(x, start.=TRUE, end.=TRUE)
  p <- nseriesOutput(x)
  m <- nseriesInput(x)
  if (m==0)
-   mat <- trim.na(output.data(x))
+   mat <- trimNA(outputData(x))
  else
-   mat <- trim.na(tbind(input.data(x),output.data(x)),start.=start.,end.=end.)
+   mat <- trimNA(tbind(inputData(x),outputData(x)),start.=start.,end.=end.)
  tf <- tframe(mat)
  if (m!=0)
    {sn <- seriesNamesInput(x)
-    input.data(x)  <- tframed(mat[,1:m, drop=FALSE], tf) 
+    inputData(x)  <- tframed(mat[,1:m, drop=FALSE], tf) 
     seriesNamesInput(x) <- sn
    }
  sn <- seriesNamesOutput(x)
- output.data(x) <- tframed(mat[,(m+1):(m+p), drop=FALSE], tf)
+ outputData(x) <- tframed(mat[,(m+1):(m+p), drop=FALSE], tf)
  seriesNamesOutput(x) <- sn
  x
 }
 
 
 
-diff.log <- function(x,  lag = 1, base = exp(1), ...)
+diffLog <- function(x,  lag = 1, base = exp(1), ...)
 {#  (... further arguments, currently disregarded)
  #Calculate the difference from lag periods prior for log of data.
  diff(log(x, base = base), lag = lag)
@@ -4159,30 +4171,30 @@ diff.log <- function(x,  lag = 1, base = exp(1), ...)
 
 ytoypc <- function(ser) {
   # Convert level data to year over year percent change.
-  # note: percent.change can alter the name, so grab it first.
+  # note: percentChange can alter the name, so grab it first.
   nm <- paste("y to y %ch", seriesNames(ser))
-  ser <- percent.change(ser, lag=frequency(ser))
+  ser <- percentChange(ser, lag=frequency(ser))
   seriesNames(ser) <- nm
   ser
  }
  
 
 
-percent.change <- function(obj, ...) UseMethod("percent.change")
+percentChange <- function(obj, ...) UseMethod("percentChange")
 
-#percent.change.list <- function(obj, ..., base=NULL, lag=1, cumulate=FALSE, e=FALSE)
+#percentChange.list <- function(obj, ..., base=NULL, lag=1, cumulate=FALSE, e=FALSE)
 #  {#Calculate the percent change relative to the data lag periods prior.
-#   #... should be a list of objects to which percent.change can be applied.
-#   pchange <- list(percent.change(obj, base=base, lag=lag, cumulate=cumulate, e=e))
+#   #... should be a list of objects to which percentChange can be applied.
+#   pchange <- list(percentChange(obj, base=base, lag=lag, cumulate=cumulate, e=e))
 #   for (mat in list(...))
 #          pchange <- append(pchange,list(
-#	    percent.change(mat, base=base, lag=lag, cumulate=cumulate, e=e)))
+#	    percentChange(mat, base=base, lag=lag, cumulate=cumulate, e=e)))
 #   pchange
 #  }
 # from help
-#    percent.change.list(obj, ..., base=NULL, lag=1, cumulate=FALSE, e=FALSE, ...)
+#    percentChange.list(obj, ..., base=NULL, lag=1, cumulate=FALSE, e=FALSE, ...)
 
-percent.change.default <- function(obj, base=NULL, lag=1, 
+percentChange.default <- function(obj, base=NULL, lag=1, 
       cumulate=FALSE, e=FALSE, ...)
 {#  (... further arguments, currently disregarded)
  #Calculate the percent change relative to the data lag periods prior.
@@ -4217,21 +4229,21 @@ percent.change.default <- function(obj, base=NULL, lag=1,
    if (!is.null(tf)) tframed(pchange, tf) else pchange
 }
 
-percent.change.TSestModel <- function(obj, base=NULL, lag=1,
+percentChange.TSestModel <- function(obj, base=NULL, lag=1,
    cumulate=FALSE, e=FALSE, ...)
   {#  (... further arguments, currently disregarded)
    #The percent change calculation is done
    # with $estimates$pred and the result is an object of class TSdata
-   TSdata(output=percent.change(obj$estimates$pred))
+   TSdata(output=percentChange(obj$estimates$pred))
   }
 
-percent.change.TSdata <- function(obj, base=NULL, lag=1,
+percentChange.TSdata <- function(obj, base=NULL, lag=1,
    cumulate=FALSE, e=FALSE, ...)
   {#  (... further arguments, currently disregarded)
    # The percent change calculation is done
    # with input and output and the result is an object of class TSdata.
-   if (0 != (nseriesInput(obj)))  input.data(obj)  <- percent.change(input.data(obj))
-   if (0 != (nseriesOutput(obj))) output.data(obj) <- percent.change(output.data(obj))
+   if (0 != (nseriesInput(obj)))  inputData(obj)  <- percentChange(inputData(obj))
+   if (0 != (nseriesOutput(obj))) outputData(obj) <- percentChange(outputData(obj))
    obj
   }
 
@@ -4276,10 +4288,10 @@ scale.TSdata <- function(x, center=FALSE, scale=NULL)
  #  scaling matrices then 
  #          y'(t) = S y(t) where y' is the new output
  #          u'(t) = S u(t) where u' is the new input
- sc <- scale$input # input.data(scale) causes problems if scale is a vector
+ sc <- scale$input # inputData(scale) causes problems if scale is a vector
  if (!is.null(sc))
    {if (! (is.matrix(sc) | is.vector(sc))) stop("input scale must be a vector or matrix")
-    d <- input.data(x)
+    d <- inputData(x)
     tf <- tframe(d)
     names <- seriesNames(d)
     if(is.matrix(sc))      d <- d %*% t(sc)
@@ -4287,12 +4299,12 @@ scale.TSdata <- function(x, center=FALSE, scale=NULL)
     else                   d <- d %*% diag(sc)                             
     tframe(d) <- tf
     seriesNames(d) <- names
-    input.data(x) <- d 
+    inputData(x) <- d 
    }
- sc <- scale$output # output.data(scale) causes problems if scale is a vector
+ sc <- scale$output # outputData(scale) causes problems if scale is a vector
  if (!is.null(sc))
    {if (! (is.matrix(sc) | is.vector(sc))) stop("output scale must be a vector or matrix")
-    d <- output.data(x)
+    d <- outputData(x)
     tf <- tframe(d)
     names <- seriesNames(d)
     if(is.matrix(sc))      d <- d %*% t(sc)
@@ -4300,7 +4312,7 @@ scale.TSdata <- function(x, center=FALSE, scale=NULL)
     else                   d <- d %*% diag(sc)                             
     tframe(d) <- tf
     seriesNames(d) <- names
-    output.data(x) <- d 
+    outputData(x) <- d 
    }
  x
 }
@@ -4315,7 +4327,7 @@ checkScale.TSestModel <- function(x, scale){checkScale(TSmodel(x), scale)}
 
 checkScale.TSmodel <- function(x, scale) 
 {# This function only checks for some error conditions.
- # input.data(scale) and output.data(scale) cause problems if scale is a vector
+ # inputData(scale) and outputData(scale) cause problems if scale is a vector
  if (!is.null(scale$input))
    {if (is.matrix(scale$input))
        {if (any(La.svd(scale$input)$d == 0))  
@@ -4345,10 +4357,10 @@ scale.innov <- function(x, center=FALSE, scale=NULL)
  if(is.vector(sc)) sc <- diag(sc, nseriesOutput(x))          
  x$H <- sc %*% x$H
  x$K <- x$K %*% solve(sc)
- set.parameters(x)
+ setTSmodelParameters(x)
 }
 
-scale.non.innov <- function(x, center=FALSE, scale=NULL)
+scale.nonInnov <- function(x, center=FALSE, scale=NULL)
 {if (!checkScale(x, scale)) stop("scaling error.")
  if (!is.null(scale$input)) 
    {sc <- scale$input
@@ -4359,7 +4371,7 @@ scale.non.innov <- function(x, center=FALSE, scale=NULL)
  if(is.vector(sc)) sc <- diag(sc, nseriesOutput(x))          
  x$H <- sc %*% x$H
  x$R <- sc %*% x$R %*% solve(sc)
- set.parameters(x)
+ setTSmodelParameters(x)
 }
 
 scale.ARMA <- function(x, center=FALSE, scale=NULL)
@@ -4377,7 +4389,7 @@ scale.ARMA <- function(x, center=FALSE, scale=NULL)
     x$C <- polyprod(sc, x$C)
    }
  if (!is.null(x$TREND))  x$TREND <- sc %*% x$TREND
- set.parameters(x)
+ setTSmodelParameters(x)
 }
 
 
@@ -4406,19 +4418,19 @@ frequencyOutput <- function(x)UseMethod("frequencyOutput")
 
 
 
-input.data <- function(x,  series=seqN(nseriesInput(x)))UseMethod("input.data")
-output.data <- function(x, series=seqN(nseriesOutput(x)))UseMethod("output.data")
+inputData <- function(x,  series=seqN(nseriesInput(x)))UseMethod("inputData")
+outputData <- function(x, series=seqN(nseriesOutput(x)))UseMethod("outputData")
 
-input.data.default <- function(x, series=seqN(nseriesInput(x)))
-   select.series(x$input, series=series)
-output.data.default <- function(x, series=seqN(nseriesOutput(x)))
-   select.series(x$output, series=series)
+inputData.default <- function(x, series=seqN(nseriesInput(x)))
+   selectSeries(x$input, series=series)
+outputData.default <- function(x, series=seqN(nseriesOutput(x)))
+   selectSeries(x$output, series=series)
 
-"input.data<-" <- function(x,  value)  UseMethod("input.data<-")
-"output.data<-" <- function(x,  value) UseMethod("output.data<-")
+"inputData<-" <- function(x,  value)  UseMethod("inputData<-")
+"outputData<-" <- function(x,  value) UseMethod("outputData<-")
 
-"input.data<-.default" <- function(x,  value) {x$input <- value; x}
-"output.data<-.default" <- function(x,  value){x$output <- value; x}
+"inputData<-.default" <- function(x,  value) {x$input <- value; x}
+"outputData<-.default" <- function(x,  value){x$output <- value; x}
 
 # The logic (revised as of May26, 1998) is that seriesNames can be an attribute
 # of any object (like a matrix) and has been moved to tframe.
@@ -4505,10 +4517,10 @@ periods.TSestModel <- function(x)periods(x$data)
 periodsInput.TSestModel <- function(x)periodsInput(x$data)
 periodsOutput.TSestModel <- function(x)periodsOutput(x$data)
 
-input.data.TSestModel <- function(x, series=seqN(nseriesInput(x)))
-    input.data(x$data, series=series)
-output.data.TSestModel <- function(x, series=seqN(nseriesOutput(x)))
-    output.data(x$data, series=series)
+inputData.TSestModel <- function(x, series=seqN(nseriesInput(x)))
+    inputData(x$data, series=series)
+outputData.TSestModel <- function(x, series=seqN(nseriesOutput(x)))
+    outputData(x$data, series=series)
 
 nseriesInput.TSestModel <- function(x)  nseriesInput(x$data)
 nseriesOutput.TSestModel <- function(x) nseriesOutput(x$data)
@@ -4553,7 +4565,7 @@ seriesNames.TSestModel <- function(x)
 identifiers.TSestModel <- function(obj){identifiers(TSdata(obj))}
 sourcedb.TSestModel <- function(obj){sourcedb(TSdata(obj))}
 sourceserver.TSestModel <- function(obj){sourceserver(TSdata(obj))}
-source.info.TSestModel <- function(obj){source.info(TSdata(obj))}
+sourceInfo.TSestModel <- function(obj){sourceInfo(TSdata(obj))}
 
 
 ############################################################################
@@ -4568,7 +4580,7 @@ is.TSdata <- function(obj) { inherits(obj, "TSdata")}
 print.TSdata <- function(x, ...)
 {  if(0 != (nseriesInput(x)))
      {cat("input data:\n")
-      print(input.data(x),...)
+      print(inputData(x),...)
       if(!is.null(x$input.transformations))
           {cat("input.transformations:\n")
            print(x$input.transformations, ...)
@@ -4581,7 +4593,7 @@ print.TSdata <- function(x, ...)
      }
   if(0 != (nseriesOutput(x)))
      {cat("output data:\n")
-      print(output.data(x),...)
+      print(outputData(x),...)
       if(!is.null(x$output.transformations))
          {cat("output.transformations:\n")
           print(x$output.transformations, ...)
@@ -4603,19 +4615,19 @@ print.TSdata <- function(x, ...)
 
 summary.TSdata <- function(object, ...)
   {#  (... further arguments, currently disregarded)
-   d <- output.data(object)
+   d <- outputData(object)
    if (!is.tframed(d)) d <- as.ts(d)
    st <- start(d)
    en <- end(d)
    fr <- frequency(d)
-   d <- cbind(d,input.data(object))
+   d <- cbind(d,inputData(object))
 
    classed(list(  # summary.TSdata constructor
       description=object$description,
       start=st,
       end=en,
       freq=fr,
-      sampleT= nrow(output.data(object)),
+      sampleT= nrow(outputData(object)),
       p=nseriesOutput(object),
       m=nseriesInput(object),
       ave=apply(d,2,mean),
@@ -4664,7 +4676,7 @@ tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
   Ngraphs <- length(select.outputs) + length(select.inputs)
   if(reset.screen)
     {Ngraphs <- min(Ngraphs, graphs.per.page)
-     old.par <- par(mfcol = c(Ngraphs, 1), mar=mar) # previously c(5.1,6.1,4.1,2.1)) 
+     old.par <- par(mfcol = c(Ngraphs, 1), mar=mar, no.readonly=TRUE) # previously c(5.1,6.1,4.1,2.1)) 
      on.exit(par(old.par))
     }
   if (is.null(Title)) Title <- ""
@@ -4681,9 +4693,9 @@ tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
             stop("Expecting TSdata objects. Do not truncate argument names as that can cause a problem here.")
           d <- freeze(d)
           j <- j + 1
-          z[, j] <- input.data(d, series = i)
+          z[, j] <- inputData(d, series = i)
          }
-       tframe(z) <-tframe(input.data(x))
+       tframe(z) <-tframe(inputData(x))
        if (!is.null(start.)) z <- tfwindow(z,start=start.)
        if (!is.null(end.))   z <- tfwindow(z,end=end.)
        tfOnePlot(z,ylab=names[i]) 
@@ -4699,9 +4711,9 @@ tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
             stop("Expecting TSdata objects. Do not truncate argument names as that can cause a problem here.")
         d <- freeze(d)
         j <- j+1
-        z[,j]<-output.data(d, series=i) 
+        z[,j]<-outputData(d, series=i) 
        }
-     tframe(z) <-tframe(output.data(x))
+     tframe(z) <-tframe(outputData(x))
      if (!is.null(start.)) z <- tfwindow(z,start=start.)
      if (!is.null(end.))   z <- tfwindow(z,end=end.)
      tfOnePlot(z,ylab=names[nseriesInput(x) + i]) # tsplot
@@ -4710,20 +4722,20 @@ tfplot.TSdata <- function(x, ..., start.=NULL,end.=NULL,
   invisible()
 }
  
-input.data.TSdata <- function(x, series=seqN(nseriesInput(x)))
-  {if (is.null(x$input)) NULL  else select.series(x$input, series=series) }
+inputData.TSdata <- function(x, series=seqN(nseriesInput(x)))
+  {if (is.null(x$input)) NULL  else selectSeries(x$input, series=series) }
 
-output.data.TSdata <- function(x, series=seqN(nseriesOutput(x)))
-  {if (is.null(x$output)) NULL  else select.series(x$output, series=series) }
+outputData.TSdata <- function(x, series=seqN(nseriesOutput(x)))
+  {if (is.null(x$output)) NULL  else selectSeries(x$output, series=series) }
 
 
-"input.data<-.TSdata" <- function(x, value) 
+"inputData<-.TSdata" <- function(x, value) 
    {cls <- dseclass(x); x$input <- value; dseclass(x) <- cls
     x
    }
 
 
-"output.data<-.TSdata" <- function(x, value)
+"outputData<-.TSdata" <- function(x, value)
    {cls <- dseclass(x); x$output <-value; dseclass(x) <- cls
     x
    }
@@ -4734,8 +4746,8 @@ output.data.TSdata <- function(x, series=seqN(nseriesOutput(x)))
 seriesNames.TSdata <- function(x)
  {list(input=seriesNamesInput(x), output=seriesNamesOutput(x))}
 
- seriesNamesInput.TSdata <- function(x) {seriesNames( input.data(x))}
-seriesNamesOutput.TSdata <- function(x) {seriesNames(output.data(x))}
+ seriesNamesInput.TSdata <- function(x) {seriesNames( inputData(x))}
+seriesNamesOutput.TSdata <- function(x) {seriesNames(outputData(x))}
 
 "seriesNames<-.TSdata" <- function(x, value)
    { seriesNamesInput(x) <-  value$input
@@ -4746,13 +4758,13 @@ seriesNamesOutput.TSdata <- function(x) {seriesNames(output.data(x))}
 "seriesNamesInput<-.TSdata" <- function(x,  value)
    {if (length( value) != nseriesInput(x))
        stop("number of series and number of names do not match.")
-    attr(input.data(x), "seriesNames")  <- value
+    attr(inputData(x), "seriesNames")  <- value
     x
    }
 "seriesNamesOutput<-.TSdata" <- function(x,  value) 
     {if (length( value) != nseriesOutput(x))
        stop("number of series and number of names do not match.")
-    attr(output.data(x), "seriesNames")  <- value
+    attr(outputData(x), "seriesNames")  <- value
     x
    }
 
@@ -4819,30 +4831,30 @@ frequencyOutput.TSdata <- function(x)
 
 periods.TSdata <- function(x, ...) UseMethod("periodsOutput")
 #  (... further arguments, currently disregarded)
-periodsOutput.TSdata <- function(x)  dim(output.data(x))[1]
-periodsInput.TSdata <- function(x)  dim(input.data(x))[1]
+periodsOutput.TSdata <- function(x)  dim(outputData(x))[1]
+periodsInput.TSdata <- function(x)  dim(inputData(x))[1]
 
 tbind.TSdata <- function(d1, d2)
  {if( ! (is.TSdata(d1) & is.TSdata(d2)))
      stop("tbind requires arguments to be of a similar type (ie. TSdata).")
   if ((0 != nseriesInput(d1)) || (0 != nseriesInput(d2)) )
-    input.data(d1) <- tbind(input.data(d1),input.data(d2))
+    inputData(d1) <- tbind(inputData(d1),inputData(d2))
   if ((0 != nseriesOutput(d1)) || (0 != nseriesOutput(d2)) )
-    output.data(d1) <- tbind(output.data(d1),output.data(d2))
+    outputData(d1) <- tbind(outputData(d1),outputData(d2))
   d1
  }
 
 
 
-test.equal.TSdata <- function(obj1, obj2, fuzz=1e-16)
+testEqual.TSdata <- function(obj1, obj2, fuzz=1e-16)
   {r <- TRUE
    if (r & (!is.null(obj1$input)))
      {if(is.null(obj2$input)) r <- FALSE
-      else  r <-test.equal.matrix(obj1$input, obj2$input, fuzz=fuzz)
+      else  r <-testEqual.matrix(obj1$input, obj2$input, fuzz=fuzz)
      }
    if (r & (!is.null(obj1$output)))
      {if(is.null(obj2$output)) r <- FALSE
-      else r <-test.equal.matrix(obj1$output, obj2$output, fuzz=fuzz)
+      else r <-testEqual.matrix(obj1$output, obj2$output, fuzz=fuzz)
      }
    r
   }
@@ -4851,7 +4863,7 @@ test.equal.TSdata <- function(obj1, obj2, fuzz=1e-16)
 identifiers.TSdata <- function(obj) {identifiers(obj$source)}
 sourcedb.TSdata <- function(obj) {sourcedb(obj$source)}
 sourceserver.TSdata <- function(obj) {sourceserver(obj$source)}
-source.info.TSdata <- function(obj) {source.info(obj$source)}
+sourceInfo.TSdata <- function(obj) {sourceInfo(obj$source)}
 
 
 
@@ -4871,8 +4883,8 @@ TSdata.default <- function(data=NULL, input=NULL, output=NULL, ...)
   
  if(!is.list(data)) stop("TSdata.default could not construct a TSdata format.")	    
  if   ( 0 == nseriesInput(data)   &    0 == nseriesOutput(data) 
-    |  (0 != nseriesOutput(data) && !is.matrix(output.data(data)))
-    |  (0 !=  nseriesInput(data) && !is.matrix( input.data(data))) )
+    |  (0 != nseriesOutput(data) && !is.matrix(outputData(data)))
+    |  (0 !=  nseriesInput(data) && !is.matrix( inputData(data))) )
       stop("TSdata.default could not construct a TSdata format.")
  data
 }
@@ -4884,22 +4896,22 @@ TSdata.TSestModel <- function(data, ...)  {data$data} # extract TSdata
 as.TSdata <- function(d) 
  {# Use whatever is actually $input and $output,
   #strip any other class, other parts of the list, and DO NOT use
-  # input.data(d) and output.data(d) which may eg reconstitute something
+  # inputData(d) and outputData(d) which may eg reconstitute something
   TSdata(input=d$input, output=d$output)
  }
 
 "tframe<-.TSdata" <- function(x, value) {
- if (0 != nseriesInput(x))  tframe(input.data(x))  <- value
- if (0 != nseriesOutput(x)) tframe(output.data(x)) <- value
+ if (0 != nseriesInput(x))  tframe(inputData(x))  <- value
+ if (0 != nseriesOutput(x)) tframe(outputData(x)) <- value
  x
 }
 
 tframed.TSdata <- function(x, tf=NULL, input.names=NULL, output.names=NULL)  
 {# switch to tframe representation
  if(0 != (nseriesOutput(x)))
-       output.data(x) <-tframed(output.data(x), tf=tf, names=output.names)
+       outputData(x) <-tframed(outputData(x), tf=tf, names=output.names)
  if (0 != (nseriesInput(x)))
-        input.data(x) <-tframed(input.data(x),  tf=tf, names= input.names)
+        inputData(x) <-tframed(inputData(x),  tf=tf, names= input.names)
  x
 }  
 

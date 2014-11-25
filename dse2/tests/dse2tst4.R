@@ -6,7 +6,7 @@ if(!require("setRNG"))stop("this test requires setRNG.")
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
    Sys.info()
-   version.dse()
+   DSEversion()
    random.number.test() 
 
 
@@ -19,23 +19,23 @@ dse4.function.tests <- function(verbose=TRUE, synopsis=TRUE,
  
  if (synopsis & !verbose) cat("All dse4 tests ...") 
  if (verbose) cat("dse4 test 1 ... ")
-  z <- mine.strip(eg1.DSE.data.diff, essential.data=c(1,2),
-                   estimation.methods=list(est.VARX.ls=list(max.lag=3)))
+  z <- stripMine(eg1.DSE.data.diff, essential.data=c(1,2),
+                   estimation.methods=list(estVARXls=list(max.lag=3)))
   ok <- is.forecastCovEstimatorsWRTdata.subsets(z)
   all.ok <-  ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse4 test 2 ... ")
   z1 <- z$multi.model[[
-       select.forecastCov(z, select.cov.best=1, verbose=FALSE)$selection.index[2]]]
-  subdata <- TSdata(output=output.data(eg1.DSE.data.diff, series=1:3))
-  z2 <- estimate.models(subdata, estimation.sample =182, quiet = TRUE, 
-           estimation.methods = list(est.VARX.ls=list(max.lag=3)))
-  output.data(subdata) <- output.data(subdata)[1:182,,drop=FALSE]
-#  input.data(subdata)  <- input.data(subdata) [1:182,,drop=FALSE] not in subdata
-  z3 <- est.VARX.ls(subdata, max.lag=3)
-  ok <-      test.equal(z2$multi.model[[1]],z3$model)
-  ok <- ok & test.equal(z2$multi.model[[1]],  z1)
+       selectForecastCov(z, select.cov.best=1, verbose=FALSE)$selection.index[2]]]
+  subdata <- TSdata(output=outputData(eg1.DSE.data.diff, series=1:3))
+  z2 <- estimateModels(subdata, estimation.sample =182, quiet = TRUE, 
+           estimation.methods = list(estVARXls=list(max.lag=3)))
+  outputData(subdata) <- outputData(subdata)[1:182,,drop=FALSE]
+#  inputData(subdata)  <- inputData(subdata) [1:182,,drop=FALSE] not in subdata
+  z3 <- estVARXls(subdata, max.lag=3)
+  ok <-      testEqual(z2$multi.model[[1]],z3$model)
+  ok <- ok & testEqual(z2$multi.model[[1]],  z1)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
@@ -48,16 +48,16 @@ else
                    output=eg1.DSE.data.diff$input )
    umodel <- build.input.models(all.data, max.lag=2)
    umodel <- build.diagonal.model(umodel)
-   z  <- TSdata(output=output.data(all.data), 
-                input=input.data(all.data, series=1:2))
-	# previously ??input=input.data(extract(all.data, outputs=1, inputs=1:2)))
-  ymodel <- est.VARX.ls(z, max.lag=3)$model 
+   z  <- TSdata(output=outputData(all.data), 
+                input=inputData(all.data, series=1:2))
+	# previously ??input=inputData(extract(all.data, outputs=1, inputs=1:2)))
+  ymodel <- estVARXls(z, max.lag=3)$model 
   z <- ymodel$C
   ymodel$C <- array(0, c(dim(z)[1:2], nseriesOutput(umodel))) 
   ymodel$C[1:(dim(z)[1]), 1:(dim(z)[2]), 1:(dim(z)[3])] <- z 
-  sim.data <- gen.mine.data(umodel, ymodel,
+  sim.data <- genMineData(umodel, ymodel,
     rng= list(kind="default",seed=c(21,46,16,12, 51, 2, 31, 8, 42, 60, 7, 3)) )
-  m.step <- mine.stepwise(sim.data, method="backward", plot.=FALSE)
+  m.step <- mineStepwise(sim.data, method="backward", plot.=FALSE)
   error <- max(abs(m.step$stepwise$rss[c(1,27)] -
                 c(5.65168201726030333e+01, 3.06441399376576440e+06)))
   # previously  c(47.537312899054931847,   4088283.2706551752053)))
@@ -97,8 +97,8 @@ dse4.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
              {dev.off(); synchronize(1); rm("zot.postscript.test.ps")})())
       }
 
-  z <- mine.strip(eg1.DSE.data.diff, essential.data=c(1,2),
-                   estimation.methods=list(est.VARX.ls=list(max.lag=3)))
+  z <- stripMine(eg1.DSE.data.diff, essential.data=c(1,2),
+                   estimation.methods=list(estVARXls=list(max.lag=3)))
   zz <- tfplot(z)
 
   if (verbose) cat("ok\n")

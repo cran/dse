@@ -1,6 +1,6 @@
  require("dse1")
  Sys.info()
- version.dse()
+ DSEversion()
  data("eg1.DSE.data.diff", package="dse1") 
  
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
@@ -13,19 +13,19 @@ all.ok <- TRUE
 
 test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Muller")
 
-  VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
+  VARmodel  <-  estVARXar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
 
   VARmodelB <- TSmodel(VARmodel)
   B <- t(chol(VARmodel$estimates$cov))
   VARmodelB$B <- array(B, c(1,dim(B)))  # has B != I
-  VARmodelB <- set.parameters(VARmodelB)
+  VARmodelB <- setTSmodelParameters(VARmodelB)
   VARmodelB <- l(VARmodelB,VARmodel$data, warn=FALSE)
 
 cat("dse1 test 8a ...\n")
-  z  <- simulate(TSmodel(VARmodel), input=input.data(eg1.DSE.data.diff)) 
-  zz <- simulate(TSmodel(VARmodel), rng=get.RNG(z), 
-                     input=input.data(eg1.DSE.data.diff))
-  ok <- test.equal(z, zz, fuzz=fuzz.small)
+  z  <- simulate(TSmodel(VARmodel), input=inputData(eg1.DSE.data.diff)) 
+  zz <- simulate(TSmodel(VARmodel), rng=getRNG(z), 
+                     input=inputData(eg1.DSE.data.diff))
+  ok <- testEqual(z, zz, fuzz=fuzz.small)
 
    if (!ok) 
      {
@@ -35,32 +35,32 @@ cat("dse1 test 8a ...\n")
 cat("dse1 test 8b ...\n")
   sigma <- solve(t(VARmodelB$model$B[1,,]) %*% VARmodelB$model$B[1,,])
   sigma <- (sigma + t(sigma))/2 # insure symetric - chol is sensitive
-  zzz <- simulate(TSmodel(VARmodelB), rng=get.RNG(z), 
-                     input=input.data(eg1.DSE.data.diff), SIGMA=sigma)
-  ok <- test.equal(z, zzz, fuzz=fuzz.small)
-  error <- max(abs(output.data(z) - output.data(zzz)))
+  zzz <- simulate(TSmodel(VARmodelB), rng=getRNG(z), 
+                     input=inputData(eg1.DSE.data.diff), SIGMA=sigma)
+  ok <- testEqual(z, zzz, fuzz=fuzz.small)
+  error <- max(abs(outputData(z) - outputData(zzz)))
    cat("max. error ", max(error), "\n")
 
    if (any(is.na(error)) || any(is.nan(error)) || fuzz.small < error || !ok) 
-     {printTestValue(output.data(z), digits=18)
-      printTestValue(output.data(zzz), digits=18)
+     {printTestValue(outputData(z), digits=18)
+      printTestValue(outputData(zzz), digits=18)
       all.ok <- FALSE  
      }
 
 cat("dse1 test 8c ...\n")
   # next use estimates$cov
-  z  <- simulate(VARmodel, input=input.data(eg1.DSE.data.diff)) 
+  z  <- simulate(VARmodel, input=inputData(eg1.DSE.data.diff)) 
   sigma <- VARmodel$estimates$cov
   sigma <- (sigma + t(sigma))/2 # insure symetric - chol is sensitive
-  zz <- simulate(TSmodel(VARmodel), rng=get.RNG(z), 
-                     input=input.data(eg1.DSE.data.diff), SIGMA=sigma)
+  zz <- simulate(TSmodel(VARmodel), rng=getRNG(z), 
+                     input=inputData(eg1.DSE.data.diff), SIGMA=sigma)
 
-  if ( ! test.equal(z, zz, fuzz=fuzz.small)) 
+  if ( ! testEqual(z, zz, fuzz=fuzz.small)) 
      {
       all.ok <- FALSE  
      }
 
-  ok <- test.equal(summary(z)$estimates,
+  ok <- testEqual(summary(z)$estimates,
                    summary(zz)$estimates, fuzz=fuzz.small)
 
   if ( !ok) 

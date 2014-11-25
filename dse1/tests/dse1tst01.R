@@ -7,18 +7,18 @@
 #   postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
 #              # width=6, height=8, pointsize=10,
 #    system.info()
-#    version.dse()
+#    DSEversion()
 #    random.number.test() 
 #    dse1.function.tests(verbose=T)    
 #    example.verify.data(eg1.DSE.data.diff, fuzz.small=1e-12, verbose=T)  
-# # The following gave several..NOT CORRECT in R. It needs est.VARX.ar (not in earlier versions of R).
+# # The following gave several..NOT CORRECT in R. It needs estVARXar (not in earlier versions of R).
 # # example.tests(eg1.DSE.data.diff,fuzz.small=1e-12, verbose=TRUE)
 
 #####################
 
  require("dse1")
  Sys.info()
- version.dse()
+ DSEversion()
  data("eg1.DSE.data.diff", package="dse1") 
 
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
@@ -36,21 +36,21 @@ test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Mul
 
  cat("dse1 test 0 ...\n")
   # check "window"
-  z <- tfwindow(output.data(eg1.DSE.data.diff), start=c(1980,1), end=c(1980,1))
+  z <- tfwindow(outputData(eg1.DSE.data.diff), start=c(1980,1), end=c(1980,1))
   ok <- all( c (c(1,3)==dim(z), c(1980,1)==start(z), c(1980,1)==end(z)))
-  z <- tfwindow(output.data(eg1.DSE.data.diff), start=c(1980,1), end=c(1982,12))
+  z <- tfwindow(outputData(eg1.DSE.data.diff), start=c(1980,1), end=c(1982,12))
   ok <- ok & all( c (c(36,3)==dim(z), c(1980,1)==start(z), c(1982,12)==end(z)))
   all.ok <- ok
 
 
  cat("dse1 test 1 ...\n")
-  z <- est.VARX.ls(eg1.DSE.data.diff)
+  z <- estVARXls(eg1.DSE.data.diff)
 #  z <-eg1.DSE.data.diff
 #  lsfit produces warning messages in the following
 #  z$output[100,] <-NA
-#  z <- est.VARX.ls(z, warn=F)
-  VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
-  SSmodel  <- to.SS(VARmodel)
+#  z <- estVARXls(z, warn=F)
+  VARmodel  <-  estVARXar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
+  SSmodel  <- toSS(VARmodel)
   ok <- fuzz.large > abs(VARmodel$estimates$like[1] -
                l(SSmodel, eg1.DSE.data.diff, warn=FALSE)$estimates$like[1])
   ok <- ok & is.TSestModel(VARmodel) & is.TSmodel(VARmodel$model)
@@ -61,7 +61,7 @@ test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Mul
   VARmodelB <- TSmodel(VARmodel)
   B <- t(chol(VARmodel$estimates$cov))
   VARmodelB$B <- array(B, c(1,dim(B)))  # has B != I
-  VARmodelB <- set.parameters(VARmodelB)
+  VARmodelB <- setTSmodelParameters(VARmodelB)
   VARmodelB <- l(VARmodelB,VARmodel$data, warn=FALSE)
 
    good <- VARmodel$estimates$pred

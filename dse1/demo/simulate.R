@@ -40,8 +40,8 @@
   tfplot(ss)
 
   cat("Convert between State Space and ARMA models\n")
-  ss.from.arma <- l(to.SS(arma), data.arma.sim)
-  arma.from.ss <- l(to.ARMA(ss), data.ss.sim)
+  ss.from.arma <- l(toSS(arma), data.arma.sim)
+  arma.from.ss <- l(toARMA(ss), data.ss.sim)
   
   summary(ss.from.arma)
   summary(arma.from.ss)

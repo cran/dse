@@ -50,7 +50,7 @@ is used as the data.
 This is multiple applications of forecastCovSingle.TSmodel
 discard.before is an integer indicating the number of points in the
 beginning of forecasts to discard before calculating covariances.
-If it is the default, NULL, then the default (minimum.startup.lag) will
+If it is the default, NULL, then the default (minimumStartupLag) will
 be used for each model and the default (1) will be used for trend and zero.
 If zero  is TRUE then forecastCov is also calculated for a forecast of zero.
 If trend is TRUE then forecastCov is also calculated for a forecast of a linear 
@@ -58,9 +58,9 @@ trend using data to estimation.sample.
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-    model1 <- est.VARX.ar(eg1.DSE.data.diff)
-    model2 <- est.VARX.ls(eg1.DSE.data.diff)
-    z <-  forecastCov(model1, model2, data=trim.na(eg1.DSE.data.diff))
+    model1 <- estVARXar(eg1.DSE.data.diff)
+    model2 <- estVARXls(eg1.DSE.data.diff)
+    z <-  forecastCov(model1, model2, data=trimNA(eg1.DSE.data.diff))
     is.forecastCov(z)
 }
 %\keyword{DSE}

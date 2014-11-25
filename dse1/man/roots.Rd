@@ -36,11 +36,11 @@ determinant of the AR polynomial are returned.
 }
 \seealso{
 \code{\link{stability}},
-\code{\link{McMillan.degree}}
+\code{\link{McMillanDegree}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
-model <- est.VARX.ls(eg1.DSE.data.diff)
+model <- estVARXls(eg1.DSE.data.diff)
 roots(model)
 }
 %\keyword{DSE}

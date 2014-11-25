@@ -8,7 +8,7 @@
     \item{res}{A matrix with time-series residuals in columns.}
 }
 \seealso{
-\code{\link{information.tests}}
+\code{\link{informationTests}}
 }
 \examples{
 if(is.R()) require("ts")

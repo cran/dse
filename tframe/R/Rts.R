@@ -14,7 +14,7 @@ tframe.ts <- function(x){classed(tsp(x), c("tstframe", "tframe"))} # extractor
 
 "tframe<-.ts" <- function(x, value) {do.call("ts", append(list(x), value))}
 
-select.series.ts <- function(x, series=seqN(nseries(x))) {
+selectSeries.ts <- function(x, series=seqN(nseries(x))) {
   names <- seriesNames(x)
   if (is.character(series)) series <- match(names,series, nomatch=0) > 0
   if(all(0==series) | is.null(series)) r <- NULL
@@ -39,7 +39,7 @@ tbind.ts <- function(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
   if (!is.matrix(x)) x <- ts(matrix(x, length(x),1),
                       start=start(x), end=end(x), frequency=frequency(x))
   if (!pad.start | !pad.end)
-     x <- trim.na(x, start. = !pad.start, end. = !pad.end)
+     x <- trimNA(x, start. = !pad.start, end. = !pad.end)
   seriesNames(x) <- nm
   x
  }
