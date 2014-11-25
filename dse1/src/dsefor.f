@@ -1,11 +1,7 @@
-C  Uses routines  DGESV, DGETRF and DGETRI from lapack.
-
-C     removed PARM IS for scratch arrays in KF and calls but do more clean up
-C  RR can be p*p, QQ can be n*n
-
+C     2000/03/21 14:42:07 
 C           Copyright 1993, 1994, 1995, 1996  Bank of Canada.
 C           Copyright 1996, 1997  Paul Gilbert.
-C           Copyright 1998, 2001, 2004  Bank of Canada.
+C           Copyright 1998  Bank of Canada.
 
 C  Any person using this software has the right to use,
 C        reproduce and distribute it.
@@ -16,16 +12,14 @@ C  or indirect, arising from the use of the software.
 
 C -------------------------------------------------------------------
 
-C  A C code version of this code has also been distribute, but is not current.
-C  It was generated using the following (extracted from the f2c readme).
+C  A C code version of this code is also distribute. It has been generated
+C   using the following (extracted from the f2c readme).
 C NOTE:	You may exercise f2c by sending netlib@netlib.bell-labs.com
 C 	a message whose first line is "execute f2c" and whose remaining
 C 	lines are the Fortran 77 source that you wish to have converted.
 C 	Return mail brings you the resulting C, with f2c's error
 C 	messages between #ifdef uNdEfInEd and #endif at the end.
 
-C Comments below for compiling are fairly old. As of 2005 the code has been
-C   compiled for a few years using standard package build procedure in R.
 
 C Compile with: f77 -c -o dsefor.Sun4.o dsefor.f
 C           or
@@ -77,35 +71,35 @@ C               f77 -c -o dsefor.Sun5.large.o dsefor.f
 C  
 C   
 C        1         2         3         4         5         6         712       8
-C      SUBROUTINE ERROR(STR,L, IS,N)
-CC  STR is a string of length L and IS is an integer vector of length N
-C      INTEGER L,N
-C      INTEGER IS(N)
-C      CHARACTER STR(L)
-CC      CALL INTPR(STR,L,IS,N)
-CC      WRITE(STR,IS)
-C      RETURN 
-C      END
+      SUBROUTINE ERROR(STR,L, IS,N)
+C  STR is a string of length L and IS is an integer vector of length N
+      INTEGER L,N
+      INTEGER IS(N)
+      CHARACTER STR(L)
+C      CALL INTPR(STR,L,IS,N)
+C      WRITE(STR,IS)
+      RETURN 
+      END
 
-C      SUBROUTINE DBPR(STR,L, IS,N)
-CC  STR is a string of length L and IS is an integer vector of length N
-C      INTEGER L,N
-C      INTEGER IS(N)
-C      CHARACTER STR(L)
-CC      CALL INTPR(STR,L,IS,N)
-CC      WRITE(STR,IS)
-C      RETURN 
-C      END
+      SUBROUTINE DBPR(STR,L, IS,N)
+C  STR is a string of length L and IS is an integer vector of length N
+      INTEGER L,N
+      INTEGER IS(N)
+      CHARACTER STR(L)
+C      CALL INTPR(STR,L,IS,N)
+C      WRITE(STR,IS)
+      RETURN 
+      END
 
-C      SUBROUTINE DBPRDB(STR,L, R,N)
-CC  STR is a string of length L and R is an double real vector of length N
-C      INTEGER L,N
-C      DOUBLE PRECISION R(N)
-C      CHARACTER STR(L)
-CC      CALL DBLEPR(STR,L, R, N)
-CC      WRITE(STR,R)
-C      RETURN 
-C      END
+      SUBROUTINE DBPRDB(STR,L, R,N)
+C  STR is a string of length L and R is an double real vector of length N
+      INTEGER L,N
+      DOUBLE PRECISION R(N)
+      CHARACTER STR(L)
+C      CALL DBLEPR(STR,L, R, N)
+C      WRITE(STR,R)
+      RETURN 
+      END
 
 
       SUBROUTINE SIMSS(Y,Z,M,N,P,NSMPL,U,W,E,F,G,H,FK,Q,R, GAIN)
@@ -113,7 +107,7 @@ C
 C  Simulate a state space model model.
 C  See s code simulate.ss for details 
       INTEGER M,N,P, NSMPL
-      INTEGER GAIN
+      LOGICAL GAIN
       DOUBLE PRECISION Z(NSMPL,N)
       DOUBLE PRECISION Y(NSMPL,P),U(NSMPL,M) 
       DOUBLE PRECISION W(NSMPL,P),E(NSMPL,N) 
@@ -133,7 +127,7 @@ C
             DO 2003 K=1,M
 2003          Z(IT,I)=Z(IT,I)+G(I,K)*U(IT,K)
       ENDIF
-      IF (GAIN .EQ. 1) THEN
+      IF (GAIN) THEN
         DO 2004 I=1,N
           DO 2004 K=1,P
 2004        Z(IT,I)=Z(IT,I)+FK(I,K)*W(IT-1,K)
@@ -147,21 +141,20 @@ C
          Y(IT,I)=0.0
          DO 2010 J=1,N
 2010        Y(IT,I)= Y(IT,I) + H(I,J)*Z(IT,J)
-      IF (GAIN .EQ. 1) THEN
+      IF (GAIN) THEN
          DO 2014 I=1,P
 2014        Y(IT,I)=Y(IT,I)+W(IT,I)
       ELSE
          DO 2015 I=1,P
            DO 2015 K=1,P
-2015        Y(IT,I)=Y(IT,I)+R(I,K)*W(IT,K)
+2015        Y(IT,I)=Y(IT,I)+R(I,K)*E(IT,K)
       ENDIF
 1000  CONTINUE
       RETURN 
       END
 C
       SUBROUTINE SMOOTH( Z, TRKERR, U,Y, N,M,P,NSMPL, F,G,H,RR,
-     +  IS, A,D,L,PT1, ZT, IPIV)
-C see also the version XMOOTH below for debugging.
+     +  A,D,L,PT1, ZT)
 C
 C   Calculate the smoothed state for the model:
 C
@@ -179,19 +172,26 @@ C     tracking error TRKERR.
       DOUBLE PRECISION U(NSMPL,M), Y(NSMPL,P)
       DOUBLE PRECISION F(N,N),G(N,M),H(P,N),RR(P,P)
 C   
-C   IS is the maximum state dimension  and the maximum output
-C     dimension  (used for working arrays)
 C   The following are for scratch space
-      DOUBLE PRECISION A(IS,IS),D(IS,IS),L(IS,IS),PT1(IS,IS)
-      DOUBLE PRECISION ZT(IS)
-      INTEGER IPIV(IS,IS)
+      DOUBLE PRECISION A(N,N),D(N,N),L(N,N),PT1(N,N)
+      DOUBLE PRECISION ZT(N)
 
+      DOUBLE PRECISION DETOM
 C
 C      CALL DBPR('M     ',6, M,1)
 C      CALL DBPR('N     ',6, N,1)
 C      CALL DBPR('P     ',6, P,1)
 C      CALL DBPR('NSMPL  ',6, NSMPL,1)
       
+      IF (IS.LT.N) THEN
+      CALL ERROR('ERROR: state dimension cannot exceed ',48, IS,1)
+         RETURN
+       ENDIF
+      IF ( IS.LT.P)  THEN
+      CALL ERROR('ERROR: output dimensions cannot exceed ',48, IS,1)
+         RETURN
+       ENDIF
+C
 C
 C        RR= RR' 
 C
@@ -206,71 +206,55 @@ C    backwards recursion, so:
 C                                          D=H*P(t|t-1)*H' + RR
       DO 2 I=1,N
          DO 2 J=1,P
-            A(J,I)=0.0D0
+            A(I,J)=0.0D0
             DO 2 K=1,N
-  2            A(J,I)=A(J,I)+TRKERR(IT,I,K)*H(J,K)
-C                     A now has  ( P(t|t-1)*H' )'                 
+  2            A(I,J)=A(I,J)+TRKERR(IT,I,K)*H(J,K)
       DO 3 I=1,P
          DO 3 J=1,P
             D(I,J)=RR(I,J)
             DO 3 K=1,N
-  3            D(I,J)=D(I,J)+H(I,K)*A(J,K)
-C                     D now has  H*P(t|t-1)*H' + RR                
+  3            D(I,J)=D(I,J)+H(I,K)*A(K,J)
+C     INVERS inverts in place and RETURNS THE DETERMINANT. 
+      CALL  INVERS(D,P,IS,DETOM)
 
-C                        Kalman gain    K=P(t|t-1)*H'*inv(D)   (A5)
-C  For inverse call DGETRI, for solve call DGETRS.
-CC    Invert method ( invert in place )
-C      CALL DGETRF( P, P, D, IS, IPIV, INFO )
-C      CALL DGETRI( P, D, IS, IPIV, L, IS*IS, INFO )
-C
-C      DO 4 I=1,N
-C         DO 4 J=1,P
-C            L(I,J)=0.0D0
-C            DO 4 K=1,P
-C  4            L(I,J)=L(I,J)+A(K,I)*D(K,J)
-
-C     Solve  method (solve in place. Result is in non-inverted array.)
-      CALL DGETRF( P, P, D, IS, IPIV, INFO )
-C       A has been transposed to use here 
-      CALL DGETRS( 'T', P, N, D, IS, IPIV, A, IS, INFO )
-
+C                        Kalman gain  (A=)  K=P(t|t-1)*H'*inv(D)
       DO 4 I=1,N
          DO 4 J=1,P
-  4            L(I,J)=A(J,I)
-
-
+            L(I,J)=0.0D0
+            DO 4 K=1,P
+  4            L(I,J)=L(I,J)+A(I,K)*D(K,J)
 C                       L now contains the Kalman gain K
-
 C      IF (IT.EQ.NSMPL-1) THEN
 C         CALL DBPRDB('K in L ',7,L,IS*IS)
 C      ENDIF
 
-C  E(z(t)|y(t),u(t+1) ZT = z(t|t) = Z(t|t-1) + K*(y - H*Z(t|t-1))  (A6)
+C  E(z(t)|y(t),u(t+1) ZT = z(t|t) = Z(t|t-1) + K*(y-H*Z(t|t-1) - G*u(t)
       DO 107 I=1,P
             A(I,1)=Y(IT,I)
             DO 107 K=1,N
 107            A(I,1)=A(I,1) - H(I,K)*Z(IT,K)
-C                     A(,1) now has  y - H*Z(t|t-1)                   
+      IF (M.NE.0) THEN
+         DO 108 I=1,P
+            DO 108 K=1,M
+108            A(I,1)=A(I,1) - G(I,K)*U(IT,K)
+      ENDIF
       DO 109 I=1,N
             ZT(I)=Z(IT,I)
             DO 109 K=1,P
 109            ZT(I)=ZT(I) + L(I,K)*A(K,1)
-C                     ZT now has  Z(t|t-1) + K*(y - H*Z(t|t-1))                  
 
 
-C                           P(t|t) = P(t|t-1) - K*H*P(t|t-1)      (A7)
+C                                  P(t|t) = P(t|t-1) - K*H*P(t|t-1)
       DO 7 I=1,N
          DO 7 J=1,N
             A(I,J)=0.0D0
             DO 7 K=1,P
   7            A(I,J)=A(I,J) + L(I,K)*H(K,J)
-C                     A now has  K*H                   
       DO 8 I=1,N
          DO 8 J=1,N
             L(I,J)=TRKERR(IT,I,J)
             DO 8 K=1,N
-  8            L(I,J)=L(I,J) - A(I,K)*TRKERR(IT,K,J)
-C                     L now has  P(t|t) = P(t|t-1) - K*H*P(t|t-1)               
+  8            L(I,J)=L(I,J)-A(I,K)*TRKERR(IT,K,J)
       DO 9 I=1,N
             DO 9 J=1,N
   9            A(I,J)=(L(I,J)+L(J,I))/2.0D0
@@ -279,94 +263,295 @@ C      IF (IT.EQ.NSMPL-1) THEN
 C         CALL DBPRDB('P(t|t) in A ',12,A,IS*IS)
 C      ENDIF
 
-C                                   J = P(t|t)*F'*inv(P(t+1|t))  (A8)
+C                                   J = P(t|t)*F'*inv(P(t+1|t))
       DO 51 I=1,N
         DO 51 J=1,N
  51        L(I,J)=PT1(I,J)
-
-C  For inverse call DGETRI, for solve call DGETRS.
-CC    Invert method ( invert in place )
-C      CALL DGETRF( N, N, L, IS, IPIV, INFO )
-C      CALL DGETRI( N, L, IS, IPIV, D, IS*IS, INFO )
-C
-CC  transpose D to be consistent with solve method
-C      DO 52 I=1,N
-C        DO 52 J=1,N
-C            D(J,I)=0.0D0
-C            DO 52 K=1,N
-C 52            D(J,I)=D(J,I) + F(K,I)*L(K,J)
-
-C     Solve  method (solve in place. Result is in non-inverted array.)
-      CALL DGETRF( N, N, L, IS, IPIV, INFO )
+      CALL  INVERS(L,N,IS,DETOM)
       DO 52 I=1,N
         DO 52 J=1,N
- 52        D(I,J)=F(I,J)
-      CALL DGETRS( 'T', N, N, L, IS, IPIV, D, IS, INFO )
-
-
-C                       D  now contains ( F'*inv(P(t+1|t)) )'
+            D(I,J)=0.0D0
+            DO 52 K=1,N
+ 52            D(I,J)=D(I,J)+F(K,I)*L(K,J)
       DO 53 I=1,N
         DO 53 J=1,N
          L(I,J)=0.0D0
             DO 53 K=1,N
- 53            L(I,J)=L(I,J) + A(I,K)*D(J,K)
-C                         L now contains J and A still contains P(t|t).
+ 53            L(I,J)=L(I,J)+A(I,K)*D(K,J)
+C                         L now contains J and A now contains P(t|t).
 
-C            smoothed state sm[t] = ZT + J*(sm[t+1] - F*ZT - G*u(t+1))  (A9)
+C            smoothed state sm[t] = ZT + J*(sm[t+1] - F*ZT - G*u(t+1))
       DO 16 I=1,N
          D(I,1)=Z(IT+1,I)
          DO 16 K=1,N
- 16            D(I,1)=D(I,1) - F(I,K)*ZT(K)
-C                         D now contains sm[t+1] - F*ZT 
+ 16            D(I,1)=D(I,1)-F(I,K)*ZT(K)
       IF (M.NE.0) THEN
          DO 17 I=1,N
             DO 17 K=1,M
- 17            D(I,1)=D(I,1) - G(I,K)*U(IT+1,K)
+ 17            D(I,1)=D(I,1)-G(I,K)*U(IT+1,K)
       ENDIF
-C                         D now contains sm[t+1] - F*ZT - G*u(t+1)
       DO 18 I=1,N
          Z(IT,I)=ZT(I)
          DO 18 K=1,N
- 18           Z(IT,I)=Z(IT,I) + L(I,K)*D(K,1)
-C                        Z now contains ZT + J*(sm[t+1] - F*ZT - G*u(t+1))
+ 18           Z(IT,I)=Z(IT,I)+L(I,K)*D(K,1)
 
-C  smoothed tracking error strk[t]= P[t|t] + J*(strk[t+1]-trk[t+1])*J'  (A10)
+C  smoothed tracking error strk[t]= P[t|t] + J*(strk[t+1]-trk[t+1])*J'
 C     L contains J and A contains P(t|t) and PT1 contains trk[t+1].
       DO 26 I=1,N
          DO 26 J=1,N
  26          PT1(I,J)=TRKERR(IT+1,I,J) - PT1(I,J)
-C                       PT1 now contains (strk[t+1]-trk[t+1])
       DO 27 I=1,N
          DO 27 J=1,N
             D(I,J)=0.0D0
             DO 27 K=1,N
  27            D(I,J)=D(I,J)+PT1(I,K)*L(J,K)
-C                       D now contains (strk[t+1]-trk[t+1])*J'
-      DO 28 I=1,N
-         DO 28 J=1,N
-            DO 28 K=1,N
- 28            A(I,J)=A(I,J)+L(I,K)*D(K,J)
-C                       A now contains P[t|t] + J*(strk[t+1]-trk[t+1])*J'
       DO 29 I=1,N
          DO 29 J=1,N
  29         PT1(I,J)=TRKERR(IT,I,J)
-C  PT1 now contains trk[t+1], the filter tracking error for the next iteration  
-      DO 30 I=1,N
-            DO 30 J=1,N
- 30            TRKERR(IT,I,J)=(A(I,J)+A(J,I))/2.0D0
-C  TRKERR(IT,,) now contains smtrk[t+1], the smoother tracking error  
+      DO 28 I=1,N
+         DO 28 J=1,N
+            TRKERR(IT,I,J)=A(I,J)
+            DO 28 K=1,N
+ 28            TRKERR(IT,I,J)=TRKERR(IT,I,J)+L(I,K)*D(K,J)
 
 1000  CONTINUE
 
       RETURN 
       END
 C
+      SUBROUTINE KFP(EY, HPERR, PRDERR, ERRWT,
+     + M,N,P,NSMPL,NPRED,NACC,U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
+     + ITH,PARM,AP,IP,JP,ICT,CONST,AN,IN,JN)
 
+C
+C Put parameters into arrays (as in S function set.arrays) and call KF
+C
+C  The state and tracking error are not calculated.
+C       Use KF if these are needed.
+C
+C  It is assummed that M,N,P, the dimensions of the parameter
+C    arrays - are given. Trying to calculate these causes problems.
+C
+      INTEGER HPERR
+      INTEGER M,N,P, NSMPL, NPRED, NACC
+      INTEGER ITH,ICT,IP(ITH),JP(ITH),IN(ICT),JN(ICT)
+      INTEGER AP(ITH),AN(ICT)
+
+      DOUBLE PRECISION EY(NPRED,P), PRDERR(NSMPL,P)
+      DOUBLE PRECISION ERRWT(HPERR)
+C      DOUBLE PRECISION STATE(NPRED,N),TRKERR(NPRED,N,N)
+      DOUBLE PRECISION STATE(1,1),TRKERR(1,1,1)
+      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
+      DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
+      DOUBLE PRECISION  Z0(N), P0(N,N)
+
+      LOGICAL LSTATE, LTKERR
+      LOGICAL GAIN
+C
+C..bug in S: passing characters is unreliable
+C   use integer for AP and AN...
+      DOUBLE PRECISION PARM(ITH),CONST(ICT)
+C  state and trkerr are not used but must be passed to KF
+C 
+      INTEGER I,J
+C
+      LSTATE = .FALSE.
+      LTKERR = .FALSE.
+
+      DO 1 I=1,N
+            DO 1 J=1,N
+1              F(I,J) = 0.0D+0
+      DO 2 I=1,N
+            DO 2 J=1,M
+2              G(I,J) = 0.0D+0
+      DO 3 I=1,P
+            DO 3 J=1,N
+3              H(I,J) = 0.0D+0
+      DO 4 I=1,N
+            DO 4 J=1,P
+4              FK(I,J) = 0.0D+0
+      DO 5 I=1,N
+            DO 5 J=1,N
+5              Q(I,J) = 0.0D+0
+      DO 6 I=1,P
+            DO 6 J=1,P
+6              R(I,J) = 0.0D+0
+      DO 7 I=1,P
+7              Z0(I) = 0.0D+0
+      IF (ITH.GT.0) THEN
+         DO 101 I=1,ITH
+            IF   (AP(I).EQ.1) THEN  
+               F(IP(I),JP(I)) = PARM(I)
+            ELSEIF(AP(I).EQ.2) THEN
+               G(IP(I),JP(I)) = PARM(I)
+            ELSEIF(AP(I).EQ.3) THEN 
+               H(IP(I),JP(I)) = PARM(I)   
+            ELSEIF(AP(I).EQ.4) THEN 
+              FK(IP(I),JP(I)) = PARM(I)   
+            ELSEIF(AP(I).EQ.5) THEN 
+               Q(IP(I),JP(I)) = PARM(I)   
+            ELSEIF(AP(I).EQ.6) THEN 
+               R(IP(I),JP(I)) = PARM(I)   
+            ELSEIF(AP(I).EQ.7) THEN 
+               Z0(IP(I)) = PARM(I)   
+            ELSEIF(AP(I).EQ.8) THEN 
+               P0(IP(I),JP(I)) = PARM(I)   
+            ENDIF
+101      CONTINUE   
+      ENDIF
+      IF (ICT.GT.0) THEN
+         DO 102 I=1,ICT
+            IF   (AN(I).EQ.1) THEN 
+               F(IN(I),JN(I)) = CONST(I)
+            ELSEIF(AN(I).EQ.2)  THEN
+               G(IN(I),JN(I)) = CONST(I)
+            ELSEIF(AN(I).EQ.3)  THEN
+               H(IN(I),JN(I)) = CONST(I)   
+            ELSEIF(AN(I).EQ.4) THEN 
+              FK(IN(I),JN(I)) = CONST(I)   
+            ELSEIF(AN(I).EQ.5) THEN 
+               Q(IN(I),JN(I)) = CONST(I)   
+            ELSEIF(AN(I).EQ.6) THEN 
+               R(IN(I),JN(I)) = CONST(I)   
+            ELSEIF(AN(I).EQ.7) THEN 
+               Z0(IN(I)) = CONST(I)   
+            ELSEIF(AN(I).EQ.8) THEN 
+               P0(IN(I),JN(I)) = CONST(I)   
+            ENDIF
+102      CONTINUE   
+      ENDIF
+
+      CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR, TRKERR,
+     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+      RETURN
+      END
+C
+
+      SUBROUTINE KFPRJ(PROJ, DSCARD, HORIZ, NHO,
+     + EY, M,N,P, NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+
+C  multiple calls to KF for prediction at given horizons.
+C     See S program project.
+C
+C  The state and tracking error are not calculate.
+
+      INTEGER DSCARD, NHO, HORIZ(NHO)
+      INTEGER M,N,P, NACC
+
+      DOUBLE PRECISION PROJ(NHO,NACC,P)
+      DOUBLE PRECISION EY(NACC,P)
+      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
+      DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
+      DOUBLE PRECISION  Z0(N), P0(N,N)
+
+      LOGICAL GAIN
+
+C  state and trkerr are not used but must be passed to KF
+C 
+      LOGICAL LSTATE, LTKERR
+      INTEGER HO,J, IT, MHORIZ
+      INTEGER HPERR
+      DOUBLE PRECISION PRDERR(1,1), ERRWT(1)
+      DOUBLE PRECISION STATE(1,1),TRKERR(1,1,1)
+
+      LSTATE = .FALSE.
+      LTKERR = .FALSE.
+      HPERR = 0
+      MHORIZ = HORIZ(1)
+      DO 1 I=2, NHO
+ 1       MHORIZ=MIN(MHORIZ,HORIZ(I))
+
+      DO 10 IT=DSCARD, (NACC-MHORIZ)
+C       this assumes HORIZ is sorted in ascending order
+        IF (IT.GT.(NACC-HORIZ(NHO))) THEN
+            NHO = NHO-1
+C            CALL DBPR('NHO   ',6, NHO,1)
+        ENDIF
+
+        CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR,TRKERR,
+     +     M,N,P, IT , NACC,NACC,  U,Y, F,G,H,FK, Q,R, 
+     +     GAIN,Z0,P0)
+
+        DO 4 HO=1,NHO
+            DO 4 J=1,P
+              PROJ(HO,IT+HORIZ(HO),J) = EY(IT+HORIZ(HO),J) 
+4     CONTINUE
+10    CONTINUE
+
+      RETURN
+      END
+
+      SUBROUTINE KFEPR(COV, DSCARD, HORIZ, NH, NT,
+     + EY, M,N,P, NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+
+C  multiple calls to KF for prediction evaluation.
+C     See S program predictions.cov.TSmodel
+C
+C  The state and tracking error are not calculate.
+
+      INTEGER DSCARD, NH, HORIZ(NH), NT(NH)
+      INTEGER M,N,P, NPRED, NACC
+
+      DOUBLE PRECISION COV(NH,P,P)
+      DOUBLE PRECISION EY(NPRED,P)
+      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
+      DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
+      DOUBLE PRECISION  Z0(N), P0(N,N)
+
+      LOGICAL GAIN
+
+C  state and trkerr are not used but must be passed to KF
+C 
+      LOGICAL LSTATE, LTKERR
+      INTEGER I,J, IT, HI
+      INTEGER HPERR
+      DOUBLE PRECISION PRDERR(1,1), ERRWT(1), MF
+      DOUBLE PRECISION STATE(1,1),TRKERR(1,1,1)
+
+C
+C        CALL DBPR('NPRED ',6, NPRED,1)
+C        CALL DBPR('HORIZ ',6, HORIZ(1),1)
+C        CALL DBPR('DSCARD',7, DSCARD,1)
+      LSTATE = .FALSE.
+      LTKERR = .FALSE.
+      HPERR = 0
+      DO 1 I=1,NH
+1        NT(I) = 0
+      DO 2 K=1,NH
+         DO 2 I=1,P
+            DO 2 J=1,P
+2               COV(K,I,J)= 0.0D0
+
+      DO 10 IT=DSCARD, 1+NPRED-HORIZ(1)
+
+        CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR,TRKERR,
+     +     M,N,P, IT ,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
+C       this assumes HORIZ is sorted in ascending order
+
+
+        IF ((IT-1+HORIZ(NH)).GT.NPRED) THEN
+           NH = NH-1
+        ENDIF
+        DO 4 I=1,NH
+           HI = IT-1+HORIZ(I)
+           DO 4 J=1,P
+4            EY(I,J) = EY(HI,J) - Y(HI,J)
+        DO 5 K=1,NH
+           NT(K) = NT(K)+1
+           MF= DBLE(NT(K)-1)/DBLE(NT(K))
+           DO 5 I=1,P
+              DO 5 J=1,P
+                COV(K,I,J)= COV(K,I,J)*MF + EY(K,I)*EY(K,J)/NT(K)
+5     CONTINUE
+
+10    CONTINUE
+
+      RETURN
+      END
 
       SUBROUTINE KF(EY, HPERR,PRDERR,ERRWT, LSTATE,STATE,
      + LTKERR,TRKERR,
-     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
+     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0)
 C
 C   Calculate the likelihood value for the model:
 C
@@ -414,8 +599,7 @@ C   IS is the maximum state dimension  and the maximum output
 C     dimension  (used for working arrays)
 C    NSTART is not properly implemented and must be set to 1.
 C
-C      PARAMETER (IS=100,NSTART=1)
-      PARAMETER (NSTART=1)
+      PARAMETER (IS=100,NSTART=1)
 
       INTEGER HPERR, M,N,P, NSMPL, NACC
 
@@ -425,16 +609,14 @@ C      PARAMETER (IS=100,NSTART=1)
       DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
       DOUBLE PRECISION F(N,N),G(N,M),H(P,N),R(P,P),Q(N,N),FK(N,P)
 
-      INTEGER LSTATE, LTKERR, GAIN
+      LOGICAL LSTATE, LTKERR, GAIN
 C   
 C
-      INTEGER IPIV(IS,IS)
-
-      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
-      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
-
+      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),DETOM
+      DOUBLE PRECISION QQ(IS,IS),RR(IS,IS)
+      DOUBLE PRECISION Z(IS), ZZ(IS),WW(IS)
       DOUBLE PRECISION HW
-      INTEGER LPERR
+      LOGICAL LPERR
 C
 C      CALL DBPR('M     ',6, M,1)
 C      CALL DBPR('N     ',6, N,1)
@@ -443,7 +625,7 @@ C      CALL DBPR('NSMPL  ',6, NSMPL,1)
 C      CALL DBPR('NPRED  ',6, NPRED,1)
 C      CALL DBPR('NACC  ',6, NACC,1)
 C      CALL DBPRDB('R  ',3,R,9)
-C      IF (GAIN.EQ.1) THEN 
+C      IF ( GAIN) THEN 
 C         CALL DBPR('GAIN is T',9, 1,0)
 C      ELSE
 C         CALL DBPR('GAIN is F',9, 1,0)
@@ -451,10 +633,18 @@ C      ENDIF
 C      CALL DBPRDB('Q  ',3,Q,N*N)
 C      CALL DBPR('HPERR ',6, HPERR,1)
       
-      LPERR= 0
+      IF (IS.LT.N) THEN
+         CALL ERROR('ERROR: state dimension cannot exceed ',48, IS,1)
+         RETURN
+      ENDIF
+      IF ( IS.LT.P)  THEN
+         CALL ERROR('ERROR: output dimensions cannot exceed ',48, IS,1)
+         RETURN
+      ENDIF
+      LPERR= .FALSE.
       IF (HPERR.GT.0) THEN
          DO 500 I=1,HPERR
-           IF (ERRWT(I).GT.0.0)  LPERR= 1
+           IF (ERRWT(I).GT.0.0)  LPERR=.TRUE.
  500     CONTINUE    
       ENDIF
 C
@@ -465,7 +655,7 @@ C     initial state.
       DO 210 I=1,N
  210         ZZ(I)=Z0(I) 
 C
-      IF (GAIN .NE. 1) THEN
+      IF (.NOT. GAIN ) THEN
 C        initial tracking error.
          DO 220 I=1,N
             DO 220 J=1,N
@@ -489,26 +679,21 @@ C
 C    Start Time loop
 C
       DO 1000 IT=NSTART,NSMPL
-      IF (GAIN .NE. 1) THEN  
-                                   
-C   Kalman gain  FK = F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
-C   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      IF (.NOT. GAIN) THEN  
 C
-C   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ P(t|t-1)*H' ~~~~~~
+C                                      
+C   Kalman gain  FK = F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
+C
       DO 5 I=1,N
          DO 5 J=1,P
             AA(I,J)=0.0D0
             DO 5 K=1,N
   5            AA(I,J)=AA(I,J)+PP(I,K)*H(J,K)
-
-C    ~~~~~~~~~~~~~~~~~~F*P(t|t-1)*H'~~~~~~~~~~~~~~~~~~~~~~~~~~~
       DO 6 I=1,N
          DO 6 J=1,P
             FK(I,J)=0.0D0
             DO 6 K=1,N
   6           FK(I,J)=FK(I,J)+F(I,K)*AA(K,J)
-
-C     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~H*P(t|t-1)*H' + RR'~~~
       DO 7 I=1,P
          DO 7 J=1,P
             A(I,J)=RR(I,J)
@@ -519,40 +704,19 @@ C     force symetry.
       DO 9 I=1,P
          DO 9 J=1,P
   9         AA(I,J)=(A(I,J)+A(J,I))/2.0D0
-
-C     ~~~~~~~~~~~~~FK =F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
-C  For inverse call DGETRI, for solve call DGETRS.
-C     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ inv( H*P(t|t-1)*H' + RR')
-CC    Invert method ( invert in place )
-C      CALL DGETRF( P, P, AA, IS, IPIV, INFO )
-C      CALL DGETRI( P, AA, IS, IPIV, A, IS*IS, INFO )
 C
-C     ~~~~~~~~~~~~~~~~~F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
-C      DO 14 I=1,N
-C         DO 14 J=1,P
-C            A(I,J)=0.0D0
-C            DO 14 K=1,P
-C  14           A(I,J)=A(I,J)+FK(I,K)*AA(K,J)
+C     INVERS inverts in place and RETURNS THE DETERMINANT. 
+      CALL  INVERS(AA,P,IS,DETOM)
+C     DETOM SHOULD BE POSITIVE
 C
-C      DO 15 I=1,N
-C         DO 15 J=1,P
-C  15           FK(I,J)=A(I,J)
-
-C     Solve  method (solve in place. Result is in non-inverted array.)
-C     ~~~~~~~~~~~~~~~~~F*P(t|t-1)*H'* inv( H*P(t|t-1)*H' + RR')
-      CALL DGETRF( P, P, AA, IS, IPIV, INFO )
-C       need KF transpose 
-      DO 14 I=1,P
-         DO 14 J=1,N
-  14           A(I,J)=FK(J,I)
-      CALL DGETRS( 'T',  P, N, AA, IS, IPIV, A, IS, INFO )
-
+      DO 14 I=1,N
+         DO 14 J=1,P
+            A(I,J)=0.0D0
+            DO 14 K=1,P
+  14           A(I,J)=A(I,J)+FK(I,K)*AA(K,J)
       DO 15 I=1,N
          DO 15 J=1,P
-  15           FK(I,J)=A(J,I)
-
-C   Now FK has the Kalman gain
-
+  15           FK(I,J)=A(I,J)
 C      IF (IT.EQ.1) THEN
 C         CALL DBPRDB('K ',2,FK,N*P)
 C      ENDIF
@@ -585,7 +749,7 @@ C     force symetry to avoid numerical round off problems
 C      IF (IT.EQ.1) THEN
 C         CALL DBPRDB('PP  ',4,PP,IS*IS)
 C      ENDIF
-      IF(LTKERR .EQ. 1) THEN
+      IF(LTKERR) THEN
          DO 21 I=1,N
             DO 21 J=1,N
   21           TRKERR(IT,I,J)=PP(I,J)
@@ -608,7 +772,7 @@ C
   23        Z(I)=Z(I)+G(I,K)*U(IT,K)
       DO 24 I=1,N
  24         ZZ(I)=Z(I)
-      IF (LSTATE .EQ. 1) THEN
+      IF (LSTATE) THEN
          DO 25 I=1,N
  25         STATE(IT,I)=Z(I)
       ENDIF
@@ -629,7 +793,7 @@ C   EY stores history of predition error WW to reconstruct predictions
 C      CALL DBPRDB('WW ',3,WW,P)
 
 C   Return weighted prediction error
-      IF (LPERR .EQ. 1) THEN
+      IF (LPERR) THEN
          DO 401 I=1,P
  401          PRDERR(IT,I)= ERRWT(1)*WW(I)**2
          IF (HPERR.GT.1) THEN
@@ -696,7 +860,7 @@ C   use prediction error from last sample point (i.e. for first prediction)
             DO 2004 K=1,P
 2004           Z(I)=Z(I)+FK(I,K)*WW(K)
       ENDIF
-      IF (LSTATE .EQ. 1) THEN
+      IF (LSTATE) THEN
          DO 2005 I=1,N
 2005        STATE(IT,I)=Z(I)
       ENDIF
@@ -724,7 +888,7 @@ C      Simulate an ARMA model. See documentation in ARMA and in the S version.
 
       DOUBLE PRECISION Y(NSMPL,P),U(NSMPL,M),Y0(IA,P), U0(IC,M)
       DOUBLE PRECISION W(NSMPL,P), W0(IB,P)
-      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(NSMPL,P)
+      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(P)
 
 C       CALL DBPRDB('inSIMARMA ',7, 1,1)
 C       CALL DBPR('M     ',6, M,1)
@@ -738,12 +902,10 @@ C      CALL DBPRDB('U  ',3, U,(NSMPL*M) )
         DO 2001 IT=NSTART,NSMPL
 2001         Y(IT,I)= 0.0D0
 
-      DO 1 IT=NSTART,NSMPL 
-      DO 1 I=1,P
- 1         Y(IT,I)= TREND(IT,I)
-
       DO 1000 IT=NSTART,NSMPL
  
+      DO 1 I=1,P
+ 1         Y(IT,I)= TREND(I)
 C      IF (IT.LE.5) CALL DBPRDB('step1 ',6, Y(IT,3),1)
       DO 5 L=2,IA
          IF ((IT+1).LE.L) THEN
@@ -791,13 +953,206 @@ C      IF (IT.LE.5) CALL DBPRDB('step4 ',6, Y(IT,3),1)
       RETURN 
       END
 
+      SUBROUTINE ARMAP(EY, HPERR, PRDERR, ERRWT,
+     + M,P,IA,IB,IC,NSMPL,NPRED,NACC,  U,Y , A,B,C, TREND,
+     + ITH,PARM,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
+     + IS,AA,BB,WW)
+C
+C Put parameters into arrays (as in S function set.arrays) and call ARMA
+C
+C  It is assummed that M,P,IA,IB, and IC - the dimensions of the parameter
+C    arrays - are given. Trying to calculate these causes problems.
+C
+      INTEGER M,P,IA,IB,IC, NSMPL, NACC
+      INTEGER HPERR
+      INTEGER ITH,ICT,IP(ITH),JP(ITH),LP(ITH),IN(ICT),JN(ICT),LN(ICT)
+
+      DOUBLE PRECISION EY(NPRED,P), PRDERR(NSMPL,P)
+      DOUBLE PRECISION ERRWT(HPERR)
+      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
+      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(P) 
+      DOUBLE PRECISION AA(IS,IS), BB(IS,IS), WW(IS)
+C
+C..bug in S: passing characters is unreliable
+C   use integer for AP and AN...
+      INTEGER AP(ITH),AN(ICT)
+      DOUBLE PRECISION PARM(ITH),CONST(ICT)
+C 
+      INTEGER I,J,L
+C
+      DO 1 L=1,IA
+         DO 1 I=1,P
+            DO 1 J=1,P
+1              A(L,I,J) = 0.0
+      DO 2 L=1,IB
+         DO 2 I=1,P
+            DO 2 J=1,P
+2              B(L,I,J) = 0.0 
+      DO 3 L=1,IC
+         DO 3 I=1,P
+            DO 3 J=1,M
+3              C(L,I,J) = 0.0
+      DO 4 I=1,P
+4         TREND(I) = 0.0
+C       IA=0
+C       IB=0
+C       IC=0
+      IF (ITH.GT.0) THEN
+         DO 101 I=1,ITH
+            IF   (AP(I).EQ.1) THEN  
+               A(LP(I),IP(I),JP(I)) = PARM(I)
+C               IA=MAX(IA,LP(I))
+            ELSEIF(AP(I).EQ.2) THEN
+               B(LP(I),IP(I),JP(I)) = PARM(I)
+C               IB=MAX(IB,LP(I))
+            ELSEIF(AP(I).EQ.3) THEN 
+               C(LP(I),IP(I),JP(I)) = PARM(I)   
+C               IC=MAX(IC,LP(I))
+            ELSEIF(AP(I).EQ.4) THEN 
+               TREND(IP(I)) = PARM(I)  
+            ENDIF
+101      CONTINUE   
+      ENDIF
+      IF (ICT.GT.0) THEN
+         DO 102 I=1,ICT
+            IF   (AN(I).EQ.1) THEN 
+               A(LN(I),IN(I),JN(I)) = CONST(I)
+C               IA=MAX(IA,LN(I))
+            ELSEIF(AN(I).EQ.2)  THEN
+               B(LN(I),IN(I),JN(I)) = CONST(I)
+C               IB=MAX(IB,LN(I))
+            ELSEIF(AN(I).EQ.3)  THEN
+               C(LN(I),IN(I),JN(I)) = CONST(I)   
+C               IC=MAX(IC,LN(I))
+            ELSEIF(AN(I).EQ.4) THEN 
+               TREND(IN(I)) = CONST(I)  
+            ENDIF
+102      CONTINUE   
+      ENDIF
+      
+      CALL ARMA(EY, HPERR, PRDERR, ERRWT,
+     +M,P,IA,IB,IC,NSMPL,NPRED,NACC,U,Y, A,B,C, TREND, 
+     + IS,AA,BB,WW)
+      RETURN
+      END
+
+      SUBROUTINE RMAPRJ(PROJ, DSCARD, HORIZ, NHO,
+     + EY, M,P,IA,IB,IC,NACC,  U,Y , A,B,C, TREND, 
+     + IS,AA,BB,WW)
+
+C  multiple calls to ARMA for for prediction at given horizons.
+C     See S program horizon.forecasts.TSmodel
+C
+C  Note: If DSCARD is too small then forecasting starts based on little (or 
+C          no) data and the results will be spurious.
+
+      INTEGER  DSCARD, NHO, HORIZ(NHO)
+      INTEGER M,P, IA, IB, IC, NACC
+      INTEGER HPERR
+
+      DOUBLE PRECISION PROJ(NHO,NACC,P)
+      DOUBLE PRECISION EY(NACC,P)
+      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
+      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(P)
+      DOUBLE PRECISION AA(IS,IS), BB(IS,IS), WW(IS)
+      DOUBLE PRECISION PRDERR(1,1), ERRWT(1)
+
+      INTEGER I,J, IT, HO, MHORIZ
+
+      HPERR = 0
+      MHORIZ = HORIZ(1)
+      DO 1 I=2, NHO
+ 1       MHORIZ=MIN(MHORIZ,HORIZ(I))
+
+      DO 10 IT=DSCARD, (NACC-MHORIZ)
+C       this assumes HORIZ is sorted in ascending order
+        IF (IT.GT.(NACC-HORIZ(NHO))) NHO = NHO-1
+
+        CALL ARMA(EY, HPERR, PRDERR, ERRWT,                  
+     +     M,P,IA,IB,IC,IT,NACC,NACC,  U,Y , A,B,C, TREND, 
+     +     IS,AA,BB,WW)
+
+        DO 4 HO=1,NHO
+            DO 4 J=1,P
+4             PROJ(HO,IT+HORIZ(HO),J) = EY(IT+HORIZ(HO),J) 
+10    CONTINUE
+
+      RETURN
+      END
+
+
+      SUBROUTINE RMAEPR(COV, DSCARD, HORIZ, NH, NT,
+     + EY, M,P,IA,IB,IC,NPRED,NACC,  U,Y , A,B,C, TREND,
+     + IS,AA,BB,WW)
+
+C  multiple calls to ARMA for prediction analysis.
+C     See S program forecast.cov
+C
+C  Note: If DSCARD is too small then forecasting starts based on little (or 
+C          no) data and the results will be spurious.
+
+      INTEGER DSCARD, NH, HORIZ(NH), NT(NH)
+      INTEGER M,P, IA, IB, IC, NPRED, NACC
+
+      DOUBLE PRECISION COV(NH,P,P)
+      DOUBLE PRECISION EY(NPRED,P)
+      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
+      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(P)
+      DOUBLE PRECISION AA(IS,IS),BB(IS,IS), WW(IS)
+
+
+      INTEGER HPERR
+      DOUBLE PRECISION PRDERR(1,1), ERRWT(1), MF
+
+      INTEGER I,J, IT, HI
+
+C
+C        CALL DBPR('NPRED ',6, NPRED,1)
+C        CALL DBPR('HORIZ ',6, HORIZ(1),1)
+C        CALL DBPR('DSCARD',7, DSCARD,1)
+      HPERR = 0
+      DO 1 I=1,NH
+1        NT(I) = 0
+      DO 2 K=1,NH
+         DO 2 I=1,P
+            DO 2 J=1,P
+2               COV(K,I,J)= 0.0D0
+
+      DO 10 IT=DSCARD, 1+NPRED-HORIZ(1)
+
+        CALL ARMA(EY, HPERR, PRDERR, ERRWT,                  
+     +     M,P,IA,IB,IC,IT,NPRED,NACC,  U,Y , A,B,C, TREND, 
+     +     IS,AA,BB,WW)
+
+C       Eliminate longer horizons as date runs out.
+C       This assumes HORIZ is sorted in ascending order.
+        IF ((IT-1+HORIZ(NH)).GT.NPRED) THEN
+           NH = NH-1
+        ENDIF
+        DO 4 I=1,NH
+           HI = IT-1+HORIZ(I)
+           DO 4 J=1,P
+4            EY(I,J) = EY(HI,J) - Y(HI,J)
+        DO 5 K=1,NH
+           NT(K) = NT(K)+1
+           MF= DBLE(NT(K)-1)/DBLE(NT(K))
+           DO 5 I=1,P
+              DO 5 J=1,P
+                COV(K,I,J)= COV(K,I,J)*MF + EY(K,I)*EY(K,J)/NT(K)
+5     CONTINUE
+
+10    CONTINUE
+
+      RETURN
+      END
+
       SUBROUTINE ARMA(EY, HPERR, PRDERR, ERRWT,                  
      + M,P,IA,IB,IC,NSMPL,NPRED,NACC,  U,Y , A,B,C, TREND, 
-     + IS,AA,BB,WW,IPIV)
+     + IS,AA,BB,WW)
 C sampleT is the length of data which should be used for estimation.
 C Calculate the one-step ahead predictions, and likelihood value for the model:
 C
-C       A(L)y(t) =  B(L)w(t) + C(L)u(t)  + TREND(t)
+C       A(L)y(t) =  B(L)w(t) + C(L)u(t)  + TREND
 C 
 C A(L) (axpxp) is the auto-regressive polynomial array.
 C B(L) (bxpxp) is the moving-average polynomial array.
@@ -836,13 +1191,13 @@ C
       DOUBLE PRECISION EY(NPRED,P), PRDERR(NSMPL,P)
       DOUBLE PRECISION ERRWT(HPERR)
       DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(NPRED,P)
+      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(P)
 C   IS should be max(P,M)
       DOUBLE PRECISION AA(IS,IS),BB(IS,IS),WW(IS)
 C   
 C
-      INTEGER LPERR
-      INTEGER IPIV(IS,IS)
+      LOGICAL LPERR
+      DOUBLE PRECISION DETOM
 C
 C       CALL DBPRDB('inARMA ',7, 1,1)
 C      CALL DBPR('M     ',6, M,1)
@@ -858,10 +1213,10 @@ C       CALL DBPRDB('B     ',6, B,(IB*P*P))
 C       CALL DBPRDB('C     ',6, C,(IC*P*M))
 
 
-      LPERR= 0
+      LPERR= .FALSE.
       IF (HPERR.GT.0) THEN
          DO 500 I=1,HPERR
-           IF (ERRWT(I).GT.0.0)  LPERR= 1
+           IF (ERRWT(I).GT.0.0)  LPERR=.TRUE.
  500     CONTINUE    
       ENDIF
 C
@@ -873,14 +1228,7 @@ C
       DO 300 I=1,P
          DO 300 J=1,P
 300         BB(I,J)=B(1,I,J)
-
-C      CALL INVERS(BB,P,IS,DETOM)
-C     invert in place. 
-      CALL DGETRF( P, P, BB, IS, IPIV, INFO )
-C  For inverse call DGETRI, for solve call DGETRS.
-      CALL DGETRI( P, BB, IS, IPIV, AA, IS*IS, INFO )
-C      CALL DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
-
+      CALL INVERS(BB,P,IS,DETOM)
       DO 302 L=1,IA
          DO 301 I=1,P
             DO 301 J=1,P
@@ -908,13 +1256,12 @@ C      CALL DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
             DO 306 J=1,M
                DO 306 K=1,P
 306               C(L,I,J)=C(L,I,J)+BB(I,K)*AA(K,J)
-      DO 308 IT=1,NSMPL
          DO 307 I=1,P
-            AA(I,1)=TREND(IT,I)
-307         TREND(IT,I)=0.0D+0
+            AA(I,1)=TREND(I)
+307         TREND(I)=0.0D+0
          DO 308 I=1,P
             DO 308 K=1,P
-308            TREND(IT,I)=TREND(IT,I) + BB(I,K)*AA(I,1)
+308            TREND(I)=TREND(I) + BB(I,K)*AA(I,1)
          DO 309 IT=1,NPRED
             DO 309 J=1,P
 309            EY(IT,J)=0.0D+0
@@ -924,7 +1271,7 @@ C
       DO 1000 IT=NSTART,NSMPL
 C  
       DO 1 I=1,P
- 1         WW(I)= -TREND(IT,I)
+ 1         WW(I)= -TREND(I)
 C
       DO 22 L=1,IA
          IF (L.LE.IT) THEN
@@ -962,14 +1309,14 @@ C   EY stores history of predition error WW to reconstruct predictions
 10         EY(IT,I)=WW(I)
 
 C   Return weighted prediction error
-      IF (LPERR .EQ. 1) THEN
+      IF (LPERR) THEN
          DO 410 I=1,P
  410          PRDERR(IT,I)= ERRWT(1)*WW(I)**2
          IF (HPERR.GT.1) THEN
             DO 400 K=2,HPERR        
               IF ((IT+K-1).LE.NSMPL) THEN
                  DO 401 I=1,P
- 401                WW(I)= -TREND(IT,I)
+ 401                WW(I)= -TREND(I)
 C
               DO 4022 L=1,IA
                   IF (L.LT.(IT+K)) THEN
@@ -1041,14 +1388,7 @@ C
       DO 2300 I=1,P
          DO 2300 J=1,P
 2300         BB(I,J)=A(1,I,J)
-
-C      CALL INVERS(BB,P,IS,DETOM)
-C     invert in place. 
-      CALL DGETRF( P, P, BB, IS, IPIV, INFO )
-C  For inverse call DGETRI, for solve call DGETRS.
-      CALL DGETRI( P, BB, IS, IPIV, AA, IS*IS, INFO )
-C      CALL DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
-
+      CALL INVERS(BB,P,IS,DETOM)
       DO 2302 L=1,IA
          DO 2301 I=1,P
             DO 2301 J=1,P
@@ -1076,21 +1416,19 @@ C      CALL DGETRS( TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO )
             DO 2306 J=1,M
                DO 2306 K=1,P
 2306               C(L,I,J)=C(L,I,J)+BB(I,K)*AA(K,J)
-      DO 2308 IT=NSMPL+1,NPRED
          DO 2307 I=1,P
-            AA(I,1)=TREND(IT,I)
-2307         TREND(IT,I)=0.0D+0
+            AA(I,1)=TREND(I)
+2307         TREND(I)=0.0D+0
          DO 2308 I=1,P
             DO 2308 K=1,P
-2308            TREND(IT,I)=TREND(IT,I) + BB(I,K)*AA(I,1)
+2308            TREND(I)=TREND(I) + BB(I,K)*AA(I,1)
 
       DO 2000 IT=NSMPL+1,NPRED
 C  
       DO 2001 I=1,P
-2001         EY(IT,I)= TREND(IT,I)
+2001         EY(IT,I)= TREND(I)
 C
-      IF (IA.GE.2) THEN
-        DO 2002 L=2,IA
+      DO 2002 L=2,IA
          DO 2002 I=1,P
             DO 2002 J=1,P
                 IF ((IT+1-L) .LE.NSMPL) THEN
@@ -1098,8 +1436,7 @@ C
                 ELSE
                    EY(IT,I)=EY(IT,I)-A(L,I,J)*EY(IT+1-L,J)
                 ENDIF
-2002    CONTINUE
-      ENDIF
+2002  CONTINUE
       IF (IB.GE.2) THEN
          DO 2004 L=2,IB
             IF ((IT+1-L).LE.NSMPL) THEN
@@ -1122,452 +1459,6 @@ C
 C  end of multi-step prediction loop
 
       RETURN 
-      END
-
-            
-      SUBROUTINE KFP(EY, HPERR, PRDERR, ERRWT,
-     + M,N,P,NSMPL,NPRED,NACC,U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     + ITH,PARM,AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-C
-C Put parameters into arrays (as in S function setArrays) and call KF
-C
-C  The state and tracking error are not calculated.
-C       Use KF if these are needed.
-C
-C  It is assummed that M,N,P, the dimensions of the parameter
-C    arrays - are given. Trying to calculate these causes problems.
-C
-      INTEGER HPERR
-      INTEGER M,N,P, NSMPL, NPRED, NACC
-      INTEGER ITH,ICT,IP(ITH),JP(ITH),IN(ICT),JN(ICT)
-      INTEGER AP(ITH),AN(ICT)
-
-      DOUBLE PRECISION EY(NPRED,P), PRDERR(NSMPL,P)
-      DOUBLE PRECISION ERRWT(HPERR)
-C      DOUBLE PRECISION STATE(NPRED,N),TRKERR(NPRED,N,N)
-      DOUBLE PRECISION STATE(1,1),TRKERR(1,1,1)
-      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
-      DOUBLE PRECISION  Z0(N), P0(N,N)
-
-      INTEGER LSTATE, LTKERR
-      INTEGER GAIN
-
-      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
-      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
-      INTEGER IPIV(IS,IS)
-
-C..bug in S: passing characters is unreliable
-C   use integer for AP and AN...
-      DOUBLE PRECISION PARM(ITH),CONST(ICT)
-C  state and trkerr are not used but must be passed to KF
-C 
-      INTEGER I,J
-C
-      LSTATE = 0
-      LTKERR = 0
-
-      DO 1 I=1,N
-            DO 1 J=1,N
-1              F(I,J) = 0.0D+0
-      DO 2 I=1,N
-            DO 2 J=1,M
-2              G(I,J) = 0.0D+0
-      DO 3 I=1,P
-            DO 3 J=1,N
-3              H(I,J) = 0.0D+0
-      DO 4 I=1,N
-            DO 4 J=1,P
-4              FK(I,J) = 0.0D+0
-      DO 5 I=1,N
-            DO 5 J=1,N
-5              Q(I,J) = 0.0D+0
-      DO 6 I=1,P
-            DO 6 J=1,P
-6              R(I,J) = 0.0D+0
-      DO 7 I=1,P
-7              Z0(I) = 0.0D+0
-      IF (ITH.GT.0) THEN
-         DO 101 I=1,ITH
-            IF   (AP(I).EQ.1) THEN  
-               F(IP(I),JP(I)) = PARM(I)
-            ELSEIF(AP(I).EQ.2) THEN
-               G(IP(I),JP(I)) = PARM(I)
-            ELSEIF(AP(I).EQ.3) THEN 
-               H(IP(I),JP(I)) = PARM(I)   
-            ELSEIF(AP(I).EQ.4) THEN 
-              FK(IP(I),JP(I)) = PARM(I)   
-            ELSEIF(AP(I).EQ.5) THEN 
-               Q(IP(I),JP(I)) = PARM(I)   
-            ELSEIF(AP(I).EQ.6) THEN 
-               R(IP(I),JP(I)) = PARM(I)   
-            ELSEIF(AP(I).EQ.7) THEN 
-               Z0(IP(I)) = PARM(I)   
-            ELSEIF(AP(I).EQ.8) THEN 
-               P0(IP(I),JP(I)) = PARM(I)   
-            ENDIF
-101      CONTINUE   
-      ENDIF
-      IF (ICT.GT.0) THEN
-         DO 102 I=1,ICT
-            IF   (AN(I).EQ.1) THEN 
-               F(IN(I),JN(I)) = CONST(I)
-            ELSEIF(AN(I).EQ.2)  THEN
-               G(IN(I),JN(I)) = CONST(I)
-            ELSEIF(AN(I).EQ.3)  THEN
-               H(IN(I),JN(I)) = CONST(I)   
-            ELSEIF(AN(I).EQ.4) THEN 
-              FK(IN(I),JN(I)) = CONST(I)   
-            ELSEIF(AN(I).EQ.5) THEN 
-               Q(IN(I),JN(I)) = CONST(I)   
-            ELSEIF(AN(I).EQ.6) THEN 
-               R(IN(I),JN(I)) = CONST(I)   
-            ELSEIF(AN(I).EQ.7) THEN 
-               Z0(IN(I)) = CONST(I)   
-            ELSEIF(AN(I).EQ.8) THEN 
-               P0(IN(I),JN(I)) = CONST(I)   
-            ENDIF
-102      CONTINUE   
-      ENDIF
-
-      CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR, TRKERR,
-     + M,N,P,NSMPL,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-      RETURN
-      END
-C
-
-      SUBROUTINE KFPRJ(PROJ, DSCARD, HORIZ, NHO,
-     + EY, M,N,P, NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-C  multiple calls to KF for prediction at given horizons.
-C     See S program project.
-C
-C  The state and tracking error are not calculate.
-
-      INTEGER DSCARD, NHO, HORIZ(NHO)
-      INTEGER M,N,P, NACC
-
-      DOUBLE PRECISION PROJ(NHO,NACC,P)
-      DOUBLE PRECISION EY(NACC,P)
-      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
-      DOUBLE PRECISION  Z0(N), P0(N,N)
-
-      INTEGER GAIN
-
-      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
-      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
-      INTEGER IPIV(IS,IS)
-
-C  state and trkerr are not used but must be passed to KF
-C 
-      INTEGER LSTATE, LTKERR
-      INTEGER HO,J, IT, MHORIZ
-      INTEGER HPERR
-      DOUBLE PRECISION PRDERR(1,1), ERRWT(1)
-      DOUBLE PRECISION STATE(1,1),TRKERR(1,1,1)
-
-      LSTATE = 0
-      LTKERR = 0
-      HPERR  = 0
-      MHORIZ = HORIZ(1)
-      DO 1 I=2, NHO
- 1       MHORIZ=MIN(MHORIZ,HORIZ(I))
-
-      DO 10 IT=DSCARD, (NACC-MHORIZ)
-C       this assumes HORIZ is sorted in ascending order
-        IF (IT.GT.(NACC-HORIZ(NHO))) THEN
-            NHO = NHO-1
-C            CALL DBPR('NHO   ',6, NHO,1)
-        ENDIF
-
-        CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR,TRKERR,
-     +     M,N,P, IT , NACC,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     +     IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-        DO 4 HO=1,NHO
-            DO 4 J=1,P
-              PROJ(HO,IT+HORIZ(HO),J) = EY(IT+HORIZ(HO),J) 
-4     CONTINUE
-10    CONTINUE
-
-      RETURN
-      END
-
-      SUBROUTINE KFEPR(COV, DSCARD, HORIZ, NH, NT,
-     + EY, M,N,P, NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-C  multiple calls to KF for prediction evaluation.
-C     See S program predictions.cov.TSmodel
-C
-C  The state and tracking error are not calculate.
-
-      INTEGER DSCARD, NH, HORIZ(NH), NT(NH)
-      INTEGER M,N,P, NPRED, NACC
-
-      DOUBLE PRECISION COV(NH,P,P)
-      DOUBLE PRECISION EY(NPRED,P)
-      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION F(N,N),G(N,M),H(P,N),FK(N,P),R(P,P),Q(N,N)
-      DOUBLE PRECISION  Z0(N), P0(N,N)
-
-      INTEGER GAIN
-
-      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
-      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
-      INTEGER IPIV(IS,IS)
-
-C  state and trkerr are not used but must be passed to KF
-C 
-      INTEGER LSTATE, LTKERR
-      INTEGER I,J, IT, HI
-      INTEGER HPERR
-      DOUBLE PRECISION PRDERR(1,1), ERRWT(1), MF
-      DOUBLE PRECISION STATE(1,1),TRKERR(1,1,1)
-
-C
-C        CALL DBPR('NPRED ',6, NPRED,1)
-C        CALL DBPR('HORIZ ',6, HORIZ(1),1)
-C        CALL DBPR('DSCARD',7, DSCARD,1)
-      LSTATE = 0
-      LTKERR = 0
-      HPERR  = 0
-      DO 1 I=1,NH
-1        NT(I) = 0
-      DO 2 K=1,NH
-         DO 2 I=1,P
-            DO 2 J=1,P
-2               COV(K,I,J)= 0.0D0
-
-      DO 10 IT=DSCARD, 1+NPRED-HORIZ(1)
-
-        CALL KF(EY, HPERR, PRDERR, ERRWT, LSTATE,STATE, LTKERR,TRKERR,
-     +     M,N,P, IT ,NPRED,NACC,  U,Y, F,G,H,FK, Q,R, GAIN,Z0,P0,
-     +     IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-C       this assumes HORIZ is sorted in ascending order
-
-
-        IF ((IT-1+HORIZ(NH)).GT.NPRED) THEN
-           NH = NH-1
-        ENDIF
-        DO 4 I=1,NH
-           HI = IT-1+HORIZ(I)
-           DO 4 J=1,P
-4            EY(I,J) = EY(HI,J) - Y(HI,J)
-        DO 5 K=1,NH
-           NT(K) = NT(K)+1
-           MF= DBLE(NT(K)-1)/DBLE(NT(K))
-           DO 5 I=1,P
-              DO 5 J=1,P
-                COV(K,I,J)= COV(K,I,J)*MF + EY(K,I)*EY(K,J)/NT(K)
-5     CONTINUE
-
-10    CONTINUE
-
-      RETURN
-      END
-
-
-      SUBROUTINE ARMAP(EY, HPERR, PRDERR, ERRWT,
-     + M,P,IA,IB,IC,NSMPL,NPRED,NACC,  U,Y , A,B,C, TREND,
-     + ITH,PARM,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
-     + IS,AA,BB,WW, IPIV)
-C
-C Put parameters into arrays (as in S function setArrays) and call ARMA
-C
-C  It is assummed that M,P,IA,IB, and IC - the dimensions of the parameter
-C    arrays - are given. Trying to calculate these causes problems.
-C
-      INTEGER M,P,IA,IB,IC, NSMPL, NACC
-      INTEGER HPERR
-      INTEGER ITH,ICT,IP(ITH),JP(ITH),LP(ITH),IN(ICT),JN(ICT),LN(ICT)
-
-      DOUBLE PRECISION EY(NPRED,P), PRDERR(NSMPL,P)
-      DOUBLE PRECISION ERRWT(HPERR)
-      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(NPRED,P) 
-      DOUBLE PRECISION AA(IS,IS), BB(IS,IS), WW(IS)
-      INTEGER IPIV(IS,IS)
-
-C..bug in S: passing characters is unreliable
-C   use integer for AP and AN...
-      INTEGER AP(ITH),AN(ICT)
-      DOUBLE PRECISION PARM(ITH),CONST(ICT)
-C 
-      INTEGER I,J,L
-C
-      DO 1 L=1,IA
-         DO 1 I=1,P
-            DO 1 J=1,P
-1              A(L,I,J) = 0.0
-      DO 2 L=1,IB
-         DO 2 I=1,P
-            DO 2 J=1,P
-2              B(L,I,J) = 0.0 
-      DO 3 L=1,IC
-         DO 3 I=1,P
-            DO 3 J=1,M
-3              C(L,I,J) = 0.0
-      DO 4 I=1,NPRED
-      DO 4 J=1,P
-4         TREND(I,J) = 0.0
-C       IA=0
-C       IB=0
-C       IC=0
-      IF (ITH.GT.0) THEN
-         DO 101 I=1,ITH
-            IF   (AP(I).EQ.1) THEN  
-               A(LP(I),IP(I),JP(I)) = PARM(I)
-C               IA=MAX(IA,LP(I))
-            ELSEIF(AP(I).EQ.2) THEN
-               B(LP(I),IP(I),JP(I)) = PARM(I)
-C               IB=MAX(IB,LP(I))
-            ELSEIF(AP(I).EQ.3) THEN 
-               C(LP(I),IP(I),JP(I)) = PARM(I)   
-C               IC=MAX(IC,LP(I))
-            ELSEIF(AP(I).EQ.4) THEN 
-               TREND(IP(I),JP(I)) = PARM(I)  
-            ENDIF
-101      CONTINUE   
-      ENDIF
-      IF (ICT.GT.0) THEN
-         DO 102 I=1,ICT
-            IF   (AN(I).EQ.1) THEN 
-               A(LN(I),IN(I),JN(I)) = CONST(I)
-C               IA=MAX(IA,LN(I))
-            ELSEIF(AN(I).EQ.2)  THEN
-               B(LN(I),IN(I),JN(I)) = CONST(I)
-C               IB=MAX(IB,LN(I))
-            ELSEIF(AN(I).EQ.3)  THEN
-               C(LN(I),IN(I),JN(I)) = CONST(I)   
-C               IC=MAX(IC,LN(I))
-            ELSEIF(AN(I).EQ.4) THEN 
-               TREND(IN(I),JN(I)) = CONST(I)  
-            ENDIF
-102      CONTINUE   
-      ENDIF
-      
-      CALL ARMA(EY, HPERR, PRDERR, ERRWT,
-     +M,P,IA,IB,IC,NSMPL,NPRED,NACC,U,Y, A,B,C, TREND, 
-     + IS,AA,BB,WW, IPIV)
-      RETURN
-      END
-
-      SUBROUTINE RMAPRJ(PROJ, DSCARD, HORIZ, NHO,
-     + EY, M,P,IA,IB,IC,NACC,  U,Y , A,B,C, TREND, 
-     + IS,AA,BB,WW, IPIV)
-
-C  multiple calls to ARMA for for prediction at given horizons.
-C     See S program horizonForecasts.TSmodel
-C
-C  Note: If DSCARD is too small then forecasting starts based on little (or 
-C          no) data and the results will be spurious.
-
-      INTEGER  DSCARD, NHO, HORIZ(NHO)
-      INTEGER M,P, IA, IB, IC, NACC
-      INTEGER HPERR
-
-      DOUBLE PRECISION PROJ(NHO,NACC,P)
-      DOUBLE PRECISION EY(NACC,P)
-      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(NACC,P)
-      DOUBLE PRECISION AA(IS,IS), BB(IS,IS), WW(IS)
-      DOUBLE PRECISION PRDERR(1,1), ERRWT(1)
-      INTEGER IPIV(IS,IS)
-
-      INTEGER I,J, IT, HO, MHORIZ
-
-      HPERR = 0
-      MHORIZ = HORIZ(1)
-      DO 1 I=2, NHO
- 1       MHORIZ=MIN(MHORIZ,HORIZ(I))
-
-      DO 10 IT=DSCARD, (NACC-MHORIZ)
-C       this assumes HORIZ is sorted in ascending order
-        IF (IT.GT.(NACC-HORIZ(NHO))) NHO = NHO-1
-
-        CALL ARMA(EY, HPERR, PRDERR, ERRWT,                  
-     +     M,P,IA,IB,IC,IT,NACC,NACC,  U,Y , A,B,C, TREND, 
-     +     IS,AA,BB,WW, IPIV)
-
-        DO 4 HO=1,NHO
-            DO 4 J=1,P
-4             PROJ(HO,IT+HORIZ(HO),J) = EY(IT+HORIZ(HO),J) 
-10    CONTINUE
-
-      RETURN
-      END
-
-
-      SUBROUTINE RMAEPR(COV, DSCARD, HORIZ, NH, NT,
-     + EY, M,P,IA,IB,IC,NPRED,NACC,  U,Y , A,B,C, TREND,
-     + IS,AA,BB,WW, IPIV)
-
-C  multiple calls to ARMA for prediction analysis.
-C     See S program forecastCov
-C
-C  Note: If DSCARD is too small then forecasting starts based on little (or 
-C          no) data and the results will be spurious.
-
-      INTEGER DSCARD, NH, HORIZ(NH), NT(NH)
-      INTEGER M,P, IA, IB, IC, NPRED, NACC
-
-      DOUBLE PRECISION COV(NH,P,P)
-      DOUBLE PRECISION EY(NPRED,P)
-      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M), TREND(NPRED,P)
-      DOUBLE PRECISION AA(IS,IS),BB(IS,IS), WW(IS)
-      INTEGER IPIV(IS,IS)
-
-
-      INTEGER HPERR
-      DOUBLE PRECISION PRDERR(1,1), ERRWT(1), MF
-
-      INTEGER I,J, IT, HI
-
-C
-C        CALL DBPR('NPRED ',6, NPRED,1)
-C        CALL DBPR('HORIZ ',6, HORIZ(1),1)
-C        CALL DBPR('DSCARD',7, DSCARD,1)
-      HPERR = 0
-      DO 1 I=1,NH
-1        NT(I) = 0
-      DO 2 K=1,NH
-         DO 2 I=1,P
-            DO 2 J=1,P
-2               COV(K,I,J)= 0.0D0
-
-      DO 10 IT=DSCARD, 1+NPRED-HORIZ(1)
-
-        CALL ARMA(EY, HPERR, PRDERR, ERRWT,                  
-     +     M,P,IA,IB,IC,IT,NPRED,NACC,  U,Y , A,B,C, TREND, 
-     +     IS,AA,BB,WW, IPIV)
-
-C       Eliminate longer horizons as date runs out.
-C       This assumes HORIZ is sorted in ascending order.
-        IF ((IT-1+HORIZ(NH)).GT.NPRED) THEN
-           NH = NH-1
-        ENDIF
-        DO 4 I=1,NH
-           HI = IT-1+HORIZ(I)
-           DO 4 J=1,P
-4            EY(I,J) = EY(HI,J) - Y(HI,J)
-        DO 5 K=1,NH
-           NT(K) = NT(K)+1
-           MF= DBLE(NT(K)-1)/DBLE(NT(K))
-           DO 5 I=1,P
-              DO 5 J=1,P
-                COV(K,I,J)= COV(K,I,J)*MF + EY(K,I)*EY(K,J)/NT(K)
-5     CONTINUE
-
-10    CONTINUE
-
-      RETURN
       END
 
       SUBROUTINE DATEPR(COV, DSCARD, HORIZ, NH, NT, P, NPRED, ERR)
@@ -1613,16 +1504,99 @@ C       this assumes HORIZ is sorted in ascending order
       RETURN
       END
 
+      SUBROUTINE INVERS(A,N,IS,DET)
+
+      INTEGER N , IS
+
+C    IS is the declared dimension of A and 
+C      N is the dimension of the matrix to invert.
+      DOUBLE PRECISION A(IS,IS)
+
+C     COMMON /MAT/ A
+C     COMMON /SIZE/ N 
+C     BOC_INVMAT is a real matrix inversion routine.It invert the 
+C     array A(N,N) in place; that is, the array A is destroyed by
+C     the  routine  and  the inverse takes its place.
+
+      DOUBLE PRECISION EPS,EPSS,Y,W,WORK(1000),DET
+
+      INTEGER I,J,K,M,JN,IWORK(1000)
+
+      DATA EPS/1.0 D -20/
+      DATA EPSS/1.0 D -100/
+      DET=1
+      DO 100 J=1,N
+         IWORK(J)=J
+  100 CONTINUE
+      DO 160 I=1,N
+         K=I
+         Y=A(I,I)
+         M=I+1
+         IF(I.EQ.N) GO TO 120
+         DO 110 J=M,N
+            W=A(I,J)
+            IF(ABS(W).LE.ABS(Y)) GO TO 110
+            K=J
+            Y=W
+  110    CONTINUE
+  120    DET=DET*Y
+         IF(ABS(Y).LT.EPS) GO TO 900
+         IF(ABS(DET).LT.EPSS) GO TO 900
+         Y=1.0/Y
+         DO 130 J=1,N
+            WORK(J)=A(J,K)
+            A(J,K)=A(J,I)
+            A(J,I)=-WORK(J)*Y
+            JN=J+N
+            A(I,J)=A(I,J)*Y
+            WORK(JN)=A(I,J)
+  130    CONTINUE
+         A(I,I)=Y
+         J=IWORK(I)
+         IWORK(I)=IWORK(K)
+         IWORK(K)=J
+         DO 150 K=1,N
+            DO 140 J=1,N
+               IF(K.EQ.I.OR.J.EQ.I) GO TO 140
+               JN=J+N
+               A(K,J)=A(K,J)-WORK(JN)*WORK(K)
+  140       CONTINUE
+  150    CONTINUE
+  160 CONTINUE
+      DO 190 I=1,N
+  170    CONTINUE
+            K=IWORK(I)
+            IF(K.EQ.I) GO TO 190
+            DO 180 J=1,N
+               W=A(I,J)
+               A(I,J)=A(K,J)
+               A(K,J)=W
+  180       CONTINUE
+            M=IWORK(I)
+            IWORK(I)=IWORK(K)
+            IWORK(K)=M
+            DET=-DET
+         GO TO 170
+  190 CONTINUE
+C      CALL DBPRDB('DET ',4, DET,1)
+      RETURN 
+  900 DET=0.0
+      RETURN
+      END
+             
 C routines for curvature calculation
 C
-      SUBROUTINE GENDK(D,ITH,X0,DELTA0,N,ND,F0,RD,HAPROX,HDIAG,
+      SUBROUTINE GEND(D,FC,ITH,X0,DELTA0,N,ND,F0,RD,HAPROX,HDIAG,
      + DAPROX, X, DELTA,F1,F2,
      + M,P,NSMPL,NACC,  U,Y , 
      + AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + NS,Z0,P0,F,G,H,FK,Q,R,GAIN,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
+     + LP,LN,IA,IB,IC,A,B,C,
+     + NS,Z0,P0,F,G,H,FK,R,Q,GAIN)
 C 
+C  Z0 is TREND for ARMA models.
 C
+C  FC  indicator of function (0=KF, 1=ARMA). It would be nice if this
+C      could be the  name of the function as in C.
 C      The function must have a single vector arguement X.
 C  X0   the parameter vector.
 C  X    is the working copy (altered by DELTA).
@@ -1641,7 +1615,7 @@ C       V could be a parameter but the way the reduction formula is
 C        coded assumes it is =2
 C
 
-      INTEGER ITH,N,RD
+      INTEGER ITH,N,RD, FC
 
       DOUBLE PRECISION  X0(ITH),X(ITH), D(N,ND),DELTA0(ITH)
       DOUBLE PRECISION  F0(N), DAPROX(N,RD),HDIAG(N,ITH),HAPROX(N,RD)
@@ -1653,12 +1627,11 @@ C
 C  parameters passed directly to ARMAp and/or KFp:
 C
       INTEGER HPERR
-      INTEGER M,NS,P, NSMPL, NACC
-C      INTEGER IA,IB,IC
+      INTEGER M,NS,P,IA,IB,IC, NSMPL, NACC
 
       DOUBLE PRECISION PRDERR(1,1), ERRWT(1)
       DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-C      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M)
+      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M)
 C
 C      F, Q, and R are used for scratch space in the call to ARMAP instead of:
 C      DOUBLE PRECISION AA(IS,IS), BB(IS,IS), WW(IS)
@@ -1667,215 +1640,46 @@ C        this could cause some problems ... some checks are made.
 C       Z0(NS) is used for TREND(P) in ARMA models
 C     PARM(ITH) for ARMAP/KFP is X(ITH) in GEND, EY is function value
 C   
-      INTEGER ICT,IP(ITH),JP(ITH),IN(ICT),JN(ICT)    
-C      INTEGER LP(ITH), LN(ICT) 
+      INTEGER ICT,IP(ITH),JP(ITH),LP(ITH),IN(ICT),JN(ICT),LN(ICT)    
 
 C      DOUBLE PRECISION Z(NSMPL,NS),TRKERR(NSMPL,NS,NS)
       DOUBLE PRECISION Z0(NS), P0(NS,NS)
       DOUBLE PRECISION F(NS,NS),G(NS,M),H(P,NS)
       DOUBLE PRECISION FK(NS,P),Q(NS,NS),R(P,P)
 
-      INTEGER GAIN         
-
-      DOUBLE PRECISION A(IS,IS),AA(IS,IS),PP(IS,IS),QQ(N,N),RR(P,P)
-      DOUBLE PRECISION Z(IS), ZZ(IS), WW(IS)
-      INTEGER IPIV(IS,IS)
-
+      LOGICAL GAIN         
+C
 C..bug in S: passing characters is unreliable
 C   use integer for AP and AN...
       INTEGER AP(ITH),AN(ICT)
       DOUBLE PRECISION CONST(ICT)
 
-C      CALL DBPR('starting gend N=',16, N,1)
-C      CALL DBPR('            ITH=',16, ITH,1)
-C      CALL DBPR('             ND=',16, ND,1)
+      CALL DBPR('starting gend N=',16, N,1)
+      CALL DBPR('            ITH=',16, ITH,1)
+      CALL DBPR('             ND=',16, ND,1)
+
+      IF    (NS.LT. MAX(M,P))  THEN
+         CALL ERROR('warning: scratch (NS too small) in GEND.',40, NS,1)
+      ENDIF
+      IF    (NS.LT. (P*P))  THEN
+         CALL ERROR('warning: scratch (P too big) in GEND.',37, NS,1)
+      ENDIF
 
       HPERR = 0
       V=2.0
       DO 1 II=1,ITH   
 1          X(II) =X0(II)
-      CALL KFP(F0, HPERR,PRDERR, ERRWT,
+      IF    (FC.EQ.0)  THEN
+          CALL KFP(F0, HPERR,PRDERR, ERRWT,
      +      M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +      ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
+     +      ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
 
-C                   each parameter  - first deriv. & hessian diagonal
-      DO 100 I=1,ITH
-         DO 10 II=1,ITH   
-10          DELTA(II) =DELTA0(II)
-C                                 successively reduce DELTA 
-C
-C  This could be done without both X and X0 by adding and then subtracting
-C   DELTA, but accumulated round off error seems to affect the result.
-         DO 20 K=1,RD 
-            X(I)=X0(I)+DELTA(I)
-            CALL KFP(F1, HPERR,PRDERR, ERRWT,
-     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-            X(I)=X0(I)-DELTA(I) 
-            CALL KFP(F2, HPERR,PRDERR, ERRWT,
-     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-            X(I)=X0(I) 
-            DO 15 II=1,N   
-15             DAPROX(II,K) = (F1(II) - F2(II))  / (2.0*DELTA(I))  
-            DO 16 II=1,N   
-16             HAPROX(II,K) =(F1(II)-2.0*F0(II)+F2(II))/ DELTA(I)**2 
-            DELTA(I) = DELTA(I)/V   
-20       CONTINUE   
-         DO 30 MC=1,(RD-1)
-           MD=4.0D0**MC
-           DO 30 K=1,(RD-MC)
-             DO 25 II=1,N   
-25             DAPROX(II,K)=(DAPROX(II,K+1)*MD-DAPROX(II,K))/(MD-1)
-             DO 26 II=1,N   
-26             HAPROX(II,K)=(HAPROX(II,K+1)*MD-HAPROX(II,K))/(MD-1)
-30       CONTINUE 
-         DO 31 II=1,N   
-31         D(II,I) = DAPROX(II,1)
-         DO 32 II=1,N   
-32         HDIAG(II,I) = HAPROX(II,1)
-100   CONTINUE
-C
-C                  2nd derivative  - do lower half of hessian only
-      UP = ITH
-C      CALL DBPR('2nd deriv. UP=\n',16, UP,1)
-      DO 200 I=1,ITH   
-         DO 200 J=1,I 
-            UP = UP + 1
-C      CALL DBPR('      UP=\n',11, UP,1)
-            IF (I.EQ.J) THEN
-               DO 120 II=1,N   
-120               D(II,UP) = HDIAG(II,I)
-            ELSE 
-               DO 121 II=1,ITH   
-121               DELTA(II) =DELTA0(II)
-C                                successively reduce DELTA 
-               DO 150 K=1,RD
-                 X(I)=X0(I)+DELTA(I) 
-                 X(J)=X0(J)+DELTA(J) 
-                 CALL KFP(F1, HPERR,PRDERR, ERRWT,
-     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-                 X(I)=X0(I)-DELTA(I) 
-                 X(J)=X0(J)-DELTA(J) 
-                 CALL KFP(F2, HPERR,PRDERR, ERRWT,
-     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
-     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + IS, A, AA, PP, QQ, RR, Z, ZZ, WW, IPIV)
-
-                 X(I)=X0(I) 
-                 X(J)=X0(J) 
-                 DO 130 II=1,N   
-130                 DAPROX(II,K)=(F1(II)-2.0*F0(II)+F2(II)
-     ,          -HDIAG(II,I)*DELTA(I)**2-HDIAG(II,J)*DELTA(J)**2)/
-     ,                    (2.0*DELTA(I)*DELTA(J))   
-                 DO 140 II=1,ITH   
-140                 DELTA(II) = DELTA(II)/V
-150            CONTINUE
-               DO 190 MC=1,(RD-1)
-                 MD=4.0D0**MC
-                 DO 170 K=1,(RD-MC)
-                  DO 170 II=1,N   
-170                DAPROX(II,K)=
-     ,                (DAPROX(II,K+1)*MD-DAPROX(II,K))/(MD-1.0)
-                 DO 180 II=1,N   
-180                 D(II,UP) = DAPROX(II,1)
-190            CONTINUE
-            ENDIF  
-200   CONTINUE
-C      DBPRDB('gend returning D[1,1]=',24, D(1,1),1)
-      RETURN
-      END
-
-C routines for curvature calculation
-C
-      SUBROUTINE GENDA(D,ITH,X0,DELTA0,N,ND,F0,RD,HAPROX,HDIAG,
-     + DAPROX, X, DELTA,F1,F2,
-     + M,P,NSMPL,NACC,  U,Y , 
-     + AP,IP,JP,ICT,CONST,AN,IN,JN,
-     + LP,LN,IA,IB,IC,A,B,C,TREND,
-     + IS,AA,BB,WW, IPIV)
-C 
-C
-C      The function must have a single vector arguement X.
-C  X0   the parameter vector.
-C  X    is the working copy (altered by DELTA).
-C  ITH   is the length of the parameter vector.
-C  F0  is the value (in sample/residual space) of the function.
-C      (only the space is needed, the function is calculated).
-C  N   is the dimension of the sample space (length of F0).
-C  DELTA0  gives the fraction of X to use for the initial 
-C           numerical approximation.
-C  ND  is the number of columns of matrix D.( first
-C               der. & lower triangle of Hessian)
-C  EPS     is used for zero elements of X.
-C  RD       the number of Richardson improvement iterations.
-C  V=2       reduction factor for Richardson iterations.
-C       V could be a parameter but the way the reduction formula is
-C        coded assumes it is =2
-C
-
-      INTEGER ITH,N,RD
-
-      DOUBLE PRECISION  X0(ITH),X(ITH), D(N,ND),DELTA0(ITH)
-      DOUBLE PRECISION  F0(N), DAPROX(N,RD),HDIAG(N,ITH),HAPROX(N,RD)
-      DOUBLE PRECISION DELTA(ITH),F1(N),F2(N)
-C      
-      INTEGER I,J,K,II,MC,UP
-      DOUBLE PRECISION V,MD
-C
-C  parameters passed directly to ARMAp and/or KFp:
-C
-      INTEGER HPERR
-      INTEGER M,P,NSMPL, NACC
-C      INTEGER NS
-      INTEGER IA,IB,IC
-
-      DOUBLE PRECISION PRDERR(1,1), ERRWT(1)
-      DOUBLE PRECISION Y(NACC,P),U(NACC,M) 
-      DOUBLE PRECISION A(IA,P,P),B(IB,P,P),C(IC,P,M)
-C
-      DOUBLE PRECISION AA(IS,IS), BB(IS,IS), WW(IS)
-
-C     PARM(ITH) for ARMAP/KFP is X(ITH) in GEND, EY is function value
-C   
-      INTEGER ICT,IP(ITH),JP(ITH),LP(ITH),IN(ICT),JN(ICT),LN(ICT)    
-
-C      DOUBLE PRECISION Z(NSMPL,NS),TRKERR(NSMPL,NS,NS)
-      DOUBLE PRECISION TREND(NACC,P)
-C      DOUBLE PRECISION P0(NS,NS)
-C      DOUBLE PRECISION F(NS,NS),G(NS,M),H(P,NS)
-C      DOUBLE PRECISION FK(NS,P),Q(NS,NS),R(P,P)
-
-C      INTEGER GAIN         
-C
-C..bug in S: passing characters is unreliable
-C   use integer for AP and AN...
-      INTEGER AP(ITH),AN(ICT)
-      DOUBLE PRECISION CONST(ICT)
-      INTEGER IPIV(IS,IS)
-
-C      CALL DBPR('starting gend N=',16, N,1)
-C      CALL DBPR('            ITH=',16, ITH,1)
-C      CALL DBPR('             ND=',16, ND,1)
-
-
-      HPERR = 0
-      V=2.0
-      DO 1 II=1,ITH   
-1          X(II) =X0(II)
-      CALL ARMAP(F0, HPERR,PRDERR, ERRWT,
-     +      M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, TREND,
+      ELSEIF(FC.EQ.1) THEN
+         CALL ARMAP(F0, HPERR,PRDERR, ERRWT,
+     +      M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, Z0,
      +      ITH,X,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
-     +      IS,AA,BB,WW, IPIV)
-
+     +      NS,F,Q,R)
+      ENDIF
 C                   each parameter  - first deriv. & hessian diagonal
       DO 100 I=1,ITH
          DO 10 II=1,ITH   
@@ -1886,17 +1690,29 @@ C  This could be done without both X and X0 by adding and then subtracting
 C   DELTA, but accumulated round off error seems to affect the result.
          DO 20 K=1,RD 
             X(I)=X0(I)+DELTA(I)
-            CALL ARMAP(F1, HPERR,PRDERR, ERRWT,
-     +         M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, TREND, 
+            IF    (FC.EQ.0) THEN
+              CALL KFP(F1, HPERR,PRDERR, ERRWT,
+     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+
+            ELSEIF(FC.EQ.1)  THEN
+               CALL ARMAP(F1, HPERR,PRDERR, ERRWT,
+     +         M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, Z0, 
      +         ITH,X,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
-     +         IS,AA,BB,WW, IPIV)  
-            
+     +         NS,F,Q,R)  
+            ENDIF
             X(I)=X0(I)-DELTA(I) 
-            CALL ARMAP(F2, HPERR,PRDERR, ERRWT,
-     +         M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, TREND,
+            IF    (FC.EQ.0) THEN
+              CALL KFP(F2, HPERR,PRDERR, ERRWT,
+     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+
+            ELSEIF(FC.EQ.1) THEN
+               CALL ARMAP(F2, HPERR,PRDERR, ERRWT,
+     +         M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, Z0,
      +         ITH,X,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
-     +         IS,AA,BB,WW, IPIV)
-            
+     +         NS,F,Q,R)
+            ENDIF
             X(I)=X0(I) 
             DO 15 II=1,N   
 15             DAPROX(II,K) = (F1(II) - F2(II))  / (2.0*DELTA(I))  
@@ -1920,11 +1736,11 @@ C   DELTA, but accumulated round off error seems to affect the result.
 C
 C                  2nd derivative  - do lower half of hessian only
       UP = ITH
-C      CALL DBPR('2nd deriv. UP=\n',16, UP,1)
+      CALL DBPR('2nd deriv. UP=\n',16, UP,1)
       DO 200 I=1,ITH   
          DO 200 J=1,I 
             UP = UP + 1
-C      CALL DBPR('      UP=\n',11, UP,1)
+      CALL DBPR('      UP=\n',11, UP,1)
             IF (I.EQ.J) THEN
                DO 120 II=1,N   
 120               D(II,UP) = HDIAG(II,I)
@@ -1935,18 +1751,32 @@ C                                successively reduce DELTA
                DO 150 K=1,RD
                  X(I)=X0(I)+DELTA(I) 
                  X(J)=X0(J)+DELTA(J) 
-                 CALL ARMAP(F1, HPERR,PRDERR, ERRWT,
-     +              M,P,IA,IB,IC,NSMPL,NSMPL,NACC, U,Y, A,B,C, TREND,
+                 IF    (FC.EQ.0)  THEN
+                  CALL KFP(F1, HPERR,PRDERR, ERRWT,
+     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+
+                 ELSEIF(FC.EQ.1) THEN
+      CALL DBPR('calling armap.F1..K=\n',22, K,1)
+                    CALL ARMAP(F1, HPERR,PRDERR, ERRWT,
+     +              M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, Z0,
      +              ITH,X,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
-     +              IS,AA,BB,WW, IPIV)
-                 
+     +              NS,F,Q,R)
+                 ENDIF
                  X(I)=X0(I)-DELTA(I) 
                  X(J)=X0(J)-DELTA(J) 
-                 CALL ARMAP(F2, HPERR,PRDERR, ERRWT,
-     +              M,P,IA,IB,IC,NSMPL,NSMPL,NACC, U,Y, A,B,C, TREND,
+                 IF    (FC.EQ.0)  THEN
+                  CALL KFP(F2, HPERR,PRDERR, ERRWT,
+     +         M,NS,P,NSMPL,NSMPL,NACC,U,Y, F,G,H,FK, Q,R, GAIN, Z0,P0,
+     +         ITH,X,AP,IP,JP,ICT,CONST,AN,IN,JN)
+
+
+                 ELSEIF(FC.EQ.1) THEN
+                    CALL ARMAP(F2, HPERR,PRDERR, ERRWT,
+     +              M,P,IA,IB,IC,NSMPL,NSMPL,NACC,  U,Y , A,B,C, Z0,
      +              ITH,X,AP,LP,IP,JP,ICT,CONST,AN,LN,IN,JN, 
-     +              IS,AA,BB,WW, IPIV)
-                 
+     +              NS,F,Q,R)
+                 ENDIF
                  X(I)=X0(I) 
                  X(J)=X0(J) 
                  DO 130 II=1,N   

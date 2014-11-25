@@ -1,3 +1,5 @@
 Package: dse2
+Version: R2000.4-1
+Description: Multivariate Time Series - extensions
+Depends: dse1
 Title: Dynamic Systems Estimation - extensions
-Description:  Multivariate Time Series - extensions.See ?00dse-Intro for more details.

@@ -1,5 +1,4 @@
 \name{egJofF.1dec93.data}
-\docType{data}
 \alias{egJofF.1dec93.data}
 \title{Eleven Time Series used in Gilbert (1995)}
 
@@ -22,7 +21,7 @@
 	The input series is 90 day interest rates (R90) and the
 	ten output variables are CPI, GDP, M1, long run interest rates (RL), 
 	the Toronto stock exchange 300 index (TSE300), employment, 
-	the Canada/US exchange rate (PFX), a commodity price index in US dollars, 
+	the Canada/US exchange rate (PFX), a commodity price index in US$, 
 	US industrial production, and US CPI.
 
 	R90, RL and TSE are differenced. All other variables are in terms of 
@@ -46,9 +45,9 @@
 
 
 \source{
-	\emph{Statistics Canada,} 
-	\emph{Bank of Canada,}
-	\emph{DRI.}
+	\emph{Statistics Canada}
+	\emph{Bank of Canada}
+	\emph{DRI}
 }
 
 \references{
@@ -60,4 +59,6 @@
 \seealso{
 	\code{\link{TSdata}}
 }
+\keyword{DSE}
+\keyword{ts}
 \keyword{datasets}

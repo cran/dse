@@ -1,8 +1,84 @@
-This package is part of the dse bundle.
-See 00Intro.* in each package for a short general description.
-The Users' Guide is divided into sections for each package.
-These are installed in the doc/ directory for each package.
-A version of the guide with all sections combined may also
-be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
-See also related packages in the bundle dseplus in the devel packages 
-area of CRAN.
+00General_Description    DSE
+acf.M                    Calculate auto-covariance
+add.plot.roots           add roots of a TSmodel to a plot
+ARMA                     ARMA Model Constructor
+balance.Mittnik          Balance a state space model
+check.balance.Mittnik    check balance of a TSmodel
+check.balance            check balance of a TSmodel
+check.consistent.dimensions
+                         Check Consistent Dimensions
+check.residuals          check residuals of a TSmodel or autocorrelations
+                         of TSdata
+combine                  Combine two objects.
+combine.TSdata           Combine series from two TSdata objects.
+diff.log                 Calculate the difference of log data
+display                  Display TSmodel arrays
+DSE.utilities            DSE Utilities
+dse1.function.tests      dse1.function.tests
+DSECOMPILED              Use Compiled or S/R Code
+eg1.DSE.data             Four Time Series used in Gilbert (1993)
+egJofF.1dec93.data       Eleven Time Series used in Gilbert (1995)
+est.SS.from.VARX         Estimate a state space TSmodel using VAR
+                         estimation
+est.VARX.ar              Estimate a VAR TSmodel
+est.VARX.ls              Estimate a VAR TSmodel
+example                  TS Examples
+findg                    find equivalence transformation
+fix.constants            fix TSmodel parameters to constants
+fixF                     Set SS Model F Matrix to Constants
+get.RNG                  get the RND and seed from an object
+gmap                     Basis transformation of a model.
+help.start.DSE           Start DSE Help in S
+information.tests.calculations
+                         Calculate selection criteria
+information.tests        Tabulates selection criteria
+input.data               TSdata Series
+input.dimension          Number of Series in in Input or Output
+input.periods            TSdata Periods
+input.series.names       TSdata Series Names
+l.ARMA                   Evaluate a ARMA TSmodel
+l                        Evaluate a TSmodel
+l.SS                     Evaluate a state space TSmodel
+load.DSE.fortran         Load compiled routines for time series models
+markov.parms             Markov Parameters
+McMillan.degree          calculate McMillan degree
+observability            Calculate observability of a TSmodel
+parms                    Extract model parameters.
+percent.change           Calculate percent change
+periods.TSdata           Specific Methods for Tframed data
+plot.roots               plot roots of a TSmodel
+polynomials              Polynomial Utilities
+Portmanteau              Calculate Portmanteau statistic
+print.TSdata             Print Specific Methods
+reachability             Calculate reachability of a TSmodel
+residual.stats           Calculate Residuals Statistics and Likelihood
+Riccati                  Riccati Equation
+roots                    Calculate roots of a TSmodel
+scale.TSdata             Scale Methods for TS objects
+series.names.TSdata      Series Names Specific Methods
+set.arrays               Set TSmodel Array Information
+set.parameters           Set TSmodel Parameter Information
+simulate                 Simulate a TSmodel
+smoother                 Evaluate a smoother with a TSmodel
+source.info.TSdata       tfPADI Specific Methods
+SS                       State Space Models
+stability                Calculate stability of a TSmodel
+standardize              standardize data
+sum.sqerror              Calculate sum of squared prediction errors
+summary                  Display summary information.
+summary.TSdata           Specific Methods for Summary
+test.equal.ARMA          Specific Methods for Testing Equality
+tfplot                   Plots of TSdata or TSestModel objects
+tfplot.TSdata            Tfplot Specific Methods
+to.ARMA                  to.ARMA
+to.parsim                convert to parsimonious form
+to.SS.Chol               Convert to non-innovation state space TSmodel
+to.SS.innov              Convert to state space innovations TSmodel
+to.SS.Oform              Convert to Oform
+to.SS                    Convert to state space form
+TSdata.object            time series data object
+TSdata                   Construct TSdata time series object
+TSestModel               Estimated Time Series Model
+TSmodel                  Time Series Models
+version.dse              Print version information
+ytoypc                   Convert to year to year percent change

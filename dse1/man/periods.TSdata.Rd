@@ -2,35 +2,39 @@
 \alias{periods.TSdata}
 \alias{periods.TSestModel}
 \alias{start.TSdata}
-\alias{start.TSestModel}
 \alias{end.TSdata}
-\alias{end.TSestModel}
 \alias{frequency.TSdata}
-\alias{frequency.TSestModel}
+\alias{tframed.TSdata}
+\alias{tfwindow.TSdata}
+\alias{tbind.TSdata}
+\alias{trim.na.TSdata}
 
-\title{Specific Methods for tframed Data}
+\alias{window.TSdata}
+
+\title{Specific Methods for Tframed data}
 \description{See the generic function description.}
 \usage{
-    \method{periods}{TSdata}(x, ...)
-    \method{periods}{TSestModel}(x)
-    \method{start}{TSdata}(x, ...)
-    \method{start}{TSestModel}(x, ...)
-    \method{end}{TSdata}(x, ...)
-    \method{end}{TSestModel}(x, ...)
-    \method{frequency}{TSdata}(x, ...)
-    \method{frequency}{TSestModel}(x, ...)
-}
-\arguments{
-    \item{x}{a time series object.}
-    \item{...}{(further arguments, currently disregarded).}
+	periods(x)
+	start(x)
+	end(x)
+	frequency(x)
+	tframed(x)
+	tfwindow(x)
+	tbind(x)
+	trim.na(x)
 }
 
 \seealso{
-    \code{\link[tframe]{periods}}, 
-    \code{\link[tframe]{start}},
-    \code{\link[tframe]{end}},
-    \code{\link[tframe]{frequency}}
+	\code{\link{periods}}, 
+	\code{\link{start}},
+	\code{\link{end}},
+	\code{\link{frequency}},
+	\code{\link{tframed}},
+	\code{\link{tfwindow}},
+	\code{\link{tbind}},
+	\code{\link{trim.na}}
 }
-\concept{DSE}
+
+\keyword{DSE}
 \keyword{ts}
 

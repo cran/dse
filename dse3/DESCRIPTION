@@ -1,0 +1,9 @@
+Version: R2000.4-1
+License: Free. See the LICENCE file for details.
+Author: 'Paul Gilbert <pgilbert@bank-banque-canada.ca>'.
+URL: http://www.bank-banque-canada.ca/pgilbert
+Package: dse3
+Version: R2000.4-1
+Description: Multivariate Time Series - extensions
+Depends: dse1
+Title: Dynamic Systems Estimation - extensions

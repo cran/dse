@@ -3,17 +3,17 @@
 \title{Calculate Portmanteau statistic}
 \description{Calculate Portmanteau statistic.}
 \usage{
-    Portmanteau(res)}
+	Portmanteau(res)}
 \arguments{
-    \item{res}{A matrix with time-series residuals in columns.}
+\item{model}{A matrix with time-series residuals in columns.}
 }
 \seealso{
-\code{\link{informationTests}}
+\code{\link{information.tests}}
 }
 \examples{
-require("stats")
+if(is.R()) require("ts")
 Portmanteau(matrix(rnorm(200), 100,2)) # but typically with a residual
 }
-\concept{DSE}
+\keyword{DSE}
 \keyword{ts}
 
