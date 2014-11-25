@@ -1,0 +1,15 @@
+TSPADI.function.tests    Test Functions in TSPADI Interface
+TSPADIdata               Constructor for TSPADIdata object
+TSPADIdata2              Constructor for TSPADIdata object
+freeze.TSPADIdata        Get fixed data snapshot using TSPADI
+getpadi                  Get Data from TSPADI Database Interface
+input.data.TSPADIdata    TS Input and Output Specific Methods
+modify.TSPADIdata        Modify a TSPADIdata Object
+print.TSPADIdata         Print Specific Methods
+putpadi.TSdata           Specific Methods for putpadi
+retrieve.and.verify.data
+                         Retrieve and Verify Data
+set.TSPADIdata           Prompt for Series Names
+source.info.TSPADIdata   TSPADIdata Specific Methods
+summary.TSPADIdata       Summary Specific Methods
+tsp.TSPADIdata           Specific Methods for tsp

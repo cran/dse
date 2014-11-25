@@ -2,7 +2,7 @@
 \alias{forecast.cov.wrt.true}
 \alias{is.forecast.cov.wrt.data}
 
-\title{Generate forecasts and compare them against the output of a true model}
+\title{Compare Forecasts to True Model Output}
 \description{
 	Generate forecasts and compare them against the output of a true model.}
 \usage{

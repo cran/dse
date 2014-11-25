@@ -4,7 +4,7 @@
 \alias{observability.SS}
 \alias{observability.TSestModel}
 
-\title{Calculate observability of a TSmodel}
+\title{Calculate Model Observability Matrix}
 \description{
 	Calculate the singular values of the observability matrix of a model.
 }

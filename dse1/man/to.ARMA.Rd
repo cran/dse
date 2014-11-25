@@ -4,7 +4,7 @@
 \alias{to.ARMA.SS}
 \alias{to.ARMA.TSestModel}
 
-\title{to.ARMA}
+\title{Convert to an ARMA Model}
 \description{
 Convert a state space model to an ARMA representation. The state is 
 eliminated by a method which uses an equivalence that can be demonstrated

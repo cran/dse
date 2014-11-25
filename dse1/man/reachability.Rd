@@ -4,7 +4,7 @@
 \alias{reachability.SS}
 \alias{reachability.TSestModel}
 
-\title{Calculate reachability of a TSmodel}
+\title{Calculate Model Reachability Matrix}
 \description{
 	Calculate the singular values of the reachability matrix of a model.
 }

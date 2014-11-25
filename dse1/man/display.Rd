@@ -1,6 +1,6 @@
 \name{display}
 \alias{display}
-\title{Display TSmodel arrays}
+\title{Display TSmodel Arrays}
 \description{
 Display TSmodel arrays. (also accessed with the generic function print)
 }

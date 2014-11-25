@@ -1,6 +1,6 @@
 \name{check.balance.Mittnik}
 \alias{check.balance.Mittnik}
-\title{check balance of a TSmodel}
+\title{Check Balance of a TSmodel}
 \description{
 Calculate the difference between observability and reachability gramians of the model transformed to Mittnik's form.
 }

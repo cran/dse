@@ -3,7 +3,7 @@
 \alias{combine.forecast.cov.estimators.wrt.data}
 \alias{combine.forecast.cov.estimators.wrt.true} 
 
-\title{Combine 2 forecast.cov type objects.}
+\title{Combine 2 Forecast Cov Objects}
 \description{Combine 2 forecast.cov type objects.}
 \usage{
 	combine(obj1, obj2)

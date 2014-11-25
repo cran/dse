@@ -1,0 +1,4 @@
+Package: curve
+Title: Dynamic Systems Estimation - extensions
+Description: Multivariate Time Series - extensions
+Depends: dse1

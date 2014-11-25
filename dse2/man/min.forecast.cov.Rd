@@ -1,6 +1,6 @@
 \name{min.forecast.cov}
 \alias{min.forecast.cov}
-\title{Minimum forecast cov models}
+\title{Minimum Forecast Cov Models}
 \description{Extract the minimum forecast.cov at each horizon}
 \usage{
 	min.forecast.cov(obj, select.series=1, verbose=T)

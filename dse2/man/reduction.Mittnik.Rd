@@ -2,7 +2,7 @@
 \alias{reduction.Mittnik}
 \alias{reduction.Mittnik.from.Hankel}
 
-\title{Balance and reduce a model}
+\title{Balance and Reduce a Model}
 \description{
 Balance and reduce the state dimension of a state space model a la Mittnik.
 }

@@ -1,0 +1,14 @@
+
+                       1993 9   1993 10   1993 11   1993 12   1994 1  1994 2   1994 3   1994 4  1994 5   1994 6
+diff(R90=B14017)       -0.2      -0.2      -0.2      -0.18     -0.1    -0.1     -0.05      0.0     0.0      0.0
+
+%change(CPI=P484549)    NA         NA         0.3        
+%change(GDP=I37026)     NA         0.2        0.1
+%change(M1=b1627)       NA         NA         NA
+diff(RL=b14013)         NA         NA         NA
+diff(TSE=b4237)         NA         NA         NA
+%change(emp=lfsa201)    NA         NA         NA  
+%change(fx=b3400)       NA         NA         NA         
+%change(UScomP=M.BCPI)  NA         NA         NA      
+%change(USprd=M.JQIND)  NA         NA         NA     
+%change(USCPI=M.CUSA0)  NA         NA         NA    

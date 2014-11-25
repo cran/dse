@@ -4,7 +4,7 @@
 \alias{roots.ARMA}
 \alias{roots.TSestModel}
 
-\title{Calculate roots of a TSmodel}
+\title{Calculate Model Roots}
 \description{Calculate roots of a TSmodel.}
 \usage{
 	roots(model, fuzz=0, randomize=F, warn=T, by.poly=F)}

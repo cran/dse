@@ -1,0 +1,4 @@
+Package: juice
+Title: Dynamic Systems Estimation - juice extensions
+Description: Multivariate Time Series - extensions
+Depends: dse1

@@ -2,7 +2,7 @@
 \alias{forecast.cov.estimators.wrt.true}
 \alias{is.forecast.cov.estimators.wrt.true}
 
-\title{Generate forecasts cov and compare against the output of a true model}
+\title{Compare Forecasts Cov Relative to True Model Output}
 \description{}
 \usage{
 	forecast.cov.estimators.wrt.true(true.model, Spawn=.SPAWN, rng=NULL,

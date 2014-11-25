@@ -1,6 +1,6 @@
 \name{mine.strip}
 \alias{mine.strip}
-\title{Select a data subset and model}
+\title{Select a Data Subset and Model}
 \description{Select a data subset and model.}
 \usage{
 	mine.strip(all.data, essential.data=1, 

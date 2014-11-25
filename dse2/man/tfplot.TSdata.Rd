@@ -1,7 +1,6 @@
 \name{tfplot.TSdata}
 \alias{tfplot.TSmodel.ee}
 \alias{tfplot.TSestModel.ee}
-\alias{tfplot.combined.forecast}
 \alias{tfplot.feather.forecasts}
 \alias{tfplot.forecast}
 \alias{tfplot.forecast.cov.estimators.wrt.data}

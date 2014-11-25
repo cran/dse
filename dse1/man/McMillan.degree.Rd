@@ -4,7 +4,7 @@
 \alias{McMillan.degree.SS}
 \alias{McMillan.degree.TSestModel}
 
-\title{calculate McMillan degree}
+\title{Calculate McMillan Degree}
 \description{
 
 Calculate the McMillan degree of an ARMA TSmodel.

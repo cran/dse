@@ -1,0 +1,4 @@
+Package: dsepadi
+Title: Dynamic Systems Estimation - PADI extensions
+Description: Multivariate Time Series - PADI extensions
+Depends: dse1 padi

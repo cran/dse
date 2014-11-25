@@ -1,6 +1,6 @@
 \name{fix.constants}
 \alias{fix.constant}
-\title{fix TSmodel parameters to constants}
+\title{Fix TSmodel Parameters to Constants}
 \description{
 	Fix any parameters within fuzz of 0.0 or 1.0 to exactly 0.0 or 1.0.
 	This will not change the model much but will affect some estimation 

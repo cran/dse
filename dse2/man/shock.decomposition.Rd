@@ -1,6 +1,6 @@
 \name{shock.decomposition}
 \alias{shock.decomposition}
-\title{shock.decomposition}
+\title{Shock Decomposition}
 \description{Graphs of the effect of shocks are plotted.}
 \usage{
 	shock.decomposition(model, horizon=30)

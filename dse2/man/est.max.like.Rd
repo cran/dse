@@ -1,6 +1,6 @@
 \name{est.max.like}
 \alias{est.max.like}
-\title{Maximum likelihood estimation}
+\title{Maximum Likelihood Estimation}
 \description{Maximum likelihood estimation.}
 \usage{
 	est.max.like(model,  max.iter=20, ftol=1e-5, algorithm='nlm')

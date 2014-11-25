@@ -3,7 +3,7 @@
 \alias{parms.TSmodel}
 \alias{parms.TSestModel}
 
-\title{Extract model parameters.}
+\title{Extract Model Parameters.}
 \description{
 	A generic function to extract parameter values from some DSE objects.
 }

@@ -6,7 +6,7 @@
 \alias{stability.TSmodel}
 \alias{stability.TSestModel}
 
-\title{Calculate stability of a TSmodel}
+\title{Calculate Stability of a TSmodel}
 \description{Calculate roots and their modulus and indicate stability.}
 \usage{
 	stability(model, fuzz=1e-4, digits=8, verbose=T)}

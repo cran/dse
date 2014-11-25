@@ -1,0 +1,38 @@
+# Expecting results from 1 tests
+
+#R --nsize=1M --vsize=10M 
+ #x11()
+  postscript(file="medium.out.ps",  paper="letter", horizontal=F, onefile=T)
+             # width=6, height=8, pointsize=10,
+  require("ts",       warn.conflicts=F)
+  require("dse2",     warn.conflicts=F)
+  require("dsepadi",  warn.conflicts=F)
+  require("monitor",  warn.conflicts=F)
+ system.info()  
+ version.dse()
+
+   require("padi",    warn.conflicts=F)
+   if (is.S()) {
+	# the next 2 lines remove old versions of PADI in the search path
+ 	invisible(if(0!=length(grep("b*/PADI/.Data",search())))
+                         detach(grep("b*/PADI/.Data",search()))  )
+	attach(paste(getenv("PADI"),"/.Data", sep=""), pos=2)
+	#load.padi(from=".")    # this gets the version in pwd
+	load.padi()           # this gets the version indicated by PADI
+	# load.padi does the following two dynamic loads 
+	#dyn.load.shared("/usr/lib/libnsl.so")     # splus 3.3 on SunOS5
+	# If the shared library is not loaded then the next has missing symbols
+	#dyn.load(paste(getenv("PADI"),"/lib/splusclnt.o", sep=""))
+	search()
+   }
+
+ guide.example.tests.part2(verbose=F, graphics=T)  # this takes some time
+
+#   example.verify.data(eg1.DSE.data.diff) 
+#  you have to look at the output for the following to be useful
+#   example.BOC.93.4.paper.tests(eg1.DSE.data.diff, eg1.DSE.data) 
+#  example.VAR.SVD(example.truncate.data(eg1.DSE.data.diff), eg1.DSE.data.diff, 
+#      eg1.DSE.data) 
+
+
+# opt.function.tests(verbose=T) # 7-9 fail and parts of others (hessian)

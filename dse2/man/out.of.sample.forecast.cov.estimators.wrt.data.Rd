@@ -1,6 +1,6 @@
 \name{out.of.sample.forecast.cov.estimators.wrt.data}
 \alias{out.of.sample.forecast.cov.estimators.wrt.data}
-\title{Calculate out-of-sample forecasts}
+\title{Calculate Out-of-Sample Forecasts}
 \description{Calculate out-of-sample forecasts.}
 \usage{
 	out.of.sample.forecast.cov.estimators.wrt.data(data, zero=F, trend=F,

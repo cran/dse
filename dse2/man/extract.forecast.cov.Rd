@@ -3,7 +3,7 @@
 \alias{extract.forecast.cov.estimators.wrt.data}
 \alias{extract.forecast.cov.estimators.from.model}
 
-\title{extract.forecast.cov}
+\title{Extract Forecast Covariance}
 \description{extract.forecast.cov}
 \usage{
 	extract.forecast.cov(e, n)

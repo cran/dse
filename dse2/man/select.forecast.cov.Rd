@@ -1,6 +1,6 @@
 \name{select.forecast.cov}
 \alias{select.forecast.cov}
-\title{Select forecast covariances meeting given criteria}
+\title{Select Forecast Covariances Meeting Criteria}
 \description{Select forecast covariances meeting given criteria.}
 \usage{
 	select.forecast.cov(obj, select.series=1, 

@@ -6,7 +6,7 @@
 \alias{check.balance.Mittnik.ARMA}
 \alias{check.balance.Mittnik.SS}
 \alias{check.balance.Mittnik.TSestModel}
-\title{check balance of a TSmodel}
+\title{Check Balance of a TSmodel}
 \description{
 Calculate the difference between observability and reachability gramians.}
 \usage{

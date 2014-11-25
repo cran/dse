@@ -1,6 +1,6 @@
 \name{tfplot}
 \alias{tfplot}
-\title{Plots of TSdata or TSestModel objects}
+\title{Time Series Plots}
 \description{
 Plot actual data and one-step ahead predictions for one or multiple models.
 }

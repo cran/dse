@@ -1,0 +1,23 @@
+#!/bin/sh
+
+VER="2000.6-1"
+
+# The following mail message can be removed. 
+(echo "dse" $VER" R DSE installed" ; date ; uname -a) | mail  -s 'R DSE installed' pgilbert@bank-banque-canada.ca
+
+echo "This is DSE version dse_R" $VER
+echo "Please check the web site <http://www.bank-banque-canada.ca/pgilbert>"
+echo "to be sure you have a recent version."
+
+# For a private library (when the owner of R is not installing DSE) use the
+#    following and note that start.help() must be run for html help links
+#    to get updated.
+# TARGET="-l rlibs"
+# echo "remember to run help.start() to update html links"
+
+# If the owner of R is installing DSE then this is preferred
+TARGET=" "
+
+R INSTALL $TARGET  syskern_$VER.tar.gz
+R INSTALL $TARGET  tframe_$VER.tar.gz
+R INSTALL $TARGET  dse_R$VER.tar.gz  

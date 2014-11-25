@@ -1,6 +1,6 @@
 \name{est.min.sqerror}
 \alias{est.min.sqerror}
-\title{est.min.sqerror}
+\title{Estimate Min Squared Error}
 \description{est.min.sqerror}
 \usage{
 	est.min.sqerror <- function(data, init.model, error.weights=1, ...)
