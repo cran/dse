@@ -19,6 +19,16 @@
     is.TSdata(obj)
     as.TSdata(d)
 }
+\arguments{
+    \item{data}{object of class TSdata, TSestModel, matrix, list with input
+       and output matrices, or another object for which a constructor or 
+       TSdata extraction method has been defined.}
+    \item{input}{a matrix of time series data.}
+    \item{output}{a matrix of time series data.}
+    \item{...}{arguments to be passed to other methods.}
+    \item{obj}{an object.}
+    \item{d}{an object from which a TSdata object can be extracted. See below.}
+}
 \details{
     Generic method to construct or extract a TSdata object. The default 
     method constructs a TSdata object. Specific methods extract the TSdata

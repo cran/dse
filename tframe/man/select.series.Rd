@@ -1,27 +1,29 @@
 \name{select.series}
 \alias{select.series}
 \alias{select.series.default}
+\alias{select.series.ts}
 
 \title{Extract a Subset of Series}
 \description{Extract a subset of series from a tframed object.}
 \usage{
-    select.series(x, ...)
-    \method{select.series}{default}(x, series=seq(ncol(x)))
+    select.series(x, series = seqN(nseries(x)))
+    \method{select.series}{default}(x, series = seqN(nseries(x)))
+    \method{select.series}{ts}(x, series = seqN(nseries(x)))
     }
 
-\arguments {
+\arguments{
     \item{x}{A tframed object.}
     \item{series}{The subset of series to retain.}
 }
 \value{A tframed object.}
 \details{
-    This is like [ , , drop=F] but retains class, series name and tframe 
+    This is like [ , , drop=FALSE] but retains class, series name and tframe 
     information. It
     also provides a methods which works with multivariate series which 
     are not matrices (e.g. tfPADIdata).
 }
 \seealso{
-    \code{\link{series.names}}
+    \code{\link{seriesNames}}
     \code{\link[dsepadi]{tfPADIdata}}
 }
 \examples{

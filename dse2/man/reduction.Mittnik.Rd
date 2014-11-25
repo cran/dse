@@ -7,14 +7,19 @@
 Balance and reduce the state dimension of a state space model a la Mittnik.
 }
 \usage{
-    reduction.Mittnik(model, data=NULL, criterion=NULL, verbose=T,warn=T)
+    reduction.Mittnik(model, data=NULL, criterion=NULL, verbose=TRUE,warn=TRUE)
 }
 \arguments{
     \item{model}{An object of class TSmodel or TSestModel.}
     \item{data}{
-    If the supplied model is of class TSestModel and data is not supplied
-then it is taken from the model. If the model is of class TSmodel
-then data must be supplied.}
+      If the supplied model is of class TSestModel and data is not supplied
+      then it is taken from the model. If the model is of class TSmodel
+      then data must be supplied.}
+    \item{criterion}{Criterion to be used for model 
+       selection. see \code{information.tests.calculations}.}
+    \item{verbose}{logical indicating if information should be printed 
+       during estimation.}
+    \item{warn}{logical indicating if some warning messages should be suppressed.}
 }
 \value{
 A state space model balance a la Mittnik in an object of class TSestModel.
@@ -55,6 +60,7 @@ without data.)
     \code{\link{est.VARX.ls}}
     \code{\link{bft}}
     \code{\link{information.tests}}
+    \code{\link[dse1]{information.tests.calculations}}
 }
 \examples{
     if(is.R()) data("egJofF.1dec93.data", package="dse1")

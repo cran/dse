@@ -3,14 +3,14 @@
 \alias{minimum.startup.lag.SS}
 \alias{minimum.startup.lag.ARMA}
 \alias{minimum.startup.lag.TSestModel}
-\alias{start.shift}
+\alias{startShift}
 
 \title{Starting Periods Required}
 \description{Number of Starting Periods Required for a Model}
 \usage{
     minimum.startup.lag(model)
 }
-\arguments {
+\arguments{
     \item{model}{A TSmodel or object containing a TSmodel.}
 }
 \value{An integer.}
@@ -25,7 +25,7 @@
     \code{\link{TSmodel}}
 }
 
-\note{There is some redundancy between this and start.shift which 
+\note{There is some redundancy between this and startShift which 
       should be cleaned up.}
 %\keyword{DSE}
 \keyword{ts}

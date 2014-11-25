@@ -13,8 +13,8 @@
     is.innov.SS(obj)
     is.non.innov.SS(obj)
 }
-\arguments {
-    \item{F}{(nxn) is the state transition matrix F.}
+\arguments{
+    \item{F.}{(nxn) is the state transition matrix F.}
     \item{H}{(pxn)is the output matrix H.}
     \item{Q}{
     (nxn) is the input matrix of the system noise and the noise is 
@@ -29,14 +29,21 @@
     \item{G}{(nxp)is the control (input) matrix.
         G should be NULL if there is no input.}
     \item{K}{(nxp)is the Kalman gain.}
-
-    \item{description}{String. An arbitrary description.
+    \item{z0}{vector indicating estimate of the state at time 0.
+       Set to zero if not supplied.}
+    \item{P0}{a matrix indicating initial tracking error P(t=1|t=0).
+       Set to I if not supplied.}
+    \item{description}{String. An arbitrary description.}
+    \item{names}{A list with elements input and output, each a vector of 
+       strings. Arguments input.names and output.names should not be used if
+       argument names is used.}
     \item{input.names}{
-    A vector of character strings indicating input variable names.
+      A vector of character strings indicating input variable names.
     }
     \item{output.names}{
-    A vector of character strings indicating output variable names.
+      A vector of character strings indicating output variable names.
     }
+    \item{obj}{an object.}
 }
 \value{An SS TSmodel}
 \details{
@@ -46,12 +53,12 @@ or a non-innovations form.
 
 The state space (SS) model is defined by:
 
-      z(t) = Fz(t-1) + Gu(t) + Qe(t)
+      z(t) =Fz(t-1) + Gu(t) + Qe(t)
       y(t) = Hz(t)  + Rw(t)
 
 or the innovations model:
 
-       z(t) = Fz(t-1) + Gu(t) + Kw(t-1)
+       z(t) =Fz(t-1) + Gu(t) + Kw(t-1)
        y(t) = Hz(t)  + w(t)
 
     \item{F}{(nxn) is the state transition matrix F.}

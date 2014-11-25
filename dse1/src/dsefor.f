@@ -1040,7 +1040,7 @@ C               IC=MAX(IC,LN(I))
      + IS,AA,BB,WW)
 
 C  multiple calls to ARMA for for prediction at given horizons.
-C     See S program horizon.forecasts.TSmodel
+C     See S program horizonForecasts.TSmodel
 C
 C  Note: If DSCARD is too small then forecasting starts based on little (or 
 C          no) data and the results will be spurious.
@@ -1085,7 +1085,7 @@ C       this assumes HORIZ is sorted in ascending order
      + IS,AA,BB,WW)
 
 C  multiple calls to ARMA for prediction analysis.
-C     See S program forecast.cov
+C     See S program forecastCov
 C
 C  Note: If DSCARD is too small then forecasting starts based on little (or 
 C          no) data and the results will be spurious.

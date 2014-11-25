@@ -1,10 +1,8 @@
 \name{tframed}
 \alias{tframed}
 \alias{tframed.default}
-\alias{settf}
-\alias{settf.default}
-\alias{settf.tftframe}
 \alias{is.tframed}
+\alias{is.Ttframed}
 
 \title{Construct a Tframed Object}
 \description{
@@ -15,24 +13,28 @@
 }
 
 \usage{
-    tframed(x, ...)
+    tframed(x, tf=NULL, names = NULL)
     \method{tframed}{default}(x, tf = NULL, names = NULL)
 
-    settf(value, x)
-    \method{settf}{default}(value, x)
-    \method{settf}{tftframe}(value, x)
-
     is.tframed(x)
+    is.Ttframed(x)
 }
 
 \arguments{
-    \item{x}{A tframed object or an object to be tframed.}
-    \item{tf}{A tframe.}
+    \item{x}{a tframed object or an object to be tframed.}
+    \item{tf}{a tframe.}
+    \item{names}{optional vector of strings to specify new series names.}
+    \item{value}{a tframe attribute to be applied to x.}
 }
 \value{A tframed object.}
 \details{
-    This constructor is like ts but enables the tframe library's generic 
-    methods for handling time.
+    This \code{tframed}constructor is like ts but enables the tframe library's  
+    generic methods for handling time. \code{is.tframed} returns TRUE if a
+    \code{tframe()} can extract a tframe from the object. This is true for many
+    objects which are not truly tframed (like ts objects), since \code{tframe()}
+    tries fairly hard to build a tframe for the object. \code{is.Ttframed} 
+    returns TRUE only if the object is truly tframed (i.e. has an attribute
+    \code{tframe}).
 }
 \seealso{
     \code{\link{tframe}}

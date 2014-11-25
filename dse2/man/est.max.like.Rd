@@ -9,19 +9,20 @@
     est.max.like(obj, ...) 
     \method{est.max.like}{TSmodel}(obj, data, algorithm="optim",
 	algorithm.args=list(method="BFGS", upper=Inf, lower=-Inf, hessian=TRUE))
-    \method{est.max.like}{TSestModel}(obj, data=TSdata(obj), ...)
+    \method{est.max.like}{TSestModel}(obj, data=TRUESdata(obj), ...)
     \method{est.max.like}{TSdata}(obj, model, ...) 
 }
 \arguments{
-    \item{obj}{An object of class TSmodel, TSdata or TSestModel}
-    \item{data}{A TSdata object.}
-    \item{model}{A TSmodel object.}
-    \item{algorithm}{The algorithm ('optim', 'nlm' or 'nlmin') to use for maximization.}
-    \item{algorithm.args}{Arguments for the optimization algorithm.}
+    \item{obj}{an object of class TSmodel, TSdata or TSestModel}
+    \item{data}{a TSdata object.}
+    \item{model}{a TSmodel object.}
+    \item{algorithm}{the algorithm ('optim', 'nlm' or 'nlmin') to use for maximization.}
+    \item{algorithm.args}{arguments for the optimization algorithm.}
+    \item{...}{arguments passed on to other methods.}
 }
 \value{
 The value returned is an object of class TSestModel with  additional
-elements \code{est$converged}, which is T or F indicating convergence, 
+elements \code{est$converged}, which is TRUE or FALSE indicating convergence, 
 and \code{est$results}. The hessian and gradient in results could potentially 
 be used for restarting in the case of non-convergence, but that has not 
 yet been implemented.

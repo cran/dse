@@ -12,8 +12,8 @@ function TSdata or can be built according to the description below.
 
 \section{Methods}{
 The \code{TSdata} class of objects has methods for the generic
-functions \code{print, plot, periods, start, end, ..., test.equal, series.names,
-input.series.names, output.series.names}
+functions \code{print, plot, periods, start, end, ..., test.equal, seriesNames,
+seriesNamesInput, seriesNamesOutput}
 Also, the function \code{is.TSdata} is supported.
 }
 
@@ -31,7 +31,7 @@ structure.  \code{TSPADIdata} makes it possible to retrieve data from
 an external database when it is needed. These subclass objects do not
 contain the actual data, but only the names of the series and the data
 base where they are located. The function set.TSPADIdata can be used to set
-up an object of class c("TSPADIdata", TSdata").
+up an object of class c("TSPADIdata", "TSdata").
 }
 
 \seealso{

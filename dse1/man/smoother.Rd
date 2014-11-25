@@ -12,7 +12,7 @@ class `non.innov' 'SS' 'TSmodel'. If filter informatin is not provided
 then smoother runs the Kalman filter (l.SS) first.}
     \item{data}{A TSdata object.}.
     \item{compiled}{
-    If T the compiled version of the code is used. Otherwise the S version is used.}
+    If TRUE the compiled version of the code is used. Otherwise the S version is used.}
 }
 \value{
 An object of class TSestModel with an additional element \code{smooth}. 
@@ -34,8 +34,8 @@ estimate of the state (sometimes called a two sided filter).
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")
 #smoother requires an non-innovations form model
-model <- TSmodel(to.SS.Chol(est.VARX.ls(eg1.DSE.data.diff))) 
-smoothed.model <- smoother(model, eg1.DSE.data.diff, compiled=F)
+model <- TSmodel(to.SSChol(est.VARX.ls(eg1.DSE.data.diff))) 
+smoothed.model <- smoother(model, eg1.DSE.data.diff, compiled=FALSE)
 }
 %\keyword{DSE}
 \keyword{ts}

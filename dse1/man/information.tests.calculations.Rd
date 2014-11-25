@@ -4,7 +4,7 @@
 \title{Calculate selection criteria}
 \description{Calculates several model selection criteria.}
 \usage{
-    information.tests.calculations(lst, sample.start=1,sample.end=NULL, warn=T)
+    information.tests.calculations(lst, sample.start=1,sample.end=NULL, warn=TRUE)
 }
 \arguments{
     \item{lst}{One or more objects of class TSestModel.}
@@ -17,7 +17,19 @@
     }
     \item{warn}{If FALSE then some warning messages are suppressed.}
 }
-\value{The calculated values are returned in a vector.}
+\value{
+   The calculated values are returned in a vector with names: port, like, 
+   aic, bic, gvc, rice, fpe, taic, tbic, tgvc, trice and tfpe. These
+   correspond to values for the  Portmanteau test, likelihood, 
+   Akaike Information Criterion, Bayes  Information Criterion, 
+   Generalized Cross Validation, Rice Criterion, and Final Prediction Error. 
+   The preceeding 't' indicates that the theoretical parameter space 
+   dimension has been used, rather than the number of 
+   coefficient (parameter) values. Methods which select a model based on some
+   information criterion calculated by \code{information.tests.calculations}
+   should use the name of the vector element to specify the test value which
+   is to be used.
+}
 \seealso{
     \code{\link{information.tests}}
 }

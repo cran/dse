@@ -2,4 +2,4 @@ Package: tframe
 Title: Time Frame coding kernel
 Description: Functions for writing code that 
  is independent of the representation of time.
-Depends: R (>= 1.2.2), syskern (>= 2001.4-1)  
+Depends: R (>= 1.3.1), syskern (>= 2001.11-1)  

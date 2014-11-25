@@ -8,7 +8,7 @@
 \usage{
     add.date(date, periods, freq)
 }
-\arguments {
+\arguments{
     \item{date}{A two element date as used by tsp i.e c(year, period).}
     \item{periods}{A number of periods.}
     \item{freq}{The number of periods in a year.}
@@ -16,7 +16,7 @@
 \value{A two element date.}
 
 \seealso{
-    \code{\link{tfexpand}}
+    \code{\link{tfExpand}}
 }
 \examples{
     add.date(c(1998,1), 20, 12)
@@ -28,4 +28,5 @@
 \keyword{utilities}
 \keyword{ts}
 \keyword{chron}
+
 

@@ -8,23 +8,23 @@
 (optionally) a trend.
 }
 \usage{
-    est.VARX.ls(data, subtract.means=F, re.add.means=T, standardize=F, 
-     unstandardize=T, max.lag=NULL, trend=F, lag.weight=1.0, warn=T) 
+    est.VARX.ls(data, subtract.means=FALSE, re.add.means=TRUE, standardize=FALSE, 
+     unstandardize=TRUE, max.lag=NULL, trend=FALSE, lag.weight=1.0, warn=TRUE) 
 }
 \arguments{
     \item{data}{A TSdata object.}
-    \item{subtract.means}{If T subtract the means from the data before estimation.}
+    \item{subtract.means}{If TRUE subtract the means from the data before estimation.}
     \item{re.add.means}{
-    If T and subtract.means is T then the mean is added back to the data and 
+    If TRUE and subtract.means is TRUE then the mean is added back to the data and 
     the model is adjusted for the non-zero mean data when returned.}
     \item{standardize}{
-    If T divide each series by its sample standard 
+    If TRUE divide each series by its sample standard 
     deviation before estimation.
-    Note that the mean is not subtracted unless subtract.means is T.}
+    Note that the mean is not subtracted unless subtract.means is TRUE.}
     \item{unstandardize}{
-    If T and standardize is T then the returned 
+    If TRUE and standardize is TRUE then the returned 
     model is adjusted to correspond to the original data.}
-    \item{trend}{If T a trend is estimated.}
+    \item{trend}{If TRUE a trend is estimated.}
     \item{max.lag}{Number of lags to be used.}
     \item{lag.weight}{
     Weight between 0 and 1 to be applied to lagged data. 
@@ -47,8 +47,13 @@ residual. This is slightly different from using ARMA, especially with
 respect to initial conditions.
 }
 \references{
-P.D.Gilbert (1993) State Space and ARMA models: An overview of
-estimation and reduction.
+    Gilbert, P. D. (1993) State space and ARMA models: An overview of
+    the equivalence. Working paper 93-4, Bank of Canada. Available at
+    <www.bank-banque-canada.ca/pgilbert>
+
+    Gilbert, P. D. (1995) "Combining VAR Estimation and State Space 
+    Model Reduction for Simple Good Predictions" J. of Forecasting: 
+    Special Issue on VAR Modelling. 14:229-250.
 }
 \seealso{
     \code{\link{est.SS.from.VARX}}

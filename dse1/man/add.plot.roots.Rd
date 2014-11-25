@@ -10,16 +10,14 @@ Calculate and plot roots of a model.
 }
 \arguments{
 
-    \item{model}{An object of class TSmodel.}
+    \item{v}{An object containing a TSmodel.}
+    \item{pch}{Character to use for plotting.}
     \item{fuzz}{If non-zero then roots within fuzz distance are considered equal.}
 }
 \sideffects{
-
-The roots are addeded to an existing tfplot.
-
+The roots are addeded to an existing plot.
 }
 \value{
-
 The eigenvalues of the state transition matrix or the inverse of the roots of the
 determinant of the AR polynomial are returned invisibly.
 }

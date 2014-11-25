@@ -2,7 +2,10 @@
  Sys.info()
  version.dse()
  if      (is.R()) data("eg1.DSE.data.diff", package="dse1") else 
- if (is.S()) source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+ if (is.S()) 
+   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
+    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
+    }
 
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
  
@@ -44,8 +47,8 @@ cat("dse1 test 11...\n")
    scale.fac <- list(output=scale.fac)
 
    good <- scale.pred
-   tst  <- l(scale(VARmodel$model, scale.fac), 
-          scale(eg1.DSE.data.diff, scale.fac), warn=F)$estimates$pred
+   tst  <- l(scale(VARmodel$model, scale=scale.fac), 
+          scale(eg1.DSE.data.diff, scale=scale.fac), warn=F)$estimates$pred
    error <- max(abs(good - tst))
    cat("max. error ", max(error), "\n")
  
@@ -58,8 +61,8 @@ cat("dse1 test 11...\n")
 cat("dse1 test 12...\n")
 
    good <- scale.pred
-   tst  <- l(scale(SSmodel, scale.fac), 
-             scale(eg1.DSE.data.diff, scale.fac))$estimates$pred
+   tst  <- l(scale(SSmodel, scale=scale.fac), 
+             scale(eg1.DSE.data.diff, scale=scale.fac))$estimates$pred
    error <- max(abs(good - tst))
    cat("max. error ", max(error), "\n")
  
@@ -73,8 +76,8 @@ cat("dse1 test 13...\n")
 
   z <- eg1.DSE.data.diff
   ok <- test.equal(z,
-      TSdata(output=output.data(combine(z,z), series=seq(output.dimension(z))),
-              input= input.data(combine(z,z), series=seq( input.dimension(z))))) 
+      TSdata(output=output.data(combine(z,z), series=seq(nseriesOutput(z))),
+              input= input.data(combine(z,z), series=seq( nseriesInput(z))))) 
  
   if (!ok) {all.ok <- F ; cat(ok, "\n")}
 

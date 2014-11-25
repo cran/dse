@@ -7,6 +7,7 @@
 \arguments{
     \item{x}{A time series.}
     \item{lag}{The difference is calculated relative to lag periods prior.}
+    \item{base}{Base to use when calculating logrithms.}
 }
 \value{
 A time series of the difference relative to lag periods prior for the log of 

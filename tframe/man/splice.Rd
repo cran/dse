@@ -14,6 +14,7 @@ not have to correspond.
 \arguments{
     \item{mat1}{A time series object.}
     \item{mat2}{A time series object.}
+    \item{...}{arguments to be passed to other methods.}
 }
 \value{A time series object}
 \details{

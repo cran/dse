@@ -15,7 +15,7 @@ combine two objects of the same class to make a single object of that class.
 }
 \value{An object of the same class as the argument but containing both e1 and e2.}
 \seealso{
-tbind, combine.TSdata, combine.forecast.cov 
+tbind, combine.TSdata, combine.forecastCov 
 }
 \examples{
 if(is.R()) {data("eg1.DSE.data.diff", package="dse1")

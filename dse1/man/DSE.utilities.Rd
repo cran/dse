@@ -9,11 +9,9 @@
 \alias{est.VARX.mean.correction}
 \alias{fake.TSestModel.missing.data}
 \alias{is.TSm.or.em}
-\alias{make.TSnoise}
 \alias{print.test.value}
 \alias{dsescan}
 \alias{read.int}
-\alias{shart.shift}
 \alias{svd.criteria}
 
 \title{DSE Utilities}
@@ -21,5 +19,5 @@
     These functions are used by other functions in DSE and are not
     typically called directly by the user.}
 %\keyword{DSE}
-\keyword{ts}
+\keyword{internal}
 

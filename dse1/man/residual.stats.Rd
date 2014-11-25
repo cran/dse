@@ -3,7 +3,7 @@
 \title{Calculate Residuals Statistics and Likelihood}
 \description{Calculate the residuals statistics and likelihood of a residual.}
 \usage{
-    residual.stats(pred, data, sampleT=nrow(pred), warn=T)}
+    residual.stats(pred, data, sampleT=nrow(pred), warn=TRUE)}
 \arguments{
     \item{pred}{A matrix with columns representing time series.}
     \item{data}{A matrix with columns representing time series.}
@@ -12,7 +12,7 @@
 }
 \details{
     Residuals are calculated as
-    pred[1:sampleT,,drop=F] - data[1:sampleT,,drop=F]
+    pred[1:sampleT,,drop=FALSE] - data[1:sampleT,,drop=FALSE]
     and then statistics are calculated based on these residuals. If pred
     or data are NULL they are treated as zero.
 }

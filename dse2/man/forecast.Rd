@@ -8,7 +8,7 @@
 \title{Forecast Multiple Steps Ahead}
 \description{Calculate forecasts multiple steps ahead.}
 \usage{
-    is.forecast.cov(obj)
+    is.forecastCov(obj)
     forecast(obj, ...)
     \method{forecast}{TSmodel}(obj, data,  horizon=36,
        conditioning.inputs=NULL, 
@@ -17,6 +17,7 @@
     \method{forecast}{TSdata}(obj, model, ...)
 }
 \arguments{
+    \item{obj}{An object of a class for which a specific method is available.}
     \item{model}{An object of class TSmodel.}
     \item{data}{An object of class TSdata.}
     \item{conditioning.inputs}{
@@ -28,6 +29,7 @@ variables for the forecast periods.}
     \item{percent}{
     A vector indication percentages of the last input to use for 
     forecast periods.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
 The result is an object of class forecast which is a list with 
@@ -70,8 +72,8 @@ give results for conditioning.input.forecasts 10 percent above and below
 the last value of input.
 }
 \seealso{
-\code{\link{feather.forecasts}},
-\code{\link{horizon.forecasts}}
+\code{\link{featherForecasts}},
+\code{\link{horizonForecasts}}
 }
 \examples{
     if(is.R()) data("egJofF.1dec93.data", package="dse1")

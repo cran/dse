@@ -1,27 +1,32 @@
-See 00Intro or 00Intro.dse1 for a general description of this package,
-A Users' Guide is available at 'URL: http://www.bank-banque-canada.ca/pgilbert'
-See also the related packages syskern tframe dse1 dse2 in the dse bundle
-   and packages curve juice  dsepadi monitor   in the dseplus bundle.
-00Intro.tframe           Tframe
-add.date                 Add Periods to a Date
-classed                  Tframe Library Utilities
-earliest.end             Start and End for Multiple Time Series Objects
-end                      Generic Time Series Parameters
-freeze                   Get fixed data snapshot
-is.consistent.tframe     Check for a Consistent tframe
-lag                      Misc Generic Replacements
-nseries                  Number of Series
-select.series            Extract a Subset of Series
-series.names             Names of Series in a tframed object
-splice                   Splice Time Series
-tbind                    Bind Time Series
-test.equal               Compare Two Objects
-test.equal.tframe        Compare Two Time Frames
-tfexpand                 Expand a Tframe or Tframed Object.
-tfplot                   Plot Tframed Objects
-tfprint                  Print Tframed Objects
-tframe                   Extract or Set a Tframe
-tframed                  Construct a Tframed Object
-tfwindow                 Truncate a Time Series
-time                     Time
-trim.na                  Trim NAs from Time Series
+See 00Intro.* in each package for a short general description.
+A Users' Guide is available in dse1/doc/guide.pdf
+  and also at 'http://www.bank-banque-canada.ca/pgilbert'
+See also the bundle dseplus with related
+ packages dsepadi monitor juice curve .
+00Intro.tframe          Tframe
+add.date                Add Periods to a Date
+check.tframeConsistent
+                        Check for a Consistent tframe
+classed                 Tframe Library Utilities
+earliestEnd             Start and End for Objects with Multiple Time
+                        Series
+freeze                  Get fixed data snapshot
+lag                     Lag
+makeTSnoise             Generate a random time series
+nseries                 Number of Series
+periods                 Generic Time Series Parameters
+select.series           Extract a Subset of Series
+seqN                    Tframe Library Utilities
+seriesNames             Names of Series in a time series object
+splice                  Splice Time Series
+tbind                   Bind Time Series
+test.Equaltframes       Compare Two Time Frames
+test.equal              Compare Two Objects
+tfExpand                Expand a Tframe or Tframed Object.
+tfplot                  Plot Tframed Objects
+tfprint                 Print Tframed Objects
+tframe                  Extract or Set a tframe
+tframed                 Construct a Tframed Object
+tfwindow                Truncate a Time Series
+trim.na                 Trim NAs from Time Series
+tsmatrix                Create a time series matrix.

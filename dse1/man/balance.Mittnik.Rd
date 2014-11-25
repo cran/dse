@@ -21,8 +21,9 @@ printed and the program prompts for n.}
 \value{A state space model balance a la Mittnik in a TSestModel object.}
 \details{See references.}
 \references{
-    P.D.Gilbert (1993) State Space and ARMA models: An overview of
-    estimation and reduction. (Other reference cited therein.)
+    Gilbert, P. D. (1993) State space and ARMA models: An overview of
+    the equivalence. Working paper 93-4, Bank of Canada. Available at
+    <www.bank-banque-canada.ca/pgilbert>
 
     Gilbert, P.D. (1995) "Combining VAR Estimation and State Space 
     Model Reduction for Simple Good Predictions" J. of Forecasting: 

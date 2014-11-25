@@ -1,5 +1,5 @@
 \name{reduced.models.Mittnik}
-\alias{reduced.modeles.Mittnik}
+\alias{reduced.models.Mittnik}
 \title{Reduced Models via Mittnik SVD balancing}
 \description{Reduced Models via Mittnik SVD balancing.}
 \usage{

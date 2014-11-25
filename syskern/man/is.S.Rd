@@ -9,7 +9,6 @@
 
 \usage{
     is.S()
-    is.R()
     is.Splus()
     is.Svanilla()
     is.Splus.pre3.3()

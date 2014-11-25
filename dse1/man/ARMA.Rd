@@ -9,11 +9,19 @@
           names=NULL, input.names=NULL, output.names=NULL)
     is.ARMA(obj)
 }
-\arguments {
-    \item{A}{(axpxp) array. (The auto-regressive polynomial array.)}
-    \item{B}{(bxpxp) array. (The moving-average polynomial array.)}
-    \item{C}{(cxpxm) array. (The  input polynomial array.) C should be NULL if 
+\arguments{
+    \item{A}{The auto-regressive polynomial, an axpxp array.}
+    \item{B}{The moving-average polynomial, an bxpxp array.}
+    \item{C}{The  input polynomial, an cxpxm array. C should be NULL if 
     there is no input}
+    \item{TREND}{A vector of length a.}
+    \item{description}{An arbitrary string.}
+    \item{names}{A list with elements input and output, each a vector of 
+       strings. Arguments input.names and output.names should not be used if
+       argument names is used.}
+    \item{input.names}{A vector of strings. }
+    \item{output.names}{A vector of strings.}
+    \item{obj}{Any object.}
 }
 \value{An ARMA TSmodel}
 \details{ 

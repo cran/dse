@@ -6,7 +6,7 @@
     est.wt.variables(data, variable.weights,
                         estimation="est.VARX.ls", estimation.args=NULL)
 }
-\arguments {
+\arguments{
     \item{data}{A TSdata object.}
     \item{variable.weights}{weights to use for each output series.}
     \item{estimation}{An estimation method.}
@@ -27,4 +27,5 @@
 }
 %\keyword{DSE}
 \keyword{ts}
+
 

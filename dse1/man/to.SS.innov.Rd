@@ -13,8 +13,8 @@ innovations state space representation.
 }
 \seealso{
 \code{\link{to.SS}},
-\code{\link{to.SS.Oform}}
-\code{\link{to.SS.Chol}}
+\code{\link{to.SSOform}}
+\code{\link{to.SSChol}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

@@ -5,7 +5,7 @@
 \usage{
     markov.parms(model, blocks=NULL)
 }
-\arguments {
+\arguments{
     \item{model}{An ARMA or SS TSmodel.}
     \item{blocks}{Number of blocks to calculate.}
 }

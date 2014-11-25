@@ -4,14 +4,14 @@
 \description{Estimate a state space model using Mittnik's markov parameter estimation.
 }
 \usage{
-    est.SS.Mittnik(data, max.lag=6, n=NULL, subtract.means=F, normalize=F)
+    est.SS.Mittnik(data, max.lag=6, n=NULL, subtract.means=FALSE, normalize=FALSE)
 }
 \arguments{
     \item{data}{A TSdata object.}
     \item{max.lag}{The number of markov parameters to estimate.}
     \item{n}{The state dimension.}
-    \item{subtract.means}{If T subtract the means from the data before estimation.}
-    \item{normalize}{If T normalize the data before estimation.}
+    \item{subtract.means}{If TRUE subtract the means from the data before estimation.}
+    \item{normalize}{If TRUE normalize the data before estimation.}
 }
 \value{A state space model in an object of class TSestModel.}
 \details{See reduction.Mittnik and references cited there. If the state

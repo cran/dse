@@ -10,16 +10,19 @@
     This function is used internally and is not normally called by a user. 
 }
 \usage{
-    set.arrays(model, parms=NULL)
-    \method{set.arrays}{ARMA}(model, parms=NULL)
-    \method{set.arrays}{SS}(model, parms=NULL)
-    \method{set.arrays}{TSestModel}(model, parms=NULL)
+    set.arrays(model, coefficients=NULL)
+    \method{set.arrays}{ARMA}(model, coefficients=NULL)
+    \method{set.arrays}{SS}(model, coefficients=NULL)
+    \method{set.arrays}{TSestModel}(model, coefficients=NULL)
     }
 \arguments{
     \item{model}{An object of class TSmodel.}
+    \item{coefficients}{A vector of new values for the model coefficients
+    (parameters).}
 }
 \value{A TSmodel object.}
 
 %\keyword{DSE}
-\keyword{ts}
+\keyword{internal}
+
 

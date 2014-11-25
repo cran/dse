@@ -1,5 +1,5 @@
 \name{observability}
-\alias{observatility}
+\alias{observability}
 \alias{observability.ARMA}
 \alias{observability.SS}
 \alias{observability.TSestModel}

@@ -39,12 +39,24 @@ all.ok <- T
 	   #list(kind="Wichmann-Hill", normal.kind="user-supplied", seed=c(979, 1479, 1542))}
            # R's Box-Muller was declared not reproducible. 
 	   
-  from <- paste(DSE.HOME, "/data/eg1.dat", sep="")
-  eg1.DSE.data <-example.get.eg.raw.data(from) #retrieves data from file
 
- 
+eg1.DSE.data <- t(matrix(scan(paste(DSE.HOME, "/data/eg1.dat", sep="")),
+                         5, 364))[, 2:5] 
+
+eg1.DSE.data <- TSdata(input = eg1.DSE.data[,1,drop = F], 
+                      output = eg1.DSE.data[, 2:4, drop = F])
+		      
+eg1.DSE.data <-tframed(eg1.DSE.data, list(start=c(1961,3), frequency=12))
+
+seriesNamesInput(eg1.DSE.data) <- "R90"
+seriesNamesOutput(eg1.DSE.data) <- c("M1","GDPl2", "CPI")
+
+
 if (is.R()) data("egJofF.1dec93.data", package="dse1")
-if (is.S()) source(paste(DSE.HOME, "/data/egJofF.1dec93.data.R", sep=""))
+if (is.S()) 
+   {source(paste(DSE.HOME, "/data/egJofF.1dec93.data.R", sep=""))
+    class(egJofF.1dec93.data$output) <- class(egJofF.1dec93.data$input) <- NULL
+    }
 
 if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
@@ -161,7 +173,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
               output=ts(rbind(output.data(eg4.DSE.data),matrix(.3,5,4)), 
                        start=start(eg4.DSE.data),
                        frequency=frequency(eg4.DSE.data)))
-  series.names(new.data) <- series.names(eg4.DSE.data)
+  seriesNames(new.data) <- seriesNames(eg4.DSE.data)
   z  <- l(TSmodel(eg4.DSE.model), trim.na(new.data)) 
 #  z <- l(TSmodel(eg4.DSE.model), trim.na(freeze(eg4.DSE.data.names)))
   error <- max(abs(556.55870662521476788 -z$estimates$like[1]))
@@ -210,9 +222,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   cat("Guide part 2 test 8 ... \n")
   z <- l(TSmodel(eg4.DSE.model), new.data)
   tfplot(z)
-  z <- feather.forecasts(TSmodel(eg4.DSE.model), new.data)
+  z <- featherForecasts(TSmodel(eg4.DSE.model), new.data)
   tfplot(z)
-  zz <-feather.forecasts(TSmodel(eg4.DSE.model), new.data,
+  zz <-featherForecasts(TSmodel(eg4.DSE.model), new.data,
                           from.periods =c(20,50,60,70,80), horizon=150)
   tfplot(zz)
   error <- max(abs(c(54.838475604100473504 -
@@ -226,9 +238,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 9 ... \n")
-  z <- horizon.forecasts(TSmodel(eg4.DSE.model), new.data, horizons=c(1,3,6))
+  z <- horizonForecasts(TSmodel(eg4.DSE.model), new.data, horizons=c(1,3,6))
   tfplot(z)
-#  error <- abs(653.329319170802592 - sum(z$horizon.forecasts) )
+#  error <- abs(653.329319170802592 - sum(z$horizonForecasts) )
   error <- abs(653.329319170802592 - sum(forecasts(z)) )
   ok <-  fuzz.large > error 
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -237,17 +249,17 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 10... \n")
-  fc1 <- forecast.cov(TSmodel(eg4.DSE.model), data=eg4.DSE.data)
+  fc1 <- forecastCov(TSmodel(eg4.DSE.model), data=eg4.DSE.data)
   
   tfplot(fc1)
-  tfplot(forecast.cov(TSmodel(eg4.DSE.model), data=eg4.DSE.data, horizons= 1:4)) 
+  tfplot(forecastCov(TSmodel(eg4.DSE.model), data=eg4.DSE.data, horizons= 1:4)) 
  
-  fc2 <- forecast.cov(TSmodel(eg4.DSE.model), data=eg4.DSE.data, zero=T, trend=T)
+  fc2 <- forecastCov(TSmodel(eg4.DSE.model), data=eg4.DSE.data, zero=T, trend=T)
   tfplot(fc2)
-  error <- max(abs(c(14.933660144821400806 - sum(fc1$forecast.cov[[1]]),
-                        14.933660144821400806 - sum(fc2$forecast.cov[[1]]),
-                        31.654672476928297442 - sum(fc2$forecast.cov.zero),
-                        18.324461923341953451 - sum(fc2$forecast.cov.trend) )))
+  error <- max(abs(c(14.933660144821400806 - sum(fc1$forecastCov[[1]]),
+                        14.933660144821400806 - sum(fc2$forecastCov[[1]]),
+                        31.654672476928297442 - sum(fc2$forecastCov.zero),
+                        18.324461923341953451 - sum(fc2$forecastCov.trend) )))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -265,23 +277,23 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
  	0.00,-0.40,-0.05,-0.66,0.00,0.00,0.17,-0.18,1.00,-0.11,-0.24,-0.09 )
 		,c(4,3,3)), 
  	B=array(diag(1,3),c(1,3,3)))
-  e.ls.mod1 <- eval.estimation( mod1, replications=100, 
+  e.ls.mod1 <- EstEval( mod1, replications=100, 
  	rng=test.rng1,
  	simulation.args=list(sampleT=100, sd=1), 
  	estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
  	criterion="TSmodel", quiet=T)
 
-#    e.ar.mod1 <- eval.estimation( mod1, replications=100, 
+#    e.ar.mod1 <- EstEval( mod1, replications=100, 
 #   	rng=test.rng1,
 #   	simulation.args=list(sampleT=100, sd=1), 
 #   	estimation="est.VARX.ar", estimation.args=list(max.lag=2, aic=F), 
 #   	criterion="TSmodel", quiet=T)
-#   tfplot(parms(e.ar.mod1))
+#   tfplot(coef(e.ar.mod1))
 
 
   if (is.S()) check.value <- -0.29855874505752699744
   if (is.R()) check.value <- -0.3699580622977686
-  error <- abs( check.value - sum(parms(e.ls.mod1$result[[100]])))
+  error <- abs( check.value - sum(coef(e.ls.mod1$result[[100]])))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -289,25 +301,25 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 12... \n")
-  e.ls.mod2 <- eval.estimation( mod2, replications=100, 
+  e.ls.mod2 <- EstEval( mod2, replications=100, 
                      rng=test.rng2,
                      simulation.args=list(sampleT=100, sd=1), 
                      estimation="est.VARX.ls", estimation.args=list(max.lag=2), 
                      criterion="TSmodel", quiet=T)
      old.par <- par(mfcol=c(2,1)) #set the number of plots on the plotics device
      on.exit(par(old.par))
-     tfplot(parms(e.ls.mod1))
-     tfplot(parms(e.ls.mod2)) 
+     tfplot(coef(e.ls.mod1))
+     tfplot(coef(e.ls.mod2)) 
      old.par <- c(old.par, par(mfcol=c(2,1)) )
-     tfplot(parms(e.ls.mod1), cum=F, bounds=F) 
-     tfplot(parms(e.ls.mod2), cum=F, bounds=F) 
-     distribution(parms(e.ls.mod1), bandwidth=.2)
-     distribution(parms(e.ls.mod2), bandwidth=.2)
+     tfplot(coef(e.ls.mod1), cum=F, bounds=F) 
+     tfplot(coef(e.ls.mod2), cum=F, bounds=F) 
+     distribution(coef(e.ls.mod1), bandwidth=.2)
+     distribution(coef(e.ls.mod2), bandwidth=.2)
     
 
   if (is.S()) check.value <- -1.0021490287427212706
   if (is.R()) check.value <- -1.0028944627996934
-  error <- abs(check.value - sum(parms(e.ls.mod2$result[[100]])))
+  error <- abs(check.value - sum(coef(e.ls.mod2$result[[100]])))
   ok <- fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -335,7 +347,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 14... \n")
-  pc <- forecast.cov.estimators.wrt.true(mod3,
+  pc <- forecastCov.estimatorsWRTtrue(mod3,
  	rng=test.rng3,
  	estimation.methods=list(est.VARX.ls=list(max.lag=6)),
  	est.replications=2, pred.replications=10, quiet=T)
@@ -346,8 +358,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
       c(60.927013860328429473, 62.32729288591478678, 63.17808145947956433) 
   if (is.R()) check.value <-
       c( 54.164759056117504, 53.519297277839669, 59.341526159411558)
-  error <- max(abs(check.value -c(sum(pc$forecast.cov[[1]]), 
-                      sum(pc$forecast.cov.zero), sum(pc$forecast.cov.trend) )))
+  error <- max(abs(check.value -c(sum(pc$forecastCov[[1]]), 
+                      sum(pc$forecastCov.zero), sum(pc$forecastCov.trend) )))
   ok <- fuzz.large > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -355,7 +367,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 15... \n")
-  pc.rd <- forecast.cov.reductions.wrt.true(mod3,
+  pc.rd <- forecastCov.reductionsWRTtrue(mod3,
  	rng=test.rng4,
  	estimation.methods=list(est.VARX.ls=list(max.lag=3)),
  	est.replications=2, pred.replications=10, quiet=T)
@@ -364,8 +376,8 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
          c(58.75543799264762157,60.451513998215133938, 64.089618782185240775) 
   if (is.R()) check.value <- 
          c( 51.237201863944890, 53.519297277839669, 59.341526159411558)
-  error <- max(abs(check.value - c(sum(pc.rd$forecast.cov[[1]]),
-                  sum(pc.rd$forecast.cov.zero), sum(pc.rd$forecast.cov.trend))))
+  error <- max(abs(check.value - c(sum(pc.rd$forecastCov[[1]]),
+                  sum(pc.rd$forecastCov.zero), sum(pc.rd$forecastCov.trend))))
   ok <- fuzz.large > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -373,7 +385,7 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   {if (ok) cat("ok\n") else cat("failed! error= ", error,"\n") }
 
   cat("Guide part 2 test 16... \n")
-  z <-out.of.sample.forecast.cov.estimators.wrt.data(trim.na(eg1.DSE.data),
+  z <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
  		est.VARX.ar=list(warn=F), 
@@ -381,17 +393,17 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
  	trend=T, zero=T)
   tfplot(z)
   opts <- options(warn=-1)
-  zz <-out.of.sample.forecast.cov.estimators.wrt.data(trim.na(eg1.DSE.data),
+  zz <-out.of.sample.forecastCov.estimatorsWRTdata(trim.na(eg1.DSE.data),
  	estimation.sample=.5,
  	estimation.methods = list(
  		est.black.box4=list(max.lag=3, verbose=F, warn=F),
 		est.VARX.ls=list(max.lag=3, warn=F)), 
 	trend=T, zero=T)
 
-#    zf<-horizon.forecasts(zz$multi.model[[1]],zz$data, horizons=c(1,3,6))
-    zf<-horizon.forecasts(TSmodel(zz, select=1),TSdata(zz), horizons=c(1,3,6))
+#    zf<-horizonForecasts(zz$multi.model[[1]],zz$data, horizons=c(1,3,6))
+    zf<-horizonForecasts(TSmodel(zz, select=1),TSdata(zz), horizons=c(1,3,6))
   options(opts)
-  zf<- zf$horizon.forecasts[3,30,]
+  zf<- zf$horizonForecasts[3,30,]
   tfplot(z)
   if (is.S())      check.value <- 
      c(6120.97621905043979, 175568.040899036743, 24.568074094041549,
@@ -410,11 +422,11 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
     }
 
   if (print.values) print.test.value(c(zf,  # 1e-5*
-                     c(sum( z$forecast.cov[[1]]), sum( z$forecast.cov[[2]]),
-                       sum(zz$forecast.cov[[1]]), sum(zz$forecast.cov[[2]]))) )  
+                     c(sum( z$forecastCov[[1]]), sum( z$forecastCov[[2]]),
+                       sum(zz$forecastCov[[1]]), sum(zz$forecastCov[[2]]))) )  
   error <- max(abs(check.value -
-         c(zf,  1e-10*c(sum( z$forecast.cov[[1]]), sum( z$forecast.cov[[2]]),
-                       sum(zz$forecast.cov[[1]]), sum(zz$forecast.cov[[2]])))))
+         c(zf,  1e-10*c(sum( z$forecastCov[[1]]), sum( z$forecastCov[[2]]),
+                       sum(zz$forecastCov[[1]]), sum(zz$forecastCov[[2]])))))
   ok <-  fuzz.large > error 
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
@@ -427,11 +439,5 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
 
   if (!all.ok) stop("Some tests FAILED")
 
-
-#   example.verify.data(eg1.DSE.data.diff) 
-#  you have to look at the output for the following to be useful
-#   example.BOC.93.4.paper.tests(eg1.DSE.data.diff, eg1.DSE.data) 
-#  example.VAR.SVD(example.truncate.data(eg1.DSE.data.diff), eg1.DSE.data.diff, 
-#      eg1.DSE.data) 
 
 

@@ -12,22 +12,24 @@
 \usage{
     acf.M(obj, ...)
     \method{acf.M}{TSdata}(obj, lag=round(6*log(periods(obj))), 
-        type ="covariance", sub.mean=T)
+        type ="covariance", sub.mean=TRUE)
     \method{acf.M}{TSmodel}(obj, lag=NULL, type ="covariance", Psi=NULL)
     \method{acf.M}{TSestModel}(obj, ...)
 }
 \arguments{
-    \item{object}{An object of class TSdata or TSmodel.}
+    \item{obj}{An object of class TSdata or TSmodel.}
+    \item{lag}{Number of lags for which to calculate the autocorrelations.}
     \item{type}{
         With the defaults the blocks are auto-covariances. 
         If type == 'correlation' the result is scaled to give 
         autocorrelations.}
-    \item{sub.means}{
-        Only valid if object is of class TSdata. If F then means 
+    \item{sub.mean}{
+        Only valid if object is of class TSdata. If FALSE then means 
         are not subtracted.}
     \item{Psi}{
         A matrix of innovation covariance. Only valid if object 
         is of class TSmodel.}
+    \item{...}{arguments to be passed to other methods.}
 }
 
 \value{

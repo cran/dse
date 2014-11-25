@@ -1,13 +1,16 @@
 \name{tbind}
 \alias{tbind}
 \alias{tbind.default}
+\alias{tbind.ts}
+
 \title{Bind Time Series}
 \description{
 Bind together (in non-time dimension) two time series objects. 
 }
 \usage{
-    tbind(x, ..., pad.start=T, pad.end=T, warn=T)
-    \method{tbind}{default}(x, ..., pad.start=T, pad.end=T, warn=T)
+    tbind(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
+    \method{tbind}{default}(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
+    \method{tbind}{ts}(x, ..., pad.start=TRUE, pad.end=TRUE, warn=TRUE)
     }
 \arguments{
     \item{x}{A time series object.}
@@ -22,8 +25,8 @@ Bind together (in non-time dimension) two time series objects.
 \details{
 Bind data as in cbind or tsmatrix align time dimension aligned. 
 The default action pads series with NA to time union. 
-If pad.start and/or pad.end is F and the intersection is empty then NULL
-is returned and a warning is issued if warn=T.
+If pad.start and/or pad.end is FALSE and the intersection is empty then NULL
+is returned and a warning is issued if warn=TRUE.
 }
 
 \seealso{

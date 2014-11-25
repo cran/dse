@@ -1,11 +1,12 @@
 \name{00Intro.syskern}
 \alias{00Intro.syskern}
 \title{Syskern}
-\synopsis{}
-\usage{library("syskern")}
+\usage{
+% library("syskern")
+}
 \description{
   A small set of programs to facilitate programming around S/R differences}
-\details{
+\section{Introduction}{
 The purpose of this package is to provide a 
 common set of utilities for some small points where S and R differ, 
 so that other code works in both S and R, and to some
@@ -29,8 +30,6 @@ the mailer option. In many cases these functions just call S equivalents,
 possibly with arguments different from the defaults. The function \code{require} 
 is defined but does nothing in S.
 
-For R the function \code{synchronize} is defined but does nothing.
-
 There are also a few function and variables added which have different
 definitions in S and R. A number of \code{is.Sxx} functions are defined to 
 identify versions of S. The variable \code{.SPAWN} is also set to be used in
@@ -39,7 +38,7 @@ to use these even in Splus. \code{.SPAWN} should be FALSE in R.)
 
 The default action of \code{unlink} is to remove subdirectories 
 in the Unix version of Splus 3.3 and
-this cannot be reconciled with R which requires the non-default action to do 
+this cannot be reconciled with R which requires the non-default action to 
 remove subdirectories. Thus it has been necessary to define the
 function \code{syskern.rm} which recursively removes subdirectories.
 
