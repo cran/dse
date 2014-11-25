@@ -1,6 +1,6 @@
   require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
  #x11()
-  postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
+  postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
    Sys.info()
    version.dse()
@@ -9,7 +9,8 @@
 
 
 
-dse2.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.large=1e-8, graphics=T)
+dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
+    fuzz.small=1e-14, fuzz.large=1e-8, graphics=TRUE)
 {max.error <- NA
  if (is.R()) data("eg1.DSE.data.diff", package="dse1")
  if (is.S()) 
@@ -21,13 +22,13 @@ dse2.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.la
  if (verbose) cat("dse2 test 0 ... ")
   z <- eg1.DSE.data.diff
   z$input <- NULL
-  mod1 <- TSmodel(est.VARX.ar(z, re.add.means=F, warn=F))
+  mod1 <- TSmodel(est.VARX.ar(z, re.add.means=FALSE, warn=FALSE))
   ok <- is.TSmodel(mod1)
   all.ok <- ok 
   if (verbose)  {if (ok) cat("ok\n") else  cat("failed!\n") }
 
   if (verbose) cat("dse2 test 1 ... ")
-  z <- est.black.box1(eg1.DSE.data.diff, verbose=F, max.lag=2)
+  z <- est.black.box1(eg1.DSE.data.diff, verbose=FALSE, max.lag=2)
   error <- max(abs(z$estimates$like[1]+4025.943051342767))
   ok <- is.TSestModel(z) &  (fuzz.large > error )
   if (!ok) {if (is.na(max.error)) max.error <- error
@@ -55,7 +56,7 @@ dse2.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.la
   if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
 
   if (verbose) cat("dse2 test 4 ... ")
-  z <- l( reduction.Mittnik(z, criterion="taic", verbose=F), 
+  z <- l( reduction.Mittnik(z, criterion="taic", verbose=FALSE), 
          eg1.DSE.data.diff)
   error <- max(abs(z$estimates$like[1]+3795.6760513068380)) 
   ok <- is.SS(z$model)  &  (fuzz.large > error )
@@ -101,7 +102,7 @@ dse2.function.tests <- function(verbose=T, synopsis=T, fuzz.small=1e-14, fuzz.la
 
 if (graphics) 
  {if (verbose) cat("dse2 test 7 (graphics) ... ")
-  ok <- dse2.graphics.tests(verbose=verbose, pause=T)
+  ok <- dse2.graphics.tests(verbose=verbose, pause=TRUE)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
  }
@@ -117,10 +118,10 @@ if (graphics)
        }
     }
 
-  if (all.ok) invisible(T)  else stop("FAILED")
+  if (all.ok) invisible(TRUE)  else stop("FAILED")
 }
 
-dse2.graphics.tests <- function(verbose=T, synopsis=T)
+dse2.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
 {# graphics tests do not do any value comparisons
   if (synopsis & !verbose) cat("dse2 graphics tests ...")
   
@@ -135,7 +136,7 @@ dse2.graphics.tests <- function(verbose=T, synopsis=T)
   # If no device is active then write to postscript file 
   if (dev.cur() == 1 )
       {postscript(file="zot.postscript.test.ps",width=6,height=6,pointsize=10,
-                   onefile=F, print.it=F, append=F)
+                   onefile=FALSE, print.it=FALSE, append=FALSE)
        on.exit((function()
              {dev.off(); synchronize(1); rm("zot.postscript.test.ps")})())
       }
@@ -159,10 +160,10 @@ dse2.graphics.tests <- function(verbose=T, synopsis=T)
     }
       
 
-  invisible(T)
+  invisible(TRUE)
 }
 
 
 
-   dse2.function.tests(verbose=T, graphics=F)  
-   dse2.graphics.tests(verbose=T)
+   dse2.function.tests(verbose=TRUE, graphics=FALSE)  
+   dse2.graphics.tests(verbose=TRUE)

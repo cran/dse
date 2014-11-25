@@ -1,6 +1,6 @@
   require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
  #x11()
-  postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
+  postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
    Sys.info()
    version.dse()
@@ -13,8 +13,8 @@
 #######################################################################
 
 
-guide.example.tests.part1 <- function( verbose=T, synopsis=T, fuzz.small=1e-14,
-    fuzz.large=1e-8, graphics=T)
+guide.example.tests.part1 <- function( verbose=TRUE, synopsis=TRUE, fuzz.small=1e-14,
+    fuzz.large=1e-8, graphics=TRUE)
 {# test examples in Brief User's guide
  # NOTE: it was necessary to reduce fuzz from 1e-14 because of differences
  # in the results between Splus 3.2 and Splus 3.3 (C libraries were changed).
@@ -25,7 +25,7 @@ guide.example.tests.part1 <- function( verbose=T, synopsis=T, fuzz.small=1e-14,
   if (graphics)
    {if ( dev.cur() == 1 )
       {postscript(file="zot.postscript.test.ps",width=6,height=6,pointsize=10,
-                   onefile=F, print.it=F, append=F)
+                   onefile=FALSE, print.it=FALSE, append=FALSE)
        on.exit((function()
              {dev.off(); synchronize(1); rm("zot.postscript.test.ps")})())
       }
@@ -67,11 +67,11 @@ guide.example.tests.part1 <- function( verbose=T, synopsis=T, fuzz.small=1e-14,
   from <- paste(DSE.HOME, "/data/eg1.dat", sep="")
   data <- t(matrix(dsescan(from), 5,364))[,2:5]
   #  data <- list(
-  #     input=tframed(data[,1  ,drop=F],  list(start=c(1961,3), frequency=12)),
-  #     output=tframed(data[,2:4,drop=F], list(start=c(1961,3), frequency=12)))
-  data <- TSdata(input=tframed(data[,1  ,drop=F],
+  #     input=tframed(data[,1  ,drop=FALSE],  list(start=c(1961,3), frequency=12)),
+  #     output=tframed(data[,2:4,drop=FALSE], list(start=c(1961,3), frequency=12)))
+  data <- TSdata(input=tframed(data[,1  ,drop=FALSE],
                                          list(start=c(1961,3), frequency=12)),
-              output=tframed(data[,2:4,drop=F], 
+              output=tframed(data[,2:4,drop=FALSE], 
                                          list(start=c(1961,3), frequency=12)))
   seriesNamesInput(data)   <-  "u1"
   seriesNamesOutput(data) <-  c("y1","y2","y3")
@@ -83,7 +83,7 @@ guide.example.tests.part1 <- function( verbose=T, synopsis=T, fuzz.small=1e-14,
   if (verbose) {if (ok) cat("ok\n") else cat("failed! error = ", error,")\n") }
 
   if (verbose) cat("Guide part 1 test 2 ... ")
-  model1 <- est.VARX.ls(data, warn=F)
+  model1 <- est.VARX.ls(data, warn=FALSE)
   model2 <- est.SS.Mittnik(data, n=14)
 #  summary(model1)
 #  summary(model2)
@@ -169,12 +169,12 @@ guide.example.tests.part1 <- function( verbose=T, synopsis=T, fuzz.small=1e-14,
      if (all.ok) cat(" OK\n")
      else    cat(", some FAILED! max.error = ", max.error,"\n")
     }
-  if (all.ok) invisible(T)  else stop("FAILED")
+  if (all.ok) invisible(TRUE)  else stop("FAILED")
 }
 
 
 
 
    random.number.test() 
-   guide.example.tests.part1(verbose=T, graphics=T)
+   guide.example.tests.part1(verbose=TRUE, graphics=TRUE)
 #         gives  Warning cov. matrix is singular. Working on subspace

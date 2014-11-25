@@ -8,10 +8,10 @@
 
 
 
-tframe.function.tests <- function( verbose=T, synopsis=T)
+tframe.function.tests <- function( verbose=TRUE, synopsis=TRUE)
 {# A short set of tests of the tframe class methods. 
 
-  all.ok <-  T
+  all.ok <-  TRUE
   if (synopsis & !verbose) cat("All tframe tests ...")
   if (verbose) cat("tframe test 1 ... ")
   tspvector <- tframed(1:100, list(start=c(1981,3), frequency=4))
@@ -126,8 +126,8 @@ tframe.function.tests <- function( verbose=T, synopsis=T)
     {if (verbose) cat("All tframe tests completed")
      if (all.ok) cat(" OK\n") else cat(", some FAILED!\n") }
      
-  if (all.ok) invisible(T)  else stop("FAILED")
+  if (all.ok) invisible(TRUE)  else stop("FAILED")
 }
 
 
-   tframe.function.tests(verbose=T) 
+   tframe.function.tests(verbose=TRUE) 

@@ -12,18 +12,18 @@
 fuzz.small <- 1e-14
 fuzz.large <- 1e-10
 digits <- 18
-all.ok <- T  
+all.ok <- TRUE  
 
 
 test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Muller")
 
-  VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=F, warn=F)
+  VARmodel  <-  est.VARX.ar(eg1.DSE.data.diff, re.add.means=FALSE, warn=FALSE)
 
   VARmodelB <- TSmodel(VARmodel)
   B <- t(chol(VARmodel$estimates$cov))
   VARmodelB$B <- array(B, c(1,dim(B)))  # has B != I
   VARmodelB <- set.parameters(VARmodelB)
-  VARmodelB <- l(VARmodelB,VARmodel$data, warn=F)
+  VARmodelB <- l(VARmodelB,VARmodel$data, warn=FALSE)
 
 cat("dse1 test 8a ...\n")
   z  <- simulate(TSmodel(VARmodel), input=input.data(eg1.DSE.data.diff)) 
@@ -33,7 +33,7 @@ cat("dse1 test 8a ...\n")
 
    if (!ok) 
      {
-      all.ok <- F  
+      all.ok <- FALSE  
      }
 
 cat("dse1 test 8b ...\n")
@@ -48,7 +48,7 @@ cat("dse1 test 8b ...\n")
    if (any(is.na(error)) || any(is.nan(error)) || fuzz.small < error || !ok) 
      {print.test.value(output.data(z), digits=18)
       print.test.value(output.data(zzz), digits=18)
-      all.ok <- F  
+      all.ok <- FALSE  
      }
 
 cat("dse1 test 8c ...\n")
@@ -61,7 +61,7 @@ cat("dse1 test 8c ...\n")
 
   if ( ! test.equal(z, zz, fuzz=fuzz.small)) 
      {
-      all.ok <- F  
+      all.ok <- FALSE  
      }
 
   ok <- test.equal(summary(z)$estimates,
@@ -70,7 +70,7 @@ cat("dse1 test 8c ...\n")
   if ( !ok) 
      {print.test.value(c(summary(z)$estimates),  digits=18)
       print.test.value(c(summary(zz)$estimates), digits=18)
-      all.ok <- F  
+      all.ok <- FALSE  
      }
 
 

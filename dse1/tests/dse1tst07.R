@@ -5,7 +5,7 @@
 fuzz.small <- 1e-14
 fuzz.large <- 1e-10
 digits <- 18
-all.ok <- T  
+all.ok <- TRUE  
 
 
 cat("dse1 test 7a...\n")
@@ -14,16 +14,16 @@ cat("dse1 test 7a...\n")
   A <- array(0, c(2,length(true.roots),length(true.roots)))
   A[1,,] <- diag(1,length(true.roots))
   A[2,,] <- diag(-true.roots, length(true.roots))
-  # the following relies on roots using by.poly=F
+  # the following relies on roots using by.poly=FALSE
   if(is.Splus()) options(expressions=1024)
-   tst <-  sort(roots( ARMA(A=A, B=diag(1,length(true.roots)) ),by.poly=F))
+   tst <-  sort(roots( ARMA(A=A, B=diag(1,length(true.roots)) ),by.poly=FALSE))
    good <- sort(true.roots)
    error <- max(Mod(good - tst))
    cat("max. error ", max(error))
 
    if (any(is.na(error)) || any(is.nan(error)) || fuzz.small < error ) 
      {print.test.value(c(tst), digits=18)
-      all.ok <- F  
+      all.ok <- FALSE  
      }
 
   #  complex roots test
@@ -50,7 +50,7 @@ cat("dse1 test 7b...\n")
    if (any(is.na(error)) || any(is.nan(error)) || fuzz.small < error ) 
      {print.test.value(c(z), digits=18)
       print.test.value(c(zz), digits=18)
-      all.ok <- F  
+      all.ok <- FALSE  
      }
 
 cat("dse1 test 7c...\n")
@@ -63,7 +63,7 @@ cat("dse1 test 7c...\n")
    if (any(is.na(error)) || any(is.nan(error)) || fuzz.small < error ) 
      {print.test.value(c(z), digits=18)
       print.test.value(c(zz), digits=18)
-      all.ok <- F  
+      all.ok <- FALSE  
      }
 
 

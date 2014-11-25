@@ -389,7 +389,6 @@ tfplot.TSestModel <- function(x, ..., start.=NULL,end.=NULL,
 # ... is a list of models of class TSestModel.
 # start. is the starting point (date) for plotting.
   model <- x
-  if (!is.TSestModel(model)) TS.error.exit(clss="TSestModel") 
   if (is.null(Title))
      Title <- "One step ahead predictions (dotted) and actual data (solid)"
   p<- nseriesOutput(model)
@@ -913,8 +912,8 @@ to.SSaugment.ARMA <- function(model, fuzz=1e-14)
 
 gmap <- function(g, model) 
 {# convert to an equivalent representation using a given matrix
- if(!is.TSm.or.em(model)) TS.error.exit()
- if (is.TSestModel(model)) model <- model$model
+ if (is.TSestModel(model)) model <- TSmodel(model)
+ if  (!is.TSmodel(model)) stop("gmap expecting a TSmodel.")
  if ( is.SS(model))# transform State space model by g in GL(n)
   {n <- dim(model$F)[1]
    if (!is.matrix(g)) g<-diag(g,n) # if g is not a matrix make it into a diagonal matrix.
@@ -950,10 +949,12 @@ findg <- function(model1,model2, minf=nlmin)
   # parameters of models gmap(g,model1) and model2.
   # This should find the g which gives equivalence of models if that exists.
   # This procedure is rather crude and can be very slow.
-  if(!is.TSm.or.em(model1)) TS.error.exit()
-  if (is.TSestModel(model1)[1]) model1 <- model1$model
-  if(!is.TSm.or.em(model2)) TS.error.exit()
-  if (is.TSestModel(model2)[1]) model2 <- model2$model
+
+  if (is.TSestModel(model1)[1]) model1 <- TSmodel(model1)
+  if   (!is.TSmodel(model1)) stop("findg expecting a TSmodel.")
+  if (is.TSestModel(model2)[1]) model2 <- TSmodel(model2)
+  if  (!is.TSmodel(model2 )) stop("findg expecting a TSmodel.")
+
   if ( !is.SS(model1)| !is.SS(model2)) 
       stop("findg only works for state space models")
    n <- dim(model1$F)[1]
@@ -987,8 +988,8 @@ fix.constants <- function(model, fuzz=1e-5, constants=NULL)
  # named const.F, const.G ..., for any arrays in which there are elements
  # (not == 0 or 1) which are to be treated as constant.
  
-  if(!is.TSm.or.em(model)) TS.error.exit()
-  if (is.TSestModel(model)) model <- model$model
+  if (is.TSestModel(model)) model <- TSmodel(model)
+  if  (!is.TSmodel(model)) stop("fix.constants expecting a TSmodel.")
   if (is.null(constants))
     {p <-abs(coef(model) - 1.0) < fuzz
      model$const <- c(model$const,rep(1.0,sum(p)))
@@ -1013,8 +1014,8 @@ to.SS.innov <- function(model)
 { # convert to an equivalent state space innovations representation
 # This assumes that the noise processes in the arbitrary SS representation are 
 #   white and uncorrelated.
- if(!is.TSm.or.em(model)) TS.error.exit()
- if (is.TSestModel(model)) model <- model$model
+ if (is.TSestModel(model)) model <- TSmodel(model)
+ if  (!is.TSmodel(model)) stop("to.SS.innov expecting a TSmodel.")
  if (!is.SS(model))  model <- to.SS(model)
  if ( is.non.innov.SS(model)) 
    {model$K <- model$Q %*% solve(model$R)
@@ -1067,8 +1068,8 @@ fixF <- function(model)
 {# Fix the entries in F to be constants.
  # This is a simple way to reduce the parameter dimension, but it may
  # not be a very good way to do it.
-  if(!is.TSm.or.em(model)) TS.error.exit()
-  if (is.TSestModel(model)) model <- model$model
+  if (is.TSestModel(model)) model <- TSmodel(model)
+  if  (!is.TSmodel(model)) stop("fixF expecting a TSmodel.")
   if (!is.SS(model))         model <- to.SS(model)
   if ( is.non.innov.SS(model))  model <- to.SS.innov(model)
   p <-model$location == "f"
@@ -1348,10 +1349,9 @@ Riccati <- function(A, B, fuzz=1e-10, iterative=FALSE)
 
 
 markov.parms <- function(model, blocks=NULL) 
-{
-if(!is.TSm.or.em(model)) TS.error.exit()
-if (is.TSestModel(model)) model <- TSmodel(model)
-if ( is.ARMA(model))
+{if (is.TSestModel(model)) model <- TSmodel(model)
+ if  (!is.TSmodel(model)) stop("markov.parms expecting a TSmodel.")
+ if ( is.ARMA(model))
   #  M ={ Mi }={ Ci-1|Bi| -Ai}, i=2,...,k. k=max(a,b,cc). Assumes I=A[1,,]=B[1,,]
   {A <- model$A
    B <- model$B
@@ -1807,17 +1807,6 @@ is.SS <- function(obj){inherits(obj,"SS")}
 is.innov.SS <- function(obj){inherits(obj,"SS")& inherits(obj,"innov")}
 is.non.innov.SS <- function(obj){inherits(obj,"SS")&inherits(obj,"non.innov")}
 is.ARMA <- function(obj){inherits(obj,"ARMA")}
-is.TSm.or.em <- function(obj)
-   {inherits(obj,"TSestModel") | inherits(obj,"TSmodel")}
-
-TS.error.exit <- function(clss="TSmodel or TSestModel")
-{ m <- sys.calls()
-  mi <- m[[2]]
-  m <- m[[length(m)-1]]
- stop(paste("Argument of class ",clss," required in call " 
-   ,m[1],"(",m[2],") from initial call ", mi[1],"(",mi[2],")"))
-}
-
 
 set.parameters <- function(model)  
   { # complete parameter info. based on representation info. 
@@ -2168,9 +2157,8 @@ simulate.SS <- function(model, input=NULL,
 # giving the system noise for t=1 to sampleT.
 # sampleT will be dim($w)[1] if noise is specified.
 
-if(!is.TSm.or.em(model)) TS.error.exit()
-if (is.TSestModel(model)) model <- model$model
-if (!is.SS(model)) TS.error.exit(clss="SS")
+if (is.TSestModel(model)) model <- TSmodel(model)
+if (!is.SS(model)) stop("simulate.SS expecting an SS TSmodel.")
  
  FF<-    model$F
  G <-    model$G
@@ -2337,10 +2325,8 @@ simulate.ARMA <- function(model, y0=NULL, input=NULL, input0=NULL,
 # noise for t=1 to sampleT. 
 # sampleT will be dim($w)[1] if noise is specified.
 
-
-if(!is.TSm.or.em(model)) TS.error.exit()
-if (is.TSestModel(model)) model <- model$model
-if (!is.ARMA(model)) TS.error.exit(clss="ARMA")
+if (is.TSestModel(model)) model <- TSmodel(model)
+if (!is.ARMA(model)) stop("simulate.ARMA expecting an ARMA TSmodel.")
  
 A<-    model$A
 B <-    model$B
@@ -2572,8 +2558,8 @@ l.ARMA <- function(obj1, dat, sampleT=NULL, predictT=NULL,result=NULL,
 # Om is the estimated output cov matrix.
 
 model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
-if (!is.ARMA(model)) TS.error.exit(clss="ARMA")
- 
+if (!is.ARMA(model)) stop("l.ARMA expecting an ARMA TSmodel.")
+
 dat <- freeze(dat)
 if(!check.consistent.dimensions(model,dat)) stop("dimension error")
 if (is.null(sampleT))  sampleT  <- periodsOutput(dat)
@@ -2806,8 +2792,8 @@ l.SS <- function(obj1, data, sampleT=NULL, predictT=NULL, error.weights=0,
 # could check that Q is symmetric  or positive definite but ...
 
 model <- if (is.TSestModel(obj1)) TSmodel(obj1) else obj1
-if (!is.SS(model)) TS.error.exit(clss="SS")
- 
+if (!is.SS(model)) stop("l.SS expecting an SS TSmodel.")
+
 data <- freeze(data)
 if(!check.consistent.dimensions(model,data)) stop("dimension error\n")
 if (is.null(sampleT))  sampleT  <- periodsOutput(data)
@@ -3008,7 +2994,7 @@ smoother <- function(model, data, compiled=.DSECOMPILED){
     estimates <- model$estimates
     model     <- TSmodel(model)
    }
- if  (!is.non.innov.SS(model)) TS.error.exit(clss=" non.innov SS")
+ if  (!is.non.innov.SS(model)) stop("smoother expecting an non.innov.SS TSmodel.")
  if  (is.null(filter$state) |  is.null(filter$track)) 
    {filter <- l(model,data, return.state=TRUE,return.track=TRUE)
     estimates <- filter$estimates
@@ -3470,8 +3456,8 @@ balance.Mittnik <- function(model, n=NULL){
 #  by the original model. If n is not supplied then the singular values are
 #  printed and the program prompts for n.
 
-  if(!is.TSm.or.em(model)) TS.error.exit()
-  if (is.TSestModel(model)) model <- model$model
+  if (is.TSestModel(model)) model <- TSmodel(model)
+  if  (!is.TSmodel(model)) stop("balance.Mittnik expecting a TSmodel.")
   m <- nseriesInput(model)
   newmodel <- balance.Mittnik.svd(markov.parms(model), m, n)$model
   newmodel$description <- paste(model$description,"converted to", newmodel$description)

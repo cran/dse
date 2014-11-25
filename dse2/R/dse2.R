@@ -247,11 +247,11 @@ reduction.Mittnik <- function(model, data=NULL, criterion=NULL, verbose=TRUE,war
 #  taken from the model. If an ARMA model is supplied then singular values 
 #  will be printed and the program prompts for the max. state dimension.
 
-  if(!is.TSm.or.em(model)) TS.error.exit()
   if (is.TSestModel(model)) 
     {if (is.null(data)) data <-TSdata(model)
      model <- TSmodel(model)
     }
+  if(!is.TSmodel(model)) stop("reduction.Mittnik expecting a TSmodel.")
   if(is.null(data))
     stop("Reduction requires data to calculate criteria (balancing does not).")
   nMax <- if(is.SS(model)) dim(model$F)[2] else NULL
@@ -356,8 +356,7 @@ reduction.Mittnik.from.Hankel <- function(M, data=NULL, nMax=NULL,
 
 
 shock.decomposition <- function(model, horizon=30, shock=rep(1,horizon))
-{ if(!is.TSm.or.em(model)) TS.error.exit()
-  m <-nseriesInput(model)
+{ m <-nseriesInput(model)
   p <-nseriesOutput(model)
 
   if (is.TSestModel(model)) 
@@ -368,6 +367,7 @@ shock.decomposition <- function(model, horizon=30, shock=rep(1,horizon))
     {if( m > 0 ) data <- TSdata(input=matrix(0,horizon,m))
      else        data <- TSdata(output=matrix(0,horizon,p))
     }
+   if (!is.TSmodel(model)) stop("shock.decomposition expecting a TSmodel.")
    model$z0 <- NULL    # zero initial conditions
    par(mfrow = c(p, p) , mar = c(2.1, 4.1,3.1, 0.1) )
    for (i in 1:p)
@@ -3324,10 +3324,11 @@ print.summary.forecastCov.estimatorsWRTdata.subsets <- function(x,
 
 gen.mine.data <- function(umodel, ymodel, uinput=NULL, sampleT=100, 
 	unoise=NULL, usd=1,ynoise=NULL, ysd=1, rng=NULL)
-{if(!is.TSm.or.em(umodel)) TS.error.exit()
- if (is.TSestModel(umodel)) umodel <- umodel$model
- if(!is.TSm.or.em(ymodel)) TS.error.exit()
- if (is.TSestModel(ymodel)) ymodel <- ymodel$model
+{if (is.TSestModel(umodel)) umodel <- TSmodel(umodel)
+ if (is.TSestModel(ymodel)) ymodel <- TSmodel(ymodel)
+ if(!is.TSmodel(umodel)) stop("gen.mine.data expecting a TSmodel.")
+ if(!is.TSmodel(ymodel)) stop("gen.mine.data expecting a TSmodel.")
+
  if (nseriesInput(ymodel) != nseriesOutput(umodel))
    stop("umodel output dimension must equal ymodel input dimension.")
  
