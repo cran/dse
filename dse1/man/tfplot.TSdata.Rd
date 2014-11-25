@@ -33,7 +33,7 @@
        before starting. If this is not TRUE then mar values will have no effect.}
 }
 
-\seealso{ \code{\link{tfplot}} }
+\seealso{ \code{\link[tframe]{tfplot}} }
 
 %\keyword{DSE}
 \keyword{ts}

@@ -78,7 +78,7 @@ determine necessary transformation of initial conditions and w0.
 The rng will be set first if it is specified. 
 }
 \seealso{
-\code{\link{makeTSnoise}},
+\code{\link[tframe]{makeTSnoise}},
 \code{\link{TSmodel}},
 \code{\link{TSdata}}
 }

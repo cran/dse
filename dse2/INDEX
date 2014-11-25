@@ -5,45 +5,42 @@ These are installed in the doc/ directory for each package.
 A version of the guide with all sections combined may also
 be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
 See also the bundle dseplus with related packages.
-EstEval                 Evaluate an estimation method
-MonteCarloSimulations   Generate simulations
-TSdata.forecastCov      TS Extractor Specific Methods
 coef.TSmodel.ee         Specific Methods for coef
 combine.forecastCov     Combine 2 Forecast Cov Objects
 distribution.MonteCarloSimulations
                         Generate distribution plots of Monte Carlo
                         simulations
 distribution            Plot distribution of estimates
+EstEval                 Evaluate an estimation method
 estimate.models         Estimate Models
 estimators.horizonForecasts
                         Estimate models and forecast at given horizons
 exclude.forecastCov     Filter Object to Remove Forecasts
 extractforecastCov      Extract Forecast Covariance
 featherForecasts        Multiple Horizon-Step Ahead Forecasts
-forecast                Forecast Multiple Steps Ahead
-forecastCov             Forecast covariance for different models
-forecastCovCompiled     Forecast covariance for different models -
-                        internal
 forecastCovEstimatorsWRTdata
                         Calculate Forecast Cov of Estimators WRT Data
 forecastCovEstimatorsWRTtrue
                         Compare Forecasts Cov Relative to True Model
                         Output
+forecastCov             Forecast covariance for different models
 forecastCovReductionsWRTtrue
                         Forecast covariance for different models
 forecastCovWRTtrue      Compare Forecasts to True Model Output
+forecast                Forecast Multiple Steps Ahead
 forecasts               Extract Forecasts
-gen.mine.data           Generate Data
 generate.model.SS       Randomly generate a state space model
-horizonForecasts        Calculate forecasts at specified horizons
+gen.mine.data           Generate Data
 horizonForecastsCompiled
                         Calculate forecasts at specified horizons
+horizonForecasts        Calculate forecasts at specified horizons
 is.forecastCovEstimatorsWRTdata.subsets
                         Check Inheritance
-min.forecastCov         Minimum Forecast Cov Models
 mine.stepwise           Mine Stepwise
 mine.strip              Select a Data Subset and Model
+min.forecastCov         Minimum Forecast Cov Models
 minimum.startup.lag     Starting Periods Required
+MonteCarloSimulations   Generate simulations
 nseriesfeatherForecasts
                         Number of Series
 out.of.sample.forecastCovEstimatorsWRTdata
@@ -63,12 +60,13 @@ summary.estimated.models
                         Summary Specific Methods
 test.equal.estimated.models
                         Specific Methods for Testing Equality
-tfplot.MonteCarloSimulations
-                        Generate plots of Monte Carlo simulations
-tfplot.TSdata.ee        Specific Methods for tfplot
 tfplot.coef.ee          Specific tfplot methods for coef.ee (EstEval)
                         objects
 tfplot.forecastCov      Plots of Forecast Variance
+tfplot.MonteCarloSimulations
+                        Generate plots of Monte Carlo simulations
 tfplot.roots.ee         Specific tfplot methods for roots.ee (EstEval)
                         objects
+tfplot.TSdata.ee        Specific Methods for tfplot
 total.forecastCov       Sum covariance of forecasts across all series
+TSdata.forecastCov      TS Extractor Specific Methods

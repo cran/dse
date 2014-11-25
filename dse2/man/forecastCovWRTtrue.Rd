@@ -52,7 +52,7 @@ in simulation.args
 }
 \seealso{
 \code{\link{forecastCovEstimatorsWRTdata}}
-\code{\link{simulate}}
+\code{\link[dse1]{simulate}}
 \code{\link{EstEval}}
 \code{\link{distribution}}
 \code{\link{MonteCarloSimulations}}

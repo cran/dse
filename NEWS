@@ -1,3 +1,15 @@
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.4-1
+
+Changes (Possibly) Affecting Users
+
+    o	dseplus which works with the previous dse changes is released.
+    
+Changes Affecting Development
+
+    o	testing in Makefiles has been been further refined.
+    o	test tolerances in dseplus have been adjusted for R 1.7.0 and Splus 3.3.
+    o	very minor changes because of R 1.7.0 name spaces.
+
 		CHANGES IN DSE AND DSEPLUS VERSION 2003.2-1
 
 Changes (Possibly) Affecting Users

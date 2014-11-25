@@ -39,7 +39,7 @@ If complex.plane is TRUE then all results are plotted on a complex plane and
    but sorting by the real part of the roots could be improved upon.
 }
 \seealso{
-    \code{\link{tfplot}}
+    \code{\link[tframe]{tfplot}}
     \code{\link{EstEval}}
 }
 

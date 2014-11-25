@@ -42,7 +42,7 @@ The first usages gives a vector of strings with the series names.
 The second usages assigns a vector of strings to be the series names of data.
 }
 \seealso{
-    \code{\link{seriesNames}}
+    \code{\link[tframe]{seriesNames}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data", package="dse1")

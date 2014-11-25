@@ -19,7 +19,7 @@
     \item{x}{an object from which series names can be extracted.}
 }
 
-\seealso{ \code{\link{seriesNames}} }
+\seealso{ \code{\link[tframe]{seriesNames}} }
 
 %\keyword{DSE}
 \keyword{ts}

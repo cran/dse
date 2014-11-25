@@ -76,7 +76,7 @@ Essential.data indicates the subset of output variables to included in all
   This is useful when you are too lazy to calculate the exact number of steps.
 }
 \seealso{
-\code{\link{est.black.box4}}
+\code{\link[dse1]{est.black.box4}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

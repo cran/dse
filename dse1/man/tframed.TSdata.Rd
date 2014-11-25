@@ -33,10 +33,10 @@
 }
 
 \seealso{
-    \code{\link{tframed}},
-    \code{\link{tfwindow}},
-    \code{\link{tbind}},
-    \code{\link{trim.na}}
+    \code{\link[tframe]{tframed}},
+    \code{\link[tframe]{tfwindow}},
+    \code{\link[tframe]{tbind}},
+    \code{\link[tframe]{trim.na}}
 }
 
 %\keyword{DSE}

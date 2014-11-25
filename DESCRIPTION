@@ -11,7 +11,7 @@ BundleDescription: Multivariate Time Series Library
   Package setRNG has a mechanism for generating the same random
   numbers in S and R.
   See also the related bundle dseplus.
-Version: 2003.3-1
+Version: 2003.4-1
 License: Free. See the LICENCE file for details.
 Author: Paul Gilbert <pgilbert@bank-banque-canada.ca>
 Maintainer: Paul Gilbert <pgilbert@bank-banque-canada.ca>

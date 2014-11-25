@@ -91,9 +91,9 @@ random.number.test <- function()
   if (!is.R()) 
      {# above should really be if (is.Splus()) but then tests require syskern
       test.seed<- c(37, 39, 39, 4, 7, 2, 27, 58, 38, 15, 32, 2)
-      test.valueU <- c(0.4299328043125570, 0.3092006836086512,
+      test.valueU.S <- c(0.4299328043125570, 0.3092006836086512,
             0.5808096211403608, 0.3061958812177181, 0.8137333435006440)
-      test.valueN <- c( -0.7613318231781665, -0.5724360196433543,
+      test.valueN.S <- c( -0.7613318231781665, -0.5724360196433543,
             0.8536399448225964, -0.2269096022522968, -0.8126790170570223)
      }
 
@@ -101,8 +101,21 @@ random.number.test <- function()
   on.exit(set.RNG(old.seed))
 
   ok <- TRUE
+if ( !is.R())
+ {if (1e-14 < max(abs(runif(5)-test.valueU.S)))
+    {warning("The default runif number generator has been changed.")
+     ok <- FALSE
+    }
 
-if ( version$major >= 1 && version$minor > 6.2)
+   set.RNG(kind="default", seed=test.seed, normal.kind="default")
+
+   if (1e-14  < max(abs(rnorm(5)-test.valueN.S)))
+    {warning("The default rnorm number generator has been changed.")
+     ok <- FALSE
+    }
+ }
+if ( is.R())
+ {if (version$major >= 1 && version$minor > 6.2)
   {if (1e-14 < max(abs(runif(5)-test.valueU)))
     {warning("The default runif number generator has been changed.")
      ok <- FALSE
@@ -123,13 +136,14 @@ if ( version$major >= 1 && version$minor > 6.2)
     {warning("The Marsaglia-Multicarry runif number generator has been changed.")
      ok <- FALSE
     }
-
+ 
   set.RNG(kind="Marsaglia-Multicarr", seed=test.seed, normal.kind="Kinderman-Ramage")
 
   if (1e-14  < max(abs(rnorm(5)-test.valueN.R1.6.2)))
     {warning("The Kinderman-Ramage rnorm number generator has been changed.")
      ok <- FALSE
     }
+ }
 
   set.RNG(kind="Wichmann-Hill", seed=c(979,1479,1542), normal.kind="Box-Muller")
   if (set.RNG()$kind        != "Wichmann-Hill" ||

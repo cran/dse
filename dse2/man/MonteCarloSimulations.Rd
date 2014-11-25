@@ -55,7 +55,7 @@ There is a \code{tfplot} method (time series plots of the simulations) and a
 of the distribution of the simulations at specified periods.
 }
 \seealso{
-\code{\link{simulate}}
+\code{\link[dse1]{simulate}}
 \code{\link{EstEval}}
 \code{\link{distribution}}
 \code{\link{forecastCovWRTtrue}}
