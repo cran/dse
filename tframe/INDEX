@@ -1,0 +1,23 @@
+00General.Description    Tframe
+add.date                 Add Periods to a Date
+classed                  Tframe Library Utilities
+earliest.end             Start and End for Ragged Multivariate Time
+                         Series
+end                      Generic Time Series Parameters
+expand                   Expand a Tframe or Tframed Object.
+freeze                   Get fixed data snapshot
+is.consistent.tframe     Check for a Consistent tframe
+lag                      Misc Generic Replacements
+nseries                  Number of Series
+select.series            Extract a Subset of Series
+series.names             Names of Series in a tframed object
+splice                   Splice Time Series
+tbind                    Bind Time Series
+test.equal               Compare Two Objects
+tfprint                  Print and Plot Tframed Objects
+tframe                   Extract or Set a Tframe
+tframe.function.tests    tframe.function.tests
+tframed                  Construct a Tframed Object
+tfwindow                 Truncate a Time Series
+time                     Time
+trim.na                  Trim NAs from Time Series

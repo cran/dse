@@ -1,0 +1,35 @@
+# Expecting results from 6 tests
+
+#R --vsize=6M --nsize=300K 
+  require("ts",    warn.conflicts=F)
+  require("dse2",  warn.conflicts=F)
+
+
+  #dev.ask(ask=T)
+  #x11()
+  postscript(file="graphics.out.ps",  paper="letter", horizontal=F, onefile=T)
+             # width=6, height=8, pointsize=10,
+  data("eg1.DSE.data.diff", package="dse")
+  dse2.graphics.tests()
+  dse3.graphics.tests()
+  dse4.graphics.tests()
+   
+  guide.example.tests.part1()
+  guide.example.tests.part2()
+  guide.example.tests.part3()
+
+
+# from eg1, eg2
+# example.show.ytoy.cpi (o.V.1,d.all.raw,start=240)
+   
+#  graph(VAR.model, Title="VAR model")
+#  graph(SS1.model, Title="Mittnik balanced state space model")
+   
+#  graph(SSgap.model, Title="State space `gap' model")
+#  graph(ARMA.model,  Title="ARMA model")
+#  model<- l(VAR.model,example.data)  # full sample
+#  example.show.ytoy.cpi(model,example.raw.data)  
+ #       title(main="Predicted and actual CPI in terms of per cent change over 12 months")
+#  example.show.ytoy.cpi(model,example.raw.data, start=240)    
+ #       title(main="Predicted and actual CPI in terms of per cent change over 12 months - ex post period")
+     

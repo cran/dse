@@ -1,0 +1,7 @@
+# Expecting results from 1 tests
+# R --vsize=1000M --nsize=2M 
+# gcinfo(1)
+  require("dse2"); require("curve") #,  warn.conflicts=F)
+ system.info()
+ version.dse()
+ dsecurvature.function.testsC(verbose=T, print.values=T) 
