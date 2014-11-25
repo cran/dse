@@ -49,16 +49,9 @@
        before starting.}
     \item{series}{integer or string indicating
       the series which should be plotted.}
-    \item{select.cov}{logical indicating that
-      for the case of multiple models select the covariance to be plotted.}
-    \item{select.zero}{logical indicating that results from a forecast of 
-      zero should be plotted.}
-    \item{select.trend}{logical indicating that results from a forecast of 
-      trend should be plotted.}
     \item{mar}{plot margins. See \code{par}.}
     \item{graph.args}{list of graphics arguments eventually passed 
        to \code{plot}. See \code{par}.}
-    \item{lty}{optional. see plot.}
     \item{criterion}{criterion which should be used to extract something from
          the object which will then be plotted. See \code{EstEval}.}
     \item{criterion.args}{arguments to be passed to code{criterion}.}

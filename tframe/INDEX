@@ -12,7 +12,7 @@ earliestEnd             Start and End for Objects with Multiple Time
                         Series
 freeze                  Get fixed data snapshot
 nseries                 Number of Series
-periods                 Generic Time Series Parameters
+periods                 Extract Time Frame Information
 selectSeries            Extract a Subset of Series
 seriesNames             Names of Series in a time series object
 splice                  Splice Time Series

@@ -1,3 +1,28 @@
+		CHANGES IN DSE AND DSEPLUS VERSION 2003.9-1
+
+Changes (Possibly) Affecting Users
+
+    o	fixed bug in fixConstants which prevented setting of arbitrary elements
+        in SS models to constant (non-parameter) values other than 0 or 1. The
+	documentation of fixConstants was also improved.
+
+    o	fixed bug causing occassional seg faults in smoother.
+
+    o	fixed bug preventing estMaxLik properly setting the estimated parameters
+        in SS models (so they appeared to be unchanged).
+
+    o	usage of random seed tightened up to correspond to R 1.8.0
+
+    o	minor documentation errors caught by new tools() have been fixed.
+
+Changes Affecting Development
+
+    o	use of tools() in Makefiles has been been further refined.
+
+    o	prcomp eliminated as version in R 1.8.0 now supports complex matrix.
+    
+
+    
 		CHANGES IN DSE AND DSEPLUS VERSION 2003.6-1
 
 Changes (Possibly) Affecting Users

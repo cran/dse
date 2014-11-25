@@ -19,14 +19,8 @@
 \alias{time}
 \alias{time.tframe}
 
-\alias{diff}
-\alias{diff.tframe}
-
-\title{Generic Time Series Parameters}
-\description{
-    Functions for extracting time information from tframes or 
-    tframed objects.
-}
+\title{Extract Time Frame Information}
+\description{Functions for extracting time frame information.}
 
 \usage{
     start(x, ...)
@@ -47,15 +41,10 @@
 
     time(x, ...)
     \method{time}{tframe}(x, ...)
-
-    diff(x, ...)
-    \method{diff}{tframe}(x, lag = 1, differences = 1, ...)
 }
 
 \arguments{
     \item{x}{a tframe or a tframed object.}
-    \item{lag}{difference calculated relative to lag periods previous.}
-    \item{differences}{order of differencing.}
     \item{...}{arguments to be passed to other methods.}
 }
 \value{Depends}
@@ -79,7 +68,8 @@
     \code{\link[base]{frequency}}
     \code{\link[base]{periods}}
     \code{\link[base]{time}}
-    \code{\link[base]{diff}}
+    \code{\link{lag}}
+    \code{\link{diff}}
 }
 \examples{
     z <- ts(rnorm(100), start=c(1982,1), frequency=12)

@@ -10,13 +10,15 @@
     This function is used internally and is not normally called by a user. 
 }
 \usage{
-    setTSmodelParameters(model)
-    \method{setTSmodelParameters}{default}(model)
-    \method{setTSmodelParameters}{ARMA}(model)
-    \method{setTSmodelParameters}{SS}(model)
+    setTSmodelParameters(model, constants=NULL)
+    \method{setTSmodelParameters}{default}(model, constants=NULL)
+    \method{setTSmodelParameters}{ARMA}(model, constants=NULL)
+    \method{setTSmodelParameters}{SS}(model, constants=NULL)
 }
 \arguments{
     \item{model}{An object of class TSmodel.}
+    \item{constants}{A list of logical arrays indicating TRUE for any model
+    array entries that should be treated as constants.}
 }
 \value{An object of class 'TSmodel'.}
 \seealso{

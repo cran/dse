@@ -49,8 +49,8 @@ is described as the brute force technique (bft) in Gilbert (1995).
 }
 \references{
     Gilbert, P.D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" J. of Forecasting: 
-    Special Issue on VAR Modelling. 14:229-250.
+    Model Reduction for Simple Good Predictions" \emph{J. of Forecasting: 
+    Special Issue on VAR Modelling}. 14:229-250.
 }
 \seealso{
 \code{\link{estBlackBox1}},

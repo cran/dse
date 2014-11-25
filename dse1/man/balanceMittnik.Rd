@@ -40,24 +40,7 @@ The output dimension p is taken from nrow(M).
 See also \code{MittnikReduction} and references.
 }
 \references{
-    Gilbert, P. D. (1993) State space and ARMA models: An overview of
-    the equivalence. Working paper 93-4, Bank of Canada. Available at
-    <www.bank-banque-canada.ca/pgilbert>
-
-    Gilbert, P.D. (1995) "Combining VAR Estimation and State Space 
-    Model Reduction for Simple Good Predictions" J. of Forecasting: 
-    Special Issue on VAR Modelling. 14:229-250.
-
-    S.Mittnik (1989), Multivariate Time Series Analysis With State 
-    Space Models, Computers Math Appl. Vol 17, No 8/9, pp1189-1201.
-   
-    S.Mittnik (1990), Macroeconomic Forecasting Experience With 
-    Balance State Space Models,  
-    International Journal Of Forecasting, Vol 6, pp337-348.
-  
-    S.Mittnik (1990), Forecasting With Balanced State Space 
-    Representations of Multivariate Distributed Lag Models. 
-    J. of Forecasting, Vol.9, 207-218.  
+    See references for \code{\link{MittnikReduction}}. 
 }
 \seealso{
     \code{\link{estVARXls}},

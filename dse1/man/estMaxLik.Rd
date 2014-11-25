@@ -23,7 +23,9 @@
 \value{
 The value returned is an object of class TSestModel with  additional
 elements \code{est$converged}, which is TRUE or FALSE indicating convergence, 
-and \code{est$results}. The hessian and gradient in results could potentially 
+\code{est$converceCode}, which is the code returned by the estimation algorithm, 
+and \code{est$results}, which are detailed results returned by the estimation 
+algorithm. The hessian and gradient in results could potentially 
 be used for restarting in the case of non-convergence, but that has not 
 yet been implemented.
 }

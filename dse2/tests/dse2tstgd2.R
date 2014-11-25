@@ -91,7 +91,9 @@ if(!exists("egJofF.1dec93.data"))warning("egJofF.1dec93.data does not exist")
   z <- checkResiduals(model.eg1.ls, plot.=FALSE, pac=TRUE)
   check.value <- (
   if (!is.R())c(4.67445135116577148, 3274.42578125,      -2371.9997808950302)
-  else        c(4.674448837156188,   3274.422653488969,  -2371.999780895034) )
+  else        c(4.674448837156188,   3274.4226534894947, -2371.999780895034) )
+# above minor modification of the value in 1.8.0 beta
+#  else        c(4.674448837156188,   3274.422653488969,  -2371.999780895034) )
 # using my old acf instead of bats version gives
 #             c(4.6744488371561879,      0.0,       -2371.999780895033837)
 

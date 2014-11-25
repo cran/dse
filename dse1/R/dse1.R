@@ -609,7 +609,7 @@ roots.SS <- function(obj, fuzz=0, randomize=FALSE, ...)
 
 roots.ARMA <- function(obj, fuzz=0, randomize=FALSE, warn=TRUE, by.poly=FALSE, ...) 
 {#  (... further arguments, currently disregarded)
-    if(by.poly) z <- 1/polyroot.det(obj$A)
+    if(by.poly) z <- 1/polyrootDet(obj$A)
     else        z <- roots(toSS(obj))
     if (fuzz!=0)
       {zz <- outer(z,z,FUN="-")  # find distinct roots within fuzz
@@ -998,8 +998,8 @@ fixConstants <- function(model, fuzz=1e-5, constants=NULL)
 {# If constants is NULL then
  # any parameters within fuzz of 0.0 or 1.0 are set to exactly 0.0 or 1.0.
  # if constants is not NULL then it should be a list with logical (T/F) arrays
- # named const.F, const.G ..., for any arrays in which there are elements
- # (not == 0 or 1) which are to be treated as constant.
+ # named F, G ..., corresponding to any model arrays in which there are elements
+ # which are to be treated as constant.
  
   if (is.TSestModel(model)) model <- TSmodel(model)
   if  (!is.TSmodel(model)) stop("fixConstants expecting a TSmodel.")
@@ -1019,7 +1019,7 @@ fixConstants <- function(model, fuzz=1e-5, constants=NULL)
      return(setArrays(model))
     }
   else
-    return(setTSmodelParameters(TSmodel(append(model,constants))))
+    return(setTSmodelParameters(model,constants=constants))
 }
 
 
@@ -1028,15 +1028,24 @@ toSSinnov <- function(model, ...)
  # convert to an equivalent state space innovations representation
 # This assumes that the noise processes in the arbitrary SS representation are 
 #   white and uncorrelated.
- if (is.TSestModel(model)) model <- TSmodel(model)
+ data <- NULL
+ if (is.TSestModel(model)) 
+    {data <- TSdata(model)
+     model <- TSmodel(model)
+    }
  if  (!is.TSmodel(model)) stop("toSSinnov expecting a TSmodel.")
  if (!is.SS(model))  model <- toSS(model)
  if ( is.nonInnov.SS(model)) 
-   {model$K <- model$Q %*% solve(model$R)
+   {warning("this is not exactly correct.")
+    PH  <-  model$Q %*% t(model$Q) %*% t(model$H)# use QQ' as state tracking error ??
+    ft    <- (model$H %*% PH) + (model$R %*% t(model$R))        
+    ft    <-  (ft + t(ft))/2   # force ft to be symmetric 
+    model$K <-  t(solve(ft,t(model$F %*% PH))) 
     model$R <- NULL
     model$Q <- NULL
    }  
- classed(model, c("innov","SS","TSmodel"))  # bypass constructor
+ model <- setTSmodelParameters(classed(model, c("innov","SS","TSmodel"))) # bypass constructor
+ if (is.null(data)) model else l(model, data)
 }
 
 
@@ -1155,7 +1164,7 @@ toARMA.SS <- function(model, fuzz=1e-10, ...)
     if (is.null(m)) m <-0
     n <-dim(FF)[1]
     p <-dim(H)[1]
-    poly <-  - characteristic.poly(FF) # N.B. sign change  in Aoki vs Kailath
+    poly <-  - characteristicPoly(FF) # N.B. sign change  in Aoki vs Kailath
     if ( n != length(poly))
       stop("There is some problem. The characteristic polynomial length should = state dimension.")
     A <- array(NA,c(1+n,p,p))
@@ -1444,7 +1453,7 @@ M
 
 polyprod <- function(a,b)
 { # product of two polynomials.
-# The convention used is by poly.value and polyroot is constant first,
+# The convention used is by polyvalue and polyroot is constant first,
 #  highest order coef. last. The reverse convention could also be used for multiplication.
 # This function handles scalar (ie. non-matrix) and matrix polynomials.
 # Scalar polynomials are vectors of length 1+the polynomial order.
@@ -1567,29 +1576,29 @@ polysum <- function(a,b){
 r             
 }
 
-polyroot.det <- function(A)
-{#roots of the determinant of A.  Note: polydet is slow. There is room for improvement here!
-z <- polydet(A)
+polyrootDet <- function(a)
+{#roots of the determinant of a.  Note: polydet is slow. There is room for improvement here!
+z <- polydet(a)
 if (length(z)==1) 
   stop(paste("root cannot be calculated for degree 0 determinant = ", as.character(z)))
 polyroot(z)
 }
 
-polydet <- function(A)
+polydet <- function(a)
 {# recursive pessimist: Life is just one damned thing before another.
  # attributed to Richard Bird in The Mathematical Intelligencer, Winter 1994.
- #Recursively form the determinant of a polynomial matrix A, where the first
- #  dim stores the coefs. of the polynomial for each A[,i,j].
-	n <- dim(A)[2]  
-        if (n != dim(A)[3])
+ #Recursively form the determinant of a polynomial matrix a, where the first
+ #  dim stores the coefs. of the polynomial for each a[,i,j].
+	n <- dim(a)[2]  
+        if (n != dim(a)[3])
            stop( "The determinant is only defined for square polynomial matrices")
-	if(1 == n) r <- c(A)
+	if(1 == n) r <- c(a)
 	else 
           {r<- 0   # previously NULL
            for (i in 1:n) 
-             {if(!all(0==A[,i,1]))#not nec.but faster for sparse arrays
+             {if(!all(0==a[,i,1]))#not nec.but faster for sparse arrays
                    r<- polysum(r,(-1)^(i+1)*
-          polyprod(A[,i,1],Recall(A[,(1:n)[i!=(1:n)],2:n,drop=FALSE])))
+          polyprod(a[,i,1],Recall(a[,(1:n)[i!=(1:n)],2:n,drop=FALSE])))
               r[is.na(r)] <- 0
               if (any(0==r)) 
                    {if (all(r==0)) r <- 0
@@ -1600,7 +1609,7 @@ polydet <- function(A)
 r
 }
 
-poly.value <- function(coef, z)
+polyvalue <- function(coef, z)
 {# evaluate a polynomial given by coef (constant first) at z
  # could be extended for matrix coef.
 #           n-1           n-2
@@ -1609,39 +1618,39 @@ poly.value <- function(coef, z)
 }
 
 
-characteristic.poly <- function(A){
+characteristicPoly <- function(a){
 	# coefficients of the characteristic polynomial of a matrix
-	# return a vector of the coefficients of the characteristic polynomial of A.
+	# return a vector of the coefficients of the characteristic polynomial of a.
 	# ref. Kailath "Linear Systems" p657
 
-   tr <- function(A){ # calc the trace of a matrix
-     sum(diag(A))
+   tr <- function(a){ # calc the trace of a matrix
+     sum(diag(a))
    }
-   n <- dim(A)[1]
-   if (n != dim(A)[2]) stop(" arguement must be a square matrix.")
+   n <- dim(a)[1]
+   if (n != dim(a)[2]) stop(" arguement must be a square matrix.")
    s <-array(0,c(n,n,n))
-   if (n==1) a <- -A
+   if (n==1) a2 <- -a
    else
-     {a <- rep(0,n)  
+     {a2 <- rep(0,n)  
       s[1,,] <- diag(1,n)
       for (i in 1:(n-1))
-        {a[i] <- -tr(s[i,,]%*%A)/i
-         s[i+1,,] <- (s[i,,]%*%A) + diag(a[i],n)
+        {a2[i] <- -tr(s[i,,]%*%a)/i
+         s[i+1,,] <- (s[i,,]%*%a) + diag(a2[i],n)
         }
-      a[n] <- -tr(s[n,,]%*%A)/n
+      a2[n] <- -tr(s[n,,]%*%a)/n
      }
-   a
+   a2
 }
-companion.matrix <- function(A)
-{# return the (top) companion matrix for a 3 dim array A (polynomial matrix), 
+companionMatrix <- function(a)
+{# return the (top) companion matrix for a 3 dim array a (polynomial matrix), 
 #  where the 1st dim corresponds to coefs. of polynomial powers (lags).
 # ref. Kailath "Linear Systems" p659
-  p <- dim(A)[2]
-  if (p!= dim(A)[3]) 
+  p <- dim(a)[2]
+  if (p!= dim(a)[3]) 
     stop("companion matrix can only be computed for square matrix polynomials")
-  l <- dim(A)[1]  # 1+ order of A
+  l <- dim(a)[1]  # 1+ order of a
   C <- rbind(matrix(0,p,l*p), cbind(diag(1,(l-1)*p,(l-1)*p), matrix(0,(l-1)*p,p)))
-  for (i in 1:l) C[1:p,((l-1)*p+1):(l*p)] <- -A[l,,]
+  for (i in 1:l) C[1:p,((l-1)*p+1):(l*p)] <- -a[l,,]
   C
 }
 
@@ -1839,14 +1848,14 @@ is.ARMA <- function(obj){inherits(obj,"ARMA")}
 
 # complete parameter info. based on representation info. 
 
-setTSmodelParameters <- function(model)  
+setTSmodelParameters <- function(model, constants=NULL)  
    UseMethod("setTSmodelParameters")
 
-setTSmodelParameters.default <- function(model)  
-  setTSmodelParameters(TSmodel(model))
+setTSmodelParameters.default <- function(model, constants=NULL)  
+  setTSmodelParameters(TSmodel(model), constants=NULL)
 
 
-setTSmodelParameters.SS <- function(model) { 
+setTSmodelParameters.SS <- function(model, constants=NULL) { 
 
  locateSS <- function(A,Ac,a,I,J,plist)# local function for locating parameters
   {indicate <-  (A==1.0)                # constants
@@ -1884,22 +1893,22 @@ setTSmodelParameters.SS <- function(model) {
     if (!is.null(model$G)) if(n!= dim(model$G)[1])
       stop("Model G matrix have first dimension consistent with matrix F.")
     p <-dim(model$H)[1]
-    plist <- locateSS(model$F, model$const.F,"f",n,n,
-                 list(coef=NULL,location=NULL,i=NULL,j=NULL,
+    plist <- locateSS(model$F, constants$F,"f",n,n,
+                 list(coefficients=NULL,location=NULL,i=NULL,j=NULL,
                  const=NULL,const.location=NULL,const.i=NULL,const.j=NULL))
-    if(!is.null(m)) plist <- locateSS(model$G,model$const.G,"G",n,m,plist)
-    plist <- locateSS(model$H,model$const.H,"H",p,n,plist)
-    if(!is.null(model$z0)) plist <- locateSS(model$z0,model$const.z0,"z",p,n,plist)
-    if(!is.null(model$P0)) plist <- locateSS(model$P0,model$const.P0,"P",p,n,plist)
+    if(!is.null(m)) plist <- locateSS(model$G,constants$G,"G",n,m,plist)
+    plist <- locateSS(model$H,constants$H,"H",p,n,plist)
+    if(!is.null(model$z0)) plist <- locateSS(model$z0,constants$z0,"z",p,n,plist)
+    if(!is.null(model$P0)) plist <- locateSS(model$P0,constants$P0,"P",p,n,plist)
     if (is.innov.SS(model)) 
-      {plist <- locateSS(model$K,model$const.K,"K",n,p,plist)
-       # note const.H, etc are logical arrays (if not NULL) to indicate
+      {plist <- locateSS(model$K,constants$K,"K",n,p,plist)
+       # note constants$H, etc are logical arrays (if not NULL) to indicate
        #      parameters which are to remain fixed, so that setTSmodelParameters
        #       knows to put them in const. This feature has not been used much.
       }
     else
-      {plist <- locateSS(model$Q,model$const.Q,"Q",n,n,plist)
-       plist <- locateSS(model$R,model$const.R,"R",p,p,plist)
+      {plist <- locateSS(model$Q,constants$Q,"Q",n,n,plist)
+       plist <- locateSS(model$R,constants$R,"R",p,p,plist)
       }
 
 #    list.add(model, names(plist) ) <- plist
@@ -1907,7 +1916,7 @@ setTSmodelParameters.SS <- function(model) {
     model
 }
 
-setTSmodelParameters.ARMA <- function  (model) { 
+setTSmodelParameters.ARMA <- function  (model, constants=NULL) { 
 
  locateARMA <- function(A,a,I,J,L,plist){ # local function for locating parameters
   ind <- function(x, i) # equivalent of row and col for higher dim arrays.
@@ -2784,26 +2793,9 @@ l.SS <- function(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
 # The default result=0 returns a list of all the results. Otherwise only the 
 #    indicated list element is return (eg. result=1 return the likelihood and
 #    result=3 returns the one step ahead predictions.
-#   Calculate the state, residuals, and likelihood value for the model:
-#
-#        z(t) = Fz(t-1) + Gu(t) + Qe(t)
-#        y(t) = Hz(t)  + Rw(t)
-# 
-# or the innovations model:
-#        z(t) = Fz(t-1) + Gu(t) + Kw(t-1)
-#        y(t) = Hz(t)  + w(t)
-#
-# FF (nxn) is the state transition matrix F.
-# H (pxn)is the output matrix H.
-# Q (nxn) is the input matrix of the system noise and the noise is assumed to be white. 
-#    Some authors (eg. Harvey) modify this as rt*qt*rt' where rt is the matrix for the 
-#    system noise and qt is the noise cov, but that is redundant.
-# R (pxp) is the input matrix of the output (measurement) noise, which is assumed white. 
-#      probably need R if p>n ??
-# G (nxp)is the control (input) matrix.
-# K (nxp)is the Kalman gain.
-# y is the p dimensional output data.
-# u is the m dimensional exogenous (input) data.
+
+# see documentation for l.SS, SS, and TSestModel
+
 # z is the n dimensional (estimated) state at time t,  E[z(t)|y(t-1), u(t)] denoted E[z(t)|t-1].
 #    Note: In the case where there is no input u this corresponds to what
 #     would usually be called the predicted state - not the filtered state.
@@ -2819,8 +2811,8 @@ l.SS <- function(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
 # P is the one step ahead estimate of the state tracking error matrix at each 
 # period. Cov{z(t)-E[z(t)|t-1]}
 # trackError is the history of P.
-#       Tracking error pt can only be calculated if Q and R are provided ( gain FALSE).
-#       Using the Kalman gain K directly these are not necessary 
+#       Tracking error pt can only be calculated if Q and R are provided ( Innov FALSE).
+#       Using the Kalman Innov K directly these are not necessary 
 #       for the likelihood calculation,
 #       but the tracking error cannot be calculated.
 # If z0 is supplied it is used as the estimate of the state at time 0.
@@ -2846,8 +2838,8 @@ if (0 != nseriesInput(data))
   }
 if (any(is.na(outputData(data)))) stop("output data cannot contain NAs.\n")
 
-gain <- is.innov.SS(model)
-if (gain & return.track) 
+Innov <- is.innov.SS(model)
+if (Innov & return.track) 
    warning("Tracking error is zero for an innovations model. track will not be calculated.")
 
 FF<-    model$F
@@ -2864,7 +2856,7 @@ else
    G <-model$G
    u <- inputData(data)
   } 
-if (gain)            # K or Q,R can be NUll in model, which messes up compiled
+if (Innov)            # K or Q,R can be NUll in model, which messes up compiled
    {K <-    model$K
     Q <-    matrix(0,1,1)      #not used
     R <-    matrix(0,1,1)      #not used
@@ -2895,7 +2887,7 @@ if (compiled)
                   error.weights=as.double(error.weights),   
                   as.integer(return.state),
                   state=state,         
-                  as.integer(return.track & !gain),
+                  as.integer(return.track & !Innov),
                   track=track,                  
                   as.integer(m), 
                   as.integer(n), 
@@ -2911,7 +2903,7 @@ if (compiled)
                   as.double(K), 
                   as.double(Q),      
                   as.double(R),    
-                  as.integer(gain),
+                  as.integer(Innov),
                   as.double(z),
                   as.double(P), 
 		  DUP=.DSEDUP,
@@ -2925,13 +2917,16 @@ else                  #  S version
    pred  <- matrix(0,predictT,p) 
    wt.err <- NULL
    if (1 < length(error.weights)) wt.err <- matrix(0,predictT,p)
-   if ( ! gain ) 
+
+## This is the beginning of the  most important part of the algorithm ####
+
+   if ( ! Innov ) 
      {RR <- R %*% t(R)  
       QQ <- Q %*% t(Q)  
      }                            
                                    
    for (Time in 1:sampleT)  {
-       if ( ! gain) 
+       if ( ! Innov) 
          {PH  <-  P %*% t(H)
           ft    <- ( H %*% PH )  + RR         
           ft    <-  (ft + t(ft))/2   # force ft to be symmetric 
@@ -2939,7 +2934,7 @@ else                  #  S version
           P   <-  (FF %*% P %*% t(FF) ) - ( K %*% H %*% P %*% t(FF) ) + QQ  # P(t|t-1)
           P   <-  (P + t(P))/2  # force symmetry (eliminate rounding error problems)
           if (return.track) track[Time,,] <- P   # P(t|t-1)
-          # note P(t|t) = P-P%*%t(H)%*%solve(H%*/home/mfa5/gilp/dse/my/src/SCCS/s.dse1b.hs*%t(H)+RR)%*04/28/00*%P
+          # note P(t|t) = P-P%*%t(H)%*%solve(H%*%t(H)+RR)%*%P
          } 
          
        z<- c(FF%*%z) + c(K%*%vt)  # E[z(t)| t-1 ]
@@ -2947,6 +2942,9 @@ else                  #  S version
        if (return.state | return.debug.info) state[Time,]<- z
        pred[Time,] <- Ey  <-  c(H %*% z)       # predicted output     
        vt<-  y[Time,] - Ey                     # prediction error 
+
+## This is the end of the most important part of the algorithm ####
+
        if (any(0!=error.weights))          
         {wt.err[Time,] <- error.weights[1]*vt^2  # weighted sq prediction error
          if (length(error.weights)>1)
@@ -2983,7 +2981,7 @@ if (! is.null(r$weighted.sqerror))  tframe(r$weighted.sqerror) <- tf
 
 filter <-NULL
 if (return.state | return.track)
-  {if (gain|(!return.track))  filter$track <- NULL 
+  {if (Innov|(!return.track))  filter$track <- NULL 
    else                       
      {filter$track <- r$track
       tframe(filter$track) <- tf
@@ -3394,38 +3392,29 @@ estMaxLik.TSmodel <- function(obj1, obj2,
 	lower=algorithm.args$lower, upper=algorithm.args$upper,
 	control=algorithm.args$control, hessian=algorithm.args$hessian,
 	Shape, data) 
-     emodel <- l(setArrays(Shape, coefficients=results$par),data)
-     emodel$est$algorithm <- algorithm
-     emodel$est$results <- results
-     emodel$est$converged <- results$converged
-     emodel$model$description <- paste("Estimated with max.like/optim (",
-       c("not converged", "converged")[1+emodel$converged],
-       ") from initial model: ", emodel$model$description)
+     parms <- results$par
+     converged <- results$convergence == 0
+     convergenceCode <- results$convergence
+     description <- paste("Estimated with max.like/optim")
     }
  else if (algorithm=="nlm")
    {warning("This has not been tested recently (and there have been changes which may affect it.")
     results <-nlm(func.like, coef(Shape), hessian=algorithm.args$hessian, 
     	iterlim=algorithm.args$iterlim)
-    emodel <- l(setArrays(Shape, coefficients=results$estimate),data)
-    emodel$est$algorithm <- algorithm
-    emodel$est$results <- results
-    emodel$est$converged <- results$code <= 2
-    emodel$model$description <- paste("Estimated with max.like/nlm (",
-       c("not converged", "converged")[1+emodel$converged],
-       ") from initial model: ", emodel$model$description)
+    parms <- results$estimate
+    converged <- results$code <= 2
+    convergenceCode <- results$code
+    description <- paste("Estimated with max.like/nlm")
    }
  else if (algorithm=="nlmin")
    {warning("This has not been tested recently (and there have been changes which may affect it.")
      results <-nlmin(func.like, coef(Shape), max.iter=algorithm.args$max.iter, 
      	max.fcal=5*algorithm.args$max.iter, ckfc=0.01)
-     emodel <- l(setArrays(Shape, coefficients=results$parms),data)
-     emodel$est$algorithm <- algorithm
-     emodel$est$results <- results
-     emodel$est$converged <- results$converged
-    # above should be improved with conv.type info
-    emodel$model$description <- paste("Estimated with max.like/nlmin (",
-       c("not converged", "converged")[1+emodel$converged],
-       ") from initial model: ", emodel$model$description)
+     parms <- results$parms
+     converged <- results$converged
+     convergenceCode <- results$converged
+     # emodel$est$converged should be improved with conv.type info
+     description <- paste("Estimated with max.like/nlmin")
    }
  else if (algorithm=="dfpMin")
     {stop("This optimization method is no longer supported.")
@@ -3434,15 +3423,20 @@ estMaxLik.TSmodel <- function(obj1, obj2,
 	max.iter=algorithm.args$max.iter, 
 	ftol=algorithm.args$ftol, gtol=algorithm.args$gtol, 
 	line.search=algorithm.args$line.search) 
-     emodel <- l(setArrays(Shape, coefficients=results$parms),data)
-     emodel$est$algorithm <- algorithm
-     emodel$est$results <- results
-     emodel$est$converged <- results$converged
-     emodel$model$description <- paste("Estimated with max.like/dfpMin (",
-       c("not converged", "converged")[1+emodel$converged],
-       ") from initial model: ", emodel$model$description)
+     parms <- results$parms
+     converged <- results$converged
+     convergenceCode <- results$converged
+     description <- paste("Estimated with max.like/dfpMin")
     }
   else stop(paste("Minimization method ", algorithm, " not supported."))
+ emodel <- l(setTSmodelParameters(setArrays(Shape, coefficients=parms)),data)
+ emodel$est$algorithm <- algorithm
+ emodel$est$results   <- results
+ emodel$est$converged <- converged
+ emodel$est$convergenceCode <- convergenceCode
+ emodel$model$description <- paste(description, 
+       if(!converged) " (not " else " (", "converged",
+       ") from initial model: ", Shape$description)
  emodel
 }    
 
@@ -4264,19 +4258,6 @@ standardize <- function(ser){
 #     model and data scaling functions   <<<<<<<<<<
 
 ############################################################
-
-# the following makes a generic copy of the function in the library to resolve
-#  problems with version of S which do not have a generic function.
-#  ( see also .First.lib at the beginning of dse1a.s
- # otherwise the following produces warning messages
-invisible(
-   if (!exists("scale.default"))
-     {if (exists("scale")) scale.default <- scale  
-      scale <- function(x, center=FALSE, scale = TRUE) UseMethod("scale")
-     }
-  )
-  
-
 
 scale.TSdata <- function(x, center=FALSE, scale=NULL) 
 {# scale should be a list with two matrices or vectors, named input and output,

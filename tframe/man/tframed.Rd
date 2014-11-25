@@ -24,7 +24,6 @@
     \item{x}{a tframed object or an object to be tframed.}
     \item{tf}{a tframe.}
     \item{names}{optional vector of strings to specify new series names.}
-    \item{value}{a tframe attribute to be applied to x.}
 }
 \value{A tframed object.}
 \details{

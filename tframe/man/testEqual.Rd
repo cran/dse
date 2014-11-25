@@ -15,11 +15,11 @@ Some descriptive information in the objects may be ignored.
 }
 \usage{
     testEqual(obj1, obj2, fuzz = 0)
-    \method{testEqual}{default}(obj1, obj2, fuzz = 0)
-    \method{testEqual}{array}(obj1, obj2, fuzz = 0)
-    \method{testEqual}{list}(obj1, obj2, fuzz = 0)
-    \method{testEqual}{matrix}(obj1, obj2, fuzz = 0)
-    \method{testEqual}{numeric}(obj1, obj2, fuzz = 0)
+    \method{testEqual}{default}(obj1, obj2, fuzz = 1e-16)
+    \method{testEqual}{array}(obj1, obj2, fuzz = 1e-16)
+    \method{testEqual}{list}(obj1, obj2, fuzz = 1e-16)
+    \method{testEqual}{matrix}(obj1, obj2, fuzz = 1e-16)
+    \method{testEqual}{numeric}(obj1, obj2, fuzz = 1e-16)
     }
 \arguments{
     \item{obj1, obj2}{Objects of the same class.}

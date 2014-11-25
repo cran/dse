@@ -17,7 +17,6 @@
 }
 \arguments{
     \item{x}{a time series object.}
-    \item{data}{a time series object.}
     \item{value}{names to be given to time series.}
 }
 \value{

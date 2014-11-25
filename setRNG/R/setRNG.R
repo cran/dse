@@ -5,15 +5,10 @@
 
 ###########################################################
 
-
-
- 
-#if (is.R())  In S different versions override later
-#  {
 #  Prior to R 0.99 Wichmann-Hill was the default and the DSE version of
 #  Box-Muller was used for rnorm.
   
-    setRNG <- function(kind=NULL, seed=NULL, normal.kind=NULL)
+setRNG <- function(kind=NULL, seed=NULL, normal.kind=NULL)
       {# with a null argument this also serves as getRNG 
        #The next line means that setRNG with null args does not truly
        #  return the state of the RNG in the case when it has not been 
@@ -21,8 +16,11 @@
        #  rational is that querying the state is usually for the purpose of
        #  reproducing it, so it must first be initialized to put it in a 
        #  reproducible state.
-	if (!exists(".Random.seed")) z <- runif(1)
-	old <- list(kind=RNGkind()[1],normal.kind=RNGkind()[2], seed=.Random.seed[-1])
+	if (!exists(".Random.seed", envir=.GlobalEnv, inherits = FALSE))
+	     z <- runif(1)
+	old <- list(kind=RNGkind()[1],normal.kind=RNGkind()[2], 
+	     seed=get(".Random.seed", envir=.GlobalEnv, inherits = FALSE)[-1])
+
         if (is.null(kind) & is.null(seed) & is.null(normal.kind)) return (old)
 	if (is.list(kind)) 
           {seed        <- kind$seed
@@ -35,8 +33,6 @@
         else assign(".Random.seed", c(.Random.seed[1], seed), envir=.GlobalEnv)
 	old
       }
-
-#  }  # end of if is.R
 
 
 getRNG <- function(e=NULL)UseMethod("getRNG")

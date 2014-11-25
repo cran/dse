@@ -17,11 +17,14 @@
     by eigenvalue decompostion of a symplectic matrix or by iteration.
 }
 \references{
-    Vaccaro and Vukina, 
-    Anderson & Moore, 1979 sec 6.7,  
-    D.Vaughan (Oct 1970) \emph{IEEE Tr AC}.
+    R. J. Vaccaro and T.Vukina(1993),
+      "A Solution to the Positivity Problem in the State-Space Approach 
+      to Modeling Vector-Valued Time Series." 
+      \emph{Journal of Economic Dynamics and Control}, 17,
+    Anderson & Moore, (1979) sec 6.7,  
+    D. Vaughan (1970) \emph{IEEE Tr AC}.
     A. Laub (1983), \emph{Proc IEEE conf Decision and Control}. 
-      Gudmundsson, Kenney and Laub (Apr 1992) \emph{IEEE Tr AC}.
+    Gudmundsson, Kenney and Laub (1992) \emph{IEEE Tr AC}.
 }
 \seealso{
     \code{\link{eigen}}

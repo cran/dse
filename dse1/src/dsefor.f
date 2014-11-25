@@ -182,15 +182,6 @@ C      CALL DBPR('N     ',6, N,1)
 C      CALL DBPR('P     ',6, P,1)
 C      CALL DBPR('NSMPL  ',6, NSMPL,1)
       
-      IF (IS.LT.N) THEN
-      CALL ERROR('ERROR: state dimension cannot exceed ',48, IS,1)
-         RETURN
-       ENDIF
-      IF ( IS.LT.P)  THEN
-      CALL ERROR('ERROR: output dimensions cannot exceed ',48, IS,1)
-         RETURN
-       ENDIF
-C
 C
 C        RR= RR' 
 C
@@ -214,7 +205,7 @@ C                                          D=H*P(t|t-1)*H' + RR
             DO 3 K=1,N
   3            D(I,J)=D(I,J)+H(I,K)*A(K,J)
 C     INVERS inverts in place and RETURNS THE DETERMINANT. 
-      CALL  INVERS(D,P,IS,DETOM)
+      CALL  INVERS(D,P,N,DETOM)
 
 C                        Kalman gain  (A=)  K=P(t|t-1)*H'*inv(D)
       DO 4 I=1,N
@@ -266,7 +257,7 @@ C                                   J = P(t|t)*F'*inv(P(t+1|t))
       DO 51 I=1,N
         DO 51 J=1,N
  51        L(I,J)=PT1(I,J)
-      CALL  INVERS(L,N,IS,DETOM)
+      CALL  INVERS(L,N,N,DETOM)
       DO 52 I=1,N
         DO 52 J=1,N
             D(I,J)=0.0D0
