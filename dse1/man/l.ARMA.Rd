@@ -6,17 +6,18 @@
 l.ARMA(model, data, sampleT=NULL, predictT=NULL,result=NULL, compiled=.DSECOMPILED, warn=T)
 }
 \arguments{
-	\item{model}{An 'ARMA' 'TSmodel' object.}
-	\item{data}{A TSdata object.}
-	\item{sampleT} {An integer indicating the number of periods of data to use.}
-	\item{predictT}{An integer to what period forecasts should be extrapolated.}
-	\item{result}{
-	If non-NULL then the returned value is only the sub-element indicated by 
+\item{model}{An 'ARMA' 'TSmodel' object.}
+\item{data}{A TSdata object.}
+\item{sampleT} {An integer indicating the number of periods of data to use.}
+\item{predictT}{An integer to what period forecasts should be extrapolated.}
+\item{result}
+{ If non-NULL then the returned value is only the sub-element indicated by 
 result. result can be a character string or integer.}
-	\item{compiled}{
+\item{compiled}
+{
 Indicates if a call should be made to the compiled code for computation. 
 A FALSE value is mainly for testing purposes.}
-	\item{warn}{If FALSE then certain warning messages are turned off.}
+\item{warn}{If FALSE then certain warning messages are turned off.}
 }
 \value{An object of class TSestModel (see TSestModel).}
 

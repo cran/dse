@@ -9,7 +9,7 @@
 }
 \usage{
 	parms(obj)}
-\arguments{	\item{obj}{An object of class TSmodel or TSestModel.}}
+\arguments{\item{obj}{An object of class TSmodel or TSestModel.}}
 \value{A vector of parameter values.}
 \examples{
 	if(is.R()) data("eg1.DSE.data.diff", package="dse1")

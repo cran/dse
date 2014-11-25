@@ -11,16 +11,16 @@
 \usage{
 	percent.change(obj, base=NULL, lag=1, cumulate=F, e=F)}
 \arguments{
-	\item{obj}{
-	An object of class TSdata or TSestModel, a time series matrix,
+\item{obj}
+{An object of class TSdata or TSestModel, a time series matrix,
 a matrix with columns corresponding to series (which are treated 
 individually), or a list of one of these kinds of objects. (called m below)}
-	\item{e}{
-	If e is T the exponent of the series is used (after cumulating 
+\item{e}
+{If e is T the exponent of the series is used (after cumulating 
 if cumulate is T). e can be
 a logical vector with elements corresponding to columns of m.}
-	\item{base}{
-	If base is provided it is treated as the first period value 
+\item{ base}
+{If base is provided it is treated as the first period value 
 (that is, prior to differencing). It is prefixed to the m prior to 
 cumulating. It should be a vector of length dim(m)[2]. 
 (If e is T then base should be log of the original data).}

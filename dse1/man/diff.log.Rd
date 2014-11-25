@@ -5,8 +5,8 @@
 \usage{
 	diff.log(series, lag=1, base = 2.71828182845905)}
 \arguments{
-	\item{series}{A time series.}
-	\item{lag}{The difference is calculated relative to lag periods prior.}
+\item{ series}{A time series.}
+\item{ lag}{The difference is calculated relative to lag periods prior.}
 }
 \value{
 A time series of the difference relative to lag periods prior for the log of 

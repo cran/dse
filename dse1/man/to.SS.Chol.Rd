@@ -14,8 +14,8 @@ This function may not be working properly.
 	to.SS.Chol(model, Om=NULL)
 }
 \arguments{
-	\item{model}{An object of class TSmodel.}}
-	\item{Om}{
+\item{model}{An object of class TSmodel.}}
+\item{Om}{
 A matrix to be used as the measurement noise covariance. If Om is
 not supplied and model is of class TSestModel then 
 \code{model$estimates$cov} is used. Otherwise, Om is set to the identity matrix.

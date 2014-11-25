@@ -11,16 +11,16 @@
 
 \alias{window.TSdata}
 
-\title{Specific Methods for tframed Data}
+\title{Specific Methods for Tframed data}
 \description{See the generic function description.}
 \usage{
 	periods(x)
 	start(x)
 	end(x)
 	frequency(x)
-	tframed(x, tf)
-	tfwindow(x, start=NULL, end=NULL, tf=NULL, warn=T)
-	tbind(x, y)
+	tframed(x)
+	tfwindow(x)
+	tbind(x)
 	trim.na(x)
 }
 

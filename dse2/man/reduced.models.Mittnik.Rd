@@ -6,7 +6,7 @@
 	reduced.models.Mittnik(largeModel)
 }
 \arguments{
-	\item{largeModel}{An SS TSmodel.}
+\item{ largeModel}{An SS TSmodel.}
 }
 \value{A list of state space TSmodels with smaller state dimensions.}
 \details{

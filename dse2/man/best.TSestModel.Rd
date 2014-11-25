@@ -7,10 +7,10 @@
 	 criterion='aic', verbose=T)
 }
 \arguments{
-	\item{models}{A list of TSestModels.}
-	\item{sample.start}{The starting point to use for 
+\item{ models}{A list of TSestModels.}
+\item{ sample.start}{The starting point to use for 
 calculating information criteria.}
-	\item{criteria}
+\item{ criteria}
 {The selection criteria. 'taic' would be a better choice but this is not
 available for VAR and ARMA models.}
 }

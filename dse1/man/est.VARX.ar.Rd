@@ -11,8 +11,8 @@
 }
 \arguments{
 	\item{data}{A TSdata object.}
-	\item{subtract.means}{
-		If T subtract the means from the data before estimation.}
+	\item{subtract.means}
+	  {If T subtract the means from the data before estimation.}
 	\item{re.add.means}{
 	  If T the model is adjusted for the non-zero mean data when returned. 
 	  If subtract.means is also T then the mean is added back to the data.}

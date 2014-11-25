@@ -8,8 +8,12 @@ Transform the basis for the state by a given invertible matrix.
 	gmap(g, model)
 }
 \arguments{
-	\item{g}{An invertible matrix}
-	\item{model}{An object of class TSmodel.}
+\item{ g}
+{An invertible matrix}
+\item{ model}
+{
+An object of class TSmodel.}
+
 }
 \value{
 

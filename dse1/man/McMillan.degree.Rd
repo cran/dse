@@ -13,10 +13,12 @@ Calculate the McMillan degree of an ARMA TSmodel.
 	McMillan.degree(model, fuzz=fuzz, verbose=T, warn=T)
 }
 \arguments{
-	\item{model}{An object of class TSmodel.}
-	\item{fuzz}{Roots within fuzz distance are counted as equivalent.}
-	\item{verbose}{If T roots are printed.}
-	\item{warn}{If F then warnings about unit roots added for TREND are not printed.}
+\item{ model}{An object of class TSmodel.}
+
+\item{ fuzz}{Roots within fuzz distance are counted as equivalent.}
+\item{ verbose}{If T roots are printed.}
+\item{ warn}
+{If F then warnings about unit roots added for TREND are not printed.}
 }
 \value{
 A list with elements gross and distinct containing all roots 

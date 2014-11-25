@@ -6,8 +6,10 @@
 	shock.decomposition(model, horizon=30)
 }
 \arguments{
-	\item{model}{An object of class TSmodel or TSestModel.}
-	\item{horizon}{The number of periods for which to calculate the effect of shocks.}
+\item{ model}
+{An object of class TSmodel or TSestModel.}
+\item{ horizon}
+{The number of periods for which to calculate the effect of shocks.}
 }
 \value{None}
 \sideffects{

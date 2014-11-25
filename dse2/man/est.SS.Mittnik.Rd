@@ -7,10 +7,10 @@
 	est.SS.Mittnik(data, max.lag=6, n=NULL, subtract.means=F, normalize=F)
 }
 \arguments{
-	\item{data}{A TSdata object.}
-	\item{max.lag}{The number of markov parameters to estimate.}
-	\item{subtract.means}{If T subtract the means from the data before estimation.}
-	\item{normalize}{If T normalize the data before estimation.}
+\item{ data}{A TSdata object.}
+\item{ max.lag}{The number of markov parameters to estimate.}
+\item{ subtract.means}{If T subtract the means from the data before estimation.}
+\item{ normalize}{If T normalize the data before estimation.}
 }
 \value{A state space model in an object of class TSestModel.}
 \details{See References}

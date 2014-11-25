@@ -8,14 +8,17 @@ Calculate a weighted sum squared prediction errors for a parameterization.
 \usage{
 	sum.sqerror(para, model=NULL, data=NULL, error.weights=c(1,1,1,1))}
 \arguments{
-	\item{para}{A vector of parameters.}
-	\item{model}{
-	An object of class TSmodel which gives the structure of the model to which
+\item{para}{A vector of parameters.}
+
+\item{model}
+{An object of class TSmodel which gives the structure of the model to which
 para is applied. \code{model$parms} should be the same length as para.}
-	\item{data}{
+\item{data}
+{
 An object of class TSdata which gives the data with which the model is
 to be evaluated.}
-	\item{error.weights}{
+\item{error.weights}
+{
 A vector of weights to be applied to the squared prediction errors.}
 }
 \value{

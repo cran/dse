@@ -20,11 +20,11 @@ d=`date`
 log=/tmp/$1.log$$
 
 if    [  $# -eq 1 ]; then
-   R --nsize=1M --vsize=10M --no-save --quiet <$1 >$log 2>&1
+   R --nsize=1M --vsize=10M --no-save --quiet <$1 >$log
 elif  [  $# -eq 2 ]; then
-   R --nsize=$2 --vsize=10M --no-save --quiet <$1 >$log 2>&1
+   R --nsize=$2 --vsize=10M --no-save --quiet <$1 >$log
 elif  [  $# -eq 3 ]; then
-   R --nsize=$2 --vsize=$3 --no-save --quiet <$1 >$log 2>&1
+   R --nsize=$2 --vsize=$3 --no-save --quiet <$1 >$log
 fi 
 
 echo "========================================="
@@ -40,13 +40,12 @@ cm=`grep "completed" $log | wc -l`
 fa=`grep "FAILED" $log | wc -l`
 er=`grep "Error" $log | wc -l`
 ht=`grep "Execution halted" $log | wc -l`
-sf=`grep "Segmentation Fault" $log | wc -l`
 
 echo OK $OK, ok $ok, completed $cm, FAILED $fa 
 grep Expecting $log
 rm -f .RData
 
-if [ $fa -gt 0  -o  $er -gt 0  -o $ht -gt 0  -o $sf -gt 0 ]; then
+if [ $fa -gt 0  -o  $er -gt 0  -o $ht -gt 0 ]; then
  cat $log;
  rm $log
  exit 1

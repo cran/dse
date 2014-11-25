@@ -12,13 +12,13 @@
 	    graphs.per.page = 5, ...)
 }
 \arguments{
-	\item{obj}{The result of forecast.cov.}
-	\item{select.series}{
+	\item{ obj}{The result of forecast.cov.}
+	\item{ select.series}{
 	  The series which should be plotted. (The default NULL gives 
 	  the end of the simulations.)}
-	\item{select.cov}{
+	\item{ select.cov}{
 	  For the case of multiple models select the covariance to be plotted.}
-	\item{graphs.per.page}{The number of graphs to put on a page.}
+	\item{ graphs.per.page}{The number of graphs to put on a page.}
 }
 \value{None}
 \details{

@@ -1,5 +1,6 @@
 \name{system.call}
 \alias{system.call}
+\alias{sleep}
 \alias{mail}
 \alias{file.copy}
 \alias{file.date.info}
@@ -9,7 +10,7 @@
 
 \usage{
 	system.call()
-	Sys.sleep()
+	sleep()
 	mail()
 	file.copy()
 	file.date.info()

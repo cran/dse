@@ -9,7 +9,9 @@
 	forecasts(obj, ...)
 }
 \arguments {
-	\item{obj}{An object which contains forecasts.}
+	\item{obj}{
+		An object which contains forecasts.
+	}
 }
 \value{The forecasts from an object which contains forecasts.}
 \details{

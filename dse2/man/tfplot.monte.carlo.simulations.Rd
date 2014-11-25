@@ -8,19 +8,19 @@
 	    select.simulations=seq(dim(obj$simulations)[3]), graphs.per.page=5)
 }
 \arguments{
-	\item{obj}{The result of monte.carlo.simulation.}
-	\item{start.}{
-	The starting period for plots. (The default NULL gives the start of 
-	the simulations.)}
-	\item{end.}{
-	The ending period for plots.(The default NULL gives the end of 
-	the simulations.)}
-	\item{select.series}{
-	The series which should be plotted. The default NULL gives all series.}
-	\item{select.simulations}{
-	Vector of integers indicating the simulations which should be plotted. 
-	The default plots all simulations.}
-	\item{graphs.per.page}{The number of graphs to put on a page.}
+\item{ obj}{The result of monte.carlo.simulation.}
+\item{start.}
+{The starting period for plots. (The default NULL gives the start of 
+the simulations.)}
+\item{ end.}
+{The ending period for plots.(The default NULL gives the end of 
+the simulations.)}
+\item{ select.series}
+{The series which should be plotted. The default NULL gives all series.}
+\item{ select.simulations}
+{Vector of integers indicating the simulations which should be plotted. 
+The default plots all simulations.}
+\item{ graphs.per.page}{The number of graphs to put on a page.}
 }
 \value{None}
 \details{

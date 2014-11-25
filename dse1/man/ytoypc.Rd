@@ -5,7 +5,7 @@
 \usage{
 	ytoypc(ser)}
 \arguments{
-	\item{ser}{A time series.}
+\item{ ser}{A time series.}
 }
 \value{
 A vector time series of the year over year percent change. This uses 

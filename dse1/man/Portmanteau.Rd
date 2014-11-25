@@ -5,7 +5,7 @@
 \usage{
 	Portmanteau(res)}
 \arguments{
-	\item{model}{A matrix with time-series residuals in columns.}
+\item{model}{A matrix with time-series residuals in columns.}
 }
 \seealso{
 \code{\link{information.tests}}

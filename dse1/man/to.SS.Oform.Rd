@@ -8,7 +8,7 @@
 \usage{
 	to.SS.Oform(model)}
 \arguments{
-	\item{model}{An object of class TSmodel.}
+\item{ model}{An object of class TSmodel.}
 }
 \value{
 An object of class 'SS' 'TSmodel' containing a state space 

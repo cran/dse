@@ -15,8 +15,8 @@ splice                   Splice Time Series
 tbind                    Bind Time Series
 test.equal               Compare Two Objects
 tfprint                  Print and Plot Tframed Objects
-tframe                   Extract or Set a Tframe
 tframe.function.tests    tframe.function.tests
+tframe                   Extract or Set a Tframe
 tframed                  Construct a Tframed Object
 tfwindow                 Truncate a Time Series
 time                     Time

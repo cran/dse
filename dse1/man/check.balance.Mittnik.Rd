@@ -7,7 +7,7 @@ Calculate the difference between observability and reachability gramians of the 
 \usage{
 	check.balance.Mittnik(model)}
 \arguments{
-	\item{model}{An object of class TSmodel.}
+\item{ model}{An object of class TSmodel.}
 }
 \value{No value is returned.}
 \sideffects{

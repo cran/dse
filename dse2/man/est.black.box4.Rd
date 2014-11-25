@@ -14,28 +14,28 @@
 	bft( ... )
 }
 \arguments{
-	\item{data}{A TSdata object.}
-	\item{estimation}{A character string indicating the estimation method to use.}
-	\item{lag.weight}{Weighting to apply to lagged observations. }
-	\item{variable.weights}{
-	Weighting to apply to series if estimation method is est.wt.variables. }
-	\item{reduction}{Character string indicating reduction procedure to use. }
-	\item{criterion}{Character string indicating model selection criteria. }
-	\item{trend}{If T include a trend in the model. }
-	\item{subtract.means}{
-	If T the mean is subtracted from the data before estimation.}
-	\item{re.add.means}{
-	If subtract.means is T then if re.add.means is T the estimated model is
-	converted back to a model for data without the mean subtracted.}
-	\item{standardize}{
-	If T the data is transformed so that all variables have the same variance.}
-	\item{verbose}{
-	If T then additional information from the estimation and reduction 
-	procedures is printed.}
-	\item{max.lag}{VAR estimation is done for each lag up to max.lag.}
-	\item{sample.start}{
-	The starting point to use for calculating information criteria in the 
-	final selection.}
+\item{data}{A TSdata object.}
+\item{estimation}{A character string indicating the estimation method to use.}
+\item{lag.weight}{Weighting to apply to lagged observations. }
+\item{variable.weights}
+{Weighting to apply to series if estimation method is est.wt.variables. }
+\item{reduction}{Character string indicating reduction procedure to use. }
+\item{criterion}{Character string indicating model selection criteria. }
+\item{trend}{If T include a trend in the model. }
+\item{subtract.means}
+{If T the mean is subtracted from the data before estimation.}
+\item{re.add.means}
+{If subtract.means is T then if re.add.means is T the estimated model is
+converted back to a model for data without the mean subtracted.}
+\item{standardize}
+{If T the data is transformed so that all variables have the same variance.}
+\item{verbose}
+{If T then additional information from the estimation and reduction 
+procedures is printed.}
+\item{max.lag}{VAR estimation is done for each lag up to max.lag.}
+\item{sample.start}
+{The starting point to use for calculating information criteria in the 
+final selection.}
 }
 \value{A TSestModel.}
 \details{

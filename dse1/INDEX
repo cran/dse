@@ -1,28 +1,21 @@
 00General.Description    DSE
-ARMA                     ARMA Model Constructor
-DSE.utilities            DSE Utilities
-DSECOMPILED              Use Compiled or S/R Code
-McMillan.degree          Calculate McMillan Degree
-Portmanteau              Calculate Portmanteau statistic
-Riccati                  Riccati Equation
-SS                       State Space Models
-TSdata                   Construct TSdata time series object
-TSdata.object            time series data object
-TSestModel               Estimated Time Series Model
-TSmodel                  Time Series Models
 acf.M                    Calculate Auto-Covariance
 add.plot.roots           Add Model Roots to a plot
+ARMA                     ARMA Model Constructor
 balance.Mittnik          Balance a state space model
 check.balance.Mittnik    Check Balance of a TSmodel
 check.balance            Check Balance of a TSmodel
 check.consistent.dimensions
                          Check Consistent Dimensions
-check.residuals          Autocorrelations Diagnostics
+check.residuals          check residuals of a TSmodel or autocorrelations
+                         of TSdata
 combine                  Combine two objects.
 combine.TSdata           Combine series from two TSdata objects.
 diff.log                 Calculate the difference of log data
 display                  Display TSmodel Arrays
+DSE.utilities            DSE Utilities
 dse1.function.tests      dse1.function.tests
+DSECOMPILED              Use Compiled or S/R Code
 eg1.DSE.data             Four Time Series used in Gilbert (1993)
 egJofF.1dec93.data       Eleven Time Series used in Gilbert (1995)
 est.SS.from.VARX         Estimate a state space TSmodel using VAR
@@ -36,9 +29,9 @@ fixF                     Set SS Model F Matrix to Constants
 get.RNG                  get the RND and seed from an object
 gmap                     Basis Transformation of a Model.
 help.start.DSE           Start DSE Help in S
-information.tests        Tabulates selection criteria
 information.tests.calculations
                          Calculate selection criteria
+information.tests        Tabulates selection criteria
 input.data               TSdata Series
 input.dimension          Number of Series in in Input or Output
 input.periods            TSdata Periods
@@ -48,15 +41,18 @@ l                        Evaluate a TSmodel
 l.SS                     Evaluate a state space TSmodel
 load.DSE.fortran         Load compiled routines for time series models
 markov.parms             Markov Parameters
+McMillan.degree          Calculate McMillan Degree
 observability            Calculate Model Observability Matrix
 parms                    Extract Model Parameters.
 percent.change           Calculate percent change
-periods.TSdata           Specific Methods for tframed Data
+periods.TSdata           Specific Methods for Tframed data
 plot.roots               Plot Model Roots
 polynomials              Polynomial Utilities
+Portmanteau              Calculate Portmanteau statistic
 print.TSdata             Print Specific Methods
 reachability             Calculate Model Reachability Matrix
 residual.stats           Calculate Residuals Statistics and Likelihood
+Riccati                  Riccati Equation
 roots                    Calculate Model Roots
 scale.TSdata             Scale Methods for TS objects
 series.names.TSdata      Series Names Specific Methods
@@ -65,6 +61,7 @@ set.parameters           Set TSmodel Parameter Information
 simulate                 Simulate a TSmodel
 smoother                 Evaluate a smoother with a TSmodel
 source.info.TSdata       tfPADI Specific Methods
+SS                       State Space Models
 stability                Calculate Stability of a TSmodel
 standardize              standardize data
 sum.sqerror              Calculate sum of squared prediction errors
@@ -74,10 +71,14 @@ test.equal.ARMA          Specific Methods for Testing Equality
 tfplot                   Time Series Plots
 tfplot.TSdata            Tfplot Specific Methods
 to.ARMA                  Convert to an ARMA Model
+to.parsim                Convert to Parsimonious Form
 to.SS.Chol               Convert to Non-Innovation State Space Model
+to.SS.innov              Convert to State Space Innovations Model
 to.SS.Oform              Convert to Oform
 to.SS                    Convert to State Space Model
-to.SS.innov              Convert to State Space Innovations Model
-to.parsim                Convert to Parsimonious Form
+TSdata.object            time series data object
+TSdata                   Construct TSdata time series object
+TSestModel               Estimated Time Series Model
+TSmodel                  Time Series Models
 version.dse              Print Version Information
 ytoypc                   Convert to year to year percent change

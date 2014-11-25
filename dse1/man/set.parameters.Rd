@@ -13,7 +13,7 @@
 	set.parameters(model)
 }
 \arguments{
-	\item{model}{An object of class TSmodel.}
+	\item{ model}{An object of class TSmodel.}
 }
 \value{An object of class 'TSmodel'.}
 \seealso{

@@ -13,11 +13,11 @@
 	is.feather.forecasts(obj)
 }
 \arguments{
-	\item{model}{An object of class TSmodel.}
-	\item{data}{An object of class TSdata.}
-	\item{from.periods.}{The starting points to use for forecasts}
-	\item{horizon}{The number of periods to forecast.}
-	\item{...}{For a TSmodel additional arguments are passed to l()}
+\item{ model}{An object of class TSmodel.}
+\item{ data}{An object of class TSdata.}
+\item{ from.periods.}{The starting points to use for forecasts}
+\item{ horizon}{The number of periods to forecast.}
+\item{ ...}{For a TSmodel additional arguments are passed to l()}
 }
 \value{
 The result is a list of class feather.forecasts with elements \code{model} (a 

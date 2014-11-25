@@ -6,9 +6,9 @@
 	est.black.box(data,...)
 }
 \arguments{
-	\item{data}{Data in an object of class TSdata.}
-	\item{...}{
-	Optional arguments depent on the function which is eventually called.}
+\item{ data}{Data in an object of class TSdata.}
+\item{ ...}
+ {Optional arguments depent on the function which is eventually called.}
 }
 \value{A state space model in an object of class TSestModel.}
 \details{

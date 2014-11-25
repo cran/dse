@@ -1,16 +1,4 @@
 
-#  1/ Functions are for identifying S or R and flavours.
- 
-#  2/ Functions are for identifying the operating system. 
- 
-#  3/ Functions depending on differences between S and R
-	 
-#  4/  Functions depending only on OS differences
-
-#  5/  Random number generation.
-#    Done with the aid of example from B. D. Ripley.
-
- 
 system.info <- function()
      {if( !exists("version")) 
          { #-- `Vanilla' S (i.e. here "S version 4")
@@ -53,8 +41,6 @@ is.R.pre0.60 <- function()
   {is.R() && ((as.numeric(version$major)+.01*as.numeric(version$minor)) <0.60) }
 is.R.pre0.63.2 <- function()
   {is.R() && ((as.numeric(version$major)+.01*as.numeric(version$minor)) <0.623)}
-is.R.pre1.2 <- function()
-  {is.R() && ((as.numeric(version$major)+.1*as.numeric(version$minor)) <1.2) }
 
 
 is.S <- function(){is.Svanilla() | is.Splus() }
@@ -91,8 +77,8 @@ if (is.S())
 
 
 is.MSwindows <- function(){OStype() == "MS Windows"}
-is.Mac <- function(){OStype() == "Macintosh" }  
-is.unix <- function(){OStype() == "Unix" }  
+is.Mac       <- function(){OStype() == "Macintosh" }  
+is.unix      <- function(){OStype() == "Unix" }  
 
 {
 if (is.unix())
@@ -132,9 +118,9 @@ is.Linux <- function(){is.unix() && OSversion() == "linux"}
 
 # Windows flavours may be more important but these are untested !!!
 is.Win3.1 <- function(){is.MSwindows() && OSversion() == "MS Windows 3.1"} 
-is.Win95 <- function(){is.MSwindows() && OSversion() == "MS Windows 95"} 
-is.WinNT <- function(){is.MSwindows() && OSversion() == "MS Windows NT"} 
-is.Win32 <- function(){is.Win95() | is.WinNT() } 
+is.Win95  <- function(){is.MSwindows() && OSversion() == "MS Windows 95"} 
+is.WinNT  <- function(){is.MSwindows() && OSversion() == "MS Windows NT"} 
+is.Win32  <- function(){is.Win95() | is.WinNT() } 
 
 
 
@@ -142,17 +128,20 @@ is.Win32 <- function(){is.Win95() | is.WinNT() }
 
 ###########################################################
 
-#    3/  Functions depending on differences between S and R
+#    3/  Functions depending only on the 
+#         differences between S and R
 
 ###########################################################
 
 if(is.S())
-   {# in a few cases R names are preferred and this is just a re-map
+   {if(is.unix())system.call  <- unix   
     global.assign <- function(name, value) {assign(name,value, where = 1)}
     .SPAWN <- TRUE
     exists.graphics.device <- function(){dev.cur() !=1 }
-    open.graphics.device <- function(display=Sys.getenv("DISPLAY"))
-                                 {openlook(display)}# {motif(display) }
+    open.graphics.device  <- function(display=getenv("DISPLAY"))
+                                 {openlook(display) }
+    #                            {motif(display) }
+
 
     "list.add<-" <- function(x, replace, value)
        {# replace or add elements to a list.
@@ -160,55 +149,16 @@ if(is.S())
         # x[[replace]] <- value  would be more logical but doesn't work
         x
        }
-    syskern.rm <- unlink
-    Sys.getenv <- getenv
-
-    # faking R compatibility:
-    require <- function(...){T} 
-
-    # in S these only work in Unix so far.
-    if(is.unix()) {
-      system.call <- unix            
-      file.exists <- function(file) {1 == unix(paste("if [ -f ", file, 
-           " ] ; then (echo 1) ; else (echo 0); fi"))}
-      date.parsed <- function() 
-        {d <- parse(text=system.call("date '+%Y %m %d %H %M %S'"),white=T)
-         list(y=  eval(d[1]),
-              m=eval(d[2]),
-              d= eval(d[3]),
-              H= eval(d[4]),
-              M= eval(d[5]),
-              S= eval(d[6]),
-              tz=system.call("date '+%Z'"))
-        }
-
-      getwd <- function(){system.call("pwd")} # previously present.working.directory()
-      Sys.sleep <- function(n) {system.call(paste("sleep ", n))} # pause for n seconds
-      whoami <- function(){system.call("whoami")} # return user id (for mail)
-      local.host.netname <- function() {system.call("uname -n")}
-      file.copy <- function(from, to)system.call(paste("cp ", from, to)) 
-      file.date.info <- function(file.name)
-     	{# This could be a lot better. It will fail for files older than a year.
-      	# Also, a returned format like date() below would be better.
-      	mo <- (1:12)[c("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug", "Sep",
-         "Oct","Nov","Dec") ==
-          substring(system.call(paste("ls -l ",file)),33,35)]
-      	day <- as.integer(substring(system.call(paste("ls -l ",file.name)),37,38))
-      	hr  <- as.integer(substring(system.call(paste("ls -l ",file.name)),40,41))
-      	sec <- as.integer(substring(system.call(paste("ls -l ",file.name)),43,44))
-      	c(mo,day,hr,sec)
-     	}
-      }
-
-    if(is.MSwindows())
-      {file.date.info <- whoami <- Sys.sleep <- system.call <-
-         getwd <- file.copy <- function(cmd) 
-         {stop("system calls must be implemented for this operating system.")}
-      }
-    }
+    require <- function(...){T} # faking R compatibility
+   }
         
 if(is.R()) 
-   {# tempfile pre 0.15 required C code from Friedrich Leisch
+   {#tempfile <- function(f)
+    #   {# Requires C code also from Friedrich Leisch not in version 0.15 of R.
+    #    d<-"This is simply a string long enough to hold the name of a tmpfile";
+    #     .C("tmpf", as.character(d))[[1]]
+    #    }
+
     if (is.R.pre0.60())
         {tempfile <- function(pattern = "file") 
                 {system(paste("for p in", paste(pattern, collapse = " "), ";",
@@ -216,74 +166,17 @@ if(is.R())
                  intern = TRUE)
                 }
         }
-    if (is.R.pre0.63.2())
-         exists.graphics.device <- function(){exists(".Device")}  
-    else exists.graphics.device <- function(){dev.cur() !=1 }
 
-    if (is.R.pre1.2()) {
-        whoami <- function(){system.call("whoami")} # return user id (for mail)
-        local.host.netname <- function() {system.call("uname -n")}
-        file.copy <- function(from, to) {file.create(to); file.append(to,from)}
-        # this version of sleep can cause some problems with the R gui
-        Sys.sleep <- function(n) {system.call(paste("sleep ", n))} # pause for n seconds
-        file.date.info <- function(file.name)
-          {# This could be a lot better. It will fail for files older than a year.
-          # Also, a returned format like date() below would be better.
-          mo <- (1:12)[c("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug", "Sep",
-         "Oct","Nov","Dec") ==
-          substring(system.call(paste("ls -l ",file)),33,35)]
-          day <- as.integer(substring(system.call(paste("ls -l ",file.name)),37,38))
-          hr  <- as.integer(substring(system.call(paste("ls -l ",file.name)),40,41))
-          sec <- as.integer(substring(system.call(paste("ls -l ",file.name)),43,44))
-          c(mo,day,hr,sec)
-          }
-        date.parsed <- function() 
-          {d<-parse(text=strsplit(
-              system.call("date \'+%Y %m %d %H %M %S\'")," ")[[1]])
-          list(y=  eval(d[1]),
-              m=eval(d[2]),
-              d= eval(d[3]),
-              H= eval(d[4]),
-              M= eval(d[5]),
-              S= eval(d[6]),
-              tz=system.call("date '+%Z'"))
-          }
-        syskern.rm <- function(file) unlink(file)
-        }
-    else {
-        whoami <- function(){Sys.info()["user"]} 
-        local.host.netname <- function() {Sys.info()["nodename"]}
-
-        file.date.info <- function(file)
-     	  {# format of the result could be better. 
-	   x <- as.POSIXlt(file.info(file)$mtime)
-	   c(1+x$mon,x$mday,x$hour,x$sec) # as previously used. should be improved
-     	  }
-   
-        date.parsed <- function() 
-          {d <- as.POSIXlt(Sys.time())
-           list(y = 1900 + d$year,   # as previously used. should be improved
-              m = 1+ d$mon,
-              d = d$mday,
-              H = d$hour,
-              M = d$min,
-              S = d$sec,
-              tz = attr(d, "tzone"))
-          }
-        #  syskern.rm() was previously unlink() which is now supported in R.
-        #  Unfortunately the argument recursive is not supported in S and the
-        #    R 1.2 default value of FALSE is a change from previous Unix versions of R
-        #    and from S and causes problems the way it is used in DSE.
-        syskern.rm <- function(file) unlink(file, recursive = TRUE)
-	
-        } 
-
+#  no longer needed  unlink <- function(file) system.call(paste("rm -fr ", file))
     global.assign <- function(name, value) 
                           {assign(name,value, envir=.GlobalEnv)}
     synchronize <- function(x){NULL} # perhaps this should do something?
     .SPAWN <- FALSE
     dev.ask <- function(ask=T){par(ask=ask)}
-    open.graphics.device <- function(display=Sys.getenv("DISPLAY")) {x11(display)}
+    if (is.R.pre0.63.2())
+         exists.graphics.device <- function(){exists(".Device")}  
+    else exists.graphics.device <- function(){dev.cur() !=1 }
+    open.graphics.device  <- function(display=getenv("DISPLAY")) {x11(display)}
 
    "list.add<-" <- function(x, replace, value)
      {# replace or add elements to a list. 
@@ -307,37 +200,121 @@ if(is.R())
       x
      }
  
-   #unix <- function(cmd) system(cmd, intern=T)
-   # unix() is now a function in R but deprecated in favour of system()
-   # (This is a bit dangerous, as these calls may be system dependent.)
-   system.call <- function(cmd) system(cmd, intern=T)
+    # in S these only work in Unix, but the R versions work more generally.
+    present.working.directory <- function(){getwd()} #present directory
+    file.copy <- function(from, to) {file.create(to); file.append(to,from)}#copy file
 
  }
 
 
 ###########################################################
 
-#    4/  Functions depending only on OS differences
+#    4/  Functions depending only on the 
+#         differences among operating system.
 
 ###########################################################
 
-if(is.unix()) {
+if(is.unix())
+  {# this version of sleep can cause some problems with the R gui
+   sleep <- function(n) {system.call(paste("sleep ", n))} # pause for n seconds
+   whoami <- function(){system.call("whoami")} # return user id (for mail)
+   local.host.netname <- function() {system.call("uname -n")}
+
    mail <- function(to, subject="", text="")
      {# If to is null then mail is not sent (useful for testing).
       file <- tempfile()
       write(text, file=file)
       if(!is.null(to))
          system.call(paste("cat ",file, " | mail  -s '", subject, "' ", to))
-      syskern.rm(file)
+      unlink(file)
       invisible()
      }
-   }
+
+
+   file.date.info <- function(file.name)
+     {# This could be a lot better. It will fail for files older than a year.
+      # Also, a returned format like date() below would be better.
+      mo <- (1:12)[c("Jan","Feb","Mar","Apr","May", "Jun","Jul","Aug", "Sep",
+         "Oct","Nov","Dec") ==
+          substring(system.call(paste("ls -l ",file)),33,35)]
+      day <- as.integer(substring(system.call(paste("ls -l ",file.name)),37,38))
+      hr  <- as.integer(substring(system.call(paste("ls -l ",file.name)),40,41))
+      sec <- as.integer(substring(system.call(paste("ls -l ",file.name)),43,44))
+      c(mo,day,hr,sec)
+     }
+
+}
+
+if(is.MSwindows())
+  {system.call  <- function(cmd) 
+         {stop("system calls must be implemented for this operating system.")}
+   sleep <- system.call 
+   whoami <- system.call
+   file.date.info <- system.call
+   if (is.S()) 
+     {present.working.directory <- system.call
+      file.copy <- system.call
+     }
+  }
+
+
 
 ###########################################################
 
-#    5/  Random number generation.
+#    5/  Functions depending on both R/S and the 
+#         differences among operating system.
 
 ###########################################################
+
+if(is.unix())
+  {if(is.R()) 
+     {#unix <- function(cmd) system(cmd, intern=T)
+      # unix() is now a function in R but deprecated in favour of system()
+      # (This is a bit dangerous, as these calls may be system dependent.)
+
+      system.call <- function(cmd) system(cmd, intern=T)
+
+  # the following date function might be made system independent as a C call.
+      date.parsed <- function() 
+        {d<-parse(text=strsplit(
+              system.call("date \'+%Y %m %d %H %M %S\'")," ")[[1]])
+         list(y=  eval(d[1]),
+              m=eval(d[2]),
+              d= eval(d[3]),
+              H= eval(d[4]),
+              M= eval(d[5]),
+              S= eval(d[6]),
+              tz=system.call("date '+%Z'"))
+        }
+     }
+   if(is.S()) 
+     {system.call <- function(cmd)  unix(cmd)            
+      file.exists <- function(file) {1 == unix(paste("if [ -f ", file, 
+           " ] ; then (echo 1) ; else (echo 0); fi"))}
+      date.parsed <- function() 
+        {d <- parse(text=system.call("date '+%Y %m %d %H %M %S'"),white=T)
+         list(y=  eval(d[1]),
+              m=eval(d[2]),
+              d= eval(d[3]),
+              H= eval(d[4]),
+              M= eval(d[5]),
+              S= eval(d[6]),
+              tz=system.call("date '+%Z'"))
+        }
+      # in S these only work in Unix, but the R versions work more generally.
+      present.working.directory <- function(){system.call("pwd")} #present directory
+      file.copy <- function(from, to)system.call(paste("cp ", from, to)) #copy file
+     }
+  }
+
+
+
+
+##############################################################################
+
+#    6/  Random number generation.
+
+##############################################################################
 
 
 

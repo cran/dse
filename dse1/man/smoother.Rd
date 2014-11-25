@@ -5,14 +5,14 @@
 \usage{
 	smoother(model, data, compiled=.DSECOMPILED))}
 \arguments{
-	\item{model}{
-	An object of class `TSestModel' or 'TSmodel' with a model of 
+\item{model}
+{An object of class `TSestModel' or 'TSmodel' with a model of 
 class `non.innov' 'SS' 'TSmodel'. If filter informatin is not provided 
 (i.e. in a TSestModel)
 then smoother runs the Kalman filter (l.SS) first.}
-	\item{data}{A TSdata object.}.
-	\item{compiled}{
-	If T the compiled version of the code is used. Otherwise the S version is used.}
+\item{data}{A TSdata object.}.
+\item{compiled}
+{If T the compiled version of the code is used. Otherwise the S version is used.}
 }
 \value{
 An object of class TSestModel with an additional element \code{smooth}. 

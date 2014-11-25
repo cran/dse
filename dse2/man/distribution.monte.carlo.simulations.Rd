@@ -7,16 +7,18 @@
 	     x.sections=T, periods=1:3, graphs.per.page=5)
 }
 \arguments{
-	\item{obj}{The result of monte.carlo.simulation.}
-	\item{select.series}{The series which should be plotted. The default gives all series.}
-	\item{x.sections}{If T then kernel density estimates are plotted 
-	for periods indicated by periods. If F then a time series plots 
-	of the mean and estimates 1  and 2 standard deviations from the 
-	mean. Periods is ignored if x.sections is F.}
-	\item{periods}{
-	The periods at which the distribution should be calculated and plotted.
-	The default gives the first three.}
-	\item{graphs.per.page}{The number of graphs to put on a page.}
+\item{ obj}{The result of monte.carlo.simulation.}
+\item{ select.series}
+{The series which should be plotted. The default gives all series.}
+\item{ x.sections}
+{If T then kernel density estimates are plotted for periods
+indicated by periods. If F then a time series plots of the mean and
+estimates 1  and 2 standard deviations from the mean. Periods is
+ignored if x.sections is F.}
+\item{ periods}
+{The periods at which the distribution should be calculated and plotted.
+The default gives the first three.}
+\item{ graphs.per.page}{The number of graphs to put on a page.}
 }
 \value{None}
 \details{

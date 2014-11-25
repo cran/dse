@@ -12,7 +12,7 @@
 \usage{
 	set.arrays(model)}
 \arguments{
-	\item{model}{An object of class TSmodel.}
+\item{ model}{An object of class TSmodel.}
 }
 \value{A TSmodel object.}
 

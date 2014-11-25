@@ -12,7 +12,7 @@ Calculate the difference between observability and reachability gramians.}
 \usage{
 	check.balance(model)}
 \arguments{
-	\item{model}{A TSmodel object.}
+\item{model}{A TSmodel object.}
 }
 \value{No value is returned.}
 \sideffects{

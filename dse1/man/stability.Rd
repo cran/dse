@@ -11,10 +11,11 @@
 \usage{
 	stability(model, fuzz=1e-4, digits=8, verbose=T)}
 \arguments{
-	\item{model}{An object of class TSmodel.}
-	\item{fuzz}{Roots within fuzz are considered equal.}
-	\item{digits}{Printing precision.}
-	\item{verbose}{Print roots and there moduli.}
+\item{ model}{An object of class TSmodel.}
+\item{ fuzz}
+{Roots within fuzz are considered equal.}
+\item{ digits}{Printing precision.}
+\item{ verbose}{Print roots and there moduli.}
 }
 \value{True or False if the model is stable or not stable.}
 \sideffects{

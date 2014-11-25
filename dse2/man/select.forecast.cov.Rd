@@ -9,12 +9,13 @@
     verbose=T)
 }
 \arguments{
-	\item{obj}{An object as returned by mine.strip.}
-	\item{select.series}{
-	An indication of series to which the tests should be applied.}
-	\item{select.cov.best}{The number of 'best' forecasts to select.}
-	\item{select.cov.bound}{A bound to use as criteria for selection.}
-	\item{verbose}{If verbose=T then summary results are printed.}
+\item{ obj}{An object as returned by mine.strip.}
+\item{ select.series}
+{An indication of series to which the tests should be applied.}
+\item{ select.cov.best}
+{The number of 'best' forecasts to select.}
+\item{ select.cov.bound}{A bound to use as criteria for selection.}
+\item{ verbose}{If verbose=T then summary results are printed.}
 }
 \value{
 The returned result is a forecast.cov object like obj, but filtered
