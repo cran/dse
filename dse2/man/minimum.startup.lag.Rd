@@ -9,9 +9,15 @@
 \description{Number of Starting Periods Required for a Model}
 \usage{
     minimum.startup.lag(model)
+    \method{minimum.startup.lag}{SS}(model)
+    \method{minimum.startup.lag}{ARMA}(model)
+    \method{minimum.startup.lag}{TSestModel}(model)
+    startShift(model,data, y0=NULL)
 }
 \arguments{
     \item{model}{A TSmodel or object containing a TSmodel.}
+    \item{data}{A TSdata object.}
+    \item{y0}{initial condition ...}
 }
 \value{An integer.}
 \details{

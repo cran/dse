@@ -1,14 +1,14 @@
 \name{combine.forecastCov}
 \alias{combine.forecastCov}
-\alias{combine.forecastCov.estimatorsWRTdata}
-\alias{combine.forecastCov.estimatorsWRTtrue} 
+\alias{combine.forecastCovEstimatorsWRTdata}
+\alias{combine.forecastCovEstimatorsWRTtrue} 
 
 \title{Combine 2 Forecast Cov Objects}
 \description{Combine 2 forecastCov type objects.}
 \usage{
     \method{combine}{forecastCov}(e1, e2)
-    \method{combine}{forecastCov.estimatorsWRTdata}(e1, e2)
-    \method{combine}{forecastCov.estimatorsWRTtrue}(e1, e2)
+    \method{combine}{forecastCovEstimatorsWRTdata}(e1, e2)
+    \method{combine}{forecastCovEstimatorsWRTtrue}(e1, e2)
 }
 \arguments{
     \item{e1, e2}{
@@ -25,11 +25,13 @@ without re-doing the initial object.
 }
 \seealso{
 \code{\link[dse1]{combine}},
-\code{\link{forecastCov.estimatorsWRTdata}},
-\code{\link{forecastCov.estimatorsWRTtrue}}
+\code{\link{forecastCovEstimatorsWRTdata}},
+\code{\link{forecastCovEstimatorsWRTtrue}}
 \code{\link{forecastCov}}
 }
 \examples{#z <-  combine(obj1, obj2)}
 %\keyword{DSE}
 \keyword{ts}
+
+
 

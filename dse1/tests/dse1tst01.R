@@ -2,7 +2,7 @@
 # All of the checks in this tests subdirectory were previously run with the
 # following commented code.
 
-# require("mva"); require("ts"); require("dse1") # adds dse, tframe, and syskern
+# require("mva"); require("ts"); require("dse1") 
 # #x11()
 #   postscript(file="lite.out.ps",  paper="letter", horizontal=F, onefile=T)
 #              # width=6, height=8, pointsize=10,
@@ -19,11 +19,7 @@
  require("dse1")
  Sys.info()
  version.dse()
- if      (is.R()) data("eg1.DSE.data.diff", package="dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
+ data("eg1.DSE.data.diff", package="dse1") 
 
  if (!is.TSdata(eg1.DSE.data.diff)) stop("Test data not found. Testing stopped.")
  
@@ -74,7 +70,7 @@ test.rng <- list(kind="Wichmann-Hill",seed=c(979,1479,1542),normal.kind="Box-Mul
    cat("max. error ", max(error))
 
    if (any(is.na(error)) || any(is.nan(error)) || fuzz.large < error) 
-     {print.test.value(c(tst), digits=18)
+     {printTestValue(c(tst), digits=18)
       all.ok <- FALSE  
      }
 

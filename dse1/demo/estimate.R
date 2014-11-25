@@ -2,11 +2,7 @@
 
   require("dse1")
   
-  if (is.R()) data("eg1.DSE.data", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.R", sep=""))
-    class(eg1.DSE.data$output) <- class(eg1.DSE.data$input) <- NULL
-    }
+  data("eg1.DSE.data", package = "dse1") 
 
   cat("Estimation...\n")
 

@@ -7,7 +7,7 @@
 \usage{
     \method{tfplot}{roots.ee}(x, ...)
     \method{plot}{roots.ee}(x, complex.plane=TRUE, cum=TRUE, norm=FALSE,
-       bounds=TRUE, transform=NULL, invert=FALSE, Sort=TRUE)
+       bounds=TRUE, transform=NULL, invert=FALSE, Sort=TRUE, ...)
 }
 \arguments{
     \item{x}{an object for which a tfplot is to be produced.}
@@ -18,7 +18,7 @@
     \item{invert}{logical indicating if the inverse of roots should be
     plotted}
     \item{Sort}{logical indicating if the roots should be sorted.}
-    \item{...}{arguments passed to plot.roots.ee.}
+    \item{...}{arguments passed to other methods.}
     \item{norm}{logical indicating if the euclidean norm of roots should be
        plotted (square root of the sum of squared roots).}
     \item{bounds}{logical indicating if estimated one standard error bounds

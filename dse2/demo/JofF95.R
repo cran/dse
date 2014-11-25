@@ -1,16 +1,7 @@
 require("dse2")
 
- if (is.R()) data("eg1.DSE.data", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.R", sep=""))
-    class(eg1.DSE.data$output) <- class(eg1.DSE.data$input) <- NULL
-    }
-
- if (is.R()) data("eg1.DSE.data.diff", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
+ data("eg1.DSE.data", package = "dse1") 
+ data("eg1.DSE.data.diff", package = "dse1") 
 
   cat("truncate sample to 240 periods.\n")
   eg1.DSE.data.diff.trunc <- TSdata(input= input.data(eg1.DSE.data.diff)[1:240,, drop=F], 

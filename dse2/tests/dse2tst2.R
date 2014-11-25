@@ -1,4 +1,4 @@
-  require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
+  require("mva"); require("ts"); require("dse2") 
  #x11()
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
@@ -12,12 +12,8 @@
 dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
     fuzz.small=1e-14, fuzz.large=1e-8, graphics=TRUE)
 {max.error <- NA
- if (is.R()) data("eg1.DSE.data.diff", package="dse1")
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
-
+ data("eg1.DSE.data.diff", package="dse1")
+ 
  if (synopsis & !verbose) cat("All dse2 tests ...") 
  if (verbose) cat("dse2 test 0 ... ")
   z <- eg1.DSE.data.diff
@@ -74,7 +70,8 @@ dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
        -c(-0.00092229286770808757701, -0.0086020067525247358164, 
            0.0043454851777852505565,  -0.0066741302949233430319,
           -0.0089398331205012854933,   0.0021769124280658046222)))
-  ok <- fuzz.small > error
+# 10* for change from svd to La.svd (but values not changed)
+  ok <- 10*fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
   all.ok <- all.ok & ok 
@@ -94,7 +91,8 @@ dse2.function.tests <- function(verbose=TRUE, synopsis=TRUE,
      -c(-0.00310702417651131587, -0.00604105559321206804,0.00214657444656118738,
       -0.00345224972784219028, -0.00671228396225603124,0.00238508249578931863,
       -0.00379747527917305948, -0.00738351233129999531,0.00262359054501745074)))
-  ok <- fuzz.small > error
+# 10* for change from svd to La.svd (but values not changed)
+  ok <- 10*fuzz.small > error
   if (!ok) {if (is.na(max.error)) max.error <- error
             else max.error <- max(error, max.error)}
   all.ok <- all.ok & ok 
@@ -125,13 +123,9 @@ dse2.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
 {# graphics tests do not do any value comparisons
   if (synopsis & !verbose) cat("dse2 graphics tests ...")
   
- if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
-
-  if (verbose) cat("  dse2 graphics test 1 ...")
+ data("eg1.DSE.data.diff", package="dse1")
+ 
+ if (verbose) cat("  dse2 graphics test 1 ...")
 
   # If no device is active then write to postscript file 
   if (dev.cur() == 1 )

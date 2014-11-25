@@ -10,17 +10,14 @@
 
 \alias{frequency}
 \alias{frequency.tframe}
-\alias{frequency.tstframe}
 
 \alias{periods}
 \alias{periods.default}
 \alias{periods.tframe}
 \alias{periods.stamped}
-\alias{periods.tstframe}
 
 \alias{time}
 \alias{time.tframe}
-\alias{time.tstframe}
 
 \alias{diff}
 \alias{diff.tframe}
@@ -33,26 +30,23 @@
 
 \usage{
     start(x, ...)
-    \method{start}{tframe}(x)
-    \method{start}{tstframe}(x)
+    \method{start}{tframe}(x, ...)
+    \method{start}{tstframe}(x, ...)
 
     end(x, ...)
-    \method{end}{tframe}(x)
-    \method{end}{tstframe}(x)
+    \method{end}{tframe}(x, ...)
+    \method{end}{tstframe}(x, ...)
 
     frequency(x, ...)
-    \method{frequency}{tframe}(x)
-    \method{frequency}{tstframe}(x)
+    \method{frequency}{tframe}(x, ...)
 
     periods(x)
     \method{periods}{default}(x)
     \method{periods}{tframe}(x)
-    \method{periods}{tstframe}(x)
     \method{periods}{stamped}(x)
 
     time(x, ...)
-    \method{time}{tframe}(x)
-    \method{time}{tstframe}(x)
+    \method{time}{tframe}(x, ...)
 
     diff(x, ...)
     \method{diff}{tframe}(x, lag = 1, differences = 1, ...)

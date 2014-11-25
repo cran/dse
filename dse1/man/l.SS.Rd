@@ -4,14 +4,14 @@
 \description{Evaluate a state space TSmodel.
 }
 \usage{
-    l.SS(obj1, data, sampleT=NULL, predictT=NULL, error.weights=0,
+    l.SS(obj1, obj2, sampleT=NULL, predictT=NULL, error.weights=0,
          return.state=FALSE, return.track=FALSE, result=NULL, 
 	 compiled=.DSECOMPILED,
-         warn=TRUE, return.debug.info=FALSE)
+         warn=TRUE, return.debug.info=FALSE, ...)
 }
 \arguments{
     \item{obj1}{An 'SS' 'TSmodel' object.}
-    \item{data}{A TSdata object.}
+    \item{obj2}{A TSdata object.}
     \item{sampleT}{an integer indicating the last data point to use 
        for one step ahead filter estimation. If NULL all available data is used. }
     \item{predictT}{an integer indicating how far past the end of the 
@@ -34,6 +34,7 @@
     \item{warn}{if FALSE then certain warning messages are turned off.}
     \item{return.debug.info}{logical indicating if additional debugging
        information should be returned.}
+    \item{...}{(further arguments, currently disregarded).}
 }
 \value{
 Usually an object of class TSestModel (see TSestModel), but see result above.}

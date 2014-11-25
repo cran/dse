@@ -8,15 +8,15 @@
 \description{Construct or extract a "TSmodel" from objects.}
 \usage{
     TSmodel(obj, ...)
-    \method{TSmodel}{TSmodel}(obj)
-    \method{TSmodel}{TSestModel}(obj)
+    \method{TSmodel}{TSmodel}(obj, ...)
+    \method{TSmodel}{TSestModel}(obj, ...)
     is.TSmodel(obj)
 }
 \arguments{
     \item{obj}{ 
       An object containing an object of class TSmodel or a list containing the 
       information necessary to build an object of class "TSmodel".}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 \details{
 This is a generic method which will extract a "TSmodel" from an object (e.g. a

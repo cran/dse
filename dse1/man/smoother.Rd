@@ -3,7 +3,8 @@
 \title{Evaluate a smoother with a TSmodel}
 \description{Evaluate a state space model.}
 \usage{
-    smoother(model, data, compiled=.DSECOMPILED))}
+    smoother(model, data, compiled=.DSECOMPILED)
+}
 \arguments{
     \item{model}{
     An object of class `TSestModel' or 'TSmodel' with a model of 

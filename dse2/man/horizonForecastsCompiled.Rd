@@ -1,0 +1,35 @@
+\name{horizonForecastsCompiled}
+\alias{horizonForecastsCompiled}
+\alias{horizonForecastsCompiled.ARMA}
+\alias{horizonForecastsCompiled.SS}
+
+\title{Calculate forecasts at specified horizons}
+\description{Calculate forecasts at specified horizons.}
+\usage{
+   horizonForecastsCompiled(obj, data, horizons=1:4,
+	  discard.before=minimum.startup.lag(obj))
+   \method{horizonForecastsCompiled}{SS}(obj, data, horizons=1:4,
+	 discard.before=minimum.startup.lag(obj))
+   \method{horizonForecastsCompiled}{ARMA}(obj, data, horizons=1:4,
+	  discard.before=minimum.startup.lag(obj))
+}
+\arguments{
+    \item{obj}{see horizonForecasts.}
+    \item{data}{see horizonForecasts.} 
+    \item{horizons}{see horizonForecasts.}
+    \item{discard.before}{see horizonForecasts.}
+    \item{...}{see horizonForecasts.}
+}
+\value{See horizonForecasts.}
+\details{Internal function not to be called by users. See horizonForecasts.}
+\seealso{
+\code{\link{horizonForecasts}}
+}
+\examples{
+if(is.R()) data("eg1.DSE.data.diff", package="dse1")
+model <- est.VARX.ls(eg1.DSE.data.diff)
+z <-  horizonForecasts(model, eg1.DSE.data.diff)
+}
+%\keyword{DSE}
+\keyword{ts}
+

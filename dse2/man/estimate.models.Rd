@@ -37,7 +37,7 @@ estimation.methods with resulting models as elements.
 \seealso{
 
 \code{\link{EstEval}},
-\code{\link{out.of.sample.forecastCov.estimatorsWRTdata}}
+\code{\link{out.of.sample.forecastCovEstimatorsWRTdata}}
 }
 \examples{
 if(is.R()) data("eg1.DSE.data.diff", package="dse1")

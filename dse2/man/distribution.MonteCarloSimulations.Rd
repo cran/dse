@@ -5,10 +5,10 @@
 \usage{
     \method{distribution}{MonteCarloSimulations}(obj,
         series=seq(dim(obj$simulations)[2]),
-        x.sections=TRUE, periods=1:3, graphs.per.page=5)
+        x.sections=TRUE, periods=1:3, graphs.per.page=5, ...)
 }
 \arguments{
-    \item{obj}{The result of monte.carlo.simulation.}
+    \item{obj}{The result of MonteCarloSimulations.}
     \item{series}{The series which should be plotted. The default gives all series.}
     \item{x.sections}{If TRUE then kernel density estimates are plotted 
        for periods indicated by periods. If FALSE then a time series plots 
@@ -19,6 +19,7 @@
        The default gives the first three.}
     \item{graphs.per.page}{integer indicating number of graphs to place on a
        page.}
+    \item{...}{(further arguments, currently disregarded).}
 }
 \value{None}
 \details{

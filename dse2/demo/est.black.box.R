@@ -1,11 +1,7 @@
 
   require("dse2")
   
- if (is.R()) data("egJofF.1dec93.data", package="dse1")else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/egJofF.1dec93.data.R", sep=""))
-    class(egJofF.1dec93.data$output) <- class(egJofF.1dec93.data$input) <- NULL
-    }
+  data("egJofF.1dec93.data", package="dse1") 
 
   cat("select a subset of the data\n")
   eg4.DSE.data<- egJofF.1dec93.data

@@ -7,9 +7,10 @@ classed <- function(x, cls) {class(x) <- cls; x}
 #  generic and default are needed more generally than the database interface,
 #  so they are included here.
 
-freeze <- function(data, ...){UseMethod("freeze")} 
+freeze <- function(data, ...) UseMethod("freeze") 
  
-freeze.default <- function(data){
+freeze.default <- function(data, ...){
+#  (... further arguments, currently disregarded)
  if ("character"==mode(data)) freeze(tfPADIdata(data, server="ets")) else data} 
 
 #internal utility
@@ -28,28 +29,33 @@ seqN <- function(N) {if (0==length(N)) NULL else if (N<=0) NULL else seq(N)}
 #  need "...", but the generic in R has it, so it is added here.
 
 start <- function(x, ...) 
- {if(is.Ttframed(x)) start(tframe(x), ...) else UseMethod("start") }
+ if(is.Ttframed(x)) start(tframe(x), ...) else UseMethod("start") 
 
-start.tframe <- function(x) c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))
+start.tframe <- function(x, ...) c(floor(x[1]), round(1 +(x[1]%%1)*x[3]))
+#  (... further arguments, currently disregarded)
+
 
 
 end <- function(x, ...) 
- {if(is.Ttframed(x)) end(tframe(x), ...) else UseMethod("end") }
+ if(is.Ttframed(x)) end(tframe(x), ...) else UseMethod("end") 
 
-end.tframe <- function(x) c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))
+end.tframe <- function(x, ...)
+ c(floor(x[2]), round(1 + (x[2]%%1)*x[3]))
+#  (... further arguments, currently disregarded)
 
 
 frequency <- function(x, ...) 
- {if(is.Ttframed(x)) frequency(tframe(x), ...) else UseMethod("frequency") }
+ if(is.Ttframed(x)) frequency(tframe(x), ...) else UseMethod("frequency") 
 
-frequency.tframe <- function(x) x[3]
+frequency.tframe <- function(x, ...) x[3]
+#  (... further arguments, currently disregarded)
 
 
 time <- function(x, ...) 
- {if(is.Ttframed(x)) time(tframe(x,...)) else UseMethod("time") }
+ if(is.Ttframed(x)) time(tframe(x,...)) else UseMethod("time") 
 
-time.tframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
-
+time.tframe <- function(x, ...) tframed(x[1]+(seq(periods(x))-1)/x[3], tf=x)
+#  (... further arguments, currently disregarded)
 
 # periods should give the number of data points in the time direction.
 # for consistency check periods needs to look at the data not the tframe,
@@ -70,8 +76,7 @@ diff <- function(x, ...)
     x <- diff(x, ...) 
     return(tframed(x, tf))
     }
-  else UseMethod("diff") 
- }
+  else UseMethod("diff") }
 
 diff.tframe <- function (x, lag = 1, differences = 1, ...) 
  {d <- lag * differences
@@ -85,30 +90,43 @@ diff.tframe <- function (x, lag = 1, differences = 1, ...)
 
 tfplot <- function(x, ...)  UseMethod("tfplot")
 
-tfplot.default <- function(x, ..., start.=NULL, end.=NULL, series=seq(nseries(x)), 
-       Title=NULL, xlab=NULL, ylab=seriesNames(x), 
+tfplot.default <- function(x, ..., start.=NULL, end.=NULL, tf=NULL,
+       series=seq(nseries(x)), Title=NULL, xlab=NULL, ylab=seriesNames(x), 
        graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
  {#  ... before other args means abbreviations do not work, but otherwise
-  # positional matching seems to kick in and an object to be plotted get used
+  # positional matching seems to kick in and an object to be plotted gets used
   #  for start..
-  obj <- append(list(x),list(...))
   if (!is.tframed(x)) UseMethod("plot")
   else
-    {names <- seriesNames(x)
+    {if (is.null(start.) && !is.null(tf)) start. <- start(tf)
+     if (is.null(end.)   && !is.null(tf)) end.   <- end(tf)
+     others <- list(...)
+     tfspan <- x
+     # this is a kludge to pass the expansion of shorter series to tbind
+     #  and then get the overall time span from the resulting tframe.
+     if (0 != length(others)) for (d in others) tfspan <- tbind(tfspan , d)
+     tfspan <- tframe(tfspan)
+     names <- seriesNames(x)
      Ngraphs <- min(length(series), graphs.per.page)
      if(reset.screen) {
         old.par <- par(mfcol = c(Ngraphs, 1), mar=mar)  
         on.exit(par(old.par)) }
-     tf <- tframe(tfwindow(x, start.=start., end.=end.))
+#     tf <- tframe(tfwindow(x, start.=start., end.=end.))
+# would be nice if this could expand tf (tfwindow only truncates - need a
+# replacement that expands too.)
+     tf <- tfwindow(tfspan, start. = start., end. = end., warn = FALSE)
+     if (! is.tframe(tf)) browser()
      for (i in series)
-       {z <- matrix(NA, periods(tf), length(obj))
+       {z <-  matrix(NA, periods(tf), 1+length(others))
         j <- 0
-        for (d in obj)
+        for (d in append(list(x),others))
     	  {d <- tfwindow(d, tf=tf, warn=FALSE)
 	   if (!is.matrix(d)) d <- tframed(as.matrix(d), tf)
 	   if(mode(i)=="character") i <- match(i, names)
 	   j <- j + 1
-	   z[,j] <- select.series(d, series=i)
+	   #z[,j] <- select.series(d, series=i)
+	   # tbind in the next will pad d if necessary  to fit tf
+	   z[,j] <- select.series(tbind(d,time(tf)), series=i)
 	  }
 	 tfOnePlot(tframed(z, tf), xlab=xlab, ylab=ylab[i])
 	}
@@ -164,6 +182,11 @@ tfwindow.default <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
    y
   }
 
+
+# window a tframe
+tfwindow.tframe <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
+      tframe(tfwindow(time(x), start.=start., end.=end., tf=tf, warn=warn))
+
 ###############################################
 
 #  tframe  methods   <<<<<<<<<<<<
@@ -176,7 +199,7 @@ is.tframed <- function(x) inherits(tframe(x), "tframe")
 is.Ttframed <- function(x) {!is.null(attr(x, "tframe"))}
 
 
-tframe <- function(x) {UseMethod("tframe") }
+tframe <- function(x) UseMethod("tframe")
 
 tframe.default <- function(x){ #extract the tframe
 	if(is.null(x)) NULL 
@@ -191,7 +214,7 @@ tframe.default <- function(x){ #extract the tframe
 # using classed(tsp(as.ts(x)), "tframe") in the last line above 
 # makes too many things into tframes (eg lists)
 
-"tframe<-" <- function(x, value) {UseMethod("tframe<-") }
+"tframe<-" <- function(x, value) UseMethod("tframe<-")
 
 "tframe<-.default" <- function(x, value) {
   # It is tempting in the next to try and make a ts if value is from a ts, 
@@ -217,7 +240,7 @@ tframe.default <- function(x){ #extract the tframe
 # making tframed generic allows tframed.TSdata to specify input and output names
 # but there may be a better way and leave "tframe<-" as the real generic.
 
-tframed <- function(x, tf=NULL, names = NULL){UseMethod("tframed") }
+tframed <- function(x, tf=NULL, names = NULL) UseMethod("tframed")
 
 tframed.default <- function(x, tf=NULL, names = NULL){
   # return x as a tframed object with tframe tf
@@ -442,7 +465,7 @@ test.equal.list <- function(obj1, obj2, fuzz=1e-16)
    r
   }
 
-if (!exists("lag")) lag <- function(x, ...) { UseMethod("lag") }
+if (!exists("lag")) lag <- function(x, ...) UseMethod("lag")
 
 if (!exists("lag.default"))  lag.default <- function(x, ...) {stop("no lag function") }
 
@@ -451,8 +474,9 @@ if (!exists("lag.default"))  lag.default <- function(x, ...) {stop("no lag funct
 
 splice <- function(mat1, mat2, ...) UseMethod("splice")
 
-splice.default <- function(mat1, mat2)
-{# splice together 2 time series matrices. If data  is provided in both for
+splice.default <- function(mat1, mat2, ...)
+{#  (... further arguments, currently disregarded)
+ # splice together 2 time series matrices. If data  is provided in both for
  #  a given period then mat1 takes priority.
  # The result starts at the earlier of mat1 and mat2 and ends at the later.
  # dimnames are taken from mat1.
@@ -479,29 +503,27 @@ splice.default <- function(mat1, mat2)
 }
 
 
-if( !exists("tsmatrix.default"))  
-  {if(exists("tsmatrix")) tsmatrix.default <- tsmatrix 
-   else tsmatrix.default <- function(x, ...) 
-            {tbind(x, ..., pad.start=FALSE, pad.end=FALSE) }
-  }
+#if( !exists("tsmatrix.default"))  
+#  {if(exists("tsmatrix")) tsmatrix.default <- tsmatrix 
+#   else tsmatrix.default <- function(x, ...) 
+#	     {tbind(x, ..., pad.start=FALSE, pad.end=FALSE) }
+#  }
+#
+#tsmatrix <- function(x, ...)
+# {# the default tsmatrix messes up because it gets some time info. (from
+#  #  start or end) but not tsp info.
+#  if (is.Ttframed(x)) tbind(x, ..., pad.start=FALSE, pad.end=FALSE)
+#  else 
+#    {#warning("Using tsmatrix which should be defunct. Consider using tbind and tframe methods.")       
+#     tsmatrix.default(x,  ...)
+#    }
+# }
 
-tsmatrix <- function(x, ...)
- {# the default tsmatrix messes up because it gets some time info. (from
-  #  start or end) but not tsp info.
-  if (is.Ttframed(x)) tbind(x, ..., pad.start=FALSE, pad.end=FALSE)
-  else 
-    {#warning("Using tsmatrix which should be defunct. Consider using tbind and tframe methods.")       
-     tsmatrix.default(x,  ...)
-    }
- }
 
-
-tfTruncate <- function(x, start=NULL, end=NULL)
- {# similar to window but start and end specify periods relative to the 
+tfTruncate <- function(x, start=NULL, end=NULL) UseMethod("tfTruncate")
+  # similar to window but start and end specify periods relative to the 
   #   beginning (eg x[start:end] for a vector).
   #   NULL means no truncation.
-  UseMethod("tfTruncate")
- }
 
 
 tfTruncate.default <- function(x, start=NULL, end=NULL)
@@ -519,11 +541,9 @@ tfTruncate.default <- function(x, start=NULL, end=NULL)
      z
     }
 
-tfExpand <- function(x, add.start=0, add.end=0)
- {# expand (a tframe) by add.start periods on the beginning
+tfExpand <- function(x, add.start=0, add.end=0) UseMethod("tfExpand")
+  # expand (a tframe) by add.start periods on the beginning
   # and add.end periods on the end
-  UseMethod("tfExpand")
- }
 
 tfExpand.default <- function(x, add.start=0, add.end=0)
     {tf <- tfExpand(tframe(x), add.start=add.start, add.end=add.end)
@@ -555,7 +575,7 @@ trim.na.default <- function(x, start. = TRUE, end. = TRUE)
 
 
 
-nseries <- function(x) {UseMethod("nseries")} 
+nseries <- function(x) UseMethod("nseries") 
 nseries.default <- function(x)  {if (is.matrix(x)) ncol(x) else 1} 
 
    
@@ -654,7 +674,7 @@ add.date <- function(date, periods, freq)
 
 ############################################################
 
-#  Utility functions for noise   <<<<<<<<<<
+#  Utility function for time series noise   <<<<<<<<<<
 
 ############################################################
 
@@ -667,7 +687,7 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
   #   the same dimension as noise (or noise generated by noise.model), or a
   #   vector of length equal to the dimension of the noise process (which will
   #   be replicated for all periods.)
-
+ require("setRNG")
  if(is.null(rng)) rng <- set.RNG() # returns setting so don't skip if NULL
  else        {old.rng <- set.RNG(rng);  on.exit(set.RNG(old.rng))  }
 
@@ -734,3 +754,4 @@ makeTSnoise <- function(sampleT,p,lags,noise=NULL, rng=NULL,
   append(noise, list(sampleT=sampleT, rng=rng,
      SIGMA=SIGMA, sd=sd, noise.model=noise.model,version=as.vector(version)))
  }
+

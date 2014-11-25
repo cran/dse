@@ -7,8 +7,8 @@
 \description{See the generic function description.}
 \usage{
     \method{tfplot}{TSdata}(x, ..., start.=NULL,end.=NULL,
-        select.inputs  = seq(length=nseriesInput(data)),
-        select.outputs = seq(length=nseriesOutput(data)),
+        select.inputs  = seq(length=nseriesInput(x)),
+        select.outputs = seq(length=nseriesOutput(x)),
         Title=NULL, xlab=NULL, ylab=NULL, 
 	graphs.per.page=5, mar=par()$mar, reset.screen=TRUE)
     \method{tfplot}{TSestModel}(x, ..., start.=NULL,end.=NULL, 

@@ -10,10 +10,9 @@
 }
 \usage{
     percent.change(obj, ...)
-    \method{percent.change}{default}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE)
-    \method{percent.change}{TSdata}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE)
-    \method{percent.change}{TSestModel}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE)
-    percent.change.list(obj, ..., base=NULL, lag=1, cumulate=FALSE, e=FALSE)
+    \method{percent.change}{default}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE, ...)
+    \method{percent.change}{TSdata}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE, ...)
+    \method{percent.change}{TSestModel}(obj, base=NULL, lag=1, cumulate=FALSE, e=FALSE, ...)
     }
 \arguments{
     \item{obj}{
@@ -33,7 +32,7 @@ a logical vector with elements corresponding to columns of m.}
       percent change should be calculated.}
     \item{cumulate}{logical indicating if the series should be cumulated before
       the percent change is calculated.}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
 For an object of class TSdata the percent change calculation is done

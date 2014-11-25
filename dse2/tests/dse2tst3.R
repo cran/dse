@@ -1,4 +1,7 @@
-  require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
+if(!require("mva"))   stop("this test requires mva.")
+if(!require("ts"))    stop("this test requires ts.")
+if(!require("dse2"))  stop("this test requires dse2.")
+if(!require("setRNG"))stop("this test requires setRNG.")
  #x11()
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
@@ -13,13 +16,7 @@
 dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
     fuzz.small=1e-14, fuzz.large=1e-8, graphics=TRUE)
 {max.error <- NA
- if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
-
-
+ data("eg1.DSE.data.diff", package="dse1")
 # The seed is not important for most of these tests, but AIC eliminates all
 #  parameters occassionally in some model selection tests.
  test.rng <- list(kind="Wichmann-Hill", normal.kind="Box-Muller", seed=c(979,1479,1542))
@@ -37,7 +34,7 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
 
   if (verbose) cat("dse3 test 1 ... ")
   z <- MonteCarloSimulations(mod1, replications=5, quiet=TRUE)
-  ok <- is.monte.carlo.simulation(z)
+  ok <- is.MonteCarloSimulations(z)
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
@@ -132,7 +129,7 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 13... ")
-  zz <-out.of.sample.forecastCov.estimatorsWRTdata(data,
+  zz <-out.of.sample.forecastCovEstimatorsWRTdata(data,
                estimation.methods = list(est.VARX.ar= list(max.lag=2, warn=FALSE), 
                                          est.VARX.ls= list(max.lag=2)))
   ok <- is.forecastCov(zz)
@@ -148,17 +145,17 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
 
   if (verbose) cat("dse3 test 15... ")
   ok <- test.equal(zz, forecastCovWRTtrue(list(mod1,mod2),mod1, 
-          pred.replications=2, Spawn=.SPAWN, quiet=TRUE, trend=NULL, zero=TRUE,
-          rng=get.RNG(zz)))
+          pred.replications=2, Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,
+	  quiet=TRUE, trend=NULL, zero=TRUE, rng=get.RNG(zz)))
   all.ok <- all.ok & ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 16... ")
-#  zz <- forecastCov.estimatorsWRTtrue(mod1, Spawn=.SPAWN, quiet=TRUE, 
-# This seems to cause a problem in Splus when .SPAWN is TRUE although it may
+# Next seems to cause a problem in Splus when .SPAWN is TRUE although it may
 #  work with default rng (at least it used to) but test.rng is now set
 #  to give same results as in R.
-  zz <- forecastCov.estimatorsWRTtrue(mod1, Spawn=FALSE, quiet=TRUE, 
+  zz <- forecastCovEstimatorsWRTtrue(mod1, 
+         Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, quiet=TRUE, 
          estimation.methods=list(est.VARX.ls=NULL, est.VARX.ar=list(warn=FALSE)), 
          est.replications=2, pred.replications=2, rng=test.rng)
   ok <- is.forecastCov(zz)
@@ -166,7 +163,7 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 
   if (verbose) cat("dse3 test 17... ")
-  ok <- test.equal(zz, forecastCov.estimatorsWRTtrue(mod1, Spawn=FALSE, 
+  ok <- test.equal(zz, forecastCovEstimatorsWRTtrue(mod1, Spawn=FALSE, 
            estimation.methods=list(est.VARX.ls=NULL,est.VARX.ar=list(warn=FALSE)), 
            est.replications=2, pred.replications=2, rng=get.RNG(zz)))
   all.ok <- all.ok & ok 
@@ -192,12 +189,8 @@ dse3.function.tests <- function(verbose=TRUE, synopsis=TRUE,
 
 
 dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
-{if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
-
+{data("eg1.DSE.data.diff", package="dse1")
+ 
   if (synopsis & !verbose) cat("dse3 graphics tests ...")
   if (verbose) cat("  dse3 graphics test 1 ...")
   # If no device is active then write to postscript file 
@@ -249,7 +242,7 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
   input.data(data) <- NULL
 # next causes Error ... all lags eliminated by AIC order selection.
 #  output.data(data) <- output.data(data, series=1)  # [,1,drop=FALSE]
-  zz <-out.of.sample.forecastCov.estimatorsWRTdata(data,
+  zz <-out.of.sample.forecastCovEstimatorsWRTdata(data,
                estimation.methods = list(est.VARX.ar=list(max.lag=2,warn=FALSE),
                                          est.VARX.ls=list(max.lag=2))) 
   tfplot(zz, series=c(1))
@@ -257,12 +250,15 @@ dse3.graphics.tests <- function(verbose=TRUE, synopsis=TRUE)
 
   if (verbose) cat("  dse3 graphics test 7 ...")
   zz <- forecastCovWRTtrue(list(mod1,mod2),mod1, rng=test.rng,
-               pred.replications=2, Spawn=.SPAWN, trend=NULL, zero=TRUE, quiet=TRUE)
+               pred.replications=2, 
+	       Spawn=if(exists(".SPAWN")) .SPAWN else FALSE, 
+	       trend=NULL, zero=TRUE, quiet=TRUE)
   tfplot(zz, select.cov=c(1))
   if (verbose) cat("ok\n")
 
   if (verbose) cat("  dse3 graphics test 8 ...")
-  zz <- forecastCov.estimatorsWRTtrue(mod1, Spawn=.SPAWN,  rng=test.rng,
+  zz <- forecastCovEstimatorsWRTtrue(mod1, 
+         Spawn=if(exists(".SPAWN")) .SPAWN else FALSE,  rng=test.rng,
          estimation.methods=list(est.VARX.ls=NULL,est.VARX.ls=list(max.lag=2)), 
 #        estimation.methods=list(est.VARX.ls=NULL,est.VARX.ar=NULL), 
          est.replications=2, pred.replications=2, quiet=TRUE)

@@ -9,7 +9,7 @@
     graphs.per.page=5, mar=par()$mar)
 }
 \arguments{
-    \item{x}{The result of monte.carlo.simulation.}
+    \item{x}{The result of MonteCarloSimulations.}
     \item{start.}{
     The starting period for plots. (The default NULL gives the start of 
     the simulations.)}

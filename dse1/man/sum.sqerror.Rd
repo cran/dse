@@ -6,7 +6,7 @@
 Calculate a weighted sum squared prediction errors for a parameterization.
 }
 \usage{
-    sum.sqerror(coefficients, model=NULL, data=NULL, error.weights=c(1,1,1,1))}
+    sum.sqerror(coefficients, model=NULL, data=NULL, error.weights=NULL)}
 \arguments{
     \item{coefficients}{A vector of coefficients (parameters).}
     \item{model}{an object of class TSmodel which gives the structure 

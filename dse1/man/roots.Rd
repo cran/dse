@@ -8,8 +8,8 @@
 \description{Calculate roots of a TSmodel.}
 \usage{
     roots(obj, ...)
-    \method{roots}{SS}(obj, fuzz=0, randomize=FALSE)
-    \method{roots}{ARMA}(obj, fuzz=0, randomize=FALSE, warn=TRUE, by.poly=FALSE)
+    \method{roots}{SS}(obj, fuzz=0, randomize=FALSE, ...)
+    \method{roots}{ARMA}(obj, fuzz=0, randomize=FALSE, warn=TRUE, by.poly=FALSE, ...)
     \method{roots}{TSestModel}(obj, ...)
     }
 \arguments{
@@ -27,7 +27,7 @@
        method is preferable for speed, accuracy, and because of a limitation
        in the degree of a polynomial which can be handled by polyroot.}
     \item{verbose}{arguments to be passed to other methods.}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{
 

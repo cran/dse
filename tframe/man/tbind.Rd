@@ -23,7 +23,7 @@ Bind together (in non-time dimension) two time series objects.
 }
 \value{A time series object}
 \details{
-Bind data as in cbind or tsmatrix align time dimension aligned. 
+Bind data as in cbind (or formerly tsmatrix) and align time dimension. 
 The default action pads series with NA to time union. 
 If pad.start and/or pad.end is FALSE and the intersection is empty then NULL
 is returned and a warning is issued if warn=TRUE.

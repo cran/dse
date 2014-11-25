@@ -15,6 +15,7 @@
     \method{tfwindow}{TSdata}(x, start=NULL, end=NULL, tf=NULL, warn=TRUE)
     \method{tbind}{TSdata}(d1, d2)
     \method{trim.na}{TSdata}(x, start.=TRUE, end.=TRUE)
+    \method{window}{TSdata}(x, start=NULL, end=NULL, tf=NULL, warn=TRUE, ...)
 }
 \arguments{
     \item{x}{See the generic function.}
@@ -28,6 +29,7 @@
     \item{d1}{See the generic function.}
     \item{d2}{See the generic function.}
     \item{warn}{logical indicating if some warning messages should be suppressed.}
+    \item{...}{arguments passed to other functions.}
 }
 
 \seealso{

@@ -8,8 +8,8 @@
 Display TSmodel arrays.
 }
 \usage{
-    \method{print}{SS}(x, digits=options()$digits)
-    \method{print}{ARMA}(x, digits=options()$digits, L=TRUE, fuzz=1e-10)
+    \method{print}{SS}(x, digits=options()$digits, ...)
+    \method{print}{ARMA}(x, digits=options()$digits, L=TRUE, fuzz=1e-10, ...)
     \method{print}{TSestModel}(x, ...)
     }
 
@@ -23,7 +23,7 @@ Display TSmodel arrays.
     \item{fuzz}{
       ARMA model polynomial elements with absolute value less than fuzz
       are not displayed (i.e.-as if they are zero)}
-    \item{...}{arguments to be passed to other methods.}
+    \item{...}{arguments passed to other methods.}
 }
 \value{The object is returned invisibly.}
 \sideffects{The model arrays are displayed.}

@@ -3,10 +3,11 @@
 \title{Plot Mine Stepwise Object}
 \description{plot.mine.stepwise}
 \usage{
-    plot.mine.stepwise(x)
+    plot.mine.stepwise(x, ...)
 }
 \arguments{
     \item{x}{Object returned by mine.stepwise.}
+    \item{...}{(further arguments, currently disregarded).}
 }
 \value{None}
 \sideffects{A plot}

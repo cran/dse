@@ -9,7 +9,7 @@
 \usage{
     \method{TSdata}{forecastCov}(obj)
     \method{TSestModel}{coef.ee}(obj)
-    \method{TSmodel}{forecastCov}(obj, select)
+    \method{TSmodel}{forecastCov}(obj, select=1)
     \method{TSmodel}{coef.ee}(obj)
 }
 \arguments{

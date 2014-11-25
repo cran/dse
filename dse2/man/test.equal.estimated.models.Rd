@@ -10,9 +10,9 @@
 \description{See the generic function description.}
 \usage{
     \method{test.equal}{estimated.models}(obj1, obj2, fuzz = 0)
-    \method{test.equal}{EstEval}(obj1, obj2, fuzz = 0)
-    \method{test.equal}{forecast}(obj1, obj2, fuzz)
-    \method{test.equal}{forecastCov}(obj1, obj2, fuzz)
+    \method{test.equal}{EstEval}(obj1, obj2, fuzz=0)
+    \method{test.equal}{forecast}(obj1, obj2, fuzz=1e-14)
+    \method{test.equal}{forecastCov}(obj1, obj2, fuzz=1e-14)
     \method{test.equal}{horizonForecasts}(obj1, obj2, fuzz=1e-14)
     \method{test.equal}{MonteCarloSimulations}(obj1, obj2, fuzz=1e-16)
 }

@@ -1,16 +1,7 @@
 require("dse1")
 
- if (is.R()) data("eg1.DSE.data", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.R", sep=""))
-    class(eg1.DSE.data$output) <- class(eg1.DSE.data$input) <- NULL
-    }
-
- if (is.R()) data("eg1.DSE.data.diff", package = "dse1") else 
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
+ data("eg1.DSE.data", package = "dse1") 
+ data("eg1.DSE.data.diff", package = "dse1") 
 
  cat("This demo reproduces some results from Bank of Canada Working Paper 93-4.\n")
 

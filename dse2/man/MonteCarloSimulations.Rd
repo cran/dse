@@ -4,34 +4,37 @@
 \alias{MonteCarloSimulations.TSmodel}
 \alias{MonteCarloSimulations.TSestModel}
 \alias{MonteCarloSimulations.EstEval}
-\alias{MonteCarloSimulations.monte.carlo.simulation}
-\alias{is.monte.carlo.simulation}
+\alias{MonteCarloSimulations.MonteCarloSimulations}
+\alias{is.MonteCarloSimulations}
 
 \title{Generate simulations}
 \description{Run multiple simulations}
 \usage{
-    is.monte.carlo.simulation(obj)
+    is.MonteCarloSimulations(obj)
     MonteCarloSimulations(model, simulation.args=NULL, 
-           replications=100, rng=NULL, ...)
+           replications=100, rng=NULL, quiet =FALSE, ...)
     \method{MonteCarloSimulations}{default}(model, simulation.args = NULL, 
- 		replications = 100, rng = NULL, quiet =FALSE)
+ 		replications = 100, rng = NULL, quiet =FALSE, ...)
     \method{MonteCarloSimulations}{TSmodel}(model, simulation.args=NULL,
-          replications=100, rng=NULL, Spawn=.SPAWN, quiet=FALSE)
+          replications=100, rng=NULL, quiet=FALSE, 
+	  Spawn=if (exists(".SPAWN")) .SPAWN else FALSE, ...)
     \method{MonteCarloSimulations}{TSestModel}(model, simulation.args=NULL, 
-           replications=100, rng=NULL, ...)
-    \method{MonteCarloSimulations}{EstEval}(model,...)
-    \method{MonteCarloSimulations}{monte.carlo.simulation}(model,...)
+           replications=100, rng=NULL, quiet=FALSE, ...)
+    \method{MonteCarloSimulations}{EstEval}(model, simulation.args=NULL,
+            replications=100, rng=get.RNG(model),  quiet=FALSE, ...)
+    \method{MonteCarloSimulations}{MonteCarloSimulations}(model, 
+       simulation.args=NULL, replications=100, rng=get.RNG(model),  quiet=FALSE, ...)
 }
 \arguments{
-    \item{model}{A model with a simulate method (e.g. a TSmodel).}
+    \item{model}{an object from which a model can be extracted. The model must
+         have an associated \code{simulation} method (e.g. a TSmodel).}
     \item{simulation.args,}{
-    A list of arguments in addition to model which are passed to 
-    simulate.}
+       A list of arguments in addition to model which are passed to simulate.}
     \item{replications}{The number of simulations.}
     \item{rng}{The RNG and starting seed.}
-    \item{Spawn}{If TRUE "For" loops are used in Splus.}
     \item{quiet}{logical indicating if printing and many warning messages should
        be suppressed.}
+    \item{Spawn}{If TRUE "For" loops are used in Splus.}
     \item{obj}{an object.}
     \item{...}{arguments passed to other methods.}
 }

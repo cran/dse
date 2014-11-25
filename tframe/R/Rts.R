@@ -61,73 +61,15 @@ tfwindow.ts <- function(x, start.=NULL, end.=NULL, tf=NULL, warn=TRUE)
   }
 
 
-# The .tstframe methods should work on tframe(ts(whatever))  from ts objects. 
+# The .tstframe methods work on tframe the tframe of a ts object. 
+# The .tframe (next) methods should work for most <tstframe tframe> tframes.
+# Following are a couple that are slightly different.
 
-start.tstframe <- function(x) c(floor(x[1]+getOption("ts.eps")),
+start.tstframe <- function(x, ...) c(floor(x[1]+getOption("ts.eps")),
     round(1 + ((x[1]+getOption("ts.eps"))%%1)*x[3]))
-end.tstframe   <- function(x) c(floor(x[2]+getOption("ts.eps")),
+#  (... further arguments, currently disregarded)
+
+end.tstframe   <- function(x, ...) c(floor(x[2]+getOption("ts.eps")),
     round(1 + ((x[2]+getOption("ts.eps"))%%1)*x[3]))
-periods.tstframe <- function(x)  {1+round((x[2]-x[1])*x[3])}
-frequency.tstframe <- function(x) x[3]
-time.tstframe <- function(x) {x[1] + (seq(periods(x))-1)/x[3]}
+#  (... further arguments, currently disregarded)
 
-tfTruncate.tstframe <- function(x, start=NULL, end=NULL) 
-    {if (!is.null(end))   x[2] <- x[1] + (end-1)/x[3]
-     if (!is.null(start)) x[1] <- x[1] + (start-1)/x[3]
-     x
-    }
-
-tfExpand.tstframe <- function(x, add.start=0, add.end=0) 
-    {x[2] <- x[2] + add.end/x[3]
-     x[1] <- x[1] - add.start/x[3]
-     x
-    }
-
-
-earliestStartIndex.tstframe <- function(x, ...) 
-    {r <- 1
-     fr <- frequency(x)
-     args <- list(x, ...)
-     for (i in seq(length(args)))
-         {tf <- args[[i]]
-          if (tf[3] != fr) stop("frequencies must be that same.")
-          if (tf[1] < args[[r]][1]) r <- i
-         }           
-     r
-    }
-
-earliestEndIndex.tstframe <- function(x, ...) 
-    {r <- 1
-     fr <- frequency(x)
-     args <- list(x, ...)
-     for (i in seq(length(args)))
-         {tf <- args[[i]]
-          if (tf[3] != fr) stop("frequencies must be that same.")
-          if (tf[2] < args[[r]][2]) r <- i
-         }           
-     r
-    }
-
-latestStartIndex.tstframe <- function(x, ...) 
-    {r <- 1
-     fr <- frequency(x)
-     args <- list(x, ...)
-     for (i in seq(length(args)))
-         {tf <- args[[i]]
-          if (tf[3] != fr) stop("frequencies must be that same.")
-          if (tf[1] > args[[r]][1]) r <- i
-         }           
-     r
-    }
-
-latestEndIndex.tstframe <- function(x, ...) 
-    {r <- 1
-     fr <- frequency(x)
-     args <- list(x, ...)
-     for (i in seq(length(args)))
-         {tf <- args[[i]]
-          if (tf[3] != fr) stop("frequencies must be that same.")
-          if (tf[2] > args[[r]][2]) r <- i
-         }           
-     r
-    }

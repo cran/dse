@@ -2,11 +2,9 @@
 \alias{tfExpand}
 \alias{tfExpand.default}
 \alias{tfExpand.tframe}
-\alias{tfExpand.tstframe}
 \alias{tfTruncate}
 \alias{tfTruncate.default}
 \alias{tfTruncate.tframe}
-\alias{tfTruncate.tstframe}
 
 \title{Expand a Tframe or Tframed Object.}
 \description{Expand a tframe or tframed object.}
@@ -15,12 +13,10 @@
     tfExpand(x, add.start = 0, add.end = 0)
     \method{tfExpand}{default}(x, add.start = 0, add.end = 0)
     \method{tfExpand}{tframe}(x, add.start = 0, add.end = 0)
-    \method{tfExpand}{tstframe}(x, add.start=0, add.end=0)
 
     tfTruncate(x, start=NULL, end=NULL)
     \method{tfTruncate}{default}(x, start=NULL, end=NULL)
     \method{tfTruncate}{tframe}(x, start=NULL, end=NULL)
-    \method{tfTruncate}{tstframe}(x, start=NULL, end=NULL)
 }
 \arguments{
     \item{x}{A tframe or tframed object.}

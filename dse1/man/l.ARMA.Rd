@@ -3,12 +3,13 @@
 \title{Evaluate an ARMA TSmodel}
 \description{Evaluate an ARMA TSmodel.}
 \usage{
-l.ARMA(obj1, dat, sampleT=NULL, predictT=NULL,result=NULL,
-       error.weights=0,  compiled=.DSECOMPILED, warn=TRUE, return.debug.info=FALSE)
+l.ARMA(obj1, obj2, sampleT=NULL, predictT=NULL,result=NULL,
+       error.weights=0,  compiled=.DSECOMPILED, warn=TRUE, 
+       return.debug.info=FALSE, ...)
 }
 \arguments{
     \item{obj1}{an 'ARMA' 'TSmodel' object.}
-    \item{dat}{a TSdata object.}
+    \item{obj2}{a TSdata object.}
     \item{sampleT}{an integer indicating the number of periods of data to use.}
     \item{predictT}{an integer to what period forecasts should be extrapolated.}
     \item{result}{
@@ -21,6 +22,7 @@ l.ARMA(obj1, dat, sampleT=NULL, predictT=NULL,result=NULL,
     \item{warn}{if FALSE then certain warning messages are turned off.}
     \item{return.debug.info}{logical indicating if additional debugging
        information should be returned.}
+    \item{...}{(further arguments, currently disregarded).}
 }
 
 \value{an object of class TSestModel (see TSestModel).}

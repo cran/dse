@@ -1,4 +1,7 @@
-  require("mva"); require("ts"); require("dse2") # adds dse, tframe, and syskern
+if(!require("mva"))   stop("this test requires mva.")
+if(!require("ts"))    stop("this test requires ts.")
+if(!require("dse2"))  stop("this test requires dse2.")
+if(!require("setRNG"))stop("this test requires setRNG.")
  #x11()
   postscript(file="lite.out.ps",  paper="letter", horizontal=FALSE, onefile=TRUE)
              # width=6, height=8, pointsize=10,
@@ -12,17 +15,13 @@
 dse4.function.tests <- function(verbose=TRUE, synopsis=TRUE, 
 		fuzz.small=1e-14, fuzz.large=1e-7, graphics=TRUE)
 {max.error <- 0
- if      (is.R()) data("eg1.DSE.data.diff", package="dse1")
- if (is.S()) 
-   {source(paste(DSE.HOME, "/data/eg1.DSE.data.diff.R", sep=""))
-    class(eg1.DSE.data.diff$output) <- class(eg1.DSE.data.diff$input) <- NULL
-    }
-
+ data("eg1.DSE.data.diff", package="dse1")
+ 
  if (synopsis & !verbose) cat("All dse4 tests ...") 
  if (verbose) cat("dse4 test 1 ... ")
   z <- mine.strip(eg1.DSE.data.diff, essential.data=c(1,2),
                    estimation.methods=list(est.VARX.ls=list(max.lag=3)))
-  ok <- is.forecastCov.estimatorsWRTdata.subsets(z)
+  ok <- is.forecastCovEstimatorsWRTdata.subsets(z)
   all.ok <-  ok 
   if (verbose) {if (ok) cat("ok\n") else cat("failed!\n") }
 

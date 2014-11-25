@@ -1,6 +1,6 @@
 \name{tfplot.forecastCov}
 \alias{tfplot.forecastCov}
-\alias{tfplot.forecastCov.estimatorsWRTdata}
+\alias{tfplot.forecastCovEstimatorsWRTdata}
 
 \title{Plots of Forecast Variance}
 \description{Generate plots of forecast variance calculated by forecastCov.}
@@ -10,8 +10,8 @@
        select.cov = 1:length(x$forecastCov), select.true =TRUE, 
        select.zero =TRUE, select.trend =TRUE, y.limit = NULL, line.labels =FALSE, 
        lty = NULL, Legend = NULL, Title = NULL,
-       graphs.per.page = 5, mar=par()$mar, reset.screen)
-    \method{tfplot}{forecastCov.estimatorsWRTdata}(x, 
+       graphs.per.page = 5, mar=par()$mar, reset.screen=TRUE)
+    \method{tfplot}{forecastCovEstimatorsWRTdata}(x, 
         series=1:dim(x$forecastCov[[1]])[2], 
         select.cov=1:length(x$forecastCov),
         select.zero=TRUE, select.trend=TRUE,
@@ -56,7 +56,7 @@ If lty is NULL (default) it is set to
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
     model <- est.VARX.ls(eg1.DSE.data.diff)
-    z <- forecastCov(model, eg1.DSE.data.diff)
+    z <- forecastCov(model, data=eg1.DSE.data.diff)
     tfplot(z)
 }
 %\keyword{DSE}

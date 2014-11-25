@@ -6,9 +6,10 @@
 \title{Evaluate a TSmodel}
 \description{Evaluate a model with data.}
 \usage{
-    l(obj1, obj2, ...)}
-    \method{l}{TSdata}(obj1, obj2, ...)}
-    \method{l}{TSestModel}(obj1, obj2, ...)}
+    l(obj1, obj2, ...)
+    \method{l}{TSdata}(obj1, obj2, ...)
+    \method{l}{TSestModel}(obj1, obj2, ...)
+}
 \arguments{
     \item{obj1}{a TSmodel, TSdata, or TSestModel object.}
     \item{obj2}{a TSmodel or TSdata object.}

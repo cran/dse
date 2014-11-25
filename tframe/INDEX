@@ -1,8 +1,10 @@
+This package is part of the dse bundle.
 See 00Intro.* in each package for a short general description.
-A Users' Guide is available in dse1/doc/guide.pdf
-  and also at 'http://www.bank-banque-canada.ca/pgilbert'
-See also the bundle dseplus with related
- packages dsepadi monitor juice curve .
+The Users' Guide is divided into sections for each package.
+These are installed in the doc/ directory for each package.
+A version of the guide with all sections combined may also
+be available at 'http://www.bank-banque-canada.ca/pgilbert', but may not be as current.
+See also the bundle dseplus with related packages.
 00Intro.tframe          Tframe
 add.date                Add Periods to a Date
 check.tframeConsistent
@@ -29,4 +31,3 @@ tframe                  Extract or Set a tframe
 tframed                 Construct a Tframed Object
 tfwindow                Truncate a Time Series
 trim.na                 Trim NAs from Time Series
-tsmatrix                Create a time series matrix.

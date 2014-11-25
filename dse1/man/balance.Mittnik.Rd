@@ -6,20 +6,39 @@
 \description{Balance a state space model a la Mittnik.}
 
 \usage{
-    balance.Mittnik(model, n=NULL)}
-    balance.Mittnik.svd(M, m, n=NULL)}
+    balance.Mittnik(model, n=NULL)
+    balance.Mittnik.svd(M, m, n=NULL)
+}
 \arguments{
     \item{model}{An TSmodel object.}
-    \item{n}{
+    \item{M}{a matrix. See details in \code{reduction.Mittnik}.}
+    \item{m}{an integer indicating the number of input series in the model.}
+    \item{n}{see details}
+}
+\value{A state space model in a TSestModel object.}
+\details{
+\code{balance.Mittnik} calculate a state space model balance a la Mittnik.
 n is intended primarily for producing a state space model from the markov
 parameters of an ARMA model, but if it is supplied with an SS model the
 result will be a model with state dimension n based on the n largest
 singular values of the svd of a Hankel matrix of markov parameters generated 
 by the original model. If n is not supplied then the singular values are
-printed and the program prompts for n.}
+printed and the program prompts for n. \code{balance.Mittnik} calls
+\code{balance.Mittnik.svd}
+
+\code{balance.Mittnik.svd} calculates a nested-balanced state space 
+model by svd a la Mittnik. If state dim n is supplied then svd 
+criteria are not calculated and the given n is used. Otherwise, 
+the singular values are printed and the program prompts for n.
+M is a matrix with p x (m+p)  blocks giving the markov parameters,
+that is, the first row of the Hankel matrix. It can be generated from the
+model as in the function markov.parms, or from the data, as in the function
+est.SS.Mittnik.
+m is the dimension of input series, which is needed to decompose M.
+The output dimension p is taken from nrow(M).
+
+See also \code{reduction.Mittnik} and references.
 }
-\value{A state space model balance a la Mittnik in a TSestModel object.}
-\details{See references.}
 \references{
     Gilbert, P. D. (1993) State space and ARMA models: An overview of
     the equivalence. Working paper 93-4, Bank of Canada. Available at
@@ -43,6 +62,7 @@ printed and the program prompts for n.}
 \seealso{
     \code{\link{est.VARX.ls}},
     \code{\link{est.VARX.ar}}
+    \code{\link{reduction.Mittnik}}
 }
 \examples{
     if(is.R()) data("eg1.DSE.data.diff", package="dse1")
@@ -56,4 +76,5 @@ printed and the program prompts for n.}
 }
 %\keyword{DSE}
 \keyword{ts}
+
 
