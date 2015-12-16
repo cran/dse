@@ -39,9 +39,9 @@ printed and the user is prompted for the state dimension.
 }
 \examples{
     data("egJofF.1dec93.data", package="dse")
-    \dontrun{model <- estSSMittnik(egJofF.1dec93.data)}
     # this prints information about singular values and prompts with
     #Enter the number of singular values to use for balanced model:
+    \donttest{model <- estSSMittnik(egJofF.1dec93.data)}
     # the choice is difficult in this example. 
     model <- estSSMittnik(egJofF.1dec93.data, n=3)
 }

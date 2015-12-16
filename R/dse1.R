@@ -370,14 +370,16 @@ tfplot.TSestModel <- function(x, ...,
      on.exit(par(old.par)) }
   names <-seriesNamesOutput(model)
   if (m!=0) names <-c(seriesNamesInput(model), names)
-  if (is.null(names)) names <- rep(" ",m+p)
+  if (is.null(names)) names <- rep(" ", m+p)
+  if (1 == length(xlab)) xlab <- rep(xlab, m+p)
+
   if (m!=0) 
     {for (i in select.inputs) 
       {z <-NULL 
        for (model in append(list(x),list(...)) )
            z<-tbind(z,inputData(model, series=i))
        tframe(z) <-tframe(inputData(model))
-       tfOnePlot(z,start=start,end=end, ylab=names[i]) # tsplot
+       tfOnePlot(z,start=start,end=end, xlab=xlab[i], ylab=names[i]) # tsplot
        if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
                 || options()$PlotTitles)) title(main = Title)
     } }
@@ -391,7 +393,7 @@ tfplot.TSestModel <- function(x, ...,
          #z <- cbind(z,model$estimates$pred[,i,drop=FALSE])}
          z <- tbind(z,selectSeries(model$estimates$pred, series=i))}
      #tframe(z) <- tframe(outputData(model))
-     tfOnePlot(z,start=start,end=end, ylab=names[m+i]) # tsplot
+     tfOnePlot(z,start=start,end=end, xlab=xlab[m+i], ylab=names[m+i]) # tsplot
      if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
                 || options()$PlotTitles)) title(main = Title)
     }
@@ -4421,9 +4423,13 @@ tfplot.TSdata <- function(x, ...,
      on.exit(par(old.par))
     }
   #if (is.null(Title)) Title <- ""
+
   if (!is.null(ylab))
        names <- rep(ylab, nseriesInput(x) + nseriesOutput(x))
   else names <-  c(seriesNamesInput(x),  seriesNamesOutput(x))
+
+  if (1 == length(xlab)) xlab <- rep(xlab, length(names))
+
 #  if (0 != length(select.inputs)) 
     {for (i in select.inputs) 
       {j <- 0
@@ -4437,7 +4443,7 @@ tfplot.TSdata <- function(x, ...,
           z[, j] <- inputData(d, series = i)
          }
        tframe(z) <-tframe(inputData(x))
-       tfOnePlot(z,ylab=names[i], start=start, end=end) 
+       tfOnePlot(z, xlab=xlab[i], ylab=names[i], start=start, end=end) 
        if(!is.null(Title) && (i==1) && (is.null(options()$PlotTitles)
                 || options()$PlotTitles)) title(main = Title)
     } }
@@ -4454,7 +4460,7 @@ tfplot.TSdata <- function(x, ...,
         z[,j]<-outputData(d, series=i) 
        }
      tframe(z) <-tframe(outputData(x))
-     tfOnePlot(z,ylab=names[nseriesInput(x) + i],start=start, end=end) # tsplot
+     tfOnePlot(z, xlab=xlab[i], ylab=names[nseriesInput(x) + i],start=start, end=end)
      if(!is.null(Title) && (0 == nseriesInput(x)) && (i==1) && 
       (is.null(options()$PlotTitles) || options()$PlotTitles)) title(main = Title)
     }

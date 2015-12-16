@@ -50,9 +50,9 @@ See also \code{MittnikReduction} and references.
 \examples{
     data("eg1.DSE.data.diff", package="dse")
     model <- toSS(TSmodel(estVARXls(eg1.DSE.data.diff)))
-    \dontrun{newmodel <-balanceMittnik(model)}
     # this prints information about singular values and prompts with
     #Enter the number of singular values to use for balanced model:
+    \donttest{newmodel <-balanceMittnik(model)}
     # 18 might be a good choice in this example. 
     newmodel <-balanceMittnik(model, n=18)
 

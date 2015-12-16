@@ -8,11 +8,10 @@ useDynLib(dse)
 ##
 ##export(genda_sym, gendk_sym)
 
-importFrom("stats","window")
-importFrom("stats","start")
-importFrom("stats","end")
-importFrom("stats","frequency")
-importFrom("stats","coef")
+import("stats")
+import("graphics")
+importFrom("grDevices", "dev.cur")
+importFrom("utils", "packageDescription")
 
 import("tframe")
 import("tfplot")
@@ -22,9 +21,6 @@ import("setRNG")
 export("DSEversion")
 export(".DSEflags")
 
-importFrom("stats","residuals")
-##export("residuals")
-##exportMethods("residuals")
 S3method("residuals", "TSestModel")
 
 export("acf")
