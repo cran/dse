@@ -1,5 +1,5 @@
 Package: dse
-Version: 2015.12-1
+Version: 2020.2-1
 Title: Dynamic Systems Estimation (Time Series Package)
 Description: Tools for multivariate, linear, time-invariant,
 	time series models. This includes ARMA and state-space representations,
@@ -22,6 +22,6 @@ Author: Paul Gilbert <pgilbert.ttv9z@ncf.ca>
 Maintainer: Paul Gilbert <pgilbert.ttv9z@ncf.ca>
 URL: http://tsanalysis.r-forge.r-project.org/
 NeedsCompilation: yes
-Packaged: 2015-12-16 01:58:32 UTC; paul
+Packaged: 2020-02-07 02:52:43 UTC; paul
 Repository: CRAN
-Date/Publication: 2015-12-16 18:54:01
+Date/Publication: 2020-02-26 07:10:02 UTC

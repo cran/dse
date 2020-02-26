@@ -18,7 +18,6 @@
     \item{data}{see horizonForecasts.} 
     \item{horizons}{see horizonForecasts.}
     \item{discard.before}{see horizonForecasts.}
-    \item{...}{see horizonForecasts.}
 }
 \value{See horizonForecasts.}
 \details{Internal function not to be called by users. See horizonForecasts.}

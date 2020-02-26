@@ -4,6 +4,20 @@ Known Bugs
    o	Handling of initial conditions for the state space filter and smoother 
 	still needs work.
 
+Changes in dse version 2020.2-1
+
+   o	Adjusted CITATION URLs for changes at CRAN and a Bank of Canada.
+
+   o	Removed ... from documented arguments for horizonForecastsCompiled() as
+   	it was not in \usage. (Caught by R bug fix PR#16223.)
+
+   o	Fixed Rbuildignore so that files from building vignettes are 
+    	not omitted in the package build.	
+
+Changes in dse version 2017.8-1
+
+   o	Corrected author field in CITATION to use person().
+
 Changes in dse version 2015.12-1
 
    o	Fixed bug passing xlab in tfplot methods for TSdata and TSestModel.
